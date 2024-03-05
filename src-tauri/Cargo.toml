@@ -14,6 +14,7 @@ tauri-build = { version = "1.5", features = [] }
 eyeball = { path="../../eyeball/eyeball", features = ["tracing"] }
 eyeball-im = { path="../../eyeball/eyeball-im", features = ["tracing", "serde"] }
 eyeball-im-util = { path="../../eyeball/eyeball-im-util" }
+futures = "0.3.28"
 futures-core = "0.3.28"
 futures-executor = "0.3.21"
 futures-util = { version = "0.3.26", default-features = false, features = ["alloc"] }

@@ -21,7 +21,7 @@ use matrix_sdk_ui::{
 };
 use serde::{Deserialize, Serialize};
 use url::Url;
-use std::sync::Mutex;
+use futures::lock::Mutex;
 
 // create the error type that represents all errors possible in our program
 #[derive(Debug, thiserror::Error)]
@@ -113,7 +113,7 @@ async fn login<'a>(params: LoginParams, state: tauri::State<'_, AppState<'a>>) -
     let sync_service = Arc::new(SyncService::builder(client.clone()).build().await?);
     sync_service.start().await;
 
-    *state.client.lock().unwrap() = Some(client);
+    *state.client.lock().await = Some(client);
 
     Ok(())
 }
@@ -121,13 +121,14 @@ async fn login<'a>(params: LoginParams, state: tauri::State<'_, AppState<'a>>) -
 #[tauri::command]
 async fn subscribe_timeline<'a>(room_id: String, state: tauri::State<'_, AppState<'a>>) -> Result<Vector<Arc<TimelineItem>>, Error> {
     // Get the timeline stream and listen to it.
-    let client = state.client.lock().unwrap().clone().unwrap();
+    let client = state.client.lock().await;
+    let clientRef = client.as_ref().unwrap();
     let id = RoomId::parse(room_id).unwrap();
-    let room = client.get_room(&id).unwrap();
+    let room = clientRef.get_room(&id).unwrap();
     let timeline = room.timeline().await?;
     let (timeline_items, timeline_stream) = timeline.subscribe().await;
 
-    *state.timeline_stream.lock().unwrap() = Some(Box::pin(timeline_stream));
+    *state.timeline_stream.lock().await = Some(Box::pin(timeline_stream));
 
     println!("Initial timeline items: {timeline_items:#?}");
 
@@ -136,9 +137,10 @@ async fn subscribe_timeline<'a>(room_id: String, state: tauri::State<'_, AppStat
 
 #[tauri::command]
 async fn get_timeline_update<'a>(state: tauri::State<'_, AppState<'a>>) -> Result<VectorDiff<Arc<TimelineItem>>, Error> {
-    let mut timeline_stream = state.timeline_stream.lock().unwrap().take().unwrap();
+    let mut timeline_stream = state.timeline_stream.lock().await;
+    let mut stream = timeline_stream.as_mut().unwrap();
 
-    let diff = timeline_stream.next().await.ok_or(anyhow!("no diffs"))?;
+    let diff = stream.next().await.ok_or(anyhow!("no diffs"))?;
     println!("Received a timeline diff: {diff:#?}");
     Ok(diff)
 }
