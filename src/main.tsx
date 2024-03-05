@@ -23,8 +23,10 @@ console.log("creating App");
 
     console.log("timeline_items", timeline_items);
 
-    const timeline_diffs = await invoke("get_timeline_update");
-    console.log("timeline_diffs", timeline_diffs);
+    while(true) {
+      const timeline_diffs = await invoke("get_timeline_update");
+      console.log("timeline_diffs", timeline_diffs);
+    }
 })();
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(

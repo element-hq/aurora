@@ -73,6 +73,7 @@ struct LoginParams {
 
 struct AppState<'a> {
     client: Mutex<Option<Client>>,
+    sync_service: Mutex<Option<SyncService>>,
     timeline_stream: Mutex<Option<BoxStream<'a, VectorDiff<Arc<TimelineItem>>>>>,
 }
 
@@ -110,9 +111,12 @@ async fn login<'a>(params: LoginParams, state: tauri::State<'_, AppState<'a>>) -
         }
     }
 
-    let sync_service = Arc::new(SyncService::builder(client.clone()).build().await?);
+    println!("starting sync service");
+    let sync_service = SyncService::builder(client.clone()).build().await?;
     sync_service.start().await;
-
+    println!("started sync service");
+    
+    *state.sync_service.lock().await = Some(sync_service);
     *state.client.lock().await = Some(client);
 
     Ok(())
@@ -120,26 +124,40 @@ async fn login<'a>(params: LoginParams, state: tauri::State<'_, AppState<'a>>) -
 
 #[tauri::command]
 async fn subscribe_timeline<'a>(room_id: String, state: tauri::State<'_, AppState<'a>>) -> Result<Vector<Arc<TimelineItem>>, Error> {
-    // Get the timeline stream and listen to it.
-    let client = state.client.lock().await;
-    let clientRef = client.as_ref().unwrap();
+    println!("subscribing to timeline for {room_id:#?}");
+
+    let sync_service = state.sync_service.lock().await;
+    let room_list_service = sync_service.as_ref().unwrap().room_list_service();
     let id = RoomId::parse(room_id).unwrap();
-    let room = clientRef.get_room(&id).unwrap();
-    let timeline = room.timeline().await?;
-    let (timeline_items, timeline_stream) = timeline.subscribe().await;
+    let Ok(ui_room) = room_list_service.room(&id).await else {
+        return Err(Error::Other(anyhow!("couldn't get room")));
+    };
 
-    *state.timeline_stream.lock().await = Some(Box::pin(timeline_stream));
+    // Initialize the timeline.
+    let builder = match ui_room.default_room_timeline_builder().await {
+        Ok(builder) => builder,
+        Err(err) => {
+            return Err(Error::Other(anyhow!("error when getting default timeline builder: {err}")));
+        }
+    };
 
-    println!("Initial timeline items: {timeline_items:#?}");
+    if let Err(err) = ui_room.init_timeline_with_builder(builder).await {
+        return Err(Error::Other(anyhow!("error when creating default timeline: {err}")));
+    }
 
-    Ok(timeline_items)
+    let (items, stream) = ui_room.timeline().unwrap().subscribe().await;
+    println!("Initial timeline items: {items:#?}");
+
+    *state.timeline_stream.lock().await = Some(Box::pin(stream));
+    Ok(items)
 }
 
 #[tauri::command]
 async fn get_timeline_update<'a>(state: tauri::State<'_, AppState<'a>>) -> Result<VectorDiff<Arc<TimelineItem>>, Error> {
     let mut timeline_stream = state.timeline_stream.lock().await;
-    let mut stream = timeline_stream.as_mut().unwrap();
+    let stream = timeline_stream.as_mut().unwrap();
 
+    println!("Pulling next timeline diff");
     let diff = stream.next().await.ok_or(anyhow!("no diffs"))?;
     println!("Received a timeline diff: {diff:#?}");
     Ok(diff)
@@ -151,7 +169,8 @@ fn main() {
     tauri::Builder::default()
         .manage(AppState {
             client: Default::default(),
-            timeline_stream: Default::default()
+            sync_service: Default::default(),
+            timeline_stream: Default::default(),
         })
         .invoke_handler(tauri::generate_handler![
             login,
