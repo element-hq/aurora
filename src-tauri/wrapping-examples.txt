@@ -1,0 +1,95 @@
+/*
+#[derive(Serialize)]
+#[serde(remote = "TimelineItemKind")]
+pub struct TimelineItemKindDef {
+}
+
+#[derive(Serialize)]
+pub struct TimelineItemDef {
+    #[serde(with = "TimelineItemKindDef")]
+    kind: TimelineItemKind,
+    internal_id: u64,
+}
+
+// from https://stackoverflow.com/a/73410629
+impl From<TimelineItem> for TimelineItemDef {
+    fn from(val: TimelineItem) -> Self {
+        Self {
+            kind: val.kind().clone(),
+            internal_id: val.unique_id(),
+        }
+    }
+}
+
+#[tauri::command]
+async fn subscribe_timeline<'a>(room_id: String, state: tauri::State<'_, AppState<'a>>) -> Result<Vector<Arc<TimelineItemDef>>, String> {
+    // Get the timeline stream and listen to it.
+    let client = state.client.lock().unwrap().clone().unwrap();
+    let id = RoomId::parse(room_id).unwrap();
+    let room = client.get_room(&id).unwrap();
+    let timeline = room.timeline().await;
+    let (timeline_items, timeline_stream) = timeline.subscribe().await;
+
+    *state.timeline_stream.lock().unwrap() = Some(Box::pin(timeline_stream));
+
+    println!("Initial timeline items: {timeline_items:#?}");
+
+    let items: Vector<Arc<TimelineItemDef>> = timeline_items.iter().map(|item| Arc::new(Arc::into_inner(item.clone()).unwrap().into())).collect();
+
+    Ok(items)
+}
+*/
+
+/*
+#[derive(Serialize)]
+#[serde(remote = "TimelineItem")]
+pub struct TimelineItemDef {
+    #[serde(with = "TimelineItemKindDef")]
+    #[serde(getter = "TimelineItem::kind")]
+    kind: TimelineItemKind,
+    #[serde(getter = "TimelineItem::unique_id")]
+    internal_id: u64,
+}
+
+#[derive(serde::Serialize)]
+struct TimelineItemWrapper(#[serde(with = "TimelineItemDef")] TimelineItem);
+
+#[tauri::command]
+async fn subscribe_timeline<'a>(room_id: String, state: tauri::State<'_, AppState<'a>>) -> Result<Vector<Arc<TimelineItemWrapper>>, String> {
+    // Get the timeline stream and listen to it.
+    let client = state.client.lock().unwrap().clone().unwrap();
+    let id = RoomId::parse(room_id).unwrap();
+    let room = client.get_room(&id).unwrap();
+    let timeline = room.timeline().await;
+    let (timeline_items, timeline_stream) = timeline.subscribe().await;
+
+    *state.timeline_stream.lock().unwrap() = Some(Box::pin(timeline_stream));
+
+    println!("Initial timeline items: {timeline_items:#?}");
+
+    let items: Vector<Arc<TimelineItemWrapper>> = timeline_items.iter().map(|item|
+        Arc::new(
+            TimelineItemWrapper(
+                Arc::into_inner(
+                    item.clone()
+                ).unwrap()
+            )
+        )
+    ).collect();
+
+    Ok(items)
+}
+
+// #[tauri::command]
+// async fn get_timeline_update<'a>(state: tauri::State<'_, AppState<'a>>) -> Result<VectorDiff<Arc<TimelineItemDef>>, String> {
+//     let mut timeline_stream = state.timeline_stream.lock().unwrap();
+//     let Some(diff) = timeline_stream.as_mut().unwrap().next().await else {
+//         return Err("game over".to_string());
+//     };
+//     println!("Received a timeline diff: {diff:#?}");
+
+//     let output: VectorDiff<Arc<TimelineItemDef>> = diff.iter().map(|item| Arc::new(Arc::into_inner(*item).unwrap().into())).collect();
+
+//     Ok(output)
+// }
+*/

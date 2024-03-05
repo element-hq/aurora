@@ -1,0 +1,37 @@
+[package]
+name = "aurora"
+version = "0.0.0"
+description = "A Tauri App"
+authors = ["you"]
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[build-dependencies]
+tauri-build = { version = "1.5", features = [] }
+
+[dependencies]
+eyeball = { version = "0.8.7", features = ["tracing"] }
+eyeball-im = { version = "0.4.1", features = ["tracing"] }
+eyeball-im-util = "0.5.1"
+futures-core = "0.3.28"
+futures-executor = "0.3.21"
+futures-util = { version = "0.3.26", default-features = false, features = ["alloc"] }
+tauri = { version = "1.5", features = ["shell-open"] }
+imbl = { version = "2.0.0", features = ["serde"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+ruma = { path="../../ruma/crates/ruma" }
+ruma-common = { path="../../ruma/crates/ruma-common" }
+matrix-sdk = { path = "../../matrix-rust-sdk/crates/matrix-sdk", version = "0.7.0", features = ["experimental-sliding-sync", "serde"] }
+matrix-sdk-ui = { path = "../../matrix-rust-sdk/crates/matrix-sdk-ui", version = "0.7.0", features = ["serde"] }
+matrix-sdk-sqlite = { path = "../../matrix-rust-sdk/crates/matrix-sdk-sqlite", version = "0.7.0" }
+tracing-subscriber = "0.3.18"
+thiserror = "1.0.57"
+url = "2.5.0"
+anyhow = "1.0.79"
+
+[features]
+# this feature is used for production builds or when `devPath` points to the filesystem
+# DO NOT REMOVE!!
+custom-protocol = ["tauri/custom-protocol"]
