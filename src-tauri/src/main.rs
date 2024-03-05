@@ -1,8 +1,10 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use anyhow::Result;
+use anyhow::{anyhow, Result};
 use imbl::Vector;
+use ruma::{OwnedServerName, ServerName};
+use tracing_subscriber::fmt::time;
 use std::sync::Arc;
 use matrix_sdk::{
     config::{
@@ -15,9 +17,7 @@ use eyeball_im::VectorDiff;
 use matrix_sdk::ruma::RoomId;
 use matrix_sdk_sqlite::SqliteStateStore;
 use matrix_sdk_ui::{
-    timeline::RoomExt,
-    timeline::TimelineItem,
-    timeline::TimelineItemKind,
+    sync_service::SyncService, timeline::{RoomExt, TimelineItem, TimelineItemKind}
 };
 use serde::{Deserialize, Serialize};
 use url::Url;
@@ -43,6 +43,15 @@ enum Error {
 
     #[error(transparent)]
     EventCache(#[from] matrix_sdk::event_cache::EventCacheError),
+
+    #[error(transparent)]
+    SyncService(#[from] matrix_sdk_ui::sync_service::Error),
+
+    #[error(transparent)]
+    IdParse(#[from] ruma::IdParseError),
+
+    #[error(transparent)]
+    Other(#[from] anyhow::Error),
 }
 
 // we must manually implement serde::Serialize
@@ -70,7 +79,8 @@ struct AppState<'a> {
 #[tauri::command]
 async fn login<'a>(params: LoginParams, state: tauri::State<'_, AppState<'a>>) -> Result<(), Error> {
     let builder = Client::builder()
-        .homeserver_url(params.homeserver)
+        //.homeserver_url(params.homeserver)
+        .server_name(&ServerName::parse("matrix.org")?)
         .store_config(
             StoreConfig::default()
                 .crypto_store(SqliteCryptoStore::open("/tmp/crypto.sqlite", None).await?)
@@ -100,12 +110,8 @@ async fn login<'a>(params: LoginParams, state: tauri::State<'_, AppState<'a>>) -
         }
     }
 
-    let sync_settings = SyncSettings::default();
-    client.sync_once(sync_settings.clone()).await?;
-
-    // Sync forever (deliberately don't await it)
-    // XXX: how do we poll/await it without blocking the calling await?
-    client.sync(sync_settings);
+    let sync_service = Arc::new(SyncService::builder(client.clone()).build().await?);
+    sync_service.start().await;
 
     *state.client.lock().unwrap() = Some(client);
 
@@ -128,17 +134,14 @@ async fn subscribe_timeline<'a>(room_id: String, state: tauri::State<'_, AppStat
     Ok(timeline_items)
 }
 
-/*
 #[tauri::command]
 async fn get_timeline_update<'a>(state: tauri::State<'_, AppState<'a>>) -> Result<VectorDiff<Arc<TimelineItem>>, Error> {
-    let mut timeline_stream = state.timeline_stream.lock().unwrap();
-    let Some(diff) = timeline_stream.as_mut().unwrap().next().await else {
-        return Err("game over".to_string());
-    };
+    let mut timeline_stream = state.timeline_stream.lock().unwrap().take().unwrap();
+
+    let diff = timeline_stream.next().await.ok_or(anyhow!("no diffs"))?;
     println!("Received a timeline diff: {diff:#?}");
     Ok(diff)
 }
-*/
 
 fn main() {
     tracing_subscriber::fmt::init();
@@ -151,7 +154,7 @@ fn main() {
         .invoke_handler(tauri::generate_handler![
             login,
             subscribe_timeline,
-            // get_timeline_update,
+            get_timeline_update,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

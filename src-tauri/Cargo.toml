@@ -11,9 +11,9 @@ edition = "2021"
 tauri-build = { version = "1.5", features = [] }
 
 [dependencies]
-eyeball = { version = "0.8.7", features = ["tracing"] }
-eyeball-im = { version = "0.4.1", features = ["tracing"] }
-eyeball-im-util = "0.5.1"
+eyeball = { path="../../eyeball/eyeball", features = ["tracing"] }
+eyeball-im = { path="../../eyeball/eyeball-im", features = ["tracing", "serde"] }
+eyeball-im-util = { path="../../eyeball/eyeball-im-util" }
 futures-core = "0.3.28"
 futures-executor = "0.3.21"
 futures-util = { version = "0.3.26", default-features = false, features = ["alloc"] }

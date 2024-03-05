@@ -1359,8 +1359,6 @@ dependencies = [
 [[package]]
 name = "eyeball"
 version = "0.8.7"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "42482893d982111055ce4b24234d6250396d3785767c6b04cedd84612a0b80fb"
 dependencies = [
  "futures-core",
  "readlock",
@@ -1370,11 +1368,10 @@ dependencies = [
 [[package]]
 name = "eyeball-im"
 version = "0.4.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "021fab29d9670be5867b16d56a95c29a12c3c1bb654e7d589010a028716d625d"
 dependencies = [
  "futures-core",
  "imbl",
+ "serde",
  "tokio",
  "tokio-util",
  "tracing",
@@ -1382,15 +1379,14 @@ dependencies = [
 
 [[package]]
 name = "eyeball-im-util"
-version = "0.5.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c243f7e39469b86dce8e526dc1fe0e1f9d7f16ba929858bfeb24727f48531493"
+version = "0.5.3"
 dependencies = [
  "arrayvec",
  "eyeball-im",
  "futures-core",
  "imbl",
  "pin-project-lite",
+ "smallvec",
 ]
 
 [[package]]
