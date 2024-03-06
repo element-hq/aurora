@@ -11,6 +11,11 @@ interface EventTileProp {
     item: any;
 }
 
+function mxcToUrl(mxcUrl: string): string {
+    return mxcUrl.replace(/^mxc:\/\//, "https://matrix.org/_matrix/media/v3/thumbnail/") + 
+        "?width=48&height=48";
+}
+
 const EventTile: React.FC<EventTileProp> = ({ item }) => {
     switch (Object.keys(item.kind)[0]) {
         case "Virtual":
@@ -27,6 +32,9 @@ const EventTile: React.FC<EventTileProp> = ({ item }) => {
             return (
                 <div className="mx_EventTile">
                     <span className="mx_Timestamp">{ new Date(event.timestamp).toLocaleTimeString() }</span>
+                    <span className="mx_Avatar">{
+                        event.sender_profile.Ready ? <img src={ mxcToUrl(event.sender_profile.Ready.avatar_url) }/> : null 
+                    }</span>
                     <span className="mx_Sender">{
                         event.sender_profile.Ready ?
                         event.sender_profile.Ready.display_name :

@@ -3,9 +3,17 @@
     left: 1em;
 }
 
-.mx_Sender {
+.mx_Avatar img {
     position: absolute;
     left: 6em;
+    width: 20px;
+    height: 20px;
+    border-radius: 32px;
+}
+
+.mx_Sender {
+    position: absolute;
+    left: 8em;
     overflow: hidden;
     white-space: nowrap;
     overflow: hidden;
@@ -14,5 +22,5 @@
 
 .mx_EventTile {
     display: block;
-    margin-left: 12em;
+    margin-left: 14em;
 }
