@@ -75,11 +75,11 @@ class TimelineStore {
                         this.items = [];
                         break;
                     case "PopFront":
-                        this.items.pop();
+                        this.items.shift();
                         this.items = [...this.items];
                         break;
                     case "PopBack":
-                        this.items.shift();
+                        this.items.pop();
                         this.items = [...this.items];
                         break;    
                     case "Insert":
