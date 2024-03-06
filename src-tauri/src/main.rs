@@ -129,11 +129,12 @@ async fn subscribe_timeline<'a>(room_id: String, state: tauri::State<'_, AppStat
     let sync_service = state.sync_service.lock().await;
     let room_list_service = sync_service.as_ref().unwrap().room_list_service();
     let id = RoomId::parse(room_id).unwrap();
+    // FIXME: wait for the room_list_service to have setup before trying to
+    // subscribe to a room which it might not know about yet.
     let Ok(ui_room) = room_list_service.room(&id).await else {
         return Err(Error::Other(anyhow!("couldn't get room")));
     };
 
-    // Initialize the timeline.
     let builder = match ui_room.default_room_timeline_builder().await {
         Ok(builder) => builder,
         Err(err) => {
