@@ -7,6 +7,8 @@ class TimelineStore {
 
     run = () => {
         (async () => {
+            await new Promise(r => setTimeout(r, 2000));
+            
             console.log("starting sdk...");
             await invoke("login", {
                 params: {
@@ -17,21 +19,47 @@ class TimelineStore {
             });
         
             console.log("subscribing to timeline...");
-            const timeline_items = await invoke("subscribe_timeline", {
+            const timeline_items: Array<any> = await invoke("subscribe_timeline", {
                 roomId: "!QQpfJfZvqxbCfeDgCj:matrix.org",
             });
+
+            this.items = timeline_items;
+            this.emit();
+
+            console.log("timeline items", timeline_items);
+            for (let i = 0; i < timeline_items.length; i++) {
+                const value = timeline_items[i];
+                const kind = value.kind ? Object.keys(value.kind)[0] : null;
+                const event = value?.kind.Event;
+                const content = event?.content;
+                console.log(`Item index=${i} internal_id=${value.internal_id} sender=${
+                    event?.sender_profile.Ready ?
+                    event?.sender_profile.Ready.display_name :
+                    event?.sender
+                } kind=${kind} content=${content?.Message?.msgtype?.body || content}`);
+            }
+
+            //console.log(JSON.stringify(timeline_items, undefined, 4));
         
-            console.log("timeline items");
-            console.log(JSON.stringify(timeline_items, undefined, 4));
-        
-            // FIXME: infinite loop breaks hot reloading, probably
             while(true) {
+                await new Promise(r => setTimeout(r, 250));
+
                 const diff: any = await invoke("get_timeline_update");
-                console.log("timeline diff", diff);
+                //console.log("timeline diff", diff);
                 //console.log(JSON.stringify(diff, undefined, 4));
                 
                 const k = Object.keys(diff)[0];
                 const v = Object.values(diff)[0] as any;
+                const kind = v.value?.kind ? Object.keys(v.value?.kind)[0] : null;
+                const event = v.value?.kind.Event;
+                const content = v.value?.kind.Event?.content;
+
+                console.log(`${k} index=${v.index} internal_id=${v.value?.internal_id} sender=${
+                    event?.sender_profile.Ready ?
+                    event?.sender_profile.Ready.display_name :
+                    event?.sender
+                } kind=${kind} content=${content?.Message?.msgtype?.body || content}`);
+
                 switch (k) {
                     case "Set":
                         this.items[v.index] = v.value;

@@ -4,9 +4,6 @@ import TimelineStore from "./TimelineStore.tsx";
 
 console.log("running App.tsx");
 
-const timeline = new TimelineStore();
-timeline.run();
-
 interface EventTileProp {
     item: any;
 }
@@ -33,7 +30,7 @@ const EventTile: React.FC<EventTileProp> = ({ item }) => {
                 <div className="mx_EventTile">
                     <span className="mx_Timestamp">{ new Date(event.timestamp).toLocaleTimeString() }</span>
                     <span className="mx_Avatar">{
-                        event.sender_profile.Ready ? <img src={ mxcToUrl(event.sender_profile.Ready.avatar_url) }/> : null 
+                        event.sender_profile.Ready && event.sender_profile.Ready.avatar_url ? <img src={ mxcToUrl(event.sender_profile.Ready.avatar_url) }/> : null 
                     }</span>
                     <span className="mx_Sender">{
                         event.sender_profile.Ready ?
@@ -50,12 +47,16 @@ const EventTile: React.FC<EventTileProp> = ({ item }) => {
     }
 }
 
-const App: React.FC = () => {
+interface AppProps {
+    timeline: TimelineStore;
+}
+
+const App: React.FC<AppProps> = ( { timeline } ) => {
     const items = useSyncExternalStore(timeline.subscribe, timeline.getSnapshot);
 
     return (
         <ol>
-            { items.map(i=><li key={ i['internal_id'] }><EventTile item={i}/></li>) }
+            { items.map(i=><li key={ i.internal_id } value={ i.internal_id }><EventTile item={i}/></li>) }
         </ol>
     );
 }
