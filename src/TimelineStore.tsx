@@ -6,9 +6,11 @@ class TimelineStore {
     listeners: Array<CallableFunction> = [];
 
     run = () => {
+
         (async () => {
-            await new Promise(r => setTimeout(r, 2000));
-            
+            //await new Promise(r => setTimeout(r, 2000));
+            await invoke("reset");
+
             console.log("starting sdk...");
             await invoke("login", {
                 params: {
@@ -42,7 +44,7 @@ class TimelineStore {
             //console.log(JSON.stringify(timeline_items, undefined, 4));
         
             while(true) {
-                await new Promise(r => setTimeout(r, 250));
+                //await new Promise(r => setTimeout(r, 250));
 
                 const diff: any = await invoke("get_timeline_update");
                 //console.log("timeline diff", diff);

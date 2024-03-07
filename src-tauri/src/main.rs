@@ -3,13 +3,10 @@
 
 use anyhow::{anyhow, Result};
 use imbl::Vector;
-use ruma::{OwnedServerName, ServerName};
-use tracing_subscriber::fmt::time;
+use ruma::ServerName;
 use std::sync::Arc;
 use matrix_sdk::{
-    config::{
-        StoreConfig, SyncSettings
-    }, matrix_auth::MatrixSession, AuthSession, Client, SqliteCryptoStore
+    config::StoreConfig, matrix_auth::MatrixSession, AuthSession, Client, SqliteCryptoStore
 };
 use futures_util::StreamExt;
 use futures_core::stream::BoxStream;
@@ -17,11 +14,14 @@ use eyeball_im::VectorDiff;
 use matrix_sdk::ruma::RoomId;
 use matrix_sdk_sqlite::SqliteStateStore;
 use matrix_sdk_ui::{
-    sync_service::SyncService, timeline::{RoomExt, TimelineItem, TimelineItemKind}
+    sync_service::SyncService, timeline::{RoomExt, TimelineItem}
 };
 use serde::{Deserialize, Serialize};
 use url::Url;
-use futures::lock::Mutex;
+use tauri::Manager;
+use futures::{future::{
+    AbortHandle, Abortable
+}, lock::Mutex, stream::{Aborted, Next}};
 
 // create the error type that represents all errors possible in our program
 #[derive(Debug, thiserror::Error)]
@@ -48,7 +48,13 @@ enum Error {
     SyncService(#[from] matrix_sdk_ui::sync_service::Error),
 
     #[error(transparent)]
+    RoomListService(#[from] matrix_sdk_ui::room_list_service::Error),
+
+    #[error(transparent)]
     IdParse(#[from] ruma::IdParseError),
+
+    #[error(transparent)]
+    Aborted(#[from] Aborted),
 
     #[error(transparent)]
     Other(#[from] anyhow::Error),
@@ -75,10 +81,35 @@ struct AppState<'a> {
     client: Mutex<Option<Client>>,
     sync_service: Mutex<Option<SyncService>>,
     timeline_stream: Mutex<Option<BoxStream<'a, VectorDiff<Arc<TimelineItem>>>>>,
+    abort_timeline_stream: Mutex<Option<AbortHandle>>,
+}
+
+#[tauri::command]
+async fn reset<'a>(state: tauri::State<'_, AppState<'a>>) -> Result<(), Error> {
+    {
+        let sync_service = state.sync_service.lock().await;
+        if !sync_service.is_none() {
+            let ss = sync_service.as_ref().unwrap();
+            println!("Stopping sync service");
+            ss.stop().await?;
+            println!("Aborting timeline listener");
+            state.abort_timeline_stream.lock().await.as_ref().unwrap().abort();
+        }
+    }
+    println!("Locking client");
+    *state.client.lock().await = Option::None;
+    println!("Locking SS");
+    *state.sync_service.lock().await = Option::None;
+    println!("Locking timeline_stream");
+    *state.timeline_stream.lock().await = Option::None;
+    println!("Reset app state");
+    Ok(())
 }
 
 #[tauri::command]
 async fn login<'a>(params: LoginParams, state: tauri::State<'_, AppState<'a>>) -> Result<(), Error> {
+    println!("Logging in.");
+
     let builder = Client::builder()
         //.homeserver_url(params.homeserver)
         .server_name(&ServerName::parse("matrix.org")?)
@@ -159,21 +190,39 @@ async fn get_timeline_update<'a>(state: tauri::State<'_, AppState<'a>>) -> Resul
     let stream = timeline_stream.as_mut().unwrap();
 
     println!("Pulling next timeline diff");
-    let diff = stream.next().await.ok_or(anyhow!("no diffs"))?;
+
+    // FIXME: we should terminate this by consuming a blank entry from the stream.
+    // but we're not getting one, so instead provide an abort handle.
+    let (abort_handle, abort_registration) = AbortHandle::new_pair();
+    *state.abort_timeline_stream.lock().await = Some(abort_handle);
+    let foo = stream.next();
+    let future = Abortable::new(stream.next(), abort_registration);
+    let diff = future.await?;
     println!("Received a timeline diff: {diff:#?}");
-    Ok(diff)
+    Ok(diff.unwrap())
 }
 
 fn main() {
     tracing_subscriber::fmt::init();
 
     tauri::Builder::default()
+        .setup(|app| {
+            #[cfg(debug_assertions)]
+            {
+                let window = app.get_window("main").unwrap();
+                window.open_devtools();
+                window.close_devtools();
+            }
+            Ok(())
+        })
         .manage(AppState {
             client: Default::default(),
             sync_service: Default::default(),
             timeline_stream: Default::default(),
+            abort_timeline_stream: Default::default(),
         })
         .invoke_handler(tauri::generate_handler![
+            reset,
             login,
             subscribe_timeline,
             get_timeline_update,
