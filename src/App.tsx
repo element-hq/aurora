@@ -1,9 +1,8 @@
-import React, { Key, useEffect, useSyncExternalStore } from "react";
+import React, { Key, MouseEventHandler, useEffect, useState, useSyncExternalStore } from "react";
 import "./App.css";
 import TimelineStore from "./TimelineStore.tsx";
 import RoomListStore from "./RoomListStore.tsx";
 import ClientStore from "./ClientStore.tsx";
-import { cli } from "@tauri-apps/api";
 
 console.log("running App.tsx");
 
@@ -78,14 +77,20 @@ const RoomTile: React.FC<RoomTileProp> = ({ room }) => {
 
 interface RoomListProps {
     roomList: RoomListStore;
+    setRoom: (roomId: string) => void;
 }
 
-const RoomList: React.FC<RoomListProps> = ( { roomList } ) => {
+const RoomList: React.FC<RoomListProps> = ( { roomList, setRoom } ) => {
     const rooms = useSyncExternalStore(roomList.subscribe, roomList.getSnapshot);
 
     return (
         <ol start={ 0 }>
-            { rooms.map(r => <li key={ Object.values(r)[0] as Key }><RoomTile room={r}/></li>) }
+            { 
+                rooms.map(r => {
+                    const roomId = Object.values(r)[0] as string;
+                    return <li key={ roomId as Key } onClick={ () => setRoom(roomId) }><RoomTile room={r}/></li>;
+                })
+            }
         </ol>
     );
 }
@@ -95,8 +100,10 @@ interface AppProps {
 }
 
 const App: React.FC<AppProps> = ( { clientStore } ) => {
+    const [currentRoomId, setCurrentRoomId] = useState('');
+
     const roomListStore = clientStore.getRoomListStore();
-    const timelineStore = clientStore.getTimelineStore("!QQpfJfZvqxbCfeDgCj:matrix.org");
+    const timelineStore = clientStore.getTimelineStore(currentRoomId);
 
     useEffect(()=>{ 
         // is this the right place to get SDK to subscribe? or should it be done in the store before passing it here somehow?
@@ -108,11 +115,17 @@ const App: React.FC<AppProps> = ( { clientStore } ) => {
     return (
         <div className="mx_App">
             <nav className="mx_RoomList">
-                <RoomList roomList={ roomListStore }/>
+                <RoomList
+                    roomList={ roomListStore }
+                    setRoom={ (roomId)=> { setCurrentRoomId(roomId); } }
+                />
             </nav>
-            <main className="mx_Timeline">
-                <Timeline timeline={ timelineStore }/>
-            </main>
+            { timelineStore ?
+                <main className="mx_Timeline">
+                    <Timeline timeline={ timelineStore }/>
+                </main>
+              : null
+            }
         </div>
     );
 }

@@ -12,6 +12,8 @@ class TimelineStore {
     }
 
     run = () => {
+        if (!this.roomId) return;
+        
         if (this.running) {
             console.log("timeline already subscribed");
             return;
@@ -33,7 +35,15 @@ class TimelineStore {
             while(this.running) {
                 //await new Promise(r => setTimeout(r, 250));
 
-                const diff: any = await invoke("get_timeline_update");
+                let diff: any = undefined;
+                try {
+                    diff = await invoke("get_timeline_update");
+                }
+                catch (error) {
+                    console.info(error);
+                }
+                if (!diff) continue;
+
                 //console.log("timeline diff", diff);
                 //console.log(JSON.stringify(diff, undefined, 4));
                 

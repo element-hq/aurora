@@ -101,13 +101,14 @@ async fn reset<'a>(state: tauri::State<'_, AppState<'a>>) -> Result<(), Error> {
             Some(ss) => {
                 info!("Stopping sync service");
                 ss.stop().await?;
-                info!("Aborting timeline poll");
-                match state.abort_timeline_poll.lock().await.as_ref() {
+                // kick the pollers to release the stream locks.
+                info!("Interrupting timeline poll on reset");
+                match state.abort_timeline_poll.lock().await.take() {
                     None => {},
                     Some(handle) => handle.abort(),
                 }
-                info!("Aborting roomlist poll");
-                match state.abort_roomlist_poll.lock().await.as_ref() {
+                info!("Interrupting roomlist poll on reset");
+                match state.abort_roomlist_poll.lock().await.take() {
                     None => {},
                     Some(handle) => handle.abort(),
                 }
@@ -185,26 +186,25 @@ async fn subscribe_timeline<'a>(room_id: String, state: tauri::State<'_, AppStat
     let sync_service = state.sync_service.lock().await;
     let room_list_service = sync_service.as_ref().unwrap().room_list_service();
     let id = RoomId::parse(room_id).unwrap();
-    // FIXME: wait for the room_list_service to have setup before trying to
-    // subscribe to a room which it might not know about yet.
     let Ok(ui_room) = room_list_service.room(&id).await else {
         return Err(Error::Other(anyhow!("couldn't get room")));
     };
 
-    let builder = match ui_room.default_room_timeline_builder().await {
-        Ok(builder) => builder,
-        Err(err) => {
-            return Err(Error::Other(anyhow!("error when getting default timeline builder: {err}")));
-        }
-    };
+    if ui_room.timeline().is_none() {
+        let builder = match ui_room.default_room_timeline_builder().await {
+            Ok(builder) => builder,
+            Err(err) => {
+                return Err(Error::Other(anyhow!("error when getting default timeline builder: {err}")));
+            }
+        };
 
-    if let Err(err) = ui_room.init_timeline_with_builder(builder).await {
-        return Err(Error::Other(anyhow!("error when creating default timeline: {err}")));
+        if let Err(err) = ui_room.init_timeline_with_builder(builder).await {
+            return Err(Error::Other(anyhow!("error when creating default timeline: {err}")));
+        }
     }
 
     let (items, stream) = ui_room.timeline().unwrap().subscribe().await;
     info!("Initial timeline items: {items:#?}");
-
     *locked_timeline_stream = Some(Box::pin(stream));
     Ok(items)
 }
@@ -231,12 +231,30 @@ async fn get_timeline_update<'a>(state: tauri::State<'_, AppState<'a>>) -> Resul
 #[tauri::command]
 async fn unsubscribe_timeline<'a>(room_id: String, state: tauri::State<'_, AppState<'a>>) -> Result<(), Error> {
     state.client.lock().await;
-    info!("unsubscribing from timeline");
-    // FIXME: check that we're unsubscribing from the expected timeline
-    match state.abort_timeline_poll.lock().await.as_ref() {
+    info!("unsubscribing from timeline {room_id:#?}");
+
+    // kick the poller to release the timeline_stream lock, otherwise we'll deadlock
+    match state.abort_timeline_poll.lock().await.take() {
         None => {},
-        Some(handle) => handle.abort(),
+        Some(handle) => {
+            info!("Interrupting timeline on unsubscribe {room_id:#?}");
+            handle.abort();
+        },
     }
+
+    // now grab the lock to remove the old stream
+    state.timeline_stream.lock().await.take();
+
+    // now actually unsubscribe
+    let sync_service = state.sync_service.lock().await;
+    let room_list_service = sync_service.as_ref().unwrap().room_list_service();
+    let id = RoomId::parse(room_id.clone()).unwrap();
+    let Ok(ui_room) = room_list_service.room(&id).await else {
+        return Err(Error::Other(anyhow!("couldn't get room")));
+    };
+    ui_room.unsubscribe();
+    
+    info!("unsubscribed from timeline poll {room_id:#?}");
     Ok(())
 }
 
@@ -286,10 +304,13 @@ async fn get_roomlist_update<'a>(state: tauri::State<'_, AppState<'a>>) -> Resul
 async fn unsubscribe_roomlist<'a>(state: tauri::State<'_, AppState<'a>>) -> Result<(), Error> {
     state.client.lock().await;
     info!("unsubscribing from roomlist");
-    match state.abort_roomlist_poll.lock().await.as_ref() {
+    // kick the poller to release the roomlist_stream lock.
+    match state.abort_roomlist_poll.lock().await.take() {
         None => {},
         Some(handle) => handle.abort(),
     }
+    // TODO: is there actually a way to unsubscribe from the roomlist?
+    info!("unsubscribed from roomlist");
     Ok(())
 }
 
