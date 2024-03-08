@@ -1,6 +1,9 @@
-import React, { useSyncExternalStore } from "react";
+import React, { Key, useEffect, useSyncExternalStore } from "react";
 import "./App.css";
 import TimelineStore from "./TimelineStore.tsx";
+import RoomListStore from "./RoomListStore.tsx";
+import ClientStore from "./ClientStore.tsx";
+import { cli } from "@tauri-apps/api";
 
 console.log("running App.tsx");
 
@@ -47,17 +50,70 @@ const EventTile: React.FC<EventTileProp> = ({ item }) => {
     }
 }
 
-interface AppProps {
+interface TimelineProps {
     timeline: TimelineStore;
 }
 
-const App: React.FC<AppProps> = ( { timeline } ) => {
+const Timeline: React.FC<TimelineProps> = ( { timeline } ) => {
     const items = useSyncExternalStore(timeline.subscribe, timeline.getSnapshot);
 
     return (
         <ol>
-            { items.map(i=><li key={ i.internal_id } value={ i.internal_id }><EventTile item={i}/></li>) }
+            { items.map(i => <li key={ i.internal_id } value={ i.internal_id }><EventTile item={i}/></li>) }
         </ol>
+    );
+}
+
+interface RoomTileProp {
+    room: any;
+}
+
+const RoomTile: React.FC<RoomTileProp> = ({ room }) => {
+    return (
+        <div className="mx_RoomTile">
+            { JSON.stringify(room) }
+        </div>
+    );
+}
+
+interface RoomListProps {
+    roomList: RoomListStore;
+}
+
+const RoomList: React.FC<RoomListProps> = ( { roomList } ) => {
+    const rooms = useSyncExternalStore(roomList.subscribe, roomList.getSnapshot);
+
+    return (
+        <ol start={ 0 }>
+            { rooms.map(r => <li key={ Object.values(r)[0] as Key }><RoomTile room={r}/></li>) }
+        </ol>
+    );
+}
+
+interface AppProps {
+    clientStore: ClientStore;
+}
+
+const App: React.FC<AppProps> = ( { clientStore } ) => {
+    const roomListStore = clientStore.getRoomListStore();
+    const timelineStore = clientStore.getTimelineStore("!QQpfJfZvqxbCfeDgCj:matrix.org");
+
+    useEffect(()=>{ 
+        // is this the right place to get SDK to subscribe? or should it be done in the store before passing it here somehow?
+        console.log("(re)running roomListStore");
+        clientStore.getRoomListStore().run();
+        console.log("(re)running timelineStore");
+        timelineStore.run();
+    });
+    return (
+        <div className="mx_App">
+            <nav className="mx_RoomList">
+                <RoomList roomList={ roomListStore }/>
+            </nav>
+            <main className="mx_Timeline">
+                <Timeline timeline={ timelineStore }/>
+            </main>
+        </div>
     );
 }
 

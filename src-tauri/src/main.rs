@@ -6,7 +6,7 @@ use imbl::Vector;
 use ruma::ServerName;
 use std::sync::Arc;
 use matrix_sdk::{
-    config::StoreConfig, matrix_auth::MatrixSession, AuthSession, Client, SqliteCryptoStore
+    config::StoreConfig, matrix_auth::MatrixSession, AuthSession, Client, RoomListEntry, SqliteCryptoStore
 };
 use futures_util::StreamExt;
 use futures_core::stream::BoxStream;
@@ -22,6 +22,7 @@ use tauri::Manager;
 use futures::{future::{
     AbortHandle, Abortable
 }, lock::Mutex, stream::{Aborted, Next}};
+use tracing::{error, info, trace, warn};
 
 // create the error type that represents all errors possible in our program
 #[derive(Debug, thiserror::Error)]
@@ -80,35 +81,53 @@ struct LoginParams {
 struct AppState<'a> {
     client: Mutex<Option<Client>>,
     sync_service: Mutex<Option<SyncService>>,
+
     timeline_stream: Mutex<Option<BoxStream<'a, VectorDiff<Arc<TimelineItem>>>>>,
-    abort_timeline_stream: Mutex<Option<AbortHandle>>,
+    abort_timeline_poll: Mutex<Option<AbortHandle>>,
+
+    roomlist_stream: Mutex<Option<BoxStream<'a, Vec<VectorDiff<RoomListEntry>>>>>,
+    abort_roomlist_poll: Mutex<Option<AbortHandle>>,
 }
 
 #[tauri::command]
 async fn reset<'a>(state: tauri::State<'_, AppState<'a>>) -> Result<(), Error> {
+    state.client.lock().await;
+    info!("Resetting app state");
     {
+        // lock SS only within this block
         let sync_service = state.sync_service.lock().await;
-        if !sync_service.is_none() {
-            let ss = sync_service.as_ref().unwrap();
-            println!("Stopping sync service");
-            ss.stop().await?;
-            println!("Aborting timeline listener");
-            state.abort_timeline_stream.lock().await.as_ref().unwrap().abort();
+        match sync_service.as_ref() {
+            None => {},
+            Some(ss) => {
+                info!("Stopping sync service");
+                ss.stop().await?;
+                info!("Aborting timeline poll");
+                match state.abort_timeline_poll.lock().await.as_ref() {
+                    None => {},
+                    Some(handle) => handle.abort(),
+                }
+                info!("Aborting roomlist poll");
+                match state.abort_roomlist_poll.lock().await.as_ref() {
+                    None => {},
+                    Some(handle) => handle.abort(),
+                }
+            },
         }
     }
-    println!("Locking client");
+    info!("Locking client");
     *state.client.lock().await = Option::None;
-    println!("Locking SS");
+    info!("Locking SS");
     *state.sync_service.lock().await = Option::None;
-    println!("Locking timeline_stream");
+    info!("Locking timeline_stream");
     *state.timeline_stream.lock().await = Option::None;
-    println!("Reset app state");
+    info!("Reset app state");
     Ok(())
 }
 
 #[tauri::command]
 async fn login<'a>(params: LoginParams, state: tauri::State<'_, AppState<'a>>) -> Result<(), Error> {
-    println!("Logging in.");
+    let mut locked_client = state.client.lock().await;
+    info!("Logging in.");
 
     let builder = Client::builder()
         //.homeserver_url(params.homeserver)
@@ -125,37 +144,43 @@ async fn login<'a>(params: LoginParams, state: tauri::State<'_, AppState<'a>>) -
     if let Ok(serialized) = std::fs::read_to_string("/tmp/session.json") {
         let session: MatrixSession = serde_json::from_str(&serialized)?;
         client.restore_session(session).await?;
-        println!("restored session");
+        info!("restored session");
     } else {
         client
             .matrix_auth()
             .login_username(&params.user_name, &params.password)
             .initial_device_display_name("rust-sdk")
             .await?;
-        println!("new login");
+        info!("new login");
 
         if let Some(session) = client.session() {
             let AuthSession::Matrix(session) = session else { panic!("unexpected oidc session") };
             let serialized = serde_json::to_string(&session)?;
             std::fs::write("/tmp/session.json", serialized)?;
-            println!("saved session");
+            info!("saved session");
         }
     }
 
-    println!("starting sync service");
+    info!("starting sync service");
     let sync_service = SyncService::builder(client.clone()).build().await?;
     sync_service.start().await;
-    println!("started sync service");
+    info!("started sync service");
     
     *state.sync_service.lock().await = Some(sync_service);
-    *state.client.lock().await = Some(client);
+    *locked_client = Some(client);
 
     Ok(())
 }
 
 #[tauri::command]
 async fn subscribe_timeline<'a>(room_id: String, state: tauri::State<'_, AppState<'a>>) -> Result<Vector<Arc<TimelineItem>>, Error> {
-    println!("subscribing to timeline for {room_id:#?}");
+    state.client.lock().await;
+    info!("subscribing to timeline for {room_id:#?}");
+
+    let mut locked_timeline_stream = state.timeline_stream.lock().await;
+    if !locked_timeline_stream.is_none() {
+        return Err(Error::Other(anyhow!("timeline already subscribed")));
+    }
 
     let sync_service = state.sync_service.lock().await;
     let room_list_service = sync_service.as_ref().unwrap().room_list_service();
@@ -178,28 +203,94 @@ async fn subscribe_timeline<'a>(room_id: String, state: tauri::State<'_, AppStat
     }
 
     let (items, stream) = ui_room.timeline().unwrap().subscribe().await;
-    println!("Initial timeline items: {items:#?}");
+    info!("Initial timeline items: {items:#?}");
 
-    *state.timeline_stream.lock().await = Some(Box::pin(stream));
+    *locked_timeline_stream = Some(Box::pin(stream));
     Ok(items)
 }
 
 #[tauri::command]
 async fn get_timeline_update<'a>(state: tauri::State<'_, AppState<'a>>) -> Result<VectorDiff<Arc<TimelineItem>>, Error> {
+    state.client.lock().await;
+
     let mut timeline_stream = state.timeline_stream.lock().await;
     let stream = timeline_stream.as_mut().unwrap();
 
-    println!("Pulling next timeline diff");
+    info!("Pulling next timeline diff");
 
     // FIXME: we should terminate this by consuming a blank entry from the stream.
     // but we're not getting one, so instead provide an abort handle.
     let (abort_handle, abort_registration) = AbortHandle::new_pair();
-    *state.abort_timeline_stream.lock().await = Some(abort_handle);
-    let foo = stream.next();
+    *state.abort_timeline_poll.lock().await = Some(abort_handle);
     let future = Abortable::new(stream.next(), abort_registration);
     let diff = future.await?;
-    println!("Received a timeline diff: {diff:#?}");
+    info!("Received a timeline diff: {diff:#?}");
     Ok(diff.unwrap())
+}
+
+#[tauri::command]
+async fn unsubscribe_timeline<'a>(room_id: String, state: tauri::State<'_, AppState<'a>>) -> Result<(), Error> {
+    state.client.lock().await;
+    info!("unsubscribing from timeline");
+    // FIXME: check that we're unsubscribing from the expected timeline
+    match state.abort_timeline_poll.lock().await.as_ref() {
+        None => {},
+        Some(handle) => handle.abort(),
+    }
+    Ok(())
+}
+
+#[tauri::command]
+async fn subscribe_roomlist<'a>(state: tauri::State<'_, AppState<'a>>) -> Result<Vector<RoomListEntry>, Error> {
+    state.client.lock().await;
+    info!("subscribing to roomlist");
+
+    let mut locked_roomlist_stream = state.roomlist_stream.lock().await;
+    if !locked_roomlist_stream.is_none() {
+        return Err(Error::Other(anyhow!("roomlist already subscribed")));
+    }
+
+    let sync_service = state.sync_service.lock().await;
+    let room_list_service = sync_service.as_ref().unwrap().room_list_service();
+
+    info!("getting all_rooms");
+
+    // XXX: should we be paginating in the roomlist rather than using all_rooms?
+    let all_rooms = room_list_service.all_rooms().await?;
+    let (rooms, stream) = all_rooms.entries();
+
+    info!("Initial roomlist items: {rooms:#?}");        
+
+    *locked_roomlist_stream = Some(Box::pin(stream));
+    Ok(rooms)        
+}
+
+#[tauri::command]
+async fn get_roomlist_update<'a>(state: tauri::State<'_, AppState<'a>>) -> Result<Vec<VectorDiff<RoomListEntry>>, Error> {
+    state.client.lock().await;
+
+    let mut roomlist_stream = state.roomlist_stream.lock().await;
+    let stream = roomlist_stream.as_mut().unwrap();
+
+    info!("Pulling next roomlist diff");
+
+    let (abort_handle, abort_registration) = AbortHandle::new_pair();
+    *state.abort_roomlist_poll.lock().await = Some(abort_handle);
+    let future = Abortable::new(stream.next(), abort_registration);
+    let diff = future.await?;
+    info!("Received a roomlist diff: {diff:#?}");
+    Ok(diff.unwrap())
+}
+
+#[tauri::command]
+async fn unsubscribe_roomlist<'a>(state: tauri::State<'_, AppState<'a>>) -> Result<(), Error> {
+    state.client.lock().await;
+    info!("unsubscribing from roomlist");
+    match state.abort_roomlist_poll.lock().await.as_ref() {
+        None => {},
+        Some(handle) => handle.abort(),
+    }
+    Ok(())
 }
 
 fn main() {
@@ -219,13 +310,19 @@ fn main() {
             client: Default::default(),
             sync_service: Default::default(),
             timeline_stream: Default::default(),
-            abort_timeline_stream: Default::default(),
+            abort_timeline_poll: Default::default(),
+            roomlist_stream: Default::default(),
+            abort_roomlist_poll: Default::default(),
         })
         .invoke_handler(tauri::generate_handler![
             reset,
             login,
             subscribe_timeline,
             get_timeline_update,
+            unsubscribe_timeline,
+            subscribe_roomlist,
+            get_roomlist_update,
+            unsubscribe_roomlist,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

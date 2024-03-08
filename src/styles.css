@@ -7,24 +7,12 @@
   color: #0f0f0f;
   background-color: #f6f6f6;
 
+  /* cargoculted from tauri */
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
-}
-
-.container {
-  margin: 0;
-  padding-top: 10vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  text-align: center;
-}
-
-h1 {
-  text-align: center;
 }
 
 @media (prefers-color-scheme: dark) {
