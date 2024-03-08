@@ -18,7 +18,6 @@ body {
     flex-direction: row;
     width: 100%;
     height: 100%;
-    background-color: #500;
 }
 
 .mx_RoomList {
@@ -29,6 +28,7 @@ body {
 .mx_Timeline {
     flex: 1 1 auto;
     overflow: scroll;
+    display: flex;
 }
 
 .mx_Timeline ol {
@@ -55,10 +55,10 @@ body {
     overflow: hidden;
     white-space: nowrap;
     overflow: hidden;
-    width: 6em;
+    width: 8em;
 }
 
 .mx_EventTile {
     display: block;
-    margin-left: 14em;
+    margin-left: 16em;
 }
