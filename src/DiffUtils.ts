@@ -1,6 +1,6 @@
 
 
-export function applyDiff<T>(diff: any, items: T[], parseValue: (value: any) => T) {
+export function applyDiff<T>(diff: any, items: T[], parseValue: (value: any) => T): T[] {
     const k = Object.keys(diff)[0];
     const v = Object.values(diff)[0] as any;
     //logDiff(k, v);
@@ -45,5 +45,7 @@ export function applyDiff<T>(diff: any, items: T[], parseValue: (value: any) => 
             items = [...items, ...v.values.map(parseValue)];
             break;
     }
+
+    return items;
 }
 

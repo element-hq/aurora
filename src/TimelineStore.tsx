@@ -54,7 +54,7 @@ export class VirtualTimelineItemSubtype {
 
     constructor(item: any) {
         this.item = item;
-        this.type = VirtualTimelineItemType[Object.keys(item.kind.Virtual)[0] as keyof typeof VirtualTimelineItemType];
+        this.type = VirtualTimelineItemType[Object.keys(item)[0] as keyof typeof VirtualTimelineItemType];
     }
 }
 
@@ -189,7 +189,7 @@ class TimelineStore {
                 //console.log("timeline diff", diff);
                 //console.log(JSON.stringify(diff, undefined, 4));
                 
-                applyDiff<TimelineItem>(diff, this.items, this.parseItem);
+                this.items = applyDiff<TimelineItem>(diff, this.items, this.parseItem);
                 this.emit();
             }
 
