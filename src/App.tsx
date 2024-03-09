@@ -77,10 +77,11 @@ const RoomTile: React.FC<RoomTileProp> = ({ room }) => {
 
 interface RoomListProps {
     roomList: RoomListStore;
+    selectedRoomId: string;
     setRoom: (roomId: string) => void;
 }
 
-const RoomList: React.FC<RoomListProps> = ( { roomList, setRoom } ) => {
+const RoomList: React.FC<RoomListProps> = ( { roomList, selectedRoomId, setRoom } ) => {
     const rooms = useSyncExternalStore(roomList.subscribe, roomList.getSnapshot);
 
     return (
@@ -88,7 +89,12 @@ const RoomList: React.FC<RoomListProps> = ( { roomList, setRoom } ) => {
             { 
                 rooms.map(r => {
                     const roomId = Object.values(r)[0] as string;
-                    return <li key={ roomId as Key } onClick={ () => setRoom(roomId) }><RoomTile room={r}/></li>;
+                    return <li
+                        key={ roomId as Key }
+                        className={ roomId === selectedRoomId ? 'mx_RoomTile_selected' : '' }
+                        onClick={ () => setRoom(roomId) }>
+                            <RoomTile room={r}/>
+                    </li>;
                 })
             }
         </ol>
@@ -117,6 +123,7 @@ const App: React.FC<AppProps> = ( { clientStore } ) => {
             <nav className="mx_RoomList">
                 <RoomList
                     roomList={ roomListStore }
+                    selectedRoomId={ currentRoomId }
                     setRoom={ (roomId)=> { setCurrentRoomId(roomId); } }
                 />
             </nav>

@@ -25,6 +25,10 @@ body {
     flex: 0 0 auto;
 }
 
+.mx_RoomTile_selected {
+    font-weight: bold;
+}
+
 .mx_Timeline {
     flex: 1 1 auto;
     overflow: scroll;
