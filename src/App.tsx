@@ -1,8 +1,9 @@
-import React, { Key, MouseEventHandler, useEffect, useState, useSyncExternalStore } from "react";
+import React, { Key, MouseEventHandler, ReactElement, useEffect, useState, useSyncExternalStore } from "react";
 import "./App.css";
 import TimelineStore, { DayDivider, EventTimelineItem, MessageContent, TimelineItem, TimelineItemKind, VirtualTimelineItem, VirtualTimelineItemType } from "./TimelineStore.tsx";
 import RoomListStore, { RoomListItem}  from "./RoomListStore.tsx";
 import ClientStore from "./ClientStore.tsx";
+import sanitizeHtml from "sanitize-html";
 
 console.log("running App.tsx");
 
@@ -34,6 +35,25 @@ const EventTile: React.FC<EventTileProp> = ({ item }) => {
             break;
         case TimelineItemKind.Event:
             const event = item as EventTimelineItem;
+
+            let body: String | ReactElement;
+            if (event.getContent().type === 'Message') {
+                const content = (event.getContent() as MessageContent).getContent();
+                if (content.msgtype?.format === 'org.matrix.custom.html') {
+                    const html = sanitizeHtml(content.msgtype?.formatted_body, {
+                        transformTags: {
+                            'a': sanitizeHtml.simpleTransform('a', {target: '_blank'})
+                        }                         
+                    });
+                    body = <span dangerouslySetInnerHTML={{__html: html}}></span>;
+                }
+                else {
+                    body = content.msgtype?.body || '';
+                }
+            }
+            else {
+                body = `Unknown event type ${event.getContent().type}`;
+            }
             
             return (
                 <div className="mx_EventTile">
@@ -46,11 +66,7 @@ const EventTile: React.FC<EventTileProp> = ({ item }) => {
                         event.getSenderProfile()?.display_name :
                         event.getSender()
                     }</span>
-                    <span className="mx_Content">{
-                        event.getContent().type === 'Message' ?
-                        (event.getContent() as MessageContent).getContent().msgtype?.body :
-                        `Unknown event type ${event.getContent().type}`
-                    }</span>
+                    <span className="mx_Content">{ body }</span>
                 </div>
             );
         default:
