@@ -1,7 +1,7 @@
 import React, { Key, MouseEventHandler, useEffect, useState, useSyncExternalStore } from "react";
 import "./App.css";
 import TimelineStore from "./TimelineStore.tsx";
-import RoomListStore from "./RoomListStore.tsx";
+import RoomListStore, { RoomListItem}  from "./RoomListStore.tsx";
 import ClientStore from "./ClientStore.tsx";
 
 console.log("running App.tsx");
@@ -64,13 +64,18 @@ const Timeline: React.FC<TimelineProps> = ( { timeline } ) => {
 }
 
 interface RoomTileProp {
-    room: any;
+    room: RoomListItem;
 }
 
 const RoomTile: React.FC<RoomTileProp> = ({ room }) => {
     return (
         <div className="mx_RoomTile">
-            { JSON.stringify(room) }
+            <span className="mx_Avatar">{
+                room.getAvatar() ? <img src={ mxcToUrl(room.getAvatar()) } /> : null
+            }</span>
+            <span className="mx_RoomTile_name">
+                { room.getName() }
+            </span>
         </div>
     );
 }
@@ -87,12 +92,11 @@ const RoomList: React.FC<RoomListProps> = ( { roomList, selectedRoomId, setRoom 
     return (
         <ol start={ 0 }>
             { 
-                rooms.map(r => {
-                    const roomId = Object.values(r)[0] as string;
+                rooms.map((r: RoomListItem) => {
                     return <li
-                        key={ roomId as Key }
-                        className={ roomId === selectedRoomId ? 'mx_RoomTile_selected' : '' }
-                        onClick={ () => setRoom(roomId) }>
+                        key={ r.roomId }
+                        className={ r.roomId === selectedRoomId ? 'mx_RoomTile_selected' : '' }
+                        onClick={ () => setRoom(r.roomId) }>
                             <RoomTile room={r}/>
                     </li>;
                 })
@@ -124,7 +128,7 @@ const App: React.FC<AppProps> = ( { clientStore } ) => {
                 <RoomList
                     roomList={ roomListStore }
                     selectedRoomId={ currentRoomId }
-                    setRoom={ (roomId)=> { setCurrentRoomId(roomId); } }
+                    setRoom={ (roomId) => { setCurrentRoomId(roomId); } }
                 />
             </nav>
             { timelineStore ?

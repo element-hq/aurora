@@ -25,8 +25,29 @@ body {
     flex: 0 0 auto;
 }
 
+.mx_RoomTile {
+    position: relative;
+    max-width: 300px;
+}
+
 .mx_RoomTile_selected {
     font-weight: bold;
+}
+
+.mx_RoomTile .mx_Avatar img {
+    position: absolute;
+    left: 0em;
+    top: 2px;
+    width: 20px;
+    height: 20px;
+    border-radius: 32px;
+    object-fit: cover;
+}
+
+.mx_RoomTile_name {
+    margin-left: 2em;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 .mx_Timeline {
@@ -44,7 +65,7 @@ body {
     left: 1em;
 }
 
-.mx_Avatar img {
+.mx_EventTile .mx_Avatar img {
     position: absolute;
     left: 6em;
     width: 20px;
@@ -58,7 +79,6 @@ body {
     left: 8em;
     overflow: hidden;
     white-space: nowrap;
-    overflow: hidden;
     width: 8em;
 }
 

@@ -1,13 +1,49 @@
 import { invoke } from "@tauri-apps/api/tauri";
 
+enum RoomListEntry {
+    Empty,
+    Invalidated,
+    Filled,
+}
+
+export class RoomListItem {
+    entry: RoomListEntry;
+    roomId: string;
+    info: any;
+
+    constructor(entry: RoomListEntry, roomId: string, info: any) {
+        this.entry = entry;
+        this.roomId = roomId;
+        this.info = info;
+    }
+
+    getName = () => {
+        return this.info?.base_info.name?.Original?.content.name;
+    }
+
+    getAvatar = () => {
+        return this.info?.base_info.avatar?.Original?.content.url;
+    }
+}
+
 class RoomListStore {
 
     running: Boolean = false;
-    rooms: Array<any> = [];
+    rooms: Array<RoomListItem> = [];
     listeners: Array<CallableFunction> = [];
 
     constructor() {
         console.log("RoomListStore constructed");
+    }
+
+    // turn the wodges of JSON from rust-sdk into something typed
+    private async parseRoom(room: any): Promise<RoomListItem> {
+        const entry: RoomListEntry = RoomListEntry[Object.keys(room)[0] as keyof typeof RoomListEntry];
+        const roomId: string = Object.values(room)[0] as string;
+        // XXX: is hammering on invoke like this a good idea?
+        const info: any = await invoke("get_room_info", { roomId });
+        const rli = new RoomListItem(entry, roomId, info);
+        return (rli);
     }
 
     run = () => {
@@ -22,10 +58,10 @@ class RoomListStore {
 
         (async () => {
             console.log("subscribing to room list");
-            const rooms: Array<any> = await invoke("subscribe_roomlist");
+            const rawRooms: Array<any> = await invoke("subscribe_roomlist");
             console.log("subscribed to room list");
 
-            this.rooms = rooms;
+            this.rooms = await Promise.all(rawRooms.map(async room => await this.parseRoom(room)));
             this.emit();
         
             // TODO: recover from network outages and laptop sleeping
@@ -39,17 +75,23 @@ class RoomListStore {
 
                     console.log("got roomlist_update", diff);
 
+                    let room: RoomListItem;
+                    let rooms: RoomListItem[];
+
                     // XXX: deduplicate VecDiff processing with the TimelineStore
                     switch (k) {
                         case "Set":
-                            this.rooms[v.index] = v.value;
+                            room = await this.parseRoom(v.value);
+                            this.rooms[v.index] = room;
                             this.rooms = [...this.rooms];
                             break;
                         case "PushBack":
-                            this.rooms = [...this.rooms, v.value];
+                            room = await this.parseRoom(v.value);
+                            this.rooms = [...this.rooms, room];
                             break;
                         case "PushFront":
-                            this.rooms = [v.value, ...this.rooms];
+                            room = await this.parseRoom(v.value);
+                            this.rooms = [room, ...this.rooms];
                             break;
                         case "Clear":
                             this.rooms = [];
@@ -63,7 +105,8 @@ class RoomListStore {
                             this.rooms = [...this.rooms];
                             break;    
                         case "Insert":
-                            this.rooms.splice(v.index, 0, v.value);
+                            room = await this.parseRoom(v.value);
+                            this.rooms.splice(v.index, 0, room);
                             this.rooms = [...this.rooms];
                             break;
                         case "Remove":
@@ -74,10 +117,12 @@ class RoomListStore {
                             this.rooms = this.rooms.slice(0, v.length);
                             break;
                         case "Reset":
-                            this.rooms = [...v.values];
+                            rooms = await Promise.all(v.values.map(async (room: any) => await this.parseRoom(room)));
+                            this.rooms = [...rooms];
                             break;
                         case "Append":
-                            this.rooms = [...this.rooms, ...v.values];
+                            rooms = await Promise.all(v.values.map(async (room: any) => await this.parseRoom(room)));
+                            this.rooms = [...this.rooms, ...rooms];
                             break;
                     }
                 }
@@ -88,11 +133,11 @@ class RoomListStore {
         })();
     };
 
-    getSnapshot = (): Array<any> => {
+    getSnapshot = (): RoomListItem[] => {
         return this.rooms;
     }
 
-    subscribe = (listener: any) => {
+    subscribe = (listener: CallableFunction) => {
         this.listeners = [...this.listeners, listener];
         return () => {
             console.log("unsubscribing roomlist");

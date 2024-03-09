@@ -6,7 +6,7 @@ use imbl::Vector;
 use ruma::ServerName;
 use std::sync::Arc;
 use matrix_sdk::{
-    config::StoreConfig, matrix_auth::MatrixSession, AuthSession, Client, RoomListEntry, SqliteCryptoStore
+    config::StoreConfig, matrix_auth::MatrixSession, AuthSession, Client, RoomInfo, RoomListEntry, SqliteCryptoStore
 };
 use futures_util::StreamExt;
 use futures_core::stream::BoxStream;
@@ -173,11 +173,19 @@ async fn login<'a>(params: LoginParams, state: tauri::State<'_, AppState<'a>>) -
     Ok(())
 }
 
+// XXX: this is starting to feel like the FFI, except without typing.
+// Perhaps we should use the uniffi FFI, but relying on its datastructures being serialisable via serde
+// rather than uniffi::Record derives for now.
+
 #[tauri::command]
 async fn subscribe_timeline<'a>(room_id: String, state: tauri::State<'_, AppState<'a>>) -> Result<Vector<Arc<TimelineItem>>, Error> {
     state.client.lock().await;
     info!("subscribing to timeline for {room_id:#?}");
 
+    // FIXME: technically we should subscribe to rooms rather than just timelines. Although
+    // given we're running with all_rooms, we might not need to?
+
+    // FIXME: track multiple timelines, rather than assume that there's only one active at a time
     let mut locked_timeline_stream = state.timeline_stream.lock().await;
     if !locked_timeline_stream.is_none() {
         return Err(Error::Other(anyhow!("timeline already subscribed")));
@@ -190,7 +198,7 @@ async fn subscribe_timeline<'a>(room_id: String, state: tauri::State<'_, AppStat
         return Err(Error::Other(anyhow!("couldn't get room")));
     };
 
-    if ui_room.timeline().is_none() {
+    if !ui_room.is_timeline_initialized() {
         let builder = match ui_room.default_room_timeline_builder().await {
             Ok(builder) => builder,
             Err(err) => {
@@ -314,6 +322,20 @@ async fn unsubscribe_roomlist<'a>(state: tauri::State<'_, AppState<'a>>) -> Resu
     Ok(())
 }
 
+// XXX: how slow are all these tauri invocations?
+// should we batch up the room infos when subscribing to the roomlist instead?
+#[tauri::command]
+async fn get_room_info<'a>(room_id: String, state: tauri::State<'_, AppState<'a>>) -> Result<RoomInfo, Error> {
+    let sync_service = state.sync_service.lock().await;
+    let room_list_service = sync_service.as_ref().unwrap().room_list_service();
+    let id = RoomId::parse(room_id).unwrap();
+    let Ok(ui_room) = room_list_service.room(&id).await else {
+        return Err(Error::Other(anyhow!("couldn't get room")));
+    };
+    let room_info = ui_room.clone_info();
+    Ok(room_info)
+}
+
 fn main() {
     tracing_subscriber::fmt::init();
 
@@ -344,6 +366,7 @@ fn main() {
             subscribe_roomlist,
             get_roomlist_update,
             unsubscribe_roomlist,
+            get_room_info,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
