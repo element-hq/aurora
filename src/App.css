@@ -54,6 +54,7 @@ body {
     flex: 1 1 auto;
     overflow: scroll;
     display: flex;
+    word-break: break-all;
 }
 
 .mx_Timeline ol {
