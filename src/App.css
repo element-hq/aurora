@@ -25,10 +25,13 @@ body {
     flex: 0 0 auto;
 }
 
+.mx_RoomList ol {
+    overflow: hidden;
+}
+
 .mx_RoomTile {
     position: relative;
     max-width: 300px;
-    overflow: hidden;
     cursor: pointer;
 }
 
@@ -48,7 +51,6 @@ body {
 
 .mx_RoomTile_name {
     margin-left: 2em;
-    overflow: hidden;
     white-space: nowrap;
 }
 
