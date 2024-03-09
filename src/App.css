@@ -28,6 +28,8 @@ body {
 .mx_RoomTile {
     position: relative;
     max-width: 300px;
+    overflow: hidden;
+    cursor: pointer;
 }
 
 .mx_RoomTile_selected {

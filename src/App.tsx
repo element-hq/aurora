@@ -73,7 +73,7 @@ const RoomTile: React.FC<RoomTileProp> = ({ room }) => {
             <span className="mx_Avatar">{
                 room.getAvatar() ? <img src={ mxcToUrl(room.getAvatar()) } /> : null
             }</span>
-            <span className="mx_RoomTile_name">
+            <span className="mx_RoomTile_name" title={ room.getName() }>
                 { room.getName() }
             </span>
         </div>
