@@ -1,13 +1,13 @@
 import React, { Key, MouseEventHandler, useEffect, useState, useSyncExternalStore } from "react";
 import "./App.css";
-import TimelineStore from "./TimelineStore.tsx";
+import TimelineStore, { DayDivider, EventTimelineItem, MessageContent, TimelineItem, TimelineItemKind, VirtualTimelineItem, VirtualTimelineItemType } from "./TimelineStore.tsx";
 import RoomListStore, { RoomListItem}  from "./RoomListStore.tsx";
 import ClientStore from "./ClientStore.tsx";
 
 console.log("running App.tsx");
 
 interface EventTileProp {
-    item: any;
+    item: TimelineItem;
 }
 
 function mxcToUrl(mxcUrl: string): string {
@@ -16,36 +16,45 @@ function mxcToUrl(mxcUrl: string): string {
 }
 
 const EventTile: React.FC<EventTileProp> = ({ item }) => {
-    switch (Object.keys(item.kind)[0]) {
-        case "Virtual":
-            if (item.kind.Virtual.DayDivider) {
+
+    switch (item.kind) {
+        case TimelineItemKind.Virtual:
+            const virtual = item as VirtualTimelineItem;
+            if (virtual.virtualItem.type === VirtualTimelineItemType.DayDivider) {
+                const dayDivider = virtual.virtualItem as DayDivider;
                 return (
                     <div className="mx_EventTile">
-                        --- { new Date(item.kind.Virtual.DayDivider).toDateString() } ---
+                        --- { dayDivider.getDate().toDateString() } ---
                     </div>
                 );
             }
-            return `Unknown virtual event ${Object.keys(item.kind.Virtual)[0]}`
-        case "Event":
-            const event = item.kind.Event;
+            else {
+                return `Unknown virtual event ${virtual.virtualItem.type}`
+            }
+            break;
+        case TimelineItemKind.Event:
+            const event = item as EventTimelineItem;
+            
             return (
                 <div className="mx_EventTile">
-                    <span className="mx_Timestamp">{ new Date(event.timestamp).toLocaleTimeString() }</span>
+                    <span className="mx_Timestamp">{ new Date(event.getTimestamp()).toLocaleTimeString() }</span>
                     <span className="mx_Avatar">{
-                        event.sender_profile.Ready && event.sender_profile.Ready.avatar_url ? <img src={ mxcToUrl(event.sender_profile.Ready.avatar_url) }/> : null 
+                        event.getSenderProfile()?.avatar_url ? <img src={ mxcToUrl(event.getSenderProfile()?.avatar_url ?? '') }/> : null 
                     }</span>
                     <span className="mx_Sender">{
-                        event.sender_profile.Ready ?
-                        event.sender_profile.Ready.display_name :
-                        event.sender
+                        event.getSenderProfile()?.display_name ?
+                        event.getSenderProfile()?.display_name :
+                        event.getSender()
                     }</span>
                     <span className="mx_Content">{
-                        event.content.Message ?
-                        event.content.Message.msgtype.body :
-                        `Unknown event type ${Object.keys(event.content)[0]}`
+                        event.getContent().type === 'Message' ?
+                        (event.getContent() as MessageContent).getContent().msgtype?.body :
+                        `Unknown event type ${event.getContent().type}`
                     }</span>
                 </div>
             );
+        default:
+            return `Unknown timeline item ${item.kind}`
     }
 }
 
@@ -58,7 +67,7 @@ const Timeline: React.FC<TimelineProps> = ( { timeline } ) => {
 
     return (
         <ol>
-            { items.map(i => <li key={ i.internal_id } value={ i.internal_id }><EventTile item={i}/></li>) }
+            { items.map(i => <li key={ i.getInternalId() } value={ i.getInternalId() }><EventTile item={i}/></li>) }
         </ol>
     );
 }
