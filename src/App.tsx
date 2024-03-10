@@ -1,4 +1,4 @@
-import React, { Key, MouseEventHandler, ReactElement, useEffect, useState, useSyncExternalStore } from "react";
+import React, { ReactElement, useEffect, useState, useSyncExternalStore } from "react";
 import "./App.css";
 import TimelineStore, { DayDivider, EventTimelineItem, MessageContent, TimelineItem, TimelineItemKind, VirtualTimelineItem, VirtualTimelineItemInnerType } from "./TimelineStore.tsx";
 import RoomListStore, { RoomListItem}  from "./RoomListStore.tsx";
@@ -154,7 +154,7 @@ const Composer: React.FC<ComposerProps> = ( { timelineStore } ) => {
                 }
             }>
             </textarea>
-            <button id="mx_Composer_send" onClick={ (e) => {
+            <button id="mx_Composer_send" onClick={ () => {
                 if (composer) {
                     timelineStore.sendMessage(composer);
                     setComposer('');

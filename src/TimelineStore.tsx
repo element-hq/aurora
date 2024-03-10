@@ -212,7 +212,7 @@ class TimelineStore {
                 this.items = applyDiff<TimelineItem>(diff, this.items, this.parseItem);
                 this.emit();
             }            
-            console.log("== releasing lock after timeline subscription & polling");
+            console.log("== releasing lock after timeline subscription & polling", this.roomId);
             release();
             console.log("no longer subscribed to", this.roomId);
         })();
