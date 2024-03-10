@@ -1,5 +1,6 @@
 import { invoke } from "@tauri-apps/api/tauri";
 import { applyDiff } from "./DiffUtils.ts";
+import { Mutex } from 'async-mutex';
 
 interface SenderProfile {
     avatar_url: string,
@@ -140,6 +141,10 @@ class TimelineStore {
     items: TimelineItem[] = [];
     listeners: CallableFunction[] = [];
 
+    // for now, lock between subs/unsubs across all timeline instances
+    // hence static, until the rust layer can handle multiple timelines simultaneously
+    static mutex: Mutex = new Mutex();
+
     constructor(roomId: string) {
         this.roomId = roomId;
     }
@@ -154,19 +159,22 @@ class TimelineStore {
         }
     }
 
+    sendMessage = async (roomId: string, msg: string) => {
+        await invoke("send_message", { roomId, msg });
+    }
+
     run = () => {
         if (!this.roomId) return;
         
-        if (this.running) {
-            console.log("timeline already subscribed");
-            return;
-        }
-
-        this.running = true;
-
         (async () => {
+            console.log("=> acquiring lock while subscribing to", this.roomId);
+            let release = await TimelineStore.mutex.acquire();
+            console.log("<= got lock while subscribing to", this.roomId);
+            if (this.running) console.warn("got timeline lock while TLS already running for", this.roomId);
             console.log("subscribing to timeline", this.roomId);
             const rawItems: any[] = await invoke("subscribe_timeline", { roomId: this.roomId });
+            console.log("subscribed to timeline", this.roomId);
+            this.running = true;
 
             this.items = rawItems.map(this.parseItem);
             this.emit();
@@ -184,16 +192,21 @@ class TimelineStore {
                 catch (error) {
                     console.info(error);
                 }
-                if (!diff) continue;
+                if (!diff) {
+                    console.info("stopping timeline poll due to empty diff");
+                    this.running = false;
+                    break;
+                };
 
                 //console.log("timeline diff", diff);
                 //console.log(JSON.stringify(diff, undefined, 4));
                 
                 this.items = applyDiff<TimelineItem>(diff, this.items, this.parseItem);
                 this.emit();
-            }
-
-            console.log("no longer subscribed to", this.roomId)
+            }            
+            console.log("== releasing lock after timeline subscription & polling");
+            release();
+            console.log("no longer subscribed to", this.roomId);
         })();
     };
 
@@ -201,8 +214,13 @@ class TimelineStore {
         this.listeners = [...this.listeners, listener];
 
         return () => {
-            this.running = false;
-            (async () => { await invoke("unsubscribe_timeline", { roomId: this.roomId }); })();
+            (async () => {
+                // XXX: we should grab a mutex to avoid overlapping unsubscribes
+                // and ensure we only unsubscribe from the timeline we think we're
+                // unsubscribing to.
+                await invoke("unsubscribe_timeline", { roomId: this.roomId });
+                this.running = false;
+            })();
             this.listeners = this.listeners.filter(l => l !== listener);
         };
     };

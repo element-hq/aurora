@@ -54,15 +54,17 @@ body {
     white-space: nowrap;
 }
 
+.mx_MainPanel {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;    
+}
+
 .mx_Timeline {
     flex: 1 1 auto;
     overflow: scroll;
-    display: flex;
-    word-break: break-all;
-}
-
-.mx_Timeline ol {
     position: relative;
+    margin: 0px;
 }
 
 .mx_Timestamp {
@@ -91,3 +93,24 @@ body {
     display: block;
     margin-left: 16em;
 }
+
+.mx_Composer {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+#mx_Composer_textarea {
+    font-size: 16px;
+    flex: 1 1 auto;
+    margin: 4px;
+}
+ 
+#mx_Composer_send {
+    width: 4em;
+    flex: 0 0 auto;
+    font-size: 16px;
+    margin: 4px;
+}
+ 

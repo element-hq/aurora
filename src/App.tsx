@@ -40,7 +40,8 @@ const EventTile: React.FC<EventTileProp> = ({ item }) => {
             if (event.getContent().type === 'Message') {
                 const content = (event.getContent() as MessageContent).getContent();
                 if (content.msgtype?.format === 'org.matrix.custom.html') {
-                    const html = sanitizeHtml(content.msgtype?.formatted_body, {
+                    const html = sanitizeHtml(content.msgtype?.formatted_body || '', {
+                        // FIXME: actually implement full sanitization as per react-sdk
                         transformTags: {
                             'a': sanitizeHtml.simpleTransform('a', {target: '_blank'})
                         }                         
@@ -82,7 +83,7 @@ const Timeline: React.FC<TimelineProps> = ( { timeline } ) => {
     const items = useSyncExternalStore(timeline.subscribe, timeline.getSnapshot);
 
     return (
-        <ol>
+        <ol className="mx_Timeline">
             { items.map(i => <li key={ i.getInternalId() } value={ i.getInternalId() }><EventTile item={i}/></li>) }
         </ol>
     );
@@ -136,29 +137,64 @@ interface AppProps {
 
 const App: React.FC<AppProps> = ( { clientStore } ) => {
     const [currentRoomId, setCurrentRoomId] = useState('');
+    const [composer, setComposer] = useState('');
 
-    const roomListStore = clientStore.getRoomListStore();
-    const timelineStore = clientStore.getTimelineStore(currentRoomId);
+    const [roomListStore, setRoomListStore] = useState<RoomListStore>();
+    const [timelineStore, setTimelineStore] = useState<TimelineStore>();
 
     useEffect(()=>{ 
         // is this the right place to get SDK to subscribe? or should it be done in the store before passing it here somehow?
-        console.log("(re)running roomListStore");
-        clientStore.getRoomListStore().run();
-        console.log("(re)running timelineStore");
-        timelineStore.run();
+        // the double-start in strict mode is pretty horrible
+        (async ()=>{
+            const rls = await clientStore.getRoomListStore();
+            const tls = await clientStore.getTimelineStore(currentRoomId);
+        
+            if (rls && rls !== roomListStore) {
+                console.log("(re)running roomListStore");
+                rls.run();
+            }
+            if (tls && tls !== timelineStore) {
+                console.log("(re)running timelineStore");
+                tls.run();
+            }
+
+            setRoomListStore(rls);
+            setTimelineStore(tls);
+        })();
     });
     return (
         <div className="mx_App">
             <nav className="mx_RoomList">
-                <RoomList
-                    roomList={ roomListStore }
-                    selectedRoomId={ currentRoomId }
-                    setRoom={ (roomId) => { setCurrentRoomId(roomId); } }
-                />
+                { roomListStore ?
+                    <RoomList
+                        roomList={ roomListStore }
+                        selectedRoomId={ currentRoomId }
+                        setRoom={ (roomId) => { setCurrentRoomId(roomId); } }
+                    /> : null
+                }
             </nav>
             { timelineStore ?
-                <main className="mx_Timeline">
+                <main className="mx_MainPanel">
                     <Timeline timeline={ timelineStore }/>
+                    <div className="mx_Composer">
+                        <textarea
+                            id="mx_Composer_textarea"
+                            rows={1}
+                            onChange={ (e)=>{ setComposer(e.currentTarget.textContent || '') } }
+                            onKeyDown={ (e) => {
+                            if (e.key === 'Enter' && composer) {
+                                timelineStore.sendMessage(currentRoomId, composer);
+                                setComposer('');
+                            }
+                        }}>
+                        </textarea>
+                        <button id="mx_Composer_send" onClick={ (e) => {
+                            if (composer) {
+                                timelineStore.sendMessage(currentRoomId, composer);
+                                setComposer('');
+                            }
+                        }}>Send</button>
+                    </div>
                 </main>
               : null
             }

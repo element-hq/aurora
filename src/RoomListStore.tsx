@@ -1,4 +1,5 @@
 import { invoke } from "@tauri-apps/api/tauri";
+import { Mutex } from 'async-mutex';
 
 enum RoomListEntry {
     Empty,
@@ -32,6 +33,8 @@ class RoomListStore {
     rooms: Array<RoomListItem> = [];
     listeners: Array<CallableFunction> = [];
 
+    mutex: Mutex = new Mutex();
+
     constructor() {
         console.log("RoomListStore constructed");
     }
@@ -49,17 +52,14 @@ class RoomListStore {
     run = () => {
         console.log("Running roomlist store with state", this.running);
 
-        if (this.running) {
-            console.log("roomlist already subscribed");
-            return;
-        }
-
-        this.running = true;
-
         (async () => {
-            console.log("subscribing to room list");
+            console.log("=> acquiring lock while subscribing to roomlist");
+            let release = await this.mutex.acquire();
+            console.log("<= got lock while subscribing to roomlist");
+            if (this.running) console.warn("got RLS lock while RLS already running");
+            console.log("subscribing to roomlist");
             const rawRooms: Array<any> = await invoke("subscribe_roomlist");
-            console.log("subscribed to room list");
+            this.running = true;
 
             this.rooms = await Promise.all(rawRooms.map(async room => await this.parseRoom(room)));
             this.emit();
@@ -67,7 +67,25 @@ class RoomListStore {
             // TODO: recover from network outages and laptop sleeping
             while(this.running) {
                 console.log("waiting for roomlist_update");
-                const diffs: any = await invoke("get_roomlist_update");
+
+                let diffs: any;
+                try {
+                    diffs = await invoke("get_roomlist_update");
+                }
+                catch (error) {
+                    if (error) {
+                        console.info(error);
+                    }
+                    else {
+                        console.info("unexpected error");
+                    }                    
+                }
+
+                if (!diffs) {
+                    console.info("stopping roomlist poll due to empty diff");
+                    this.running = false;
+                    break;
+                }
 
                 for (const diff of diffs) {                
                     const k = Object.keys(diff)[0];
@@ -129,6 +147,9 @@ class RoomListStore {
                 this.emit();
             }
 
+            console.log("== releasing lock after roomlist subscription & polling");
+            release();
+
             console.log("stopped polling");
         })();
     };
@@ -141,8 +162,11 @@ class RoomListStore {
         this.listeners = [...this.listeners, listener];
         return () => {
             console.log("unsubscribing roomlist");
-            (async () => { await invoke("unsubscribe_roomlist"); })();
-            this.running = false;
+            (async () => {
+                // XXX: we should grab a mutex to avoid overlapping unsubscribes
+                await invoke("unsubscribe_roomlist");
+                this.running = false;
+            })();
             this.listeners = this.listeners.filter(l => l !== listener);
         };
     };

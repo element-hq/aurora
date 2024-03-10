@@ -5,18 +5,21 @@ import RoomListStore from "./RoomListStore.tsx";
 class ClientStore {
 
     timelineStores: Map<String, TimelineStore> = new Map();
-    roomListStore: RoomListStore;
+    roomListStore?: RoomListStore;
+
+    startup: Promise<void>;
+    resolve: (value: void | PromiseLike<void>) => void;
 
     constructor() {
-        this.roomListStore = new RoomListStore();
+        this.resolve = () => {};
+        this.startup = new Promise<void>((resolve) => { this.resolve = resolve; });
     }
 
     run = () => {
         (async () => {
             //await new Promise(r => setTimeout(r, 2000));
-            await invoke("reset");
-
             console.log("starting sdk...");
+            await invoke("reset");
             await invoke("login", {
                 params: {
                     homeserver: "https://matrix.org",
@@ -24,10 +27,16 @@ class ClientStore {
                     password: "",
                 }
             });
+            console.log("logged in...");
+
+            console.log("resolving startup promise");
+            this.resolve();
         })();
     }
 
-    getTimelineStore = ( roomId: string ) => {
+    getTimelineStore = async ( roomId: string ) => {
+        if (roomId === '') return;
+        await this.startup;
         let store = this.timelineStores.get(roomId);
         if (!store) {
             store = new TimelineStore(roomId);
@@ -36,7 +45,11 @@ class ClientStore {
         return store;
     }
 
-    getRoomListStore = () => this.roomListStore;
+    getRoomListStore = async () => {
+        await this.startup;
+        this.roomListStore ||= new RoomListStore();
+        return this.roomListStore;
+    }
 }
 
 export default ClientStore;
