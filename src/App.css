@@ -27,6 +27,12 @@ body {
 
 .mx_RoomList ol {
     overflow: hidden;
+    margin: 0px;
+    padding: 8px;
+}
+
+.mx_RoomList li {
+    list-style-type: none;
 }
 
 .mx_RoomTile {
@@ -57,7 +63,9 @@ body {
 .mx_MainPanel {
     flex: 1 1 auto;
     display: flex;
-    flex-direction: column;    
+    flex-direction: column;
+    margin-right: 8px;
+    margin-bottom: 4px;
 }
 
 .mx_Timeline {
@@ -65,6 +73,10 @@ body {
     overflow: scroll;
     position: relative;
     margin: 0px;
+}
+
+.mx_Timeline li::marker {
+    color: var(--cpd-color-text-placeholder);
 }
 
 .mx_Timestamp {
@@ -92,6 +104,11 @@ body {
 .mx_EventTile {
     display: block;
     margin-left: 16em;
+}
+
+.mx_EventTile_stateEvent {
+    color: var(--cpd-color-text-secondary);
+    font-style: italic;
 }
 
 .mx_Composer {

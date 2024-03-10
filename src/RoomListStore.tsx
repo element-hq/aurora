@@ -66,7 +66,7 @@ class RoomListStore {
         
             // TODO: recover from network outages and laptop sleeping
             while(this.running) {
-                console.log("waiting for roomlist_update");
+                //console.log("waiting for roomlist_update");
 
                 let diffs: any;
                 try {
@@ -91,7 +91,7 @@ class RoomListStore {
                     const k = Object.keys(diff)[0];
                     const v = Object.values(diff)[0] as any;
 
-                    console.log("got roomlist_update", diff);
+                    //console.log("got roomlist_update", diff);
 
                     let room: RoomListItem;
                     let rooms: RoomListItem[];

@@ -1,6 +1,9 @@
-:root {
+@import "@vector-im/compound-design-tokens/assets/web/css/compound-design-tokens.css";
+@import "@vector-im/compound-web/dist/style.css";
+
+/* :root {
   font-family: Inter, sans-serif;
-  font-feature-settings: 'liga' 1, 'calt' 1; /* Inter fix for Chrome */
+  font-feature-settings: 'liga' 1, 'calt' 1;
   font-size: 16px;
   line-height: 24px;
   font-weight: 400;
@@ -8,18 +11,18 @@
   color: #0f0f0f;
   background-color: #f6f6f6;
 
-  /* cargoculted from tauri */
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
-}
+} */
 
 @supports (font-variation-settings: normal) {
   :root { font-family: InterVariable, sans-serif; }
 }
 
+/*
 @media (prefers-color-scheme: dark) {
   :root {
     color: #f6f6f6;
@@ -39,3 +42,4 @@
     background-color: #0f0f0f69;
   }
 }
+*/

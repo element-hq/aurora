@@ -1,6 +1,18 @@
 import React, { ReactElement, useEffect, useState, useSyncExternalStore } from "react";
 import "./App.css";
-import TimelineStore, { DayDivider, EventTimelineItem, MessageContent, TimelineItem, TimelineItemKind, VirtualTimelineItem, VirtualTimelineItemInnerType } from "./TimelineStore.tsx";
+import TimelineStore, {
+    ContentType,
+    DayDivider,
+    EventTimelineItem,
+    MembershipChange,
+    MembershipChangeContent,
+    MessageContent,
+    ProfileChangeContent,
+    TimelineItem,
+    TimelineItemKind,
+    VirtualTimelineItem,
+    VirtualTimelineItemInnerType
+} from "./TimelineStore.tsx";
 import RoomListStore, { RoomListItem}  from "./RoomListStore.tsx";
 import ClientStore from "./ClientStore.tsx";
 import sanitizeHtml from "sanitize-html";
@@ -21,7 +33,6 @@ const EventTile: React.FC<EventTileProp> = ({ item }) => {
     switch (item.kind) {
         case TimelineItemKind.Virtual:
             const virtual = item as VirtualTimelineItem;
-            console.log("rendering virtual", virtual);
             if (virtual.virtualItem?.type === VirtualTimelineItemInnerType.DayDivider) {
                 const dayDivider = virtual.virtualItem as DayDivider;
                 return (
@@ -38,23 +49,35 @@ const EventTile: React.FC<EventTileProp> = ({ item }) => {
             const event = item as EventTimelineItem;
 
             let body: String | ReactElement;
-            if (event.getContent().type === 'Message') {
-                const content = (event.getContent() as MessageContent).getContent();
-                if (content.msgtype?.format === 'org.matrix.custom.html') {
-                    const html = sanitizeHtml(content.msgtype?.formatted_body || '', {
-                        // FIXME: actually implement full sanitization as per react-sdk
-                        transformTags: {
-                            'a': sanitizeHtml.simpleTransform('a', {target: '_blank'})
-                        }                         
-                    });
-                    body = <span dangerouslySetInnerHTML={{__html: html}}></span>;
-                }
-                else {
-                    body = content.msgtype?.body || '';
-                }
-            }
-            else {
-                body = `Unknown event type ${event.getContent().type}`;
+            switch (event.getContent().type) {
+                case ContentType[ContentType.Message]:
+                    const message = (event.getContent() as MessageContent).getMessage();
+                    if (message.msgtype?.format === 'org.matrix.custom.html') {
+                        const html = sanitizeHtml(message.msgtype?.formatted_body || '', {
+                            // FIXME: actually implement full sanitization as per react-sdk
+                            transformTags: {
+                                'a': sanitizeHtml.simpleTransform('a', {target: '_blank'})
+                            }                         
+                        });
+                        body = <span dangerouslySetInnerHTML={{__html: html}}></span>;
+                    }
+                    else {
+                        body = message.msgtype?.body || '';
+                    }
+                    break;
+                case ContentType[ContentType.ProfileChange]:
+                    const profileChange = (event.getContent() as ProfileChangeContent).getProfileChange();
+                    const changes = [];
+                    if (profileChange.avatar_url_change) changes.push(`avatar`);
+                    if (profileChange.displayname_change) changes.push(`displayname from ${profileChange.displayname_change.old} to ${profileChange.displayname_change.new}`);
+                    body = <span className="mx_EventTile_stateEvent">changed their { changes.join(" and changed their ") } </span>;
+                    break;
+                case ContentType[ContentType.MembershipChange]:
+                    const membershipChange = (event.getContent() as MembershipChangeContent).getMembershipChange();
+                    body = <span className="mx_EventTile_stateEvent">{ membershipChange.change.toLowerCase() }</span>;
+                    break;
+                default:
+                    body = `Unknown event type ${event.getContent().type}`;
             }
             
             return (

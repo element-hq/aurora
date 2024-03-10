@@ -5,11 +5,8 @@ import { Mutex } from 'async-mutex';
 // XXX: should we use purely abstract interfaces here, and entirely separate the code
 // for parsing the JSON from the types (rather than using a mix of classes and types)?
 
-interface SenderProfile {
-    avatar_url: string,
-    display_name: string,
-    display_name_ambiguous: boolean,
-}
+// XXX: gen these types via uniffi from the rust?
+// keeping it in sync manually is going to be very error prone.
 
 export enum TimelineItemKind {
     Event,
@@ -30,31 +27,12 @@ export class TimelineItem {
     }
 }
 
+
+// VirtualTimelineItems Inner (i.e. item.kind.Virtual) Types
+
 export enum VirtualTimelineItemInnerType {
     DayDivider,
     ReadMarker,
-}
-
-export class VirtualTimelineItem extends TimelineItem {
-    virtualItem?: VirtualTimelineItemInner;
-
-    constructor(item: any) {
-        super(item);
-        const type = (typeof item.kind.Virtual === 'string') ?
-            VirtualTimelineItemInnerType[item.kind.Virtualtype as keyof typeof VirtualTimelineItemInnerType] :
-            VirtualTimelineItemInnerType[Object.keys(item.kind.Virtual)[0] as keyof typeof VirtualTimelineItemInnerType];
-
-            switch (type) {
-            case VirtualTimelineItemInnerType.DayDivider:
-                this.virtualItem = new DayDivider(item.kind.Virtual);
-                break;
-            case VirtualTimelineItemInnerType.ReadMarker:
-                this.virtualItem = new ReadMarker(item.kind.Virtual);
-                break;
-            default:
-                console.error("unrecognised virtual item", item.kind.Virtual);
-        }
-    }
 }
 
 export class VirtualTimelineItemInner {
@@ -76,23 +54,30 @@ export class DayDivider extends VirtualTimelineItemInner {
 export class ReadMarker extends VirtualTimelineItemInner {
 }
 
-interface MessageType {
-    body: string,
-    msgtype: string,
-    format?: string,
-    formatted_body?: string,
+export class VirtualTimelineItem extends TimelineItem {
+    virtualItem?: VirtualTimelineItemInner;
+
+    constructor(item: any) {
+        super(item);
+        const type = (typeof item.kind.Virtual === 'string') ?
+            VirtualTimelineItemInnerType[item.kind.Virtual as keyof typeof VirtualTimelineItemInnerType] :
+            VirtualTimelineItemInnerType[Object.keys(item.kind.Virtual)[0] as keyof typeof VirtualTimelineItemInnerType];
+
+            switch (type) {
+            case VirtualTimelineItemInnerType.DayDivider:
+                this.virtualItem = new DayDivider(item.kind.Virtual);
+                break;
+            case VirtualTimelineItemInnerType.ReadMarker:
+                this.virtualItem = new ReadMarker(item.kind.Virtual);
+                break;
+            default:
+                console.error("unrecognised virtual item", item.kind.Virtual);
+        }
+    }
 }
 
-interface Message {
-    edited?: boolean,
-    in_reply_to?: string,
-    msgtype?: MessageType,
-    thread_root?: string,
-}
 
-enum ContentType {
-    Message,
-}
+// EventTimelineItem Content types
 
 class Content {
     protected content: any;
@@ -104,10 +89,89 @@ class Content {
     }
 }
 
+export enum ContentType {
+    Message,
+    ProfileChange,
+    MembershipChange,
+}
+
+interface Message {
+    edited?: boolean,
+    in_reply_to?: string,
+    msgtype?: {
+        body: string,
+        msgtype: string,
+        format?: string,
+        formatted_body?: string,
+    },
+    thread_root?: string,
+}
+
 export class MessageContent extends Content {
-    getContent = (): Message => {
+    getMessage = (): Message => {
         return this.content.Message;
     }
+}
+
+interface ProfileChange {
+    avatar_url_change: {
+        old?: string,
+        new?: string,
+    },
+    displayname_change: {
+        old?: string,
+        new?: string,
+    },
+}
+
+export class ProfileChangeContent extends Content {
+    getProfileChange = (): ProfileChange => {
+        return this.content.ProfileChange;
+    }
+}
+
+export enum MembershipChange {
+    None,
+    Error,
+    Joined,
+    Left,
+    Banned,
+    Unbanned,
+    Kicked,
+    Invited,
+    KickedAndBanned,
+    InvitationAccepted,
+    InvitationRejected,
+    InvitationRevoked,
+    Knocked,
+    KnockAccepted,
+    KnockRetracted,
+    KnockDenied,
+    NotImplemented,
+}
+
+interface RoomMembershipChange {
+    user_id: string,
+    change: string, // string of type MembershipChange
+    content: {
+        Original: {
+            displayname?: string,
+            avatar_url?: string,
+            membership: string,
+        }
+    }
+}
+
+export class MembershipChangeContent extends Content {
+    getMembershipChange = (): RoomMembershipChange => {
+        return this.content.MembershipChange;
+    }
+}
+
+interface SenderProfile {
+    avatar_url: string,
+    display_name: string,
+    display_name_ambiguous: boolean,
 }
 
 export class EventTimelineItem extends TimelineItem {
@@ -119,6 +183,12 @@ export class EventTimelineItem extends TimelineItem {
         switch(contentType) {
             case ContentType[ContentType.Message]:
                 this.content = new MessageContent(this.item.kind.Event.content);
+                break;
+            case ContentType[ContentType.ProfileChange]:
+                this.content = new ProfileChangeContent(this.item.kind.Event.content);
+                break;
+            case ContentType[ContentType.MembershipChange]:
+                this.content = new MembershipChangeContent(this.item.kind.Event.content);
                 break;
             default:
                 this.content = new Content(this.item.kind.Event.content);
@@ -206,7 +276,7 @@ class TimelineStore {
                     break;
                 };
 
-                //console.log("timeline diff", diff);
+                console.log("timeline diff", diff);
                 //console.log(JSON.stringify(diff, undefined, 4));
                 
                 this.items = applyDiff<TimelineItem>(diff, this.items, this.parseItem);
