@@ -1,6 +1,6 @@
 import React, { Key, MouseEventHandler, ReactElement, useEffect, useState, useSyncExternalStore } from "react";
 import "./App.css";
-import TimelineStore, { DayDivider, EventTimelineItem, MessageContent, TimelineItem, TimelineItemKind, VirtualTimelineItem, VirtualTimelineItemType } from "./TimelineStore.tsx";
+import TimelineStore, { DayDivider, EventTimelineItem, MessageContent, TimelineItem, TimelineItemKind, VirtualTimelineItem, VirtualTimelineItemInnerType } from "./TimelineStore.tsx";
 import RoomListStore, { RoomListItem}  from "./RoomListStore.tsx";
 import ClientStore from "./ClientStore.tsx";
 import sanitizeHtml from "sanitize-html";
@@ -21,7 +21,8 @@ const EventTile: React.FC<EventTileProp> = ({ item }) => {
     switch (item.kind) {
         case TimelineItemKind.Virtual:
             const virtual = item as VirtualTimelineItem;
-            if (virtual.virtualItem.type === VirtualTimelineItemType.DayDivider) {
+            console.log("rendering virtual", virtual);
+            if (virtual.virtualItem?.type === VirtualTimelineItemInnerType.DayDivider) {
                 const dayDivider = virtual.virtualItem as DayDivider;
                 return (
                     <div className="mx_EventTile">
@@ -30,7 +31,7 @@ const EventTile: React.FC<EventTileProp> = ({ item }) => {
                 );
             }
             else {
-                return `Unknown virtual event ${virtual.virtualItem.type}`
+                return `Unknown virtual event ${virtual.virtualItem?.type}`
             }
             break;
         case TimelineItemKind.Event:
@@ -76,10 +77,10 @@ const EventTile: React.FC<EventTileProp> = ({ item }) => {
 }
 
 interface TimelineProps {
-    timeline: TimelineStore;
+    timelineStore: TimelineStore;
 }
 
-const Timeline: React.FC<TimelineProps> = ( { timeline } ) => {
+const Timeline: React.FC<TimelineProps> = ( { timelineStore: timeline } ) => {
     const items = useSyncExternalStore(timeline.subscribe, timeline.getSnapshot);
 
     return (
@@ -107,12 +108,12 @@ const RoomTile: React.FC<RoomTileProp> = ({ room }) => {
 }
 
 interface RoomListProps {
-    roomList: RoomListStore;
+    roomListStore: RoomListStore;
     selectedRoomId: string;
     setRoom: (roomId: string) => void;
 }
 
-const RoomList: React.FC<RoomListProps> = ( { roomList, selectedRoomId, setRoom } ) => {
+const RoomList: React.FC<RoomListProps> = ( { roomListStore: roomList, selectedRoomId, setRoom } ) => {
     const rooms = useSyncExternalStore(roomList.subscribe, roomList.getSnapshot);
 
     return (
@@ -131,13 +132,44 @@ const RoomList: React.FC<RoomListProps> = ( { roomList, selectedRoomId, setRoom 
     );
 }
 
+interface ComposerProps {
+    timelineStore: TimelineStore;
+}
+
+const Composer: React.FC<ComposerProps> = ( { timelineStore } ) => {
+    const [composer, setComposer] = useState('');
+
+    return(
+        <div className="mx_Composer">
+            <textarea
+                id="mx_Composer_textarea"
+                rows={1}
+                value={ composer }
+                onChange={ e => setComposer(e.currentTarget.value) }
+                onKeyDown={ (e) => {
+                    if (e.key === 'Enter' && composer) {
+                        timelineStore.sendMessage(composer);
+                        setComposer('');
+                    }
+                }
+            }>
+            </textarea>
+            <button id="mx_Composer_send" onClick={ (e) => {
+                if (composer) {
+                    timelineStore.sendMessage(composer);
+                    setComposer('');
+                }
+            }}>Send</button>
+        </div>
+    );
+}
+
 interface AppProps {
     clientStore: ClientStore;
 }
 
 const App: React.FC<AppProps> = ( { clientStore } ) => {
     const [currentRoomId, setCurrentRoomId] = useState('');
-    const [composer, setComposer] = useState('');
 
     const [roomListStore, setRoomListStore] = useState<RoomListStore>();
     const [timelineStore, setTimelineStore] = useState<TimelineStore>();
@@ -167,7 +199,7 @@ const App: React.FC<AppProps> = ( { clientStore } ) => {
             <nav className="mx_RoomList">
                 { roomListStore ?
                     <RoomList
-                        roomList={ roomListStore }
+                        roomListStore={ roomListStore }
                         selectedRoomId={ currentRoomId }
                         setRoom={ (roomId) => { setCurrentRoomId(roomId); } }
                     /> : null
@@ -175,26 +207,8 @@ const App: React.FC<AppProps> = ( { clientStore } ) => {
             </nav>
             { timelineStore ?
                 <main className="mx_MainPanel">
-                    <Timeline timeline={ timelineStore }/>
-                    <div className="mx_Composer">
-                        <textarea
-                            id="mx_Composer_textarea"
-                            rows={1}
-                            onChange={ (e)=>{ setComposer(e.currentTarget.textContent || '') } }
-                            onKeyDown={ (e) => {
-                            if (e.key === 'Enter' && composer) {
-                                timelineStore.sendMessage(currentRoomId, composer);
-                                setComposer('');
-                            }
-                        }}>
-                        </textarea>
-                        <button id="mx_Composer_send" onClick={ (e) => {
-                            if (composer) {
-                                timelineStore.sendMessage(currentRoomId, composer);
-                                setComposer('');
-                            }
-                        }}>Send</button>
-                    </div>
+                    <Timeline timelineStore={ timelineStore }/>
+                    <Composer timelineStore={ timelineStore }/>
                 </main>
               : null
             }

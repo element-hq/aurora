@@ -2,6 +2,9 @@ import { invoke } from "@tauri-apps/api/tauri";
 import { applyDiff } from "./DiffUtils.ts";
 import { Mutex } from 'async-mutex';
 
+// XXX: should we use purely abstract interfaces here, and entirely separate the code
+// for parsing the JSON from the types (rather than using a mix of classes and types)?
+
 interface SenderProfile {
     avatar_url: string,
     display_name: string,
@@ -27,45 +30,50 @@ export class TimelineItem {
     }
 }
 
-export enum VirtualTimelineItemType {
+export enum VirtualTimelineItemInnerType {
     DayDivider,
     ReadMarker,
 }
 
 export class VirtualTimelineItem extends TimelineItem {
-    virtualItem: VirtualTimelineItemSubtype;
+    virtualItem?: VirtualTimelineItemInner;
 
     constructor(item: any) {
         super(item);
-        const type = VirtualTimelineItemType[Object.keys(item.kind.Virtual)[0] as keyof typeof VirtualTimelineItemType];
-        switch (type) {
-            case VirtualTimelineItemType.DayDivider:
+        const type = (typeof item.kind.Virtual === 'string') ?
+            VirtualTimelineItemInnerType[item.kind.Virtualtype as keyof typeof VirtualTimelineItemInnerType] :
+            VirtualTimelineItemInnerType[Object.keys(item.kind.Virtual)[0] as keyof typeof VirtualTimelineItemInnerType];
+
+            switch (type) {
+            case VirtualTimelineItemInnerType.DayDivider:
                 this.virtualItem = new DayDivider(item.kind.Virtual);
                 break;
-            case VirtualTimelineItemType.ReadMarker:
+            case VirtualTimelineItemInnerType.ReadMarker:
                 this.virtualItem = new ReadMarker(item.kind.Virtual);
                 break;
+            default:
+                console.error("unrecognised virtual item", item.kind.Virtual);
         }
     }
 }
 
-export class VirtualTimelineItemSubtype {
-    item: any;
-    type: VirtualTimelineItemType;
+export class VirtualTimelineItemInner {
+    innerItem: any;
+    type: VirtualTimelineItemInnerType;
 
-    constructor(item: any) {
-        this.item = item;
-        this.type = VirtualTimelineItemType[Object.keys(item)[0] as keyof typeof VirtualTimelineItemType];
+    constructor(innerItem: any) {
+        this.innerItem = innerItem;
+        this.type = VirtualTimelineItemInnerType[Object.keys(innerItem)[0] as keyof typeof VirtualTimelineItemInnerType];
     }
 }
 
-export class DayDivider extends VirtualTimelineItemSubtype {
+export class DayDivider extends VirtualTimelineItemInner {
     getDate = (): Date => {
-        return new Date(this.item.DayDivider);
+        return new Date(this.innerItem.DayDivider);
     }
 }
 
-export class ReadMarker extends VirtualTimelineItemSubtype {
+export class ReadMarker extends VirtualTimelineItemInner {
 }
 
 interface MessageType {
@@ -159,8 +167,8 @@ class TimelineStore {
         }
     }
 
-    sendMessage = async (roomId: string, msg: string) => {
-        await invoke("send_message", { roomId, msg });
+    sendMessage = async (msg: string) => {
+        await invoke("send_message", { roomId: this.roomId, msg });
     }
 
     run = () => {
