@@ -85,7 +85,7 @@ body {
     font-weight: bold;
 }
 
-.mx_RoomTile .mx_Avatar img {
+.mx_RoomTile .mx_Avatar {
     position: absolute;
     left: 0em;
     top: 2px;
@@ -124,6 +124,7 @@ body {
     margin: 0px;
     padding: 0px;
     align-content: end;;
+    list-style: none;
 }
 
 .mx_Timeline ol li::marker {
@@ -131,27 +132,38 @@ body {
 }
 
 .mx_Timestamp {
+    display: none;
     position: absolute;
     left: 1em;
 }
 
-.mx_EventTile .mx_Avatar img {
+.mx_EventTile .mx_Avatar {
     position: absolute;
-    left: 6em;
 }
 
 .mx_Sender {
-    position: absolute;
-    left: 8em;
-    overflow: hidden;
-    white-space: nowrap;
-    width: 8em;
+    display: block;
+    margin-left: var(--cpd-space-12x);
+    font-size: var(--cpd-font-size-body-sm);
+    font-weight: var(--cpd-font-weight-semibold);
+    color: var(--cpd-color-text-secondary);
+}
+
+.mx_Content {
+    display: block;
+    margin-left: var(--cpd-space-12x);
+    font-size: var(--cpd-font-size-body-md);
+    color: var(--cpd-color-text-primary);
 }
 
 .mx_EventTile {
+    margin-top: var(--cpd-space-2x);
     display: block;
-    margin-left: 19em;
     overflow-wrap: anywhere;
+}
+
+.mx_EventTile_continuation {
+    margin: 0px;
 }
 
 /* hack for iamb content */

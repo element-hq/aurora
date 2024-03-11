@@ -15,12 +15,13 @@ import TimelineStore, {
 import RoomListStore, { RoomListEntry, RoomListItem}  from "./RoomListStore.tsx";
 import ClientStore, { ClientState } from "./ClientStore.tsx";
 import sanitizeHtml from "sanitize-html";
-import { Button, Form, Glass, PasswordInput, Text, TextInput, TooltipProvider } from "@vector-im/compound-web";
+import { Avatar, Button, Form, Glass, PasswordInput, Text, TextInput, TooltipProvider } from "@vector-im/compound-web";
 
 console.log("running App.tsx");
 
 interface EventTileProp {
     item: TimelineItem;
+    continuation: boolean;
 }
 
 function mxcToUrl(mxcUrl: string): string {
@@ -28,7 +29,7 @@ function mxcToUrl(mxcUrl: string): string {
         "?width=48&height=48";
 }
 
-const EventTile: React.FC<EventTileProp> = ({ item }) => {
+const EventTile: React.FC<EventTileProp> = ({ item, continuation }) => {
 
     switch (item.kind) {
         case TimelineItemKind.Virtual:
@@ -78,9 +79,17 @@ const EventTile: React.FC<EventTileProp> = ({ item }) => {
                     if (profileChange.avatar_url_change) {
                         changes.push([
                             'avatar from ',
-                            <img key='old' className="mx_Avatar_img" src={ mxcToUrl(profileChange.avatar_url_change.old ?? '') }/>,
+                            <Avatar
+                                name={ event.getSenderProfile()?.display_name || event.getSender().charAt(1) }
+                                id={ event.getSender() }
+                                src={ mxcToUrl(profileChange.avatar_url_change.old ?? '')
+                            } size="16px"/>,
                             ' to ',
-                            <img key='new' className="mx_Avatar_img" src={ mxcToUrl(profileChange.avatar_url_change.new ?? '') }/>,
+                            <Avatar
+                                name={ event.getSenderProfile()?.display_name || event.getSender().charAt(1) }
+                                id={ event.getSender() }
+                                src={ mxcToUrl(profileChange.avatar_url_change.new ?? '')
+                            } size="16px"/>,
                         ]);
                         if (profileChange.displayname_change) changes.push(' and changed their ');
                     }
@@ -109,17 +118,22 @@ const EventTile: React.FC<EventTileProp> = ({ item }) => {
             }
             
             return (
-                <div className="mx_EventTile">
+                <div className={ `mx_EventTile${continuation ? ' mx_EventTile_continuation' : ''}` }>
                     <span className="mx_Timestamp">{ new Date(event.getTimestamp()).toLocaleTimeString() }</span>
-                    <span className="mx_Avatar">{
-                        event.getSenderProfile()?.avatar_url ?
-                        <img className="mx_Avatar_img" src={ mxcToUrl(event.getSenderProfile()?.avatar_url ?? '') }/> : null 
-                    }</span>
-                    <span className="mx_Sender">{
-                        event.getSenderProfile()?.display_name ?
-                        event.getSenderProfile()?.display_name :
-                        event.getSender()
-                    }</span>
+                    { continuation ? null : <>
+                        <span className="mx_Avatar">
+                            <Avatar
+                                    name={ event.getSenderProfile()?.display_name || event.getSender().charAt(1) }
+                                    id={ event.getSender() }
+                                    src={ event.getSenderProfile()?.avatar_url ? mxcToUrl(event.getSenderProfile()?.avatar_url || '') : '' }
+                                    size="32px"/>
+                        </span>
+                        <span className="mx_Sender">{
+                            event.getSenderProfile()?.display_name ?
+                            event.getSenderProfile()?.display_name :
+                            event.getSender()
+                        }</span>
+                    </> }
                     <span className="mx_Content">{ body }</span>
                 </div>
             );
@@ -138,7 +152,16 @@ const Timeline: React.FC<TimelineProps> = ( { timelineStore: timeline } ) => {
     return (
         <div className="mx_Timeline">
             <ol>
-                { items.map(i => <li key={ i.getInternalId() } value={ i.getInternalId() }><EventTile item={i}/></li>) }
+                { items.map((item, i) => <li key={ item.getInternalId() } value={ item.getInternalId() }>
+                        <EventTile item={item} continuation={
+                            i > 0 && 
+                            item.kind == TimelineItemKind.Event && 
+                            items[i-1].kind == TimelineItemKind.Event && 
+                            (item as EventTimelineItem).getSender() === 
+                                (items[i-1] as EventTimelineItem).getSender()
+                        }/>
+                    </li>)
+                }
             </ol>
         </div>
     );
