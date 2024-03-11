@@ -20,10 +20,10 @@ body {
     height: 100%;
 }
 
+/* room for the tauri window header */
 .mx_Header {
-    flex: none;
-    /* height: 30px;
-    background-color: #f00; */
+    flex: 0 0 auto;
+    height: 30px;
 }
 
 .mx_Client {
@@ -55,12 +55,16 @@ body {
 }
 
 .mx_RoomList {
-    overflow: scroll;
+    display: flex;
+    /* this is important, to stop roomlist pushing the composer off the bottom */
+    flex-direction: column;
     flex: 0 0 auto;
 }
 
 .mx_RoomList ol {
-    overflow: hidden;
+    overflow: scroll;
+    /* this is important, to stop roomlist pushing the composer off the bottom */
+    flex: 1 1 0;
     margin: 0px;
     padding: 8px;
 }
@@ -70,6 +74,8 @@ body {
 }
 
 .mx_RoomTile {
+    overflow: hidden;
+    text-overflow: ellipsis;
     position: relative;
     max-width: 300px;
     cursor: pointer;
@@ -107,10 +113,11 @@ body {
 }
 
 .mx_Timeline {
+    /* important to stop the header pushing the composer off the bottom */
+    flex: 1 1 0;
     overflow: scroll;
     position: relative;
     margin: 0px;
-    height: 100%;
 }
 
 .mx_Timeline li::marker {
