@@ -117,11 +117,16 @@ body {
     flex: 1 1 0;
     overflow: scroll;
     position: relative;
-    margin: 0px;
-    padding: 0px;
+    display: flex;
 }
 
-.mx_Timeline li::marker {
+.mx_Timeline ol {
+    margin: 0px;
+    padding: 0px;
+    align-content: end;;
+}
+
+.mx_Timeline ol li::marker {
     color: var(--cpd-color-text-placeholder);
 }
 

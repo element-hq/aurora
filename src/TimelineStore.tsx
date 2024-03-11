@@ -41,7 +41,9 @@ export class VirtualTimelineItemInner {
 
     constructor(innerItem: any) {
         this.innerItem = innerItem;
-        this.type = VirtualTimelineItemInnerType[Object.keys(innerItem)[0] as keyof typeof VirtualTimelineItemInnerType];
+        this.type = (typeof innerItem === 'string') ?
+            VirtualTimelineItemInnerType[innerItem as keyof typeof VirtualTimelineItemInnerType] :
+            VirtualTimelineItemInnerType[Object.keys(innerItem)[0] as keyof typeof VirtualTimelineItemInnerType];
     }
 }
 
@@ -59,6 +61,7 @@ export class VirtualTimelineItem extends TimelineItem {
 
     constructor(item: any) {
         super(item);
+        console.log(item.kind.Virtual, VirtualTimelineItemInnerType['ReadMarker']);
         const type = (typeof item.kind.Virtual === 'string') ?
             VirtualTimelineItemInnerType[item.kind.Virtual as keyof typeof VirtualTimelineItemInnerType] :
             VirtualTimelineItemInnerType[Object.keys(item.kind.Virtual)[0] as keyof typeof VirtualTimelineItemInnerType];

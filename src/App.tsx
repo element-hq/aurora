@@ -33,16 +33,22 @@ const EventTile: React.FC<EventTileProp> = ({ item }) => {
     switch (item.kind) {
         case TimelineItemKind.Virtual:
             const virtual = item as VirtualTimelineItem;
-            if (virtual.virtualItem?.type === VirtualTimelineItemInnerType.DayDivider) {
-                const dayDivider = virtual.virtualItem as DayDivider;
-                return (
-                    <div className="mx_EventTile">
-                        --- { dayDivider.getDate().toDateString() } ---
-                    </div>
-                );
-            }
-            else {
-                return `Unknown virtual event ${virtual.virtualItem?.type}`
+            switch (virtual.virtualItem?.type) {
+                case VirtualTimelineItemInnerType.DayDivider:
+                    const dayDivider = virtual.virtualItem as DayDivider;
+                    return (
+                        <div className="mx_EventTile">
+                            --- { dayDivider.getDate().toDateString() } ---
+                        </div>
+                    );
+                case VirtualTimelineItemInnerType.ReadMarker:
+                    return (
+                        <div className="mx_EventTile">
+                            --- New messages ---
+                        </div>
+                    );
+                default:
+                    return `Unknown virtual event ${virtual.virtualItem?.type}`
             }
             break;
         case TimelineItemKind.Event:
@@ -130,9 +136,11 @@ const Timeline: React.FC<TimelineProps> = ( { timelineStore: timeline } ) => {
     const items = useSyncExternalStore(timeline.subscribe, timeline.getSnapshot);
 
     return (
-        <ol className="mx_Timeline">
-            { items.map(i => <li key={ i.getInternalId() } value={ i.getInternalId() }><EventTile item={i}/></li>) }
-        </ol>
+        <div className="mx_Timeline">
+            <ol>
+                { items.map(i => <li key={ i.getInternalId() } value={ i.getInternalId() }><EventTile item={i}/></li>) }
+            </ol>
+        </div>
     );
 }
 
