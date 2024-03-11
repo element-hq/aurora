@@ -85,7 +85,7 @@ class Content {
 
     constructor(content: any) {
         this.content = content;
-        this.type = Object.keys(content)[0];
+        this.type = typeof content === 'string' ? content : Object.keys(content)[0];
     }
 }
 
@@ -93,6 +93,7 @@ export enum ContentType {
     Message,
     ProfileChange,
     MembershipChange,
+    RedactedMessage,
 }
 
 interface Message {
@@ -152,13 +153,16 @@ export enum MembershipChange {
 
 interface RoomMembershipChange {
     user_id: string,
-    change: string, // string of type MembershipChange
+    change?: string, // string of type MembershipChange
     content: {
-        Original: {
+        Original?: {
             displayname?: string,
             avatar_url?: string,
             membership: string,
-        }
+        },
+        Redacted?: {
+            membership: string,
+        },
     }
 }
 
@@ -257,6 +261,7 @@ class TimelineStore {
             this.items = rawItems.map(this.parseItem);
             this.emit();
 
+            console.log("timeline items", this.items);            
             //this.logItems(timeline_items);
         
             // TODO: recover from network outages and laptop sleeping

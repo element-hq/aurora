@@ -4,7 +4,6 @@ import TimelineStore, {
     ContentType,
     DayDivider,
     EventTimelineItem,
-    MembershipChange,
     MembershipChangeContent,
     MessageContent,
     ProfileChangeContent,
@@ -68,13 +67,35 @@ const EventTile: React.FC<EventTileProp> = ({ item }) => {
                 case ContentType[ContentType.ProfileChange]:
                     const profileChange = (event.getContent() as ProfileChangeContent).getProfileChange();
                     const changes = [];
-                    if (profileChange.avatar_url_change) changes.push(`avatar`);
-                    if (profileChange.displayname_change) changes.push(`displayname from ${profileChange.displayname_change.old} to ${profileChange.displayname_change.new}`);
-                    body = <span className="mx_EventTile_stateEvent">changed their { changes.join(" and changed their ") } </span>;
+                    changes.push('changed their ');
+                    if (profileChange.avatar_url_change) {
+                        changes.push([
+                            'avatar from ',
+                            <img className="mx_Avatar_img" src={ mxcToUrl(profileChange.avatar_url_change.old ?? '') }/>,
+                            ' to ',
+                            <img className="mx_Avatar_img" src={ mxcToUrl(profileChange.avatar_url_change.new ?? '') }/>,
+                        ]);
+                        if (profileChange.displayname_change) changes.push(' and changed their ');
+                    }
+                    if (profileChange.displayname_change) {
+                        changes.push(`displayname from ${profileChange.displayname_change.old} to ${profileChange.displayname_change.new}`);
+                    }
+                    body = <span className="mx_EventTile_stateEvent">{ changes } </span>;
                     break;
                 case ContentType[ContentType.MembershipChange]:
                     const membershipChange = (event.getContent() as MembershipChangeContent).getMembershipChange();
-                    body = <span className="mx_EventTile_stateEvent">{ membershipChange.change.toLowerCase() }</span>;
+                    if (membershipChange.change) {
+                        body = <span className="mx_EventTile_stateEvent">{ membershipChange.change.toLowerCase() }</span>;
+                    }
+                    else if (membershipChange.content.Redacted) {
+                        body = <span className="mx_EventTile_stateEvent">redacted { membershipChange.content.Redacted?.membership }</span>;
+                    }
+                    else {
+                        body = <span className="mx_EventTile_stateEvent">unknown membership change</span>;
+                    }
+                    break;
+                case ContentType[ContentType.RedactedMessage]:
+                    body = <span className="mx_EventTile_redacted">redacted</span>
                     break;
                 default:
                     body = `Unknown event type ${event.getContent().type}`;
@@ -84,7 +105,8 @@ const EventTile: React.FC<EventTileProp> = ({ item }) => {
                 <div className="mx_EventTile">
                     <span className="mx_Timestamp">{ new Date(event.getTimestamp()).toLocaleTimeString() }</span>
                     <span className="mx_Avatar">{
-                        event.getSenderProfile()?.avatar_url ? <img src={ mxcToUrl(event.getSenderProfile()?.avatar_url ?? '') }/> : null 
+                        event.getSenderProfile()?.avatar_url ?
+                        <img className="mx_Avatar_img" src={ mxcToUrl(event.getSenderProfile()?.avatar_url ?? '') }/> : null 
                     }</span>
                     <span className="mx_Sender">{
                         event.getSenderProfile()?.display_name ?
@@ -121,7 +143,7 @@ const RoomTile: React.FC<RoomTileProp> = ({ room }) => {
     return (
         <div className="mx_RoomTile">
             <span className="mx_Avatar">{
-                room.getAvatar() ? <img src={ mxcToUrl(room.getAvatar()) } /> : null
+                room.getAvatar() ? <img className="mx_Avatar_img" src={ mxcToUrl(room.getAvatar()) } /> : null
             }</span>
             <span className="mx_RoomTile_name" title={ room.getName() }>
                 { room.getName() }

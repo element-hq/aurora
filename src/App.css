@@ -49,6 +49,9 @@ body {
     position: absolute;
     left: 0em;
     top: 2px;
+}
+
+.mx_Avatar_img {
     width: 20px;
     height: 20px;
     border-radius: 32px;
@@ -87,10 +90,6 @@ body {
 .mx_EventTile .mx_Avatar img {
     position: absolute;
     left: 6em;
-    width: 20px;
-    height: 20px;
-    border-radius: 32px;
-    object-fit: cover;
 }
 
 .mx_Sender {
@@ -106,7 +105,12 @@ body {
     margin-left: 16em;
 }
 
-.mx_EventTile_stateEvent {
+/* hack for iamb content */
+.mx_EventTile > .mx_Content > span > p {
+    margin: 0px;
+}
+
+.mx_EventTile_stateEvent, .mx_EventTile_redacted {
     color: var(--cpd-color-text-secondary);
     font-style: italic;
 }
