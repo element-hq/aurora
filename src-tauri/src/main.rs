@@ -3,7 +3,7 @@
 
 use anyhow::{anyhow, Result};
 use imbl::Vector;
-use ruma::{events::room::message::RoomMessageEventContent, ServerName};
+use ruma::{events::{room::message::RoomMessageEventContent, AnyMessageLikeEventContent}, ServerName};
 use std::sync::Arc;
 use matrix_sdk::{
     config::StoreConfig, matrix_auth::MatrixSession, AuthSession, Client, RoomInfo, RoomListEntry, SqliteCryptoStore
@@ -386,7 +386,9 @@ async fn send_message<'a>(room_id: String, msg: String, state: tauri::State<'_, 
     };
 
     let content = RoomMessageEventContent::text_plain(msg);
-    ui_room.send(content).await.unwrap();
+    if let Some(timeline) = ui_room.timeline() {
+        timeline.send(AnyMessageLikeEventContent::RoomMessage(content)).await;
+    }
     Ok(())
 }
 
