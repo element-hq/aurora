@@ -15,9 +15,43 @@ body {
 
 .mx_App {
     display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+
+.mx_Header {
+    flex: none;
+    /* height: 30px;
+    background-color: #f00; */
+}
+
+.mx_Client {
+    display: flex;
+    flex: 1 1 auto;
     flex-direction: row;
     width: 100%;
     height: 100%;
+}
+
+.mx_LoginPage {
+    background-image: url("assets/backgroundGradient.svg");
+    background-position: center;
+    background-size: cover;
+
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.mx_Login {
+    width: 400px;
+}
+
+.mx_Login_dialog {
+    background: var(--cpd-color-bg-canvas-default);
 }
 
 .mx_RoomList {
@@ -66,16 +100,17 @@ body {
 .mx_MainPanel {
     flex: 1 1 auto;
     display: flex;
+    height: 100%;
     flex-direction: column;
     margin-right: 8px;
     margin-bottom: 4px;
 }
 
 .mx_Timeline {
-    flex: 1 1 auto;
     overflow: scroll;
     position: relative;
     margin: 0px;
+    height: 100%;
 }
 
 .mx_Timeline li::marker {

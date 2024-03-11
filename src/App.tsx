@@ -12,9 +12,10 @@ import TimelineStore, {
     VirtualTimelineItem,
     VirtualTimelineItemInnerType
 } from "./TimelineStore.tsx";
-import RoomListStore, { RoomListItem}  from "./RoomListStore.tsx";
-import ClientStore from "./ClientStore.tsx";
+import RoomListStore, { RoomListEntry, RoomListItem}  from "./RoomListStore.tsx";
+import ClientStore, { ClientState } from "./ClientStore.tsx";
 import sanitizeHtml from "sanitize-html";
+import { Button, Form, Glass, PasswordInput, Text, TextInput, TooltipProvider } from "@vector-im/compound-web";
 
 console.log("running App.tsx");
 
@@ -71,9 +72,9 @@ const EventTile: React.FC<EventTileProp> = ({ item }) => {
                     if (profileChange.avatar_url_change) {
                         changes.push([
                             'avatar from ',
-                            <img className="mx_Avatar_img" src={ mxcToUrl(profileChange.avatar_url_change.old ?? '') }/>,
+                            <img key='old' className="mx_Avatar_img" src={ mxcToUrl(profileChange.avatar_url_change.old ?? '') }/>,
                             ' to ',
-                            <img className="mx_Avatar_img" src={ mxcToUrl(profileChange.avatar_url_change.new ?? '') }/>,
+                            <img key='new' className="mx_Avatar_img" src={ mxcToUrl(profileChange.avatar_url_change.new ?? '') }/>,
                         ]);
                         if (profileChange.displayname_change) changes.push(' and changed their ');
                     }
@@ -142,12 +143,17 @@ interface RoomTileProp {
 const RoomTile: React.FC<RoomTileProp> = ({ room }) => {
     return (
         <div className="mx_RoomTile">
-            <span className="mx_Avatar">{
-                room.getAvatar() ? <img className="mx_Avatar_img" src={ mxcToUrl(room.getAvatar()) } /> : null
-            }</span>
-            <span className="mx_RoomTile_name" title={ room.getName() }>
-                { room.getName() }
-            </span>
+            { room.entry !== RoomListEntry.Empty ?
+                <>
+                    <span className="mx_Avatar">{
+                        room.getAvatar() ? <img className="mx_Avatar_img" src={ mxcToUrl(room.getAvatar()) } /> : null
+                    }</span>
+                    <span className="mx_RoomTile_name" title={ room.getName() }>
+                        { room.getName() }
+                    </span>
+                </>
+            : ' '
+            }
         </div>
     );
 }
@@ -168,7 +174,7 @@ const RoomList: React.FC<RoomListProps> = ( { roomListStore: roomList, selectedR
                     return <li
                         key={ r.roomId }
                         className={ r.roomId === selectedRoomId ? 'mx_RoomTile_selected' : '' }
-                        onClick={ () => setRoom(r.roomId) }>
+                        onClick={ () => { if (r.roomId) setRoom(r.roomId) } }>
                             <RoomTile room={r}/>
                     </li>;
                 })
@@ -209,11 +215,11 @@ const Composer: React.FC<ComposerProps> = ( { timelineStore } ) => {
     );
 }
 
-interface AppProps {
+interface ClientProps {
     clientStore: ClientStore;
 }
 
-const App: React.FC<AppProps> = ( { clientStore } ) => {
+const Client: React.FC<ClientProps> = ( { clientStore } ) => {
     const [currentRoomId, setCurrentRoomId] = useState('');
 
     const [roomListStore, setRoomListStore] = useState<RoomListStore>();
@@ -223,8 +229,10 @@ const App: React.FC<AppProps> = ( { clientStore } ) => {
         // is this the right place to get SDK to subscribe? or should it be done in the store before passing it here somehow?
         // the double-start in strict mode is pretty horrible
         (async ()=>{
+            // console.log("trying to get tls for ", currentRoomId);
             const rls = await clientStore.getRoomListStore();
             const tls = await clientStore.getTimelineStore(currentRoomId);
+            // console.log("got tls for ", currentRoomId, tls);
         
             if (rls && rls !== roomListStore) {
                 console.log("(re)running roomListStore");
@@ -240,22 +248,93 @@ const App: React.FC<AppProps> = ( { clientStore } ) => {
         })();
     });
     return (
-        <div className="mx_App">
-            <nav className="mx_RoomList">
-                { roomListStore ?
-                    <RoomList
-                        roomListStore={ roomListStore }
-                        selectedRoomId={ currentRoomId }
-                        setRoom={ (roomId) => { setCurrentRoomId(roomId); } }
-                    /> : null
+        <>
+            <header className="mx_Header"> </header>
+            <section className="mx_Client">
+                <nav className="mx_RoomList">
+                    { roomListStore ?
+                        <RoomList
+                            roomListStore={ roomListStore }
+                            selectedRoomId={ currentRoomId }
+                            setRoom={ (roomId) => { setCurrentRoomId(roomId); } }
+                        /> : null
+                    }
+                </nav>
+                { timelineStore ?
+                    <main className="mx_MainPanel">
+                        <Timeline timelineStore={ timelineStore }/>
+                        <Composer timelineStore={ timelineStore }/>
+                    </main>
+                : null
                 }
-            </nav>
-            { timelineStore ?
-                <main className="mx_MainPanel">
-                    <Timeline timelineStore={ timelineStore }/>
-                    <Composer timelineStore={ timelineStore }/>
-                </main>
-              : null
+            </section>
+        </>
+    );
+}
+
+interface LoginProps {
+    clientStore: ClientStore;
+}
+
+const Login: React.FC<LoginProps> = ( { clientStore } ) => {
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [server, setServer] = useState("matrix.org");
+
+    return (
+        <div className="mx_LoginPage">
+            <div className="mx_Login">
+                <Glass>
+                    <div className="mx_Login_dialog">
+                        <TooltipProvider>
+                            <Form.Root
+                                style={{ padding: 'var(--cpd-space-5x)' }}
+                                onSubmit={ (e)=>{
+                                    e.preventDefault();
+                                    clientStore.login({username, password, server: `https://${server}`});
+                                }}
+                            >
+                                <Form.Field name="username">
+                                    <Form.Label>Username</Form.Label>
+                                    <Form.TextControl value={ username } onChange={ e=>setUsername(e.target.value) }/>
+                                </Form.Field>
+
+                                <Form.Field name="password">
+                                    <Form.Label>Password</Form.Label>
+                                    <Form.PasswordControl value={ password } onChange={ e=>setPassword(e.target.value) } />
+                                </Form.Field>
+
+                                <Form.Field name="server">
+                                    <Form.Label>Server</Form.Label>
+                                    <Form.TextControl disabled={true} value={ server } onChange={ e=>setServer(e.target.value) }/>
+                                </Form.Field>
+
+                                <Form.Submit
+                                    disabled={ !username || !password || !server}
+                                >Login</Form.Submit>
+                            </Form.Root>
+                        </TooltipProvider>
+                    </div>
+                </Glass>
+            </div>
+        </div>
+    );
+}
+
+interface AppProps {
+    clientStore: ClientStore;
+}
+
+const App: React.FC<AppProps> = ( { clientStore } ) => {
+    const clientState = useSyncExternalStore(clientStore.subscribe, clientStore.getSnapshot);
+
+    return (
+        <div className="mx_App">
+            {
+                clientState == ClientState.Unknown ? null :
+                clientState == ClientState.LoggedIn ?
+                <Client clientStore={clientStore} /> :
+                <Login clientStore={clientStore} />
             }
         </div>
     );

@@ -1,7 +1,7 @@
 import { invoke } from "@tauri-apps/api/tauri";
 import { Mutex } from 'async-mutex';
 
-enum RoomListEntry {
+export enum RoomListEntry {
     Empty,
     Invalidated,
     Filled,
@@ -41,7 +41,14 @@ class RoomListStore {
 
     // turn the wodges of JSON from rust-sdk into something typed
     private async parseRoom(room: any): Promise<RoomListItem> {
-        const entry: RoomListEntry = RoomListEntry[Object.keys(room)[0] as keyof typeof RoomListEntry];
+        const entry: RoomListEntry = typeof room === 'string' ? 
+            RoomListEntry[room as keyof typeof RoomListEntry] :
+            RoomListEntry[Object.keys(room)[0] as keyof typeof RoomListEntry];
+
+        if (entry === RoomListEntry.Empty) {
+            return new RoomListItem(entry, '', {});
+        }
+
         const roomId: string = Object.values(room)[0] as string;
         // XXX: is hammering on invoke like this a good idea?
         const info: any = await invoke("get_room_info", { roomId });

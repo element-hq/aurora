@@ -137,8 +137,7 @@ async fn login<'a>(params: LoginParams, state: tauri::State<'_, AppState<'a>>) -
     info!("Logging in.");
 
     let builder = Client::builder()
-        //.homeserver_url(params.homeserver)
-        .server_name(&ServerName::parse("matrix.org")?)
+        .server_name(&ServerName::parse(params.homeserver.host_str().unwrap())?)
         .store_config(
             StoreConfig::default()
                 .crypto_store(SqliteCryptoStore::open("/tmp/crypto.sqlite", None).await?)
@@ -292,6 +291,10 @@ async fn subscribe_roomlist<'a>(state: tauri::State<'_, AppState<'a>>) -> Result
     }
 
     let sync_service = state.sync_service.lock().await;
+    if sync_service.is_none() {
+        error!("sync service doesn't exist - client not initialiased");
+        return Err(Error::Other(anyhow!("sync service doesn't exist - client not initialiased")));
+    }
     let room_list_service = sync_service.as_ref().unwrap().room_list_service();
 
     info!("getting all_rooms");

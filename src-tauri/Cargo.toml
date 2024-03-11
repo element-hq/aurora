@@ -18,7 +18,7 @@ futures = "0.3.28"
 futures-core = "0.3.28"
 futures-executor = "0.3.21"
 futures-util = { version = "0.3.26", default-features = false, features = ["alloc"] }
-tauri = { version = "1.5", features = ["shell-open"] }
+tauri = { version = "1.5", features = [ "window-hide", "window-unmaximize", "window-minimize", "window-maximize", "window-unminimize", "window-show", "window-close", "window-start-dragging", "shell-open"] }
 imbl = { version = "2.0.0", features = ["serde"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"

@@ -5,7 +5,9 @@ import "./styles.css";
 import ClientStore from "./ClientStore.tsx";
 
 const clientStore = new ClientStore();
-clientStore.run();
+
+// XXX: hacky bodge to restore any existing session
+clientStore.login({ username: '', password: '', server: 'https://matrix.org'});
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
