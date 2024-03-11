@@ -118,6 +118,7 @@ body {
     overflow: scroll;
     position: relative;
     margin: 0px;
+    padding: 0px;
 }
 
 .mx_Timeline li::marker {
@@ -144,7 +145,8 @@ body {
 
 .mx_EventTile {
     display: block;
-    margin-left: 16em;
+    margin-left: 19em;
+    overflow-wrap: anywhere;
 }
 
 /* hack for iamb content */
