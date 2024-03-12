@@ -59,7 +59,7 @@ body {
     /* this is important, to stop roomlist pushing the composer off the bottom */
     flex-direction: column;
     flex: 0 0 auto;
-    border-right: 1px solid var(--cpd-color-border-interactive-secondary);
+    border-right: 1px solid #262628;
 }
 
 .mx_RoomList ol {
@@ -78,23 +78,24 @@ body {
     position: relative;
     max-width: 300px;
     cursor: pointer;
-    padding-top: var(--cpd-space-1x);
-    padding-bottom: var(--cpd-space-1x);
-    border-bottom: 1px solid var(--cpd-color-border-interactive-secondary);
+    background-color: #0f0f12bf;
+    padding-top: var(--cpd-space-2x);
+    padding-bottom: var(--cpd-space-2x);
+    border-bottom: 1px solid #262628;
 }
 
 .mx_RoomTile_selected {
-    background-color: var(--cpd-color-bg-subtle-primary);
+    background-color: #a0a0a088;
 }
 
 .mx_RoomTile_avatar {
     top: var(--cpd-space-2x);
-    left: var(--cpd-space-1x);
+    left: var(--cpd-space-4x);
     position: absolute;
 }
 
 .mx_RoomTile_name {
-    margin-left: var(--cpd-space-10x);
+    margin-left: var(--cpd-space-14x);
     overflow: hidden;
     text-overflow: ellipsis;
     font-size: var(--cpd-font-size-body-sm);
@@ -103,7 +104,7 @@ body {
 }
 
 .mx_RoomTile_preview {
-    margin-left: var(--cpd-space-10x);
+    margin-left: var(--cpd-space-14x);
     overflow: hidden;
     text-overflow: ellipsis;
     font-size: var(--cpd-font-size-body-xs);
@@ -149,11 +150,13 @@ body {
 
 .mx_EventTile .mx_Avatar {
     position: absolute;
+    left: var(--cpd-space-2x);
 }
 
 .mx_Sender {
     display: block;
-    margin-left: var(--cpd-space-12x);
+    margin-left: var(--cpd-space-14x);
+    margin-bottom: var(--cpd-space-1x);
     font-size: var(--cpd-font-size-body-sm);
     font-weight: var(--cpd-font-weight-semibold);
     color: var(--cpd-color-text-secondary);
@@ -161,13 +164,13 @@ body {
 
 .mx_Content {
     display: block;
-    margin-left: var(--cpd-space-12x);
+    margin-left: var(--cpd-space-14x);
     font-size: var(--cpd-font-size-body-md);
     color: var(--cpd-color-text-primary);
 }
 
 .mx_EventTile {
-    margin-top: var(--cpd-space-2x);
+    margin-top: var(--cpd-space-3x);
     display: block;
     overflow-wrap: anywhere;
 }
@@ -179,7 +182,7 @@ body {
 .mx_StateEventTile {
     margin-top: var(--cpd-space-0-5x);
     margin-bottom: var(--cpd-space-0-5x);
-    margin-left: var(--cpd-space-12x);
+    margin-left: var(--cpd-space-14x);
     font-weight: var(--cpd-font-weight-semibold);
     color: var(--cpd-color-text-secondary);
     font-size: var(--cpd-font-size-body-xs);
@@ -192,8 +195,7 @@ body {
 
 .mx_Separator {
     width: 100%;
-    margin-top: var(--cpd-space-4x);
-    margin-bottom: -1em;
+    margin-top: var(--cpd-space-6x);
     border-top: 1px solid var(--cpd-color-border-interactive-primary);
     font-size: var(--cpd-font-size-body-sm);
     color: var(--cpd-color-text-secondary);
