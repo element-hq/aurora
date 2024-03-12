@@ -48,6 +48,9 @@ thiserror = "1.0.57"
 url = "2.5.0"
 anyhow = "1.0.79"
 
+[target.'cfg(windows)'.dependencies]
+matrix-sdk-sqlite = { git = "https://github.com/matrix-org/matrix-rust-sdk.git", rev = "bf5aeb8a69498499cccd595b3a0e4290c3a78642", features=["rusqlite/bundled"] }
+
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem
 # DO NOT REMOVE!!
