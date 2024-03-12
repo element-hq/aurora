@@ -16,7 +16,7 @@ import TimelineStore, {
 import RoomListStore, { RoomListEntry, RoomListItem}  from "./RoomListStore.tsx";
 import ClientStore, { ClientState } from "./ClientStore.tsx";
 import sanitizeHtml from "sanitize-html";
-import { Avatar, Button, Form, Glass, PasswordInput, Text, TextInput, TooltipProvider } from "@vector-im/compound-web";
+import { Avatar, Form, Glass, TooltipProvider } from "@vector-im/compound-web";
 
 console.log("running App.tsx");
 
