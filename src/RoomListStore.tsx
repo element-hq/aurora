@@ -7,6 +7,28 @@ export enum RoomListEntry {
     Filled,
 }
 
+interface ReadReceipts {
+    num_mentions: number,
+    num_notifications: number,
+    num_unread: number,
+    pending: string[],
+}
+
+interface NotificationCounts {
+    highlight_count: number,
+    notification_count: number,
+}
+
+interface Event {
+    sender: string,
+    type: string,
+    origin_server_ts: number,
+    content: {
+        body?: string,
+        msgtype?: string,
+    }
+}
+
 export class RoomListItem {
     entry: RoomListEntry;
     roomId: string;
@@ -24,6 +46,18 @@ export class RoomListItem {
 
     getAvatar = () => {
         return this.info?.base_info.avatar?.Original?.content.url;
+    }
+
+    getReadReceipts = (): ReadReceipts => {
+        return this.info?.read_receipts;
+    }
+
+    getNotificationCounts = (): NotificationCounts => {
+        return this.info?.notification_counts;
+    }
+
+    getLatestEvent = (): Event | undefined => {
+        return this.info?.latest_event?.event?.event;
     }
 }
 
@@ -52,6 +86,8 @@ class RoomListStore {
         const roomId: string = Object.values(room)[0] as string;
         // XXX: is hammering on invoke like this a good idea?
         const info: any = await invoke("get_room_info", { roomId });
+
+        //console.log(JSON.stringify(info));
         const rli = new RoomListItem(entry, roomId, info);
         return (rli);
     }

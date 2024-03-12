@@ -175,6 +175,8 @@ const Timeline: React.FC<TimelineProps> = ( { timelineStore: timeline } ) => {
                             i > 0 && 
                             item.kind == TimelineItemKind.Event && 
                             items[i-1].kind == TimelineItemKind.Event && 
+                            (item as EventTimelineItem).getContent().type === ContentType[ContentType.Message] &&
+                            (items[i-1] as EventTimelineItem).getContent().type === ContentType[ContentType.Message] &&
                             (item as EventTimelineItem).getSender() === 
                                 (items[i-1] as EventTimelineItem).getSender()
                         }/>
@@ -190,16 +192,26 @@ interface RoomTileProp {
 }
 
 const RoomTile: React.FC<RoomTileProp> = ({ room }) => {
+    let preview;
+    if (room.getLatestEvent()?.content?.body) {
+        preview = `${room.getLatestEvent()?.content?.body}`;
+    }
     return (
         <div className="mx_RoomTile">
             { room.entry !== RoomListEntry.Empty ?
                 <>
-                    <span className="mx_Avatar">{
-                        room.getAvatar() ? <img className="mx_Avatar_img" src={ mxcToUrl(room.getAvatar()) } /> : null
-                    }</span>
-                    <span className="mx_RoomTile_name" title={ room.getName() }>
+                    <Avatar
+                        className="mx_RoomTile_avatar"
+                        id = { room.roomId }
+                        name={ room.getName() }
+                        src={ room.getAvatar() ? mxcToUrl(room.getAvatar()) : '' }
+                        size="26px"/>
+                    <div className="mx_RoomTile_name" title={ room.getName() }>
                         { room.getName() }
-                    </span>
+                    </div>
+                    <div className="mx_RoomTile_preview" title={ preview }>
+                        { preview ? preview : <>&nbsp;</> }
+                    </div>
                 </>
             : ' '
             }
@@ -243,6 +255,7 @@ const Composer: React.FC<ComposerProps> = ( { timelineStore } ) => {
         <div className="mx_Composer">
             <textarea
                 id="mx_Composer_textarea"
+                placeholder="Send a message"
                 rows={1}
                 value={ composer }
                 onChange={ e => setComposer(e.currentTarget.value) }
