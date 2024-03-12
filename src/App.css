@@ -121,9 +121,10 @@ body {
 }
 
 .mx_Timeline ol {
+    width: 100%;
     margin: 0px;
     padding: 0px;
-    align-content: end;;
+    align-content: end;
     list-style: none;
 }
 
@@ -166,12 +167,50 @@ body {
     margin: 0px;
 }
 
+.mx_StateEventTile {
+    margin-top: var(--cpd-space-0-5x);
+    margin-bottom: var(--cpd-space-0-5x);
+    margin-left: var(--cpd-space-12x);
+    font-weight: var(--cpd-font-weight-semibold);
+    color: var(--cpd-color-text-secondary);
+    font-size: var(--cpd-font-size-body-xs);
+}
+
+.mx_StateAvatar {
+    position: relative;
+    top: var(--cpd-space-1x);
+}
+
+.mx_Separator {
+    width: 100%;
+    margin-top: var(--cpd-space-4x);
+    margin-bottom: -1em;
+    border-top: 1px solid var(--cpd-color-border-interactive-primary);
+    font-size: var(--cpd-font-size-body-sm);
+    color: var(--cpd-color-text-secondary);
+    text-align: center;
+}
+
+.mx_Separator span {
+    background-color: var(--cpd-color-bg-canvas-default);
+    position: relative;
+    top: -9px;
+}
+
+.mx_ReadMarker {
+    border-color: var(--cpd-color-icon-accent-tertiary);
+}
+
+.mx_ReadMarker span {
+    color: var(--cpd-color-icon-accent-tertiary);
+}
+
 /* hack for iamb content */
 .mx_EventTile > .mx_Content > span > p {
     margin: 0px;
 }
 
-.mx_EventTile_stateEvent, .mx_EventTile_redacted {
+.mx_EventTile_redacted {
     color: var(--cpd-color-text-secondary);
     font-style: italic;
 }

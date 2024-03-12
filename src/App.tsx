@@ -4,6 +4,7 @@ import TimelineStore, {
     ContentType,
     DayDivider,
     EventTimelineItem,
+    MembershipChange,
     MembershipChangeContent,
     MessageContent,
     ProfileChangeContent,
@@ -38,14 +39,14 @@ const EventTile: React.FC<EventTileProp> = ({ item, continuation }) => {
                 case VirtualTimelineItemInnerType.DayDivider:
                     const dayDivider = virtual.virtualItem as DayDivider;
                     return (
-                        <div className="mx_EventTile">
-                            --- { dayDivider.getDate().toDateString() } ---
+                        <div className="mx_Separator">
+                            <span>&nbsp;&nbsp;{ dayDivider.getDate().toDateString() }&nbsp;&nbsp;</span>
                         </div>
                     );
                 case VirtualTimelineItemInnerType.ReadMarker:
                     return (
-                        <div className="mx_EventTile">
-                            --- New messages ---
+                        <div className="mx_Separator mx_ReadMarker">
+                            <span>&nbsp;&nbsp;New Messages&nbsp;&nbsp;</span>
                         </div>
                     );
                 default:
@@ -55,7 +56,8 @@ const EventTile: React.FC<EventTileProp> = ({ item, continuation }) => {
         case TimelineItemKind.Event:
             const event = item as EventTimelineItem;
 
-            let body: String | ReactElement;
+            let body: String | ReactElement | undefined;
+            let stateChange;
             switch (event.getContent().type) {
                 case ContentType[ContentType.Message]:
                     const message = (event.getContent() as MessageContent).getMessage();
@@ -80,34 +82,36 @@ const EventTile: React.FC<EventTileProp> = ({ item, continuation }) => {
                         changes.push([
                             'avatar from ',
                             <Avatar
+                                className="mx_StateAvatar"
                                 name={ event.getSenderProfile()?.display_name || event.getSender().charAt(1) }
                                 id={ event.getSender() }
-                                src={ mxcToUrl(profileChange.avatar_url_change.old ?? '')
-                            } size="16px"/>,
+                                src={ profileChange.avatar_url_change.old ? mxcToUrl(profileChange.avatar_url_change.old): '' }
+                                size="16px"/>,
                             ' to ',
                             <Avatar
+                                className="mx_StateAvatar"
                                 name={ event.getSenderProfile()?.display_name || event.getSender().charAt(1) }
                                 id={ event.getSender() }
-                                src={ mxcToUrl(profileChange.avatar_url_change.new ?? '')
-                            } size="16px"/>,
+                                src={ profileChange.avatar_url_change.new ? mxcToUrl(profileChange.avatar_url_change.new): '' }
+                                size="16px"/>,
                         ]);
                         if (profileChange.displayname_change) changes.push(' and changed their ');
                     }
                     if (profileChange.displayname_change) {
                         changes.push(`displayname from ${profileChange.displayname_change.old} to ${profileChange.displayname_change.new}`);
                     }
-                    body = <span className="mx_EventTile_stateEvent">{ changes } </span>;
+                    stateChange = changes;
                     break;
                 case ContentType[ContentType.MembershipChange]:
                     const membershipChange = (event.getContent() as MembershipChangeContent).getMembershipChange();
                     if (membershipChange.change) {
-                        body = <span className="mx_EventTile_stateEvent">{ membershipChange.change.toLowerCase() }</span>;
+                        stateChange = getChangeDescription(membershipChange.change);
                     }
                     else if (membershipChange.content.Redacted) {
-                        body = <span className="mx_EventTile_stateEvent">redacted { membershipChange.content.Redacted?.membership }</span>;
+                        stateChange = `redacted ${membershipChange.content.Redacted?.membership}`
                     }
                     else {
-                        body = <span className="mx_EventTile_stateEvent">unknown membership change</span>;
+                        stateChange = `unknown membership change ${membershipChange.content}`;
                     }
                     break;
                 case ContentType[ContentType.RedactedMessage]:
@@ -116,11 +120,24 @@ const EventTile: React.FC<EventTileProp> = ({ item, continuation }) => {
                 default:
                     body = `Unknown event type ${event.getContent().type}`;
             }
+
+            if (stateChange) {
+                return (
+                    <div className="mx_StateEventTile">
+                        <Avatar
+                            className="mx_StateAvatar"
+                            name={ event.getSenderProfile()?.display_name || event.getSender().charAt(1) }
+                            id={ event.getSender() }
+                            src={ event.getSenderProfile()?.avatar_url ? mxcToUrl(event.getSenderProfile()?.avatar_url || '') : '' }
+                            size="16px"/> { event.getSender() } { stateChange }
+                    </div>
+                );
+            }
             
             return (
                 <div className={ `mx_EventTile${continuation ? ' mx_EventTile_continuation' : ''}` }>
                     <span className="mx_Timestamp">{ new Date(event.getTimestamp()).toLocaleTimeString() }</span>
-                    { continuation ? null : <>
+                    { !continuation ? <>
                         <span className="mx_Avatar">
                             <Avatar
                                     name={ event.getSenderProfile()?.display_name || event.getSender().charAt(1) }
@@ -132,8 +149,9 @@ const EventTile: React.FC<EventTileProp> = ({ item, continuation }) => {
                             event.getSenderProfile()?.display_name ?
                             event.getSenderProfile()?.display_name :
                             event.getSender()
-                        }</span>
-                    </> }
+                        }
+                        </span>
+                    </> : null}
                     <span className="mx_Content">{ body }</span>
                 </div>
             );
@@ -356,7 +374,7 @@ interface AppProps {
     clientStore: ClientStore;
 }
 
-const App: React.FC<AppProps> = ( { clientStore } ) => {
+export const App: React.FC<AppProps> = ( { clientStore } ) => {
     const clientState = useSyncExternalStore(clientStore.subscribe, clientStore.getSnapshot);
 
     return (
@@ -372,3 +390,58 @@ const App: React.FC<AppProps> = ( { clientStore } ) => {
 }
 
 export default App;
+
+function getChangeDescription(membershipChange: string): string {
+    switch (membershipChange) {
+        case MembershipChange[MembershipChange.None]:
+            return "did nothing";
+            break;
+        case MembershipChange[MembershipChange.Error]:
+            return "<error>";
+            break;
+        case MembershipChange[MembershipChange.Joined]:
+            return "joined";
+            break;
+        case MembershipChange[MembershipChange.Left]:
+            return "left";
+            break;
+        case MembershipChange[MembershipChange.Banned]:
+            return "was banned";
+            break;
+        case MembershipChange[MembershipChange.Unbanned]:
+            return "was unbanned";
+            break;
+        case MembershipChange[MembershipChange.Kicked]:
+            return "was kicked";
+            break;
+        case MembershipChange[MembershipChange.Invited]:
+            return "was invited";
+            break;
+        case MembershipChange[MembershipChange.InvitationAccepted]:
+            return "accepted an invite";
+            break;
+        case MembershipChange[MembershipChange.InvitationRejected]:
+            return "rejected an invite";
+            break;
+        case MembershipChange[MembershipChange.InvitationRevoked]:
+            return "was uninvited";
+            break;
+        case MembershipChange[MembershipChange.Knocked]:
+            return "knocked";
+            break;
+        case MembershipChange[MembershipChange.KnockAccepted]:
+            return "was accepted";
+            break;
+        case MembershipChange[MembershipChange.KnockRetracted]:
+            return "stoped knocking";
+            break;
+        case MembershipChange[MembershipChange.KnockDenied]:
+            return "was rejected";
+            break;
+        case MembershipChange[MembershipChange.NotImplemented]:
+            return "<unimplemented>";
+            break;
+        default:
+            return "<unknown>";
+    }
+}
