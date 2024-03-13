@@ -49,6 +49,17 @@ Aurora is quite an opinionated experiment, making the following tradeoffs:
  * Minimum featureset, so one can test it with a real account to see how it feels and performs, but not use it (yet) as
    a daily driver.
  * Keep It Simple & Stupid.
+
+There aren't any tests yet (but if doing this for real, we should absolutely have each component come with its own tests,
+both of its model and its UI).
+
+Stuff that hasn't really been on the radar, but probably should be:
+ * MVVM for nice modular and testable components
+ * Progressive loading (unless vite does that automatically)
+
+Stuff that is deliberately not in focus
+ * Features beyond the absolute bare essentials.  This is meant to be a test jig for experimenting with EX, and piling
+   on features for parity with EW only makes sense if it's going somewhere.
  
 ## Findings
 
@@ -122,4 +133,11 @@ tauri::generate_handler![
         ]
 ```
 
-...so it could be much easier and fun to finish the job by hooking up a proper FFI now.
+...so it could be much easier and fun to finish the job by hooking up a proper FFI, having got a working framework to
+iterate on.
+
+Another thought is whether the FFI should try to expose the same object model as js-sdk (in terms of the shape of rooms 
+and events, at least), to make it easier to shift over things like event tiles directly from react-sdk.
+This is probably a no brainer, but right now the FFI mirrors the rust-sdk's internal API rather than mapping to a
+js-sdk shape.  This might be an argument in favour of having web-specific FFI rather than reusing the existing
+uniffi one.
