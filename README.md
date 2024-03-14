@@ -40,7 +40,7 @@ Aurora is quite an opinionated experiment, making the following tradeoffs:
       to port code direct from Element Web
     * React may not be perfect, but it's good enough
     * Group code into related modules, rather than juggling loads of fiddly little files (see also speed of dev).
- * Add abstractions incrementally as needed. (For instance, the rust-sdk interface only supports subscribing to a single
+ * Add abstractions incrementally as needed. (For instance, aurora's rust-sdk interface only supports subscribing to a single
    timeline at a time currently).
  * `useSyncStateStore` for selectively exposing rust-sdk's state into the app.  No fancy/mindbending Redux or MobX style
    stores.
