@@ -1,20 +1,43 @@
-import { useRef } from "react";
+import { useRef, useSyncExternalStore } from "react";
 import type TimelineStore from "./TimelineStore";
 import { Virtuoso, type VirtuosoHandle } from "react-virtuoso";
-import {
-	ContentType,
-	type EventTimelineItem,
-	TimelineItemKind,
-	type TimelineItem,
-} from "./TimelineStore";
 import { EventTile } from "./EventTile";
+import {
+	MsgLikeKind_Tags,
+	TimelineItemContent_Tags,
+	type TimelineItemInterface,
+} from "./index.web";
 
 interface TimelineProps {
 	timelineStore: TimelineStore;
 }
 
+function continuation(
+	i: number,
+	item: TimelineItemInterface,
+	items: TimelineItemInterface[],
+): boolean {
+	if (i <= 0) {
+		return false;
+	}
+	const itemContent = item.asEvent()?.content;
+	const nextItem = items[i - 1].asEvent();
+	const nextItemContent = nextItem?.content;
+	return (
+		i > 0 &&
+		itemContent?.tag === TimelineItemContent_Tags.MsgLike &&
+		itemContent?.inner.content.kind.tag === MsgLikeKind_Tags.Message &&
+		nextItemContent?.tag === TimelineItemContent_Tags.MsgLike &&
+		nextItemContent?.inner.content.kind.tag === MsgLikeKind_Tags.Message &&
+		item.asEvent()?.sender === nextItem?.sender
+	);
+}
+
 const Timeline: React.FC<TimelineProps> = ({ timelineStore: timeline }) => {
-	const items: TimelineItem[] = []; //useSyncExternalStore(timeline.subscribe, timeline.getSnapshot);
+	const items: TimelineItemInterface[] = useSyncExternalStore(
+		timeline.subscribe,
+		timeline.getSnapshot,
+	);
 	const virtuosoRef = useRef<VirtuosoHandle | null>(null);
 
 	return (
@@ -44,20 +67,10 @@ const Timeline: React.FC<TimelineProps> = ({ timelineStore: timeline }) => {
 					// increaseViewportBy={{ top: 3000, bottom: 3000 }}
 					// overscan={{ main: 1000, reverse: 1000 }}
 					itemContent={(i, item, context) => (
-						<li key={item.getInternalId()} value={item.getInternalId()}>
+						<li key={item.uniqueId().id} value={item.uniqueId().id}>
 							<EventTile
 								item={item}
-								continuation={
-									i > 0 &&
-									item.kind === TimelineItemKind.Event &&
-									items[i - 1].kind === TimelineItemKind.Event &&
-									(item as EventTimelineItem).getContent().type ===
-										ContentType[ContentType.Message] &&
-									(items[i - 1] as EventTimelineItem).getContent().type ===
-										ContentType[ContentType.Message] &&
-									(item as EventTimelineItem).getSender() ===
-										(items[i - 1] as EventTimelineItem).getSender()
-								}
+								continuation={continuation(i, item, items)}
 							/>
 						</li>
 					)}

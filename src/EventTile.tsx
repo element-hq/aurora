@@ -1,22 +1,23 @@
 import type { ReactElement } from "react";
-import {
-	TimelineItemKind,
-	type VirtualTimelineItem,
-	type TimelineItem,
-	VirtualTimelineItemInnerType,
-	type DayDivider,
-	type EventTimelineItem,
-	type MessageContent,
-	ContentType,
-	type ProfileChangeContent,
-	type MembershipChangeContent,
-	MembershipChange,
-} from "./TimelineStore";
+// import {
+// 	TimelineItemKind,
+// 	type VirtualTimelineItem,
+// 	type TimelineItem,
+// 	VirtualTimelineItemInnerType,
+// 	type DayDivider,
+// 	type EventTimelineItem,
+// 	type MessageContent,
+// 	ContentType,
+// 	type ProfileChangeContent,
+// 	type MembershipChangeContent,
+// 	MembershipChange,
+// } from "./TimelineStore";
 import { Avatar } from "@vector-im/compound-web";
 import sanitizeHtml from "sanitize-html";
+import { MembershipChange, type TimelineItemInterface } from "./index.web";
 
 interface EventTileProp {
-	item: TimelineItem;
+	item: TimelineItemInterface;
 	continuation: boolean;
 }
 
@@ -28,39 +29,39 @@ function mxcToUrl(mxcUrl: string): string {
 	return `${url}?width=48&height=48`;
 }
 
-function getChangeDescription(membershipChange: string): string {
+function getChangeDescription(membershipChange: MembershipChange): string {
 	switch (membershipChange) {
-		case MembershipChange[MembershipChange.None]:
+		case MembershipChange.None:
 			return "did nothing";
-		case MembershipChange[MembershipChange.Error]:
+		case MembershipChange.Error:
 			return "<error>";
-		case MembershipChange[MembershipChange.Joined]:
+		case MembershipChange.Joined:
 			return "joined";
-		case MembershipChange[MembershipChange.Left]:
+		case MembershipChange.Left:
 			return "left";
-		case MembershipChange[MembershipChange.Banned]:
+		case MembershipChange.Banned:
 			return "was banned";
-		case MembershipChange[MembershipChange.Unbanned]:
+		case MembershipChange.Unbanned:
 			return "was unbanned";
-		case MembershipChange[MembershipChange.Kicked]:
+		case MembershipChange.Kicked:
 			return "was kicked";
-		case MembershipChange[MembershipChange.Invited]:
+		case MembershipChange.Invited:
 			return "was invited";
-		case MembershipChange[MembershipChange.InvitationAccepted]:
+		case MembershipChange.InvitationAccepted:
 			return "accepted an invite";
-		case MembershipChange[MembershipChange.InvitationRejected]:
+		case MembershipChange.InvitationRejected:
 			return "rejected an invite";
-		case MembershipChange[MembershipChange.InvitationRevoked]:
+		case MembershipChange.InvitationRevoked:
 			return "was uninvited";
-		case MembershipChange[MembershipChange.Knocked]:
+		case MembershipChange.Knocked:
 			return "knocked";
-		case MembershipChange[MembershipChange.KnockAccepted]:
+		case MembershipChange.KnockAccepted:
 			return "was accepted";
-		case MembershipChange[MembershipChange.KnockRetracted]:
+		case MembershipChange.KnockRetracted:
 			return "stoped knocking";
-		case MembershipChange[MembershipChange.KnockDenied]:
+		case MembershipChange.KnockDenied:
 			return "was rejected";
-		case MembershipChange[MembershipChange.NotImplemented]:
+		case MembershipChange.NotImplemented:
 			return "<unimplemented>";
 		default:
 			return "<unknown>";
