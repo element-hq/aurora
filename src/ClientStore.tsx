@@ -1,7 +1,13 @@
-import { invoke } from "@tauri-apps/api/tauri";
-import TimelineStore from "./TimelineStore.tsx";
-import RoomListStore from "./RoomListStore.tsx";
 import { Mutex } from "async-mutex";
+import RoomListStore from "./RoomListStore.tsx";
+import TimelineStore from "./TimelineStore.tsx";
+import {
+	ClientBuilder,
+	type ClientInterface,
+	LogLevel,
+	type SyncServiceInterface,
+	initPlatform,
+} from "./index.web.ts";
 
 interface LoginParams {
 	username: string;
@@ -18,32 +24,54 @@ export enum ClientState {
 class ClientStore {
 	timelineStores: Map<string, TimelineStore> = new Map();
 	roomListStore?: RoomListStore;
+	client?: ClientInterface;
+	syncService?: SyncServiceInterface;
 
 	mutex: Mutex = new Mutex();
 
-	clientState: ClientState = ClientState.Unknown;
+	// XXX: if we had any form of persistence then the state would be unknown until we loaded it,
+	// for now we do not so we initialise in a logged out state
+	clientState: ClientState = ClientState.LoggedOut;
 	listeners: CallableFunction[] = [];
 
 	login = async ({ username, password, server }: LoginParams) => {
 		const release = await this.mutex.acquire();
+		const client = await new ClientBuilder().homeserverUrl(server).build();
 
-		//await new Promise(r => setTimeout(r, 2000));
 		console.log("starting sdk...");
-		await invoke("reset");
 		try {
-			await invoke("login", {
-				params: {
-					user_name: username,
-					password: password,
-					homeserver: server,
+			initPlatform(
+				{
+					logLevel: LogLevel.Trace,
+					traceLogPacks: [],
+					extraTargets: [],
+					writeToStdoutOrSystem: true,
+					writeToFiles: undefined,
+					sentryDsn: undefined,
 				},
-			});
+				true,
+			);
 
+			await client.login(username, password, "rust-sdk", undefined);
 			console.log("logged in...");
+			this.client = client;
 			this.clientState = ClientState.LoggedIn;
 		} catch (e) {
 			console.log("login failed", e);
-			this.clientState = ClientState.LoggedOut;
+			this.clientState = ClientState.Unknown;
+		}
+
+		try {
+			const v = await client.availableSlidingSyncVersions();
+			console.log("@@", v, client.slidingSyncVersion());
+
+			const syncServiceBuilder = client.syncService();
+			this.syncService = await syncServiceBuilder.finish();
+			await this.syncService.start();
+			console.log("syncing...");
+		} catch (e) {
+			console.log("syncing failed", e, e.inner);
+			this.clientState = ClientState.Unknown;
 		}
 
 		this.emit();
@@ -65,7 +93,7 @@ class ClientStore {
 	getRoomListStore = async () => {
 		const release = await this.mutex.acquire();
 		release();
-		this.roomListStore ||= new RoomListStore();
+		this.roomListStore ||= new RoomListStore(this.client!, this.syncService!);
 		return this.roomListStore;
 	};
 

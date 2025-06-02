@@ -6,6 +6,12 @@ import {
 	useSyncExternalStore,
 } from "react";
 import "./App.css";
+import { Avatar, Form, Glass, TooltipProvider } from "@vector-im/compound-web";
+import sanitizeHtml from "sanitize-html";
+import type ClientStore from "./ClientStore.tsx";
+import { ClientState } from "./ClientStore.tsx";
+import type RoomListStore from "./RoomListStore.tsx";
+import { RoomListEntry, type RoomListItem } from "./RoomListStore.tsx";
 import type TimelineStore from "./TimelineStore.tsx";
 import {
 	ContentType,
@@ -20,12 +26,7 @@ import {
 	type VirtualTimelineItem,
 	VirtualTimelineItemInnerType,
 } from "./TimelineStore.tsx";
-import type RoomListStore from "./RoomListStore.tsx";
-import { RoomListEntry, type RoomListItem } from "./RoomListStore.tsx";
-import type ClientStore from "./ClientStore.tsx";
-import { ClientState } from "./ClientStore.tsx";
-import sanitizeHtml from "sanitize-html";
-import { Avatar, Form, Glass, TooltipProvider } from "@vector-im/compound-web";
+import { RoomInterface } from "./index.web.ts";
 
 console.log("running App.tsx");
 
@@ -179,7 +180,9 @@ const EventTile: React.FC<EventTileProp> = ({ item, continuation }) => {
 
 			return (
 				<div
-					className={`mx_EventTile${continuation ? " mx_EventTile_continuation" : ""}`}
+					className={`mx_EventTile${
+						continuation ? " mx_EventTile_continuation" : ""
+					}`}
 				>
 					<span className="mx_Timestamp">
 						{new Date(event.getTimestamp()).toLocaleTimeString()}
@@ -294,7 +297,10 @@ const RoomList: React.FC<RoomListProps> = ({
 	selectedRoomId,
 	setRoom,
 }) => {
-	const rooms = useSyncExternalStore(roomList.subscribe, roomList.getSnapshot);
+	const rooms: RoomListItem[] = useSyncExternalStore(
+		roomList.subscribe,
+		roomList.getSnapshot,
+	);
 
 	return (
 		<ol start={0}>

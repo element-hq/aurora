@@ -1,0 +1,8 @@
+rust:
+  repo: https://github.com/filament-dm/matrix-rust-sdk
+  branch: wasm_mega_pr
+  manifestPath: bindings/matrix-sdk-ffi-web/Cargo.toml
+web:
+  workspace: true
+  manifestPath: rust_modules/matrix-rust-sdk/bindings/wasm/Cargo.toml
+  runtimeVersion: 0.29.0-0.1
