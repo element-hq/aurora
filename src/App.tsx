@@ -27,6 +27,7 @@ import {
 	VirtualTimelineItemInnerType,
 } from "./TimelineStore.tsx";
 import { RoomInterface } from "./index.web.ts";
+import { RoomListView } from "./RoomListView";
 
 console.log("running App.tsx");
 
@@ -398,12 +399,12 @@ const Client: React.FC<ClientProps> = ({ clientStore }) => {
 			<section className="mx_Client">
 				<nav className="mx_RoomList">
 					{roomListStore ? (
-						<RoomList
-							roomListStore={roomListStore}
-							selectedRoomId={currentRoomId}
-							setRoom={(roomId) => {
-								setCurrentRoomId(roomId);
-							}}
+						<RoomListView
+							vm={roomListStore}
+							// currentRoomId={currentRoomId}
+							// onRoomSelect={(roomId) => {
+							// 	setCurrentRoomId(roomId);
+							// }}
 						/>
 					) : null}
 				</nav>
