@@ -7,6 +7,7 @@
 
 import React, { type JSX, memo } from "react";
 import classNames from "classnames";
+import "./RoomListItemView.css";
 
 import { Flex } from "./utils/Flex";
 import { NotificationDecoration } from "./NotificationDecoration";
@@ -62,7 +63,6 @@ export const RoomListItemView = memo(function RoomListItemView({
 				align="center"
 			>
 				<Avatar
-					className="mx_RoomTile_avatar"
 					id={room.roomId}
 					name={room.getName()}
 					src={room.getAvatar() ? mxcToUrl(room.getAvatar()) : ""}
@@ -77,7 +77,7 @@ export const RoomListItemView = memo(function RoomListItemView({
 					{/* We truncate the room name when too long. Title here is to show the full name on hover */}
 					<div className="mx_RoomListItemView_text">
 						<div className="mx_RoomListItemView_roomName" title={vm.name}>
-							{vm.name}
+							{room.getName()}
 						</div>
 						<div className="mx_RoomListItemView_messagePreview">
 							{vm.messagePreview}

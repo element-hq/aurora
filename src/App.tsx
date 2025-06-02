@@ -492,7 +492,7 @@ export const App: React.FC<AppProps> = ({ clientStore }) => {
 	);
 
 	return (
-		<div className="mx_App">
+		<div className="mx_App cpd-theme-dark">
 			{clientState == ClientState.Unknown ? null : clientState ==
 				ClientState.LoggedIn ? (
 				<Client clientStore={clientStore} />

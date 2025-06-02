@@ -13,17 +13,28 @@ import RoomListStore from "./RoomListStore";
 
 type RoomListViewProps = {
 	vm: RoomListStore;
-	onRoomSelected: (roomId: string) => void;
-	currentRoomId: string;
+	//onRoomSelected: (roomId: string) => void;
+	currentRoomId?: string;
 };
 
 /**
  * A virtualized list of rooms.
  */
 export function RoomListView({
-	vm,
+	//vm,
 	currentRoomId = "TODO",
 }: RoomListViewProps): JSX.Element {
+	const vm = {
+		rooms: [
+			{
+				roomId: "room1",
+				getName: () => "room1",
+				getAvatar: () =>
+					"https://avatars.githubusercontent.com/u/13446337?s=280&v=4",
+			},
+		], // Placeholder for the view model, replace with actual implementation
+	};
+
 	//const vm = {} as any; // Placeholder for the view model, replace with actual implementation
 
 	const roomRendererMemoized = useCallback(
