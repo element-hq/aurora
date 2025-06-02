@@ -6,47 +6,42 @@
  */
 
 import "./RoomListView.css";
-import { useCallback, type JSX } from "react";
+import { type JSX, useCallback, useSyncExternalStore } from "react";
 import { AutoSizer, List, type ListRowProps } from "react-virtualized";
 import { RoomListItemView } from "./RoomListItemView";
-import RoomListStore from "./RoomListStore";
+import type RoomListStore from "./RoomListStore";
+import type { RoomListItem } from "./RoomListStore";
 
 type RoomListViewProps = {
 	vm: RoomListStore;
-	//onRoomSelected: (roomId: string) => void;
-	currentRoomId?: string;
+	onRoomSelected: (roomId: string) => void;
+	currentRoomId: string;
 };
 
 /**
  * A virtualized list of rooms.
  */
 export function RoomListView({
-	//vm,
-	currentRoomId = "TODO",
+	vm,
+	onRoomSelected,
+	currentRoomId,
 }: RoomListViewProps): JSX.Element {
-	const vm = {
-		rooms: [
-			{
-				roomId: "room1",
-				getName: () => "room1",
-				getAvatar: () =>
-					"https://avatars.githubusercontent.com/u/13446337?s=280&v=4",
-			},
-		], // Placeholder for the view model, replace with actual implementation
-	};
-
-	//const vm = {} as any; // Placeholder for the view model, replace with actual implementation
+	const rooms: RoomListItem[] = useSyncExternalStore(
+		vm.subscribe,
+		vm.getSnapshot,
+	);
 
 	const roomRendererMemoized = useCallback(
 		({ key, index, style }: ListRowProps) => (
 			<RoomListItemView
-				room={vm.rooms[index]}
+				room={rooms[index]}
 				key={key}
 				style={style}
-				isSelected={currentRoomId === vm.rooms[index].roomId}
+				isSelected={currentRoomId === rooms[index].roomId}
+				onClick={() => onRoomSelected(rooms[index].roomId)}
 			/>
 		),
-		[vm.rooms, vm],
+		[rooms, currentRoomId, onRoomSelected],
 	);
 
 	// The first div is needed to make the virtualized list take all the remaining space and scroll correctly
@@ -57,7 +52,7 @@ export function RoomListView({
 					<List
 						className="mx_RoomList_List"
 						rowRenderer={roomRendererMemoized}
-						rowCount={vm.rooms.length}
+						rowCount={rooms.length}
 						rowHeight={48}
 						height={height}
 						width={width}

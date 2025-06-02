@@ -12,6 +12,7 @@ import type ClientStore from "./ClientStore.tsx";
 import { ClientState } from "./ClientStore.tsx";
 import type RoomListStore from "./RoomListStore.tsx";
 import { RoomListEntry, type RoomListItem } from "./RoomListStore.tsx";
+import { RoomListView } from "./RoomListView";
 import type TimelineStore from "./TimelineStore.tsx";
 import {
 	ContentType,
@@ -27,7 +28,6 @@ import {
 	VirtualTimelineItemInnerType,
 } from "./TimelineStore.tsx";
 import { RoomInterface } from "./index.web.ts";
-import { RoomListView } from "./RoomListView";
 
 console.log("running App.tsx");
 
@@ -401,10 +401,10 @@ const Client: React.FC<ClientProps> = ({ clientStore }) => {
 					{roomListStore ? (
 						<RoomListView
 							vm={roomListStore}
-							// currentRoomId={currentRoomId}
-							// onRoomSelect={(roomId) => {
-							// 	setCurrentRoomId(roomId);
-							// }}
+							currentRoomId={currentRoomId}
+							onRoomSelected={(roomId) => {
+								setCurrentRoomId(roomId);
+							}}
 						/>
 					) : null}
 				</nav>
