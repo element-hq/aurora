@@ -23,11 +23,11 @@ interface IProps {
 
 export function RoomMemberTileView(props: IProps): JSX.Element {
 	// const vm = useMemberTileViewModel(props);
-    const vm = {
-        name: "Test",
-        onClick: () => {},
-        userLabel: "Test",
-    } as any;
+	const vm = {
+		name: "Test",
+		onClick: () => {},
+		userLabel: "Test",
+	} as any;
 
 	const member = vm.member;
 	const av = (

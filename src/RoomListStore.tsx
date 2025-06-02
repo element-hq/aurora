@@ -1,8 +1,11 @@
 import { Mutex } from "async-mutex";
-import type {
-	ClientInterface,
-	RoomListEntriesUpdate,
-	SyncServiceInterface,
+import {
+	type ClientInterface,
+	type RoomInfo,
+	type RoomInterface,
+	RoomListEntriesDynamicFilterKind,
+	type RoomListEntriesUpdate,
+	type RoomListServiceInterface,
 } from "./index.web";
 
 export enum RoomListEntry {
@@ -36,32 +39,33 @@ interface Event {
 export class RoomListItem {
 	entry: RoomListEntry;
 	roomId: string;
-	info: any;
+	info: Partial<RoomInfo>;
 
-	constructor(entry: RoomListEntry, roomId: string, info: any) {
+	constructor(entry: RoomListEntry, roomId: string, info: Partial<RoomInfo>) {
 		this.entry = entry;
 		this.roomId = roomId;
 		this.info = info;
 	}
 
 	getName = () => {
-		return this.info?.base_info.name?.Original?.content.name;
+		return this.info?.displayName;
 	};
 
 	getAvatar = () => {
-		return this.info?.base_info.avatar?.Original?.content.url;
+		return this.info?.avatarUrl;
 	};
 
-	getReadReceipts = (): ReadReceipts => {
-		return this.info?.read_receipts;
-	};
-
-	getNotificationCounts = (): NotificationCounts => {
-		return this.info?.notification_counts;
-	};
+	// getReadReceipts = (): ReadReceipts => {
+	// 	return this.info?.read_receipts;
+	// };
+	//
+	// getNotificationCounts = (): NotificationCounts => {
+	// 	return this.info?.notification_counts;
+	// };
 
 	getLatestEvent = (): Event | undefined => {
-		return this.info?.latest_event?.event?.event;
+		return undefined;
+		// return this.info?.latest_event?.event?.event;
 	};
 }
 
@@ -74,28 +78,17 @@ class RoomListStore {
 
 	constructor(
 		private readonly client: ClientInterface,
-		private readonly syncService: SyncServiceInterface,
+		private readonly roomListService: RoomListServiceInterface,
 	) {
 		console.log("RoomListStore constructed");
 	}
 
-	// turn the wodges of JSON from rust-sdk into something typed
-	private parseRoom(room: any): RoomListItem {
-		const entry: RoomListEntry =
-			typeof room === "string"
-				? RoomListEntry[room as keyof typeof RoomListEntry]
-				: RoomListEntry[Object.keys(room)[0] as keyof typeof RoomListEntry];
+	private async parseRoom(room: RoomInterface): Promise<RoomListItem> {
+		const roomId = room.id();
+		const info = await room.roomInfo();
 
-		if (entry === RoomListEntry.Empty) {
-			return new RoomListItem(entry, "", {});
-		}
-
-		const roomId: string = Object.values(room)[0] as string;
-		// XXX: is hammering on invoke like this a good idea?
-		// const info: any = await invoke("get_room_info", { roomId });
-
-		//console.log(JSON.stringify(info));
-		const rli = new RoomListItem(entry, roomId, {});
+		// console.trace("@@ room info", roomId, info);
+		const rli = new RoomListItem(RoomListEntry.Filled, roomId, info);
 		return rli;
 	}
 
@@ -104,18 +97,60 @@ class RoomListStore {
 	): Promise<void> => {
 		let rooms = [...this.rooms];
 
-		console.log("@@", rooms, roomEntriesUpdate);
 		for (const update of roomEntriesUpdate) {
+			// console.log("@@ roomListUpdate", update, rooms);
 			switch (update.tag) {
-				case "Append":
-					rooms.push(...update.inner.values.map(this.parseRoom));
+				case "Set":
+					rooms[update.inner.index] = await this.parseRoom(update.inner.value);
+					rooms = [...rooms];
+					break;
+				case "PushBack":
+					rooms = [...rooms, await this.parseRoom(update.inner.value)];
+					break;
+				case "PushFront":
+					rooms = [await this.parseRoom(update.inner.value), ...rooms];
 					break;
 				case "Clear":
 					rooms = [];
 					break;
+				case "PopFront":
+					rooms.shift();
+					rooms = [...rooms];
+					break;
+				case "PopBack":
+					rooms.pop();
+					rooms = [...rooms];
+					break;
+				case "Insert":
+					rooms.splice(
+						update.inner.index,
+						0,
+						await this.parseRoom(update.inner.value),
+					);
+					rooms = [...rooms];
+					break;
+				case "Remove":
+					rooms.splice(update.inner.index, 1);
+					rooms = [...rooms];
+					break;
+				case "Truncate":
+					rooms = rooms.slice(0, update.inner.length);
+					break;
+				case "Reset":
+					rooms = [
+						...(await Promise.all(update.inner.values.map(this.parseRoom))),
+					];
+					break;
+				case "Append":
+					rooms = [
+						...rooms,
+						...(await Promise.all(update.inner.values.map(this.parseRoom))),
+					];
+					break;
 			}
 		}
 
+		// console.log("@@ roomListUpdated", rooms);
 		this.rooms = rooms;
 		this.emit();
 	};
@@ -132,104 +167,24 @@ class RoomListStore {
 
 			this.running = true;
 			const abortController = new AbortController();
-			const roomListService = this.syncService.roomListService();
-			const p = await roomListService.allRooms({
+			const p = await this.roomListService.allRooms({
 				signal: abortController.signal,
 			});
 			const v = p.entriesWithDynamicAdapters(100, this);
+			const controller = v.controller();
+			controller.setFilter(new RoomListEntriesDynamicFilterKind.NonLeft());
+			controller.addOnePage();
 
 			this.emit();
 
-			// TODO: recover from network outages and laptop sleeping
 			// while (this.running) {
-			// 	//console.log("waiting for roomlist_update");
-			//
-			// 	let diffs: any;
-			// 	try {
-			// 		// diffs = await invoke("get_roomlist_update");
-			// 	} catch (error) {
-			// 		if (error) {
-			// 			console.info(error);
-			// 		} else {
-			// 			console.info("unexpected error");
-			// 		}
-			// 	}
-			//
-			// 	if (!diffs) {
-			// 		console.info("stopping roomlist poll due to empty diff");
-			// 		this.running = false;
-			// 		break;
-			// 	}
-			//
-			// 	for (const diff of diffs) {
-			// 		const k = Object.keys(diff)[0];
-			// 		const v = Object.values(diff)[0] as any;
-			//
-			// 		//console.log("got roomlist_update", diff);
-			//
-			// 		let room: RoomListItem;
-			// 		let rooms: RoomListItem[];
-			//
-			// 		// XXX: deduplicate VecDiff processing with the TimelineStore
-			// 		switch (k) {
-			// 			case "Set":
-			// 				room = await this.parseRoom(v.value);
-			// 				this.rooms[v.index] = room;
-			// 				this.rooms = [...this.rooms];
-			// 				break;
-			// 			case "PushBack":
-			// 				room = await this.parseRoom(v.value);
-			// 				this.rooms = [...this.rooms, room];
-			// 				break;
-			// 			case "PushFront":
-			// 				room = await this.parseRoom(v.value);
-			// 				this.rooms = [room, ...this.rooms];
-			// 				break;
-			// 			case "Clear":
-			// 				this.rooms = [];
-			// 				break;
-			// 			case "PopFront":
-			// 				this.rooms.shift();
-			// 				this.rooms = [...this.rooms];
-			// 				break;
-			// 			case "PopBack":
-			// 				this.rooms.pop();
-			// 				this.rooms = [...this.rooms];
-			// 				break;
-			// 			case "Insert":
-			// 				room = await this.parseRoom(v.value);
-			// 				this.rooms.splice(v.index, 0, room);
-			// 				this.rooms = [...this.rooms];
-			// 				break;
-			// 			case "Remove":
-			// 				this.rooms.splice(v.index, 1);
-			// 				this.rooms = [...this.rooms];
-			// 				break;
-			// 			case "Truncate":
-			// 				this.rooms = this.rooms.slice(0, v.length);
-			// 				break;
-			// 			case "Reset":
-			// 				rooms = await Promise.all(
-			// 					v.values.map(async (room: any) => await this.parseRoom(room)),
-			// 				);
-			// 				this.rooms = [...rooms];
-			// 				break;
-			// 			case "Append":
-			// 				rooms = await Promise.all(
-			// 					v.values.map(async (room: any) => await this.parseRoom(room)),
-			// 				);
-			// 				this.rooms = [...this.rooms, ...rooms];
-			// 				break;
-			// 		}
-			// 	}
-			// 	this.emit();
+			// 	// TODO
 			// }
-			// abortController.abort();
 
-			console.log("== releasing lock after roomlist subscription & polling");
-			release();
+			// console.log("== releasing lock after roomlist subscription & polling");
+			// release();
 
-			console.log("stopped polling");
+			// console.log("stopped polling");
 		})();
 	};
 
@@ -244,7 +199,7 @@ class RoomListStore {
 			(async () => {
 				// XXX: we should grab a mutex to avoid overlapping unsubscribes
 				// await invoke("unsubscribe_roomlist");
-				this.running = false;
+				// this.running = false;
 			})();
 			this.listeners = this.listeners.filter((l) => l !== listener);
 		};

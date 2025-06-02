@@ -22,23 +22,23 @@ interface IProps {
 const MemberListView: React.FC<IProps> = (props: IProps) => {
 	// const vm = useMemberListViewModel(props.roomId);
 	const vm = {
-    members: []
-  } as any;
+		members: [],
+	} as any;
 
 	const totalRows = vm.members.length;
 
 	const getRowComponent = (item: MemberWithSeparator): JSX.Element => {
 		if (item === SEPARATOR) {
 			return <hr className="mx_MemberListView_separator" />;
-		// } else if (item.member) {
-    }
-    return (
-      <RoomMemberTileView
-        member={item.member}
-        showPresence={vm.isPresenceEnabled}
-      />
-    );
-    // }
+			// } else if (item.member) {
+		}
+		return (
+			<RoomMemberTileView
+				member={item.member}
+				showPresence={vm.isPresenceEnabled}
+			/>
+		);
+		// }
 		// } else {
 		// 	return <ThreePidInviteTileView threePidInvite={item.threePidInvite} />;
 		// }

@@ -10,11 +10,10 @@ import React, {
 import classNames from "classnames";
 import { Avatar } from "@vector-im/compound-web";
 
-
 export type ButtonEvent =
-  | React.MouseEvent<Element>
-  | React.KeyboardEvent<Element>
-  | React.FormEvent<Element>;
+	| React.MouseEvent<Element>
+	| React.KeyboardEvent<Element>
+	| React.FormEvent<Element>;
 
 interface IProps {
 	name?: React.ComponentProps<typeof Avatar>["name"]; // The name (first initial used as default)

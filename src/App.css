@@ -1,6 +1,8 @@
 html {
 	height: 100%;
 	overflow: hidden;
+	background-color: var(--cpd-color-bg-canvas-default);
+	color: var(--cpd-color-text-primary);
 }
 
 body {

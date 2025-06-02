@@ -16,19 +16,17 @@ interface Props {
 	threePidInvite: ThreePIDInvite;
 }
 
-
 export type ThreePIDInvite = {
-  event: MatrixEvent;
+	event: MatrixEvent;
 };
-
 
 export function ThreePidInviteTileView(props: Props): JSX.Element {
 	// const vm = useThreePidTileViewModel(props);
-    const vm = {
-        name: "Test",
-        onClick: () => {},
-        userLabel: "Test",
-    } as any;
+	const vm = {
+		name: "Test",
+		onClick: () => {},
+		userLabel: "Test",
+	} as any;
 	const av = <BaseAvatar name={vm.name} size="32px" aria-hidden="true" />;
 	const iconJsx = <InvitedIconView isThreePid={true} />;
 

@@ -12,6 +12,7 @@ import type ClientStore from "./ClientStore.tsx";
 import { ClientState } from "./ClientStore.tsx";
 import type RoomListStore from "./RoomListStore.tsx";
 import { RoomListEntry, type RoomListItem } from "./RoomListStore.tsx";
+import { RoomListView } from "./RoomListView";
 import type TimelineStore from "./TimelineStore.tsx";
 import {
 	ContentType,
@@ -402,10 +403,10 @@ const Client: React.FC<ClientProps> = ({ clientStore }) => {
 			<section className="mx_Client">
 				<nav className="mx_RoomList">
 					{roomListStore ? (
-						<RoomList
-							roomListStore={roomListStore}
-							selectedRoomId={currentRoomId}
-							setRoom={(roomId) => {
+						<RoomListView
+							vm={roomListStore}
+							currentRoomId={currentRoomId}
+							onRoomSelected={(roomId) => {
 								setCurrentRoomId(roomId);
 							}}
 						/>
@@ -498,7 +499,7 @@ export const App: React.FC<AppProps> = ({ clientStore }) => {
 	);
 
 	return (
-		<div className="mx_App">
+		<div className="mx_App cpd-theme-dark">
 			{clientState == ClientState.Unknown ? null : clientState ==
 				ClientState.LoggedIn ? (
 				<Client clientStore={clientStore} />

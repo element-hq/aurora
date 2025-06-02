@@ -5,6 +5,8 @@ import {
 	ClientBuilder,
 	type ClientInterface,
 	LogLevel,
+	type RoomListServiceInterface,
+	SlidingSyncVersionBuilder,
 	type SyncServiceInterface,
 	initPlatform,
 } from "./index.web.ts";
@@ -28,6 +30,7 @@ class ClientStore {
 	client?: ClientInterface;
 	syncService?: SyncServiceInterface;
 	memberListStore?: MemberListStore;
+	roomListService?: RoomListServiceInterface;
 
 	mutex: Mutex = new Mutex();
 
@@ -38,7 +41,10 @@ class ClientStore {
 
 	login = async ({ username, password, server }: LoginParams) => {
 		const release = await this.mutex.acquire();
-		const client = await new ClientBuilder().homeserverUrl(server).build();
+		const client = await new ClientBuilder()
+			.slidingSyncVersionBuilder(SlidingSyncVersionBuilder.DiscoverNative)
+			.homeserverUrl(server)
+			.build();
 
 		console.log("starting sdk...");
 		try {
@@ -59,21 +65,25 @@ class ClientStore {
 			this.client = client;
 			this.clientState = ClientState.LoggedIn;
 		} catch (e) {
-			console.log("login failed", e);
+			console.log("login failed", e, e.inner);
 			this.clientState = ClientState.Unknown;
+			this.emit();
+			release();
+			return;
 		}
 
 		try {
-			const v = await client.availableSlidingSyncVersions();
-			console.log("@@", v, client.slidingSyncVersion());
-
 			const syncServiceBuilder = client.syncService();
 			this.syncService = await syncServiceBuilder.finish();
+			this.roomListService = this.syncService.roomListService();
 			await this.syncService.start();
 			console.log("syncing...");
 		} catch (e) {
 			console.log("syncing failed", e, e.inner);
 			this.clientState = ClientState.Unknown;
+			this.emit();
+			release();
+			return;
 		}
 
 		this.emit();
@@ -95,7 +105,10 @@ class ClientStore {
 	getRoomListStore = async () => {
 		const release = await this.mutex.acquire();
 		release();
-		this.roomListStore ||= new RoomListStore(this.client!, this.syncService!);
+		this.roomListStore ||= new RoomListStore(
+			this.client!,
+			this.roomListService!,
+		);
 		return this.roomListStore;
 	};
 
