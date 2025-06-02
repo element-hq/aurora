@@ -9,6 +9,7 @@ investigate what Element X Desktop could look like.
 ## Prereqs
 
 ```bash
+cargo install wasm-bindgen-cli
 yarn install
 ```
 
