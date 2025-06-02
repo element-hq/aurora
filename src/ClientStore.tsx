@@ -5,6 +5,8 @@ import {
 	ClientBuilder,
 	type ClientInterface,
 	LogLevel,
+	type RoomListServiceInterface,
+	SlidingSyncVersionBuilder,
 	type SyncServiceInterface,
 	initPlatform,
 } from "./index.web.ts";
@@ -26,6 +28,7 @@ class ClientStore {
 	roomListStore?: RoomListStore;
 	client?: ClientInterface;
 	syncService?: SyncServiceInterface;
+	roomListService?: RoomListServiceInterface;
 
 	mutex: Mutex = new Mutex();
 
@@ -36,7 +39,10 @@ class ClientStore {
 
 	login = async ({ username, password, server }: LoginParams) => {
 		const release = await this.mutex.acquire();
-		const client = await new ClientBuilder().homeserverUrl(server).build();
+		const client = await new ClientBuilder()
+			.slidingSyncVersionBuilder(SlidingSyncVersionBuilder.DiscoverNative)
+			.homeserverUrl(server)
+			.build();
 
 		console.log("starting sdk...");
 		try {
@@ -62,11 +68,9 @@ class ClientStore {
 		}
 
 		try {
-			const v = await client.availableSlidingSyncVersions();
-			console.log("@@", v, client.slidingSyncVersion());
-
 			const syncServiceBuilder = client.syncService();
 			this.syncService = await syncServiceBuilder.finish();
+			this.roomListService = this.syncService.roomListService();
 			await this.syncService.start();
 			console.log("syncing...");
 		} catch (e) {
@@ -93,7 +97,10 @@ class ClientStore {
 	getRoomListStore = async () => {
 		const release = await this.mutex.acquire();
 		release();
-		this.roomListStore ||= new RoomListStore(this.client!, this.syncService!);
+		this.roomListStore ||= new RoomListStore(
+			this.client!,
+			this.roomListService!,
+		);
 		return this.roomListStore;
 	};
 
