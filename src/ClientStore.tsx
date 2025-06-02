@@ -8,6 +8,7 @@ import {
 	type SyncServiceInterface,
 	initPlatform,
 } from "./index.web.ts";
+import { MemberListStore } from "./MemberList/MemberListStore.tsx";
 
 interface LoginParams {
 	username: string;
@@ -26,6 +27,7 @@ class ClientStore {
 	roomListStore?: RoomListStore;
 	client?: ClientInterface;
 	syncService?: SyncServiceInterface;
+	memberListStore?: MemberListStore;
 
 	mutex: Mutex = new Mutex();
 
@@ -95,6 +97,13 @@ class ClientStore {
 		release();
 		this.roomListStore ||= new RoomListStore(this.client!, this.syncService!);
 		return this.roomListStore;
+	};
+
+	getMemberListStore = async (roomId: string) => {
+		const release = await this.mutex.acquire();
+		release();
+		this.memberListStore ||= new MemberListStore(roomId);
+		return this.memberListStore;
 	};
 
 	subscribe = (listener: any) => {

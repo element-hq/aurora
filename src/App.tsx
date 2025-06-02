@@ -26,7 +26,8 @@ import {
 	type VirtualTimelineItem,
 	VirtualTimelineItemInnerType,
 } from "./TimelineStore.tsx";
-import { RoomInterface } from "./index.web.ts";
+import { MemberListStore } from "./MemberList/MemberListStore.tsx";
+import MemberListView from "./MemberList/MemberListView.tsx";
 
 console.log("running App.tsx");
 
@@ -369,6 +370,7 @@ const Client: React.FC<ClientProps> = ({ clientStore }) => {
 
 	const [roomListStore, setRoomListStore] = useState<RoomListStore>();
 	const [timelineStore, setTimelineStore] = useState<TimelineStore>();
+	const [memberListStore, setMemberListStore] = useState<MemberListStore>();
 
 	useEffect(() => {
 		// is this the right place to get SDK to subscribe? or should it be done in the store before passing it here somehow?
@@ -377,6 +379,7 @@ const Client: React.FC<ClientProps> = ({ clientStore }) => {
 			// console.log("trying to get tls for ", currentRoomId);
 			const rls = await clientStore.getRoomListStore();
 			const tls = await clientStore.getTimelineStore(currentRoomId);
+			const mls = await clientStore.getMemberListStore(currentRoomId);
 			// console.log("got tls for ", currentRoomId, tls);
 
 			if (rls && rls !== roomListStore) {
@@ -390,6 +393,7 @@ const Client: React.FC<ClientProps> = ({ clientStore }) => {
 
 			setRoomListStore(rls);
 			setTimelineStore(tls);
+			setMemberListStore(mls);
 		})();
 	});
 	return (
@@ -411,6 +415,9 @@ const Client: React.FC<ClientProps> = ({ clientStore }) => {
 					<main className="mx_MainPanel">
 						<Timeline timelineStore={timelineStore} />
 						<Composer timelineStore={timelineStore} />
+						{memberListStore ? (
+							<MemberListView memberListStore={memberListStore} />
+						) : null}
 					</main>
 				) : null}
 			</section>
