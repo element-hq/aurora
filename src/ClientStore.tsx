@@ -1,4 +1,4 @@
-import { invoke } from "@tauri-apps/api/tauri";
+import { invoke } from "@tauri-apps/api/core";
 import TimelineStore from "./TimelineStore.tsx";
 import RoomListStore from "./RoomListStore.tsx";
 import { Mutex } from "async-mutex";
