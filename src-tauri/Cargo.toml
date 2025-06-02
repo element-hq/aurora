@@ -26,12 +26,13 @@ eyeball = { git = "https://github.com/jplatte/eyeball.git", rev="71e0a72adc37758
 eyeball-im = { git = "https://github.com/jplatte/eyeball.git", rev="71e0a72adc377584da78fb4c1b3ad9714a7287f4", features = ["tracing", "serde"] }
 eyeball-im-util = { git = "https://github.com/jplatte/eyeball.git", rev="71e0a72adc377584da78fb4c1b3ad9714a7287f4" }
 
-ruma = { git = "https://github.com/ara4n/ruma.git", rev = "7f706bc7df5da887756564d711d2d5a062c3451d" }
-ruma-common = { git = "https://github.com/ara4n/ruma.git", package="ruma-common", rev = "7f706bc7df5da887756564d711d2d5a062c3451d" }
+#ruma = { git = "https://github.com/ara4n/ruma.git", rev = "7f706bc7df5da887756564d711d2d5a062c3451d" }
+#ruma-common = { git = "https://github.com/ara4n/ruma.git", package="ruma-common", rev = "7f706bc7df5da887756564d711d2d5a062c3451d" }
 
-matrix-sdk = { git = "https://github.com/matrix-org/matrix-rust-sdk.git", rev = "bf5aeb8a69498499cccd595b3a0e4290c3a78642", features = ["experimental-sliding-sync", "serde"] }
-matrix-sdk-ui = { git = "https://github.com/matrix-org/matrix-rust-sdk.git", rev = "bf5aeb8a69498499cccd595b3a0e4290c3a78642", features = ["serde"] }
-matrix-sdk-sqlite = { git = "https://github.com/matrix-org/matrix-rust-sdk.git", rev = "bf5aeb8a69498499cccd595b3a0e4290c3a78642" }
+#matrix-sdk = { git = "https://github.com/matrix-org/matrix-rust-sdk.git", rev = "bf5aeb8a69498499cccd595b3a0e4290c3a78642", features = ["experimental-sliding-sync", "serde"] }
+#matrix-sdk = { git = "https://github.com/matrix-org/matrix-rust-sdk.git", rev = "1e938df90d90b5d0a423499dea42e01167b4f428" }
+#matrix-sdk-ui = { git = "https://github.com/matrix-org/matrix-rust-sdk.git", rev = "1e938df90d90b5d0a423499dea42e01167b4f428" }
+#matrix-sdk-sqlite = { git = "https://github.com/matrix-org/matrix-rust-sdk.git", rev = "1e938df90d90b5d0a423499dea42e01167b4f428" }
 
 futures = "0.3.28"
 futures-core = "0.3.28"
@@ -48,9 +49,15 @@ thiserror = "1.0.57"
 url = "2.5.0"
 anyhow = "1.0.79"
 time = "0.3.35"
+ruma= "0.12.3"
+ruma-common = "0.15.2"
+matrix-sdk = "0.11.0"
+matrix-sdk-ui = "0.11.0"
+#matrix-sdk-sqlite = "0.11.0"
+matrix-sdk-sqlite = { git = "https://github.com/matrix-org/matrix-rust-sdk.git", rev = "1e938df90d90b5d0a423499dea42e01167b4f428" }
 
 [target.'cfg(windows)'.dependencies]
-matrix-sdk-sqlite = { git = "https://github.com/matrix-org/matrix-rust-sdk.git", rev = "bf5aeb8a69498499cccd595b3a0e4290c3a78642", features = ["bundled"] }
+matrix-sdk-sqlite = { git = "https://github.com/matrix-org/matrix-rust-sdk.git", rev = "1e938df90d90b5d0a423499dea42e01167b4f428", features = ["bundled"] }
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem
