@@ -1,6 +1,14 @@
 import { invoke } from "@tauri-apps/api/tauri";
 import { applyDiff } from "./DiffUtils.ts";
 import { Mutex } from "async-mutex";
+import {
+	ClientInterface,
+	Room,
+	TimelineChange,
+	TimelineDiffInterface,
+	TimelineInterface,
+	TimelineItemInterface,
+} from "./index.web.ts";
 
 // XXX: should we use purely abstract interfaces here, and entirely separate the code
 // for parsing the JSON from the types (rather than using a mix of classes and types)?
@@ -236,7 +244,8 @@ export class EventTimelineItem extends TimelineItem {
 
 class TimelineStore {
 	roomId: string;
-	running: boolean = false;
+	client: ClientInterface;
+	running = false;
 	items: TimelineItem[] = [];
 	listeners: CallableFunction[] = [];
 
@@ -244,11 +253,12 @@ class TimelineStore {
 	// hence static, until the rust layer can handle multiple timelines simultaneously
 	static mutex: Mutex = new Mutex();
 
-	constructor(roomId: string) {
+	constructor(roomId: string, client: ClientInterface) {
 		this.roomId = roomId;
+		this.client = client;
 	}
 
-	private parseItem(item: any): TimelineItem {
+	private parseItem(item: TimelineItemInterface): TimelineItem {
 		const kind: TimelineItemKind =
 			TimelineItemKind[
 				Object.keys(item.kind)[0] as keyof typeof TimelineItemKind
@@ -265,6 +275,82 @@ class TimelineStore {
 		await invoke("send_message", { roomId: this.roomId, msg });
 	};
 
+	onUpdate = async (diff: TimelineDiffInterface[]): Promise<void> => {
+		let items = [...this.items];
+
+		for (const update of diff) {
+			console.log("@@ timelineUpdate", update, items);
+			switch (update.change()) {
+				case TimelineChange.Set: {
+					const data = update.set();
+					if (!data) throw Error();
+					items[data.index] = this.parseItem(data.item);
+					items = [...items];
+					break;
+				}
+				case TimelineChange.PopBack:
+					items.pop();
+					items = [...items];
+					break;
+				case TimelineChange.PushFront: {
+					const data = update.pushFront();
+					if (!data) throw Error();
+					items = [this.parseItem(data), ...items];
+					break;
+				}
+				case TimelineChange.Clear:
+					items = [];
+					break;
+				case TimelineChange.PopFront:
+					items.shift();
+					items = [...items];
+					break;
+				case TimelineChange.PushBack: {
+					const data = update.pushBack();
+					if (!data) throw Error();
+					items = [...items, this.parseItem(data)];
+					break;
+				}
+				case TimelineChange.Insert: {
+					const data = update.insert();
+					if (!data) throw Error();
+					items.splice(data.index, 0, this.parseItem(data.item));
+					items = [...items];
+					break;
+				}
+				case TimelineChange.Remove: {
+					const data = update.remove();
+					if (!data) throw Error();
+					items.splice(data, 1);
+					items = [...items];
+					break;
+				}
+				case TimelineChange.Truncate: {
+					const data = update.truncate();
+					if (!data) throw Error();
+					items = items.slice(0, data);
+					break;
+				}
+				case TimelineChange.Reset: {
+					const data = update.reset();
+					if (!data) throw Error();
+					items = [...(await Promise.all(data.map(this.parseItem)))];
+					break;
+				}
+				case TimelineChange.Append: {
+					const data = update.append();
+					if (!data) throw Error();
+					items = [...items, ...(await Promise.all(data.map(this.parseItem)))];
+					break;
+				}
+			}
+
+			console.log("@@ timelinepdated", items);
+			this.items = items;
+			this.emit();
+		}
+	};
+
 	run = () => {
 		if (!this.roomId) return;
 
@@ -278,50 +364,26 @@ class TimelineStore {
 					this.roomId,
 				);
 			console.log("subscribing to timeline", this.roomId);
-			const rawItems: any[] = await invoke("subscribe_timeline", {
-				roomId: this.roomId,
-			});
-			console.log("subscribed to timeline", this.roomId);
-			this.running = true;
 
-			this.items = rawItems.map(this.parseItem);
+			const room = this.client.getRoom(this.roomId);
+			if (!room) return;
+			const timeline = await room.timeline();
+			this.running = true;
+			timeline.addListener(this);
 			this.emit();
 
 			console.log("timeline items", this.items);
-			//this.logItems(timeline_items);
 
-			// TODO: recover from network outages and laptop sleeping
-			while (this.running) {
-				//await new Promise(r => setTimeout(r, 250));
-
-				let diff: any = undefined;
-				try {
-					diff = await invoke("get_timeline_update");
-				} catch (error) {
-					console.info(error);
-				}
-				if (!diff) {
-					console.info("stopping timeline poll due to empty diff");
-					this.running = false;
-					break;
-				}
-
-				console.log("timeline diff", diff);
-				//console.log(JSON.stringify(diff, undefined, 4));
-
-				this.items = applyDiff<TimelineItem>(diff, this.items, this.parseItem);
-				this.emit();
-			}
-			console.log(
-				"== releasing lock after timeline subscription & polling",
-				this.roomId,
-			);
-			release();
-			console.log("no longer subscribed to", this.roomId);
+			// console.log(
+			// 	"== releasing lock after timeline subscription & polling",
+			// 	this.roomId,
+			// );
+			// release();
+			// console.log("no longer subscribed to", this.roomId);
 		})();
 	};
 
-	subscribe = (listener: any) => {
+	subscribe = (listener: CallableFunction) => {
 		this.listeners = [...this.listeners, listener];
 
 		return () => {
@@ -329,8 +391,8 @@ class TimelineStore {
 				// XXX: we should grab a mutex to avoid overlapping unsubscribes
 				// and ensure we only unsubscribe from the timeline we think we're
 				// unsubscribing to.
-				await invoke("unsubscribe_timeline", { roomId: this.roomId });
-				this.running = false;
+				// await invoke("unsubscribe_timeline", { roomId: this.roomId });
+				// this.running = false;
 			})();
 			this.listeners = this.listeners.filter((l) => l !== listener);
 		};
