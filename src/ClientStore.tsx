@@ -63,8 +63,11 @@ class ClientStore {
 			this.client = client;
 			this.clientState = ClientState.LoggedIn;
 		} catch (e) {
-			console.log("login failed", e);
+			console.log("login failed", e, e.inner);
 			this.clientState = ClientState.Unknown;
+			this.emit();
+			release();
+			return;
 		}
 
 		try {
@@ -76,6 +79,9 @@ class ClientStore {
 		} catch (e) {
 			console.log("syncing failed", e, e.inner);
 			this.clientState = ClientState.Unknown;
+			this.emit();
+			release();
+			return;
 		}
 
 		this.emit();
