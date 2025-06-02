@@ -1,4 +1,3 @@
-import { invoke } from "@tauri-apps/api/tauri";
 import { Mutex } from "async-mutex";
 import { ClientInterface } from "./index.web";
 
