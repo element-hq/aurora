@@ -9,7 +9,7 @@ await uniffiInitAsync();
 const clientStore = new ClientStore();
 
 // XXX: hacky bodge to restore any existing session
-// clientStore.login({ username: "", password: "", server: "https://matrix.org" });
+clientStore.login({ username: "", password: "", server: "https://matrix.org" });
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
 	<React.StrictMode>
