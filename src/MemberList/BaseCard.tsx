@@ -13,6 +13,7 @@ import React, {
 	type MouseEvent,
 } from "react";
 import classNames from "classnames";
+import "./BaseCard.css";
 import { IconButton, Text } from "@vector-im/compound-web";
 import CloseIcon from "@vector-im/compound-design-tokens/assets/web/icons/close";
 
@@ -48,21 +49,21 @@ const BaseCard: React.FC<IProps> = ({
 	closeButtonRef,
 	ref,
 }: IProps) => {
-	let closeButton;
-	if (!hideHeaderButtons) {
-		closeButton = (
-			<IconButton
-				size="28px"
-				data-testid="base-card-close-button"
-				onClick={onClose}
-				ref={closeButtonRef}
-				tooltip={closeLabel ?? "Close"}
-				subtleBackground
-			>
-				<CloseIcon />
-			</IconButton>
-		);
-	}
+	// let closeButton;
+	// if (!hideHeaderButtons) {
+	// 	closeButton = (
+	// 		<IconButton
+	// 			size="28px"
+	// 			data-testid="base-card-close-button"
+	// 			onClick={onClose}
+	// 			ref={closeButtonRef}
+	// 			tooltip={closeLabel ?? "Close"}
+	// 			subtleBackground
+	// 		>
+	// 			<CloseIcon />
+	// 		</IconButton>
+	// 	);
+	// }
 
 	const shouldRenderHeader = header || !hideHeaderButtons;
 
@@ -91,7 +92,7 @@ const BaseCard: React.FC<IProps> = ({
 					) : (
 						(header ?? <div className="mx_BaseCard_header_spacer" />)
 					)}
-					{closeButton}
+					{/* {closeButton} */}
 				</div>
 			)}
 			{children}

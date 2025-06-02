@@ -7,6 +7,7 @@
 
 import { ThreePIDInvite } from "./tiles/ThreePidInviteTileView";
 import { RoomMember } from "../generated/matrix_sdk_ffi";
+import { ButtonEvent } from "../utils/ButtonEvent";
 // import { KnownMembership } from "matrix-js-sdk/src/types";
 // import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 // import { throttle } from "lodash";
@@ -103,17 +104,17 @@ type Member = { member: RoomMember };
 export const SEPARATOR = "SEPARATOR";
 export type MemberWithSeparator = Member | typeof SEPARATOR;
 
-// export interface MemberListViewState {
-// 	members: MemberWithSeparator[];
-// 	memberCount: number;
-// 	search: (searchQuery: string) => void;
-// 	isPresenceEnabled: boolean;
-// 	shouldShowInvite: boolean;
-// 	shouldShowSearch: boolean;
-// 	isLoading: boolean;
-// 	canInvite: boolean;
-// 	onInviteButtonClick: (ev: ButtonEvent) => void;
-// }
+export interface MemberListViewState {
+	members: MemberWithSeparator[];
+	memberCount: number;
+	search: (searchQuery: string) => void;
+	isPresenceEnabled: boolean;
+	shouldShowInvite: boolean;
+	shouldShowSearch: boolean;
+	isLoading: boolean;
+	canInvite: boolean;
+	onInviteButtonClick: (ev: ButtonEvent) => void;
+}
 // export function useMemberListViewModel(roomId: string): MemberListViewState {
 // 	const cli = useMatrixClientContext();
 

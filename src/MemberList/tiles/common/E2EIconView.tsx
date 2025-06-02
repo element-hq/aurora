@@ -1,55 +1,60 @@
-/*
-Copyright 2024 New Vector Ltd.
+// /*
+// Copyright 2024 New Vector Ltd.
 
-SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
-Please see LICENSE files in the repository root for full details.
-*/
+// SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+// Please see LICENSE files in the repository root for full details.
+// */
 
-import React, { type JSX } from "react";
-import { Tooltip } from "@vector-im/compound-web";
-import VerifiedIcon from "@vector-im/compound-design-tokens/assets/web/icons/verified";
-import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error-solid";
+// import React, { type JSX } from "react";
+// import { Tooltip } from "@vector-im/compound-web";
+// import VerifiedIcon from "@vector-im/compound-design-tokens/assets/web/icons/verified";
+// import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error-solid";
 
-import { E2EStatus } from "../../../utils/ShieldUtils";
-import { crossSigningUserTitles } from "../../E2EIcon";
+// import { E2EStatus } from "../../../utils/ShieldUtils";
 
-function getIconFromStatus(status: E2EStatus): JSX.Element | undefined {
-	switch (status) {
-		case E2EStatus.Normal:
-			return undefined;
-		case E2EStatus.Verified:
-			return (
-				<VerifiedIcon
-					height="16px"
-					width="16px"
-					className="mx_E2EIconView_verified"
-				/>
-			);
-		case E2EStatus.Warning:
-			return (
-				<ErrorIcon
-					height="16px"
-					width="16px"
-					className="mx_E2EIconView_warning"
-				/>
-			);
-	}
-}
+// export const crossSigningUserTitles: { [key in E2EStatus]?: string } = {
+//   [E2EStatus.Warning]: "This user has not verified all of their sessions.",
+//   [E2EStatus.Normal]: "You have not verified this user.",
+//   [E2EStatus.Verified]: "You have verified this user. This user has verified all of their sessions.",
+// };
 
-interface Props {
-	status: E2EStatus;
-}
+// function getIconFromStatus(status: E2EStatus): JSX.Element | undefined {
+// 	switch (status) {
+// 		case E2EStatus.Normal:
+// 			return undefined;
+// 		case E2EStatus.Verified:
+// 			return (
+// 				<VerifiedIcon
+// 					height="16px"
+// 					width="16px"
+// 					className="mx_E2EIconView_verified"
+// 				/>
+// 			);
+// 		case E2EStatus.Warning:
+// 			return (
+// 				<ErrorIcon
+// 					height="16px"
+// 					width="16px"
+// 					className="mx_E2EIconView_warning"
+// 				/>
+// 			);
+// 	}
+// }
 
-export const E2EIconView: React.FC<Props> = ({ status }) => {
-	const e2eTitle = crossSigningUserTitles[status];
-	const label = e2eTitle ? _t(e2eTitle) : "";
+// interface Props {
+// 	status: E2EStatus;
+// }
 
-	const icon = getIconFromStatus(status);
-	if (!icon) return null;
+// export const E2EIconView: React.FC<Props> = ({ status }) => {
+// 	const e2eTitle = crossSigningUserTitles[status];
+// 	const label = e2eTitle ?? "";
 
-	return (
-		<Tooltip label={label}>
-			<div className="mx_E2EIconView">{icon}</div>
-		</Tooltip>
-	);
-};
+// 	const icon = getIconFromStatus(status);
+// 	if (!icon) return null;
+
+// 	return (
+// 		<Tooltip label={label}>
+// 			<div className="mx_E2EIconView">{icon}</div>
+// 		</Tooltip>
+// 	);
+// };

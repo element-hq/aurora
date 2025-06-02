@@ -416,11 +416,9 @@ const Client: React.FC<ClientProps> = ({ clientStore }) => {
 					<main className="mx_MainPanel">
 						<Timeline timelineStore={timelineStore} />
 						<Composer timelineStore={timelineStore} />
-						{memberListStore ? (
-							<MemberListView memberListStore={memberListStore} />
-						) : null}
 					</main>
 				) : null}
+				<MemberListView roomId={currentRoomId} />
 			</section>
 		</>
 	);
@@ -431,9 +429,9 @@ interface LoginProps {
 }
 
 const Login: React.FC<LoginProps> = ({ clientStore }) => {
-	const [username, setUsername] = useState("");
-	const [password, setPassword] = useState("");
-	const [server, setServer] = useState("matrix.org");
+	const [username, setUsername] = useState("marc.sirisak");
+	const [password, setPassword] = useState("0tr1jug4eda96uzq");
+	const [server, setServer] = useState("matrix.hackdays2025.fr");
 
 	return (
 		<div className="mx_LoginPage">

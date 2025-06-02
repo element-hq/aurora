@@ -1,29 +1,37 @@
-import { Form } from "@vector-im/compound-web";
-import React, { type JSX } from "react";
+import { Form, TooltipProvider } from "@vector-im/compound-web";
+import type React from "react";
+import type { JSX } from "react";
 import { List, type ListRowProps } from "react-virtualized/dist/commonjs/List";
 import { AutoSizer } from "react-virtualized";
 
 import { Flex } from "../utils/Flex";
 import {
 	type MemberWithSeparator,
-	SEPARATOR,
+  SEPARATOR,
 	// useMemberListViewModel,
 } from "./MemberListViewModel";
 import { RoomMemberTileView } from "./tiles/RoomMemberTileView";
 import { ThreePidInviteTileView } from "./tiles/ThreePidInviteTileView";
 import { MemberListHeaderView } from "./MemberListHeaderView";
 import BaseCard from "./BaseCard";
-import { MemberListStore } from "./MemberListStore";
+import "./MemberList.css";
 
 interface IProps {
-	memberListStore: MemberListStore;
+	roomId: string;
 }
 
 const MemberListView: React.FC<IProps> = (props: IProps) => {
 	// const vm = useMemberListViewModel(props.roomId);
 	const vm = {
-		members: [],
-	} as any;
+		members: [
+			{
+				member: {
+					name: "Test",
+					userId: "Test",
+				},
+			},
+		],
+	} as any;   
 
 	const totalRows = vm.members.length;
 
@@ -80,38 +88,40 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
 	};
 
 	return (
-		<BaseCard
-			id="memberlist-panel"
-			className="mx_MemberListView"
-			ariaLabelledBy="memberlist-panel-tab"
-			role="tabpanel"
-			header={"People"}
-			onClose={props.onClose}
-		>
-			<Flex
-				align="stretch"
-				direction="column"
-				className="mx_MemberListView_container"
+		<TooltipProvider>
+			<BaseCard
+				id="memberlist-panel"
+				className="mx_MemberListView"
+				ariaLabelledBy="memberlist-panel-tab"
+				role="tabpanel"
+				header={"People"}
+				onClose={() => {}}
 			>
-				<Form.Root>
-					<MemberListHeaderView vm={vm} />
-				</Form.Root>
-				<AutoSizer>
-					{({ height, width }) => (
-						<List
-							rowRenderer={rowRenderer}
-							rowHeight={getRowHeight}
-							// The +1 refers to the additional empty div that we render at the end of the list.
-							rowCount={totalRows + 1}
-							// Subtract the height of MemberlistHeaderView so that the parent div does not overflow.
-							height={height - 113}
-							width={width}
-							overscanRowCount={15}
-						/>
-					)}
-				</AutoSizer>
-			</Flex>
-		</BaseCard>
+				<Flex
+					align="stretch"
+					direction="column"
+					className="mx_MemberListView_container"
+				>
+					<Form.Root>
+						<MemberListHeaderView vm={vm} />
+					</Form.Root>
+					<AutoSizer>
+						{({ height, width }) => (
+							<List
+								rowRenderer={rowRenderer}
+								rowHeight={getRowHeight}
+								// The +1 refers to the additional empty div that we render at the end of the list.
+								rowCount={totalRows + 1}
+								// Subtract the height of MemberlistHeaderView so that the parent div does not overflow.
+								height={height - 113}
+								width={width}
+								overscanRowCount={15}
+							/>
+						)}
+					</AutoSizer>
+				</Flex>
+			</BaseCard>
+		</TooltipProvider>
 	);
 };
 

@@ -10,7 +10,7 @@ import React, { type JSX } from "react";
 // import DisambiguatedProfile from "../../../messages/DisambiguatedProfile";
 import { type RoomMember } from "../../generated/matrix_sdk_ffi";
 // import { useMemberTileViewModel } from "../../../../viewmodels/memberlist/tiles/MemberTileViewModel";
-import { E2EIconView } from "./common/E2EIconView";
+// import { E2EIconView } from "./common/E2EIconView";
 import AvatarPresenceIconView from "./common/PresenceIconView";
 import BaseAvatar from "../BaseAvatar";
 import { MemberTileView } from "./common/MemberTileView";
@@ -24,7 +24,10 @@ interface IProps {
 export function RoomMemberTileView(props: IProps): JSX.Element {
 	// const vm = useMemberTileViewModel(props);
 	const vm = {
-		name: "Test",
+		member: {
+			name: "Test",
+			userId: "Test",
+		},
 		onClick: () => {},
 		userLabel: "Test",
 	} as any;
@@ -53,9 +56,9 @@ export function RoomMemberTileView(props: IProps): JSX.Element {
 	}
 
 	let iconJsx;
-	if (vm.e2eStatus) {
-		iconJsx = <E2EIconView status={vm.e2eStatus} />;
-	}
+	// if (vm.e2eStatus) {
+	// 	iconJsx = <E2EIconView status={vm.e2eStatus} />;
+	// }
 	if (member.isInvite) {
 		iconJsx = <InvitedIconView isThreePid={false} />;
 	}

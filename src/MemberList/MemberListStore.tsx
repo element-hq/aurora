@@ -6,11 +6,14 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import { type Room, type RoomMember } from "../index.web";
-import { KnownMembership } from "matrix-js-sdk/src/types";
-
-import SettingsStore from "../settings/SettingsStore";
-import SdkConfig from "../SdkConfig";
+import {
+	ClientInterface,
+	MembershipState,
+	MembershipState_Tags,
+	RoomInterface,
+	type Room,
+	type RoomMember,
+} from "../index.web";
 
 // Regex applied to filter our punctuation in member names before applying sort, to fuzzy it a little
 // matches all ASCII punctuation: !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
@@ -26,10 +29,11 @@ export class MemberListStore {
 	private readonly loadedRooms = new Set<string>();
 	private readonly roomId: string;
 	private collator?: Intl.Collator;
-
-	public constructor(roomId: string) {
+	private client: ClientInterface;
+	public constructor(roomId: string, client: ClientInterface) {
 		console.log("MemberListStore constructor", roomId);
 		this.roomId = roomId;
+		this.client = client;
 	}
 
 	/**
@@ -41,7 +45,7 @@ export class MemberListStore {
 	public async loadMemberList(
 		searchQuery?: string,
 	): Promise<Record<"joined" | "invited", RoomMember[]>> {
-		if (!this.stores.client) {
+		if (!this.client) {
 			return {
 				joined: [],
 				invited: [],
@@ -69,7 +73,7 @@ export class MemberListStore {
 	}
 
 	private async loadMembers(roomId: string): Promise<Array<RoomMember>> {
-		const room = this.stores.client!.getRoom(roomId);
+		const room = this.client!.getRoom(roomId);
 		if (!room) {
 			return [];
 		}
@@ -81,49 +85,24 @@ export class MemberListStore {
 			// nice and easy, we must already have all the members so just return them.
 			return this.loadMembersInRoom(room);
 		}
-		// lazy loading is enabled. There are two kinds of lazy loading:
-		// - With storage: most members are in indexedDB, we just need a small delta via /members.
-		//   Valid for normal sync in normal windows.
-		// - Without storage: nothing in indexedDB, we need to load all via /members. Valid for
-		//   Sliding Sync and incognito windows (non-Sliding Sync).
-		if (!this.isLazyMemberStorageEnabled()) {
-			// pull straight from the server. Don't use a since token as we don't have earlier deltas
-			// accumulated.
-			room.currentState.markOutOfBandMembersStarted();
-			const response = await this.stores.client!.members(
-				roomId,
-				undefined,
-				KnownMembership.Leave,
-			);
-			const memberEvents = response.chunk.map(
-				this.stores.client!.getEventMapper(),
-			);
-			room.currentState.setOutOfBandMembers(memberEvents);
-		} else {
-			// load using traditional lazy loading
-			try {
-				await room.loadMembersIfNeeded();
-			} catch {
-				/* already logged in RoomView */
-			}
-		}
 		// remember that we have loaded the members so we don't hit /members all the time. We
 		// will forget this on refresh which is fine as we only store the data in-memory.
 		this.loadedRooms.add(roomId);
 		return this.loadMembersInRoom(room);
 	}
 
-	private loadMembersInRoom(room: Room): Array<RoomMember> {
-		const allMembers = Object.values(room.currentState.members);
-		allMembers.forEach((member) => {
+	private async loadMembersInRoom(
+		room: RoomInterface,
+	): Promise<Array<RoomMember>> {
+		const members = await room.members();
+		const allMembers = Object.values(members);
+		allMembers.forEach(async (member) => {
 			// work around a race where you might have a room member object
 			// before the user object exists. This may or may not cause
 			// https://github.com/vector-im/vector-web/issues/186
 			if (!member.user) {
-				member.user = this.stores.client!.getUser(member.userId) || undefined;
+				member.user = (await room.member(member.userId)) || undefined;
 			}
-			// XXX: this user may have no lastPresenceTs value!
-			// the right solution here is to fix the race rather than leave it as 0
 		});
 		return allMembers;
 	}
@@ -135,32 +114,18 @@ export class MemberListStore {
 	 * @returns True if enabled
 	 */
 	private async isLazyLoadingEnabled(roomId: string): Promise<boolean> {
-		if (SettingsStore.getValue("feature_simplified_sliding_sync")) {
-			// only unencrypted rooms use lazy loading
-			return !(await this.stores.client
-				?.getCrypto()
-				?.isEncryptionEnabledInRoom(roomId));
-		}
-		return this.stores.client!.hasLazyLoadMembersEnabled();
-	}
-
-	/**
-	 * Check if lazy member storage is supported.
-	 * @returns True if there is storage for lazy loading members
-	 */
-	private isLazyMemberStorageEnabled(): boolean {
-		if (SettingsStore.getValue("feature_simplified_sliding_sync")) {
-			return false;
-		}
-		return this.stores.client!.hasLazyLoadMembersEnabled();
+		// if (SettingsStore.getValue("feature_simplified_sliding_sync")) {
+		// 	// only unencrypted rooms use lazy loading
+		// 	return !(await this.stores.client
+		// 		?.getCrypto()
+		// 		?.isEncryptionEnabledInRoom(roomId));
+		// }
+		// return this.stores.client!.hasLazyLoadMembersEnabled();
+		return Promise.resolve(false);
 	}
 
 	public isPresenceEnabled(): boolean {
-		if (!this.stores.client) {
-			return true;
-		}
-		const enablePresenceByHsUrl = SdkConfig.get("enable_presence_by_hs_url");
-		return enablePresenceByHsUrl?.[this.stores.client!.baseUrl] ?? true;
+		return false;
 	}
 
 	/**
@@ -179,24 +144,24 @@ export class MemberListStore {
 		};
 		members.forEach((m) => {
 			if (
-				m.membership !== KnownMembership.Join &&
-				m.membership !== KnownMembership.Invite
+				m.membership.tag !== MembershipState_Tags.Join &&
+				m.membership.tag !== MembershipState_Tags.Invite
 			) {
 				return; // bail early for left/banned users
 			}
 			if (query) {
 				query = query.toLowerCase();
-				const matchesName = m.name.toLowerCase().includes(query);
+				const matchesName = m.displayName?.toLowerCase().includes(query);
 				const matchesId = m.userId.toLowerCase().includes(query);
 				if (!matchesName && !matchesId) {
 					return;
 				}
 			}
-			switch (m.membership) {
-				case KnownMembership.Join:
+			switch (m.membership.tag) {
+				case MembershipState_Tags.Join:
 					result.joined.push(m);
 					break;
-				case KnownMembership.Invite:
+				case MembershipState_Tags.Invite:
 					result.invited.push(m);
 					break;
 			}
@@ -217,8 +182,8 @@ export class MemberListStore {
 		// ...and then alphabetically.
 		// We could tiebreak instead by "last recently spoken in this room" if we wanted to.
 
-		const userA = memberA.user;
-		const userB = memberB.user;
+		const userA = memberA;
+		const userB = memberB;
 
 		if (!userA && !userB) return 0;
 		if (userA && !userB) return -1;
@@ -227,40 +192,40 @@ export class MemberListStore {
 		const showPresence = this.isPresenceEnabled();
 
 		// First by presence
-		if (showPresence) {
-			const convertPresence = (p: string): string =>
-				p === "unavailable" ? "online" : p;
-			const presenceIndex = (p: string): number => {
-				const order = ["active", "online", "offline"];
-				const idx = order.indexOf(convertPresence(p));
-				return idx === -1 ? order.length : idx; // unknown states at the end
-			};
+		// if (showPresence) {
+		//   const convertPresence = (p: string): string =>
+		//     p === "unavailable" ? "online" : p;
+		//   const presenceIndex = (p: string): number => {
+		//     const order = ["active", "online", "offline"];
+		//     const idx = order.indexOf(convertPresence(p));
+		//     return idx === -1 ? order.length : idx; // unknown states at the end
+		//   };
 
-			const idxA = presenceIndex(
-				userA!.currentlyActive ? "active" : userA!.presence,
-			);
-			const idxB = presenceIndex(
-				userB!.currentlyActive ? "active" : userB!.presence,
-			);
-			if (idxA !== idxB) {
-				return idxA - idxB;
-			}
-		}
+		//   const idxA = presenceIndex(
+		//     userA!. currentlyActive ? "active" : userA!.presence
+		//   );
+		//   const idxB = presenceIndex(
+		//     userB!.currentlyActive ? "active" : userB!.presence
+		//   );
+		//   if (idxA !== idxB) {
+		//     return idxA - idxB;
+		//   }
+		// }
 
 		// Second by power level
 		if (memberA.powerLevel !== memberB.powerLevel) {
 			return memberB.powerLevel - memberA.powerLevel;
 		}
 
-		// Third by last active
-		if (showPresence && userA!.getLastActiveTs() !== userB!.getLastActiveTs()) {
-			return userB!.getLastActiveTs() - userA!.getLastActiveTs();
-		}
+		// // Third by last active
+		// if (showPresence && userA!.getLastActiveTs() !== userB!.getLastActiveTs()) {
+		//   return userB!.getLastActiveTs() - userA!.getLastActiveTs();
+		// }
 
 		// Fourth by name (alphabetical)
 		return this.collator!.compare(
-			this.canonicalisedName(memberA.name),
-			this.canonicalisedName(memberB.name),
+			this.canonicalisedName(memberA.displayName || ""),
+			this.canonicalisedName(memberB.displayName || ""),
 		);
 	}
 
