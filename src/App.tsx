@@ -457,7 +457,6 @@ const Login: React.FC<LoginProps> = ({ clientStore }) => {
 								<Form.Field name="server">
 									<Form.Label>Server</Form.Label>
 									<Form.TextControl
-										disabled={true}
 										value={server}
 										onChange={(e) => setServer(e.target.value)}
 									/>
