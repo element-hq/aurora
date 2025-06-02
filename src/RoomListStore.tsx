@@ -1,225 +1,228 @@
 import { invoke } from "@tauri-apps/api/tauri";
-import { Mutex } from 'async-mutex';
+import { Mutex } from "async-mutex";
 
 export enum RoomListEntry {
-    Empty,
-    Invalidated,
-    Filled,
+	Empty = 0,
+	Invalidated = 1,
+	Filled = 2,
 }
 
 interface ReadReceipts {
-    num_mentions: number,
-    num_notifications: number,
-    num_unread: number,
-    pending: string[],
+	num_mentions: number;
+	num_notifications: number;
+	num_unread: number;
+	pending: string[];
 }
 
 interface NotificationCounts {
-    highlight_count: number,
-    notification_count: number,
+	highlight_count: number;
+	notification_count: number;
 }
 
 interface Event {
-    sender: string,
-    type: string,
-    origin_server_ts: number,
-    content: {
-        body?: string,
-        msgtype?: string,
-    }
+	sender: string;
+	type: string;
+	origin_server_ts: number;
+	content: {
+		body?: string;
+		msgtype?: string;
+	};
 }
 
 export class RoomListItem {
-    entry: RoomListEntry;
-    roomId: string;
-    info: any;
+	entry: RoomListEntry;
+	roomId: string;
+	info: any;
 
-    constructor(entry: RoomListEntry, roomId: string, info: any) {
-        this.entry = entry;
-        this.roomId = roomId;
-        this.info = info;
-    }
+	constructor(entry: RoomListEntry, roomId: string, info: any) {
+		this.entry = entry;
+		this.roomId = roomId;
+		this.info = info;
+	}
 
-    getName = () => {
-        return this.info?.base_info.name?.Original?.content.name;
-    }
+	getName = () => {
+		return this.info?.base_info.name?.Original?.content.name;
+	};
 
-    getAvatar = () => {
-        return this.info?.base_info.avatar?.Original?.content.url;
-    }
+	getAvatar = () => {
+		return this.info?.base_info.avatar?.Original?.content.url;
+	};
 
-    getReadReceipts = (): ReadReceipts => {
-        return this.info?.read_receipts;
-    }
+	getReadReceipts = (): ReadReceipts => {
+		return this.info?.read_receipts;
+	};
 
-    getNotificationCounts = (): NotificationCounts => {
-        return this.info?.notification_counts;
-    }
+	getNotificationCounts = (): NotificationCounts => {
+		return this.info?.notification_counts;
+	};
 
-    getLatestEvent = (): Event | undefined => {
-        return this.info?.latest_event?.event?.event;
-    }
+	getLatestEvent = (): Event | undefined => {
+		return this.info?.latest_event?.event?.event;
+	};
 }
 
 class RoomListStore {
+	running: boolean = false;
+	rooms: Array<RoomListItem> = [];
+	listeners: Array<CallableFunction> = [];
 
-    running: Boolean = false;
-    rooms: Array<RoomListItem> = [];
-    listeners: Array<CallableFunction> = [];
+	mutex: Mutex = new Mutex();
 
-    mutex: Mutex = new Mutex();
+	constructor() {
+		console.log("RoomListStore constructed");
+	}
 
-    constructor() {
-        console.log("RoomListStore constructed");
-    }
+	// turn the wodges of JSON from rust-sdk into something typed
+	private async parseRoom(room: any): Promise<RoomListItem> {
+		const entry: RoomListEntry =
+			typeof room === "string"
+				? RoomListEntry[room as keyof typeof RoomListEntry]
+				: RoomListEntry[Object.keys(room)[0] as keyof typeof RoomListEntry];
 
-    // turn the wodges of JSON from rust-sdk into something typed
-    private async parseRoom(room: any): Promise<RoomListItem> {
-        const entry: RoomListEntry = typeof room === 'string' ? 
-            RoomListEntry[room as keyof typeof RoomListEntry] :
-            RoomListEntry[Object.keys(room)[0] as keyof typeof RoomListEntry];
+		if (entry === RoomListEntry.Empty) {
+			return new RoomListItem(entry, "", {});
+		}
 
-        if (entry === RoomListEntry.Empty) {
-            return new RoomListItem(entry, '', {});
-        }
+		const roomId: string = Object.values(room)[0] as string;
+		// XXX: is hammering on invoke like this a good idea?
+		const info: any = await invoke("get_room_info", { roomId });
 
-        const roomId: string = Object.values(room)[0] as string;
-        // XXX: is hammering on invoke like this a good idea?
-        const info: any = await invoke("get_room_info", { roomId });
+		//console.log(JSON.stringify(info));
+		const rli = new RoomListItem(entry, roomId, info);
+		return rli;
+	}
 
-        //console.log(JSON.stringify(info));
-        const rli = new RoomListItem(entry, roomId, info);
-        return (rli);
-    }
+	run = () => {
+		console.log("Running roomlist store with state", this.running);
 
-    run = () => {
-        console.log("Running roomlist store with state", this.running);
+		(async () => {
+			console.log("=> acquiring lock while subscribing to roomlist");
+			const release = await this.mutex.acquire();
+			console.log("<= got lock while subscribing to roomlist");
+			if (this.running) console.warn("got RLS lock while RLS already running");
+			console.log("subscribing to roomlist");
+			const rawRooms: Array<any> = await invoke("subscribe_roomlist");
+			this.running = true;
 
-        (async () => {
-            console.log("=> acquiring lock while subscribing to roomlist");
-            let release = await this.mutex.acquire();
-            console.log("<= got lock while subscribing to roomlist");
-            if (this.running) console.warn("got RLS lock while RLS already running");
-            console.log("subscribing to roomlist");
-            const rawRooms: Array<any> = await invoke("subscribe_roomlist");
-            this.running = true;
+			this.rooms = await Promise.all(
+				rawRooms.map(async (room) => await this.parseRoom(room)),
+			);
+			this.emit();
 
-            this.rooms = await Promise.all(rawRooms.map(async room => await this.parseRoom(room)));
-            this.emit();
-        
-            // TODO: recover from network outages and laptop sleeping
-            while(this.running) {
-                //console.log("waiting for roomlist_update");
+			// TODO: recover from network outages and laptop sleeping
+			while (this.running) {
+				//console.log("waiting for roomlist_update");
 
-                let diffs: any;
-                try {
-                    diffs = await invoke("get_roomlist_update");
-                }
-                catch (error) {
-                    if (error) {
-                        console.info(error);
-                    }
-                    else {
-                        console.info("unexpected error");
-                    }                    
-                }
+				let diffs: any;
+				try {
+					diffs = await invoke("get_roomlist_update");
+				} catch (error) {
+					if (error) {
+						console.info(error);
+					} else {
+						console.info("unexpected error");
+					}
+				}
 
-                if (!diffs) {
-                    console.info("stopping roomlist poll due to empty diff");
-                    this.running = false;
-                    break;
-                }
+				if (!diffs) {
+					console.info("stopping roomlist poll due to empty diff");
+					this.running = false;
+					break;
+				}
 
-                for (const diff of diffs) {                
-                    const k = Object.keys(diff)[0];
-                    const v = Object.values(diff)[0] as any;
+				for (const diff of diffs) {
+					const k = Object.keys(diff)[0];
+					const v = Object.values(diff)[0] as any;
 
-                    //console.log("got roomlist_update", diff);
+					//console.log("got roomlist_update", diff);
 
-                    let room: RoomListItem;
-                    let rooms: RoomListItem[];
+					let room: RoomListItem;
+					let rooms: RoomListItem[];
 
-                    // XXX: deduplicate VecDiff processing with the TimelineStore
-                    switch (k) {
-                        case "Set":
-                            room = await this.parseRoom(v.value);
-                            this.rooms[v.index] = room;
-                            this.rooms = [...this.rooms];
-                            break;
-                        case "PushBack":
-                            room = await this.parseRoom(v.value);
-                            this.rooms = [...this.rooms, room];
-                            break;
-                        case "PushFront":
-                            room = await this.parseRoom(v.value);
-                            this.rooms = [room, ...this.rooms];
-                            break;
-                        case "Clear":
-                            this.rooms = [];
-                            break;
-                        case "PopFront":
-                            this.rooms.shift();
-                            this.rooms = [...this.rooms];
-                            break;
-                        case "PopBack":
-                            this.rooms.pop();
-                            this.rooms = [...this.rooms];
-                            break;    
-                        case "Insert":
-                            room = await this.parseRoom(v.value);
-                            this.rooms.splice(v.index, 0, room);
-                            this.rooms = [...this.rooms];
-                            break;
-                        case "Remove":
-                            this.rooms.splice(v.index, 1);
-                            this.rooms = [...this.rooms];
-                            break;
-                        case "Truncate":
-                            this.rooms = this.rooms.slice(0, v.length);
-                            break;
-                        case "Reset":
-                            rooms = await Promise.all(v.values.map(async (room: any) => await this.parseRoom(room)));
-                            this.rooms = [...rooms];
-                            break;
-                        case "Append":
-                            rooms = await Promise.all(v.values.map(async (room: any) => await this.parseRoom(room)));
-                            this.rooms = [...this.rooms, ...rooms];
-                            break;
-                    }
-                }
-                this.emit();
-            }
+					// XXX: deduplicate VecDiff processing with the TimelineStore
+					switch (k) {
+						case "Set":
+							room = await this.parseRoom(v.value);
+							this.rooms[v.index] = room;
+							this.rooms = [...this.rooms];
+							break;
+						case "PushBack":
+							room = await this.parseRoom(v.value);
+							this.rooms = [...this.rooms, room];
+							break;
+						case "PushFront":
+							room = await this.parseRoom(v.value);
+							this.rooms = [room, ...this.rooms];
+							break;
+						case "Clear":
+							this.rooms = [];
+							break;
+						case "PopFront":
+							this.rooms.shift();
+							this.rooms = [...this.rooms];
+							break;
+						case "PopBack":
+							this.rooms.pop();
+							this.rooms = [...this.rooms];
+							break;
+						case "Insert":
+							room = await this.parseRoom(v.value);
+							this.rooms.splice(v.index, 0, room);
+							this.rooms = [...this.rooms];
+							break;
+						case "Remove":
+							this.rooms.splice(v.index, 1);
+							this.rooms = [...this.rooms];
+							break;
+						case "Truncate":
+							this.rooms = this.rooms.slice(0, v.length);
+							break;
+						case "Reset":
+							rooms = await Promise.all(
+								v.values.map(async (room: any) => await this.parseRoom(room)),
+							);
+							this.rooms = [...rooms];
+							break;
+						case "Append":
+							rooms = await Promise.all(
+								v.values.map(async (room: any) => await this.parseRoom(room)),
+							);
+							this.rooms = [...this.rooms, ...rooms];
+							break;
+					}
+				}
+				this.emit();
+			}
 
-            console.log("== releasing lock after roomlist subscription & polling");
-            release();
+			console.log("== releasing lock after roomlist subscription & polling");
+			release();
 
-            console.log("stopped polling");
-        })();
-    };
+			console.log("stopped polling");
+		})();
+	};
 
-    getSnapshot = (): RoomListItem[] => {
-        return this.rooms;
-    }
+	getSnapshot = (): RoomListItem[] => {
+		return this.rooms;
+	};
 
-    subscribe = (listener: CallableFunction) => {
-        this.listeners = [...this.listeners, listener];
-        return () => {
-            console.log("unsubscribing roomlist");
-            (async () => {
-                // XXX: we should grab a mutex to avoid overlapping unsubscribes
-                await invoke("unsubscribe_roomlist");
-                this.running = false;
-            })();
-            this.listeners = this.listeners.filter(l => l !== listener);
-        };
-    };
+	subscribe = (listener: CallableFunction) => {
+		this.listeners = [...this.listeners, listener];
+		return () => {
+			console.log("unsubscribing roomlist");
+			(async () => {
+				// XXX: we should grab a mutex to avoid overlapping unsubscribes
+				await invoke("unsubscribe_roomlist");
+				this.running = false;
+			})();
+			this.listeners = this.listeners.filter((l) => l !== listener);
+		};
+	};
 
-    emit = () => {
-        for (let listener of this.listeners) {
-            listener();
-        }        
-    }   
+	emit = () => {
+		for (const listener of this.listeners) {
+			listener();
+		}
+	};
 }
-
 
 export default RoomListStore;

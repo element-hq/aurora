@@ -1,30 +1,32 @@
 {
-  "name": "aurora",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview",
-    "tauri": "tauri"
-  },
-  "dependencies": {
-    "@tauri-apps/api": "^1.5.2",
-    "@vector-im/compound-design-tokens": "^1.2.0",
-    "@vector-im/compound-web": "^3.1.3",
-    "async-mutex": "^0.4.1",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "sanitize-html": "^2.12.1"
-  },
-  "devDependencies": {
-    "@tauri-apps/cli": "^1.5.8",
-    "@types/react": "^18.2.15",
-    "@types/react-dom": "^18.2.7",
-    "@types/sanitize-html": "^2.11.0",
-    "@vitejs/plugin-react": "^4.2.1",
-    "typescript": "^5.0.2",
-    "vite": "^5.0.0"
-  }
+	"name": "aurora",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"scripts": {
+		"dev": "vite",
+		"build": "tsc && vite build",
+		"preview": "vite preview",
+		"tauri": "tauri",
+		"biome:format": "yarn biome format --write ."
+	},
+	"dependencies": {
+		"@tauri-apps/api": "^1.5.2",
+		"@vector-im/compound-design-tokens": "^1.2.0",
+		"@vector-im/compound-web": "^3.1.3",
+		"async-mutex": "^0.4.1",
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0",
+		"sanitize-html": "^2.12.1"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^1.9.4",
+		"@tauri-apps/cli": "^1.5.8",
+		"@types/react": "^18.2.15",
+		"@types/react-dom": "^18.2.7",
+		"@types/sanitize-html": "^2.11.0",
+		"@vitejs/plugin-react": "^4.2.1",
+		"typescript": "^5.0.2",
+		"vite": "^5.0.0"
+	}
 }
