@@ -95,6 +95,8 @@ class RoomListStore {
 	onUpdate = async (
 		roomEntriesUpdate: RoomListEntriesUpdate[],
 	): Promise<void> => {
+		const release = await this.mutex.acquire();
+
 		let rooms = [...this.rooms];
 
 		for (const update of roomEntriesUpdate) {
@@ -153,16 +155,16 @@ class RoomListStore {
 		// console.log("@@ roomListUpdated", rooms);
 		this.rooms = rooms;
 		this.emit();
+		release();
 	};
 
 	run = () => {
 		console.log("Running roomlist store with state", this.running);
 
 		(async () => {
-			console.log("=> acquiring lock while subscribing to roomlist");
-			const release = await this.mutex.acquire();
-			console.log("<= got lock while subscribing to roomlist");
-			if (this.running) console.warn("got RLS lock while RLS already running");
+			// console.log("=> acquiring lock while subscribing to roomlist");
+			// console.log("<= got lock while subscribing to roomlist");
+			// if (this.running) console.warn("got RLS lock while RLS already running");
 			console.log("subscribing to roomlist");
 
 			this.running = true;
