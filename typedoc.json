@@ -1,0 +1,17 @@
+{
+    "entryPointStrategy": "expand",
+    "entryPoints": ["src/generated"],
+    "highlightLanguages": [
+        "bash",
+        "console",
+        "css",
+        "html",
+        "javascript",
+        "json",
+        "jsonc",
+        "json5",
+        "tsx",
+        "typescript",
+        "rust"
+    ]
+}

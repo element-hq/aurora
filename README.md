@@ -34,6 +34,12 @@ yarn tauri dev
 yarn tauri build
 ```
 
+## To build docs for wasm bindings:
+
+```bash
+yarn docs:build
+```
+
 ## Philosophy
 
 Aurora is quite an opinionated experiment, making the following tradeoffs:
