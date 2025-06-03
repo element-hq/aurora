@@ -1,17 +1,14 @@
 import type React from "react";
-import {
-    useEffect,
-    useState,
-} from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import type ClientStore from "./ClientStore.tsx";
+import { Composer } from "./Composer.tsx";
 import { RoomListFiltersView } from "./RoomListFiltersView";
 import type RoomListStore from "./RoomListStore.tsx";
 import { RoomListView } from "./RoomListView";
-import type TimelineStore from "./TimelineStore.tsx";
-import { Timeline } from "./Timeline.tsx";
 import { SidePanelView } from "./SidePanelView.tsx";
-import { Composer } from "./Composer.tsx";
+import { Timeline } from "./Timeline.tsx";
+import type TimelineStore from "./TimelineStore.tsx";
 
 console.log("running App.tsx");
 
@@ -52,7 +49,7 @@ export const Client: React.FC<ClientProps> = ({ clientStore }) => {
             <header className="mx_Header"> </header>
             <section className="mx_Client">
                 <nav className="mx_SidePanel">
-                    <SidePanelView/>
+                    <SidePanelView clientStore={clientStore} />
                 </nav>
                 <nav className="mx_RoomList">
                     {roomListStore ? (

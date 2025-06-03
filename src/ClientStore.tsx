@@ -6,6 +6,7 @@ import {
     type ClientInterface,
     LogLevel,
     type RoomListServiceInterface,
+    Session,
     SlidingSyncVersionBuilder,
     type SyncServiceInterface,
     initPlatform,
@@ -24,7 +25,27 @@ export enum ClientState {
     LoggedOut = 2,
 }
 
+/**
+ * Stores Matrix client session (username, token, etc) in localStorage
+ */
+class SessionStore {
+    load(): Session | undefined {
+        const stored = localStorage.getItem("mx_session");
+        const session = stored ? JSON.parse(stored) : undefined;
+        return session ? Session.new(session) : undefined;
+    }
+    save(session: Session): void {
+        localStorage.setItem("mx_session", JSON.stringify(session));
+    }
+
+    clear(): void {
+        localStorage.removeItem("mx_session");
+    }
+}
+
 class ClientStore {
+    sessionStore = new SessionStore();
+
     timelineStores: Map<string, TimelineStore> = new Map();
     roomListStore?: RoomListStore;
     client?: ClientInterface;
@@ -33,15 +54,57 @@ class ClientStore {
 
     mutex: Mutex = new Mutex();
 
-    // XXX: if we had any form of persistence then the state would be unknown until we loaded it,
-    // for now we do not so we initialise in a logged out state
-    clientState: ClientState = ClientState.LoggedOut;
+    clientState: ClientState = ClientState.Unknown;
     listeners: CallableFunction[] = [];
+
+    getClientBuilder = () =>
+        new ClientBuilder().slidingSyncVersionBuilder(
+            SlidingSyncVersionBuilder.DiscoverNative,
+        );
+
+    tryLoadSession = async () => {
+        const release = await this.mutex.acquire();
+        try {
+            const session = this.sessionStore.load();
+            if (!session) {
+                this.clientState = ClientState.LoggedOut;
+                this.emit();
+                return;
+            }
+
+            const client = await this.getClientBuilder()
+                .homeserverUrl(session.homeserverUrl)
+                .build();
+            await client.restoreSession(session);
+
+            this.client = client;
+            this.clientState = ClientState.LoggedIn;
+        } catch (e) {
+            printRustError("Failed to restore session", e);
+        } finally {
+            release();
+        }
+
+        await this.sync();
+
+        this.emit();
+        release();
+    };
+
+    logout = () => {
+        this.sessionStore.clear();
+        this.client = undefined;
+        this.timelineStores = new Map();
+        this.roomListStore = undefined;
+        this.roomListService = undefined;
+        this.syncService = undefined;
+        this.clientState = ClientState.LoggedOut;
+        this.emit();
+    };
 
     login = async ({ username, password, server }: LoginParams) => {
         const release = await this.mutex.acquire();
-        const client = await new ClientBuilder()
-            .slidingSyncVersionBuilder(SlidingSyncVersionBuilder.DiscoverNative)
+        const client = await this.getClientBuilder()
             .homeserverUrl(server)
             .build();
 
@@ -61,6 +124,9 @@ class ClientStore {
 
             await client.login(username, password, "rust-sdk", undefined);
             console.log("logged in...");
+
+            this.sessionStore.save(client.session());
+
             this.client = client;
             this.clientState = ClientState.LoggedIn;
         } catch (e) {
@@ -71,22 +137,25 @@ class ClientStore {
             return;
         }
 
+        await this.sync();
+
+        this.emit();
+        release();
+    };
+
+    sync = async () => {
         try {
-            const syncServiceBuilder = client.syncService();
+            const syncServiceBuilder = this.client!.syncService();
             this.syncService = await syncServiceBuilder.finish();
             this.roomListService = this.syncService.roomListService();
             await this.syncService.start();
             console.log("syncing...");
+            this.emit();
         } catch (e) {
             printRustError("syncing failed", e);
             this.clientState = ClientState.Unknown;
-            this.emit();
-            release();
             return;
         }
-
-        this.emit();
-        release();
     };
 
     getTimelineStore = async (roomId: string) => {
