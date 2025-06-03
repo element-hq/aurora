@@ -79,18 +79,18 @@ export const Client: React.FC<ClientProps> = ({ clientStore }) => {
                         </>
                     ) : null}
                 </nav>
-                {timelineStore ? (
-                    <main className="mx_MainPanel">
-                        <RoomHeaderView
-                            roomListStore={roomListStore!}
-                            currentRoomId={currentRoomId}
-                        />
-                        <Timeline timelineStore={timelineStore} />
-                        <Composer timelineStore={timelineStore} />
-                    </main>
-                ) : null}
-                {memberListStore ? (
-                    <MemberListView vm={memberListStore} />
+                {timelineStore && memberListStore ? (
+                    <>
+                        <main className="mx_MainPanel">
+                            <RoomHeaderView
+                                roomListStore={roomListStore!}
+                                currentRoomId={currentRoomId}
+                            />
+                            <Timeline timelineStore={timelineStore} />
+                            <Composer timelineStore={timelineStore} />
+                        </main>
+                        <MemberListView vm={memberListStore} />
+                    </>
                 ) : null}
             </section>
         </>
