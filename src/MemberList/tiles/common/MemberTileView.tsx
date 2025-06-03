@@ -28,24 +28,20 @@ export function MemberTileView(props: Props): JSX.Element {
 	}
 
 	return (
-		// The wrapping div is required to make the magic mouse listener work, for some reason.
-		<div>
-			<div
-				type="button"
-				className="mx_MemberTileView"
-				title={props.title}
-				onClick={props.onClick}
-			>
-				<div className="mx_MemberTileView_left">
-					<div className="mx_MemberTileView_avatar">
-						{props.avatarJsx} {props.presenceJsx}
-					</div>
-					<div className="mx_MemberTileView_name">{props.nameJsx}</div>
+		<div
+			className="mx_MemberTileView"
+			title={props.title}
+			onClick={props.onClick}
+		>
+			<div className="mx_MemberTileView_left">
+				<div className="mx_MemberTileView_avatar">
+					{props.avatarJsx} {props.presenceJsx}
 				</div>
-				<div className="mx_MemberTileView_right">
-					{userLabelJsx}
-					{props.iconJsx}
-				</div>
+				<div className="mx_MemberTileView_name">{props.nameJsx}</div>
+			</div>
+			<div className="mx_MemberTileView_right">
+				{userLabelJsx}
+				{props.iconJsx}
 			</div>
 		</div>
 	);
