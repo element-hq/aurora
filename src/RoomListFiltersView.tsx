@@ -6,7 +6,7 @@
  */
 
 import { ChatFilter } from "@vector-im/compound-web";
-import React, { type JSX } from "react";
+import React, { type JSX, useSyncExternalStore } from "react";
 import "./RoomListFiltersView.css";
 
 import { FILTERS, type SupportedFilters } from "./Filter";
@@ -54,6 +54,8 @@ export function RoomListFiltersView({
 }
 
 function useRoomListViewModel(store: RoomListStore) {
+    const { filter } = useSyncExternalStore(store.subscribe, store.getSnapshot);
+
     return {
         filters: Object.entries(FILTERS)
             .filter(
@@ -62,7 +64,7 @@ function useRoomListViewModel(store: RoomListStore) {
             )
             .map(([key, value]) => {
                 return {
-                    active: key === store.filter,
+                    active: key === filter,
                     name: value.name,
                     toggle: () => store.toggleFilter(key as SupportedFilters),
                 };
