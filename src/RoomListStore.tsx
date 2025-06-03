@@ -9,7 +9,7 @@ import {
     type RoomListServiceInterface,
 } from "./index.web";
 
-import { FILTERS } from "./Filter";
+import { FILTERS, type SupportedFilters } from "./Filter";
 
 export enum RoomListEntry {
     Empty = 0,
@@ -85,7 +85,7 @@ class RoomListStore {
     running = false;
     rooms: Array<RoomListItem> = [];
     listeners: Array<CallableFunction> = [];
-    filter = RoomListEntriesDynamicFilterKind_Tags.NonLeft;
+    filter: SupportedFilters = RoomListEntriesDynamicFilterKind_Tags.NonLeft;
 
     mutex: Mutex = new Mutex();
 
@@ -143,7 +143,7 @@ class RoomListStore {
         })();
     };
 
-    toggleFilter = (filter: RoomListEntriesDynamicFilterKind_Tags) => {
+    toggleFilter = (filter: SupportedFilters) => {
         console.log("Toggling filter", filter, this.filter);
         if (filter === this.filter) {
             console.log("Filter is already set, resetting to 'All'");

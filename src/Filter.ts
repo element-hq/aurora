@@ -3,6 +3,13 @@ import {
     RoomListEntriesDynamicFilterKind_Tags,
 } from "./generated/matrix_sdk_ffi";
 
+type FiltersToBePicked = typeof RoomListEntriesDynamicFilterKind_Tags;
+
+export type SupportedFilters = keyof Pick<
+    FiltersToBePicked,
+    "NonLeft" | "Unread" | "Favourite" | "Invite"
+>;
+
 export const FILTERS = {
     [RoomListEntriesDynamicFilterKind_Tags.NonLeft]: {
         name: "All",
