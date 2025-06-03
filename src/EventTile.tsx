@@ -80,7 +80,7 @@ export const EventTile: React.FC<EventTileProp> = ({ item, continuation }) => {
             ) {
                 const mxc =
                     message.kind.inner.content.msgType.inner.content.source.url();
-                body = <img src={mxcToUrl(mxc, 200)} height={250} />;
+                body = <img src={mxcToUrl(mxc, 500)} height={250} />;
             } else if (
                 MessageType.Text.instanceOf(message.kind.inner.content.msgType)
             ) {
