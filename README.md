@@ -1,6 +1,6 @@
 # aurora
 
-A highly experimental attempt to plug matrix-rust-sdk into Tauri, in order to
+A highly experimental attempt to plug matrix-rust-sdk into the browser (and originally Tauri), in order to
 investigate what Element X Desktop could look like.
 
 ![Screenshot 2025-06-03 at 15 49 53](https://github.com/user-attachments/assets/dc66e83c-1985-4f67-8d11-8331ffd10d2f)
@@ -14,6 +14,8 @@ yarn install
 ```
 
 ## To create the bindings
+
+Do *not* run this - bindings are currently vendored into the repo.
 
 ```bash
 yarn ubrn:checkout
