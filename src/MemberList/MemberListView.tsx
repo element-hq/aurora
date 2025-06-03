@@ -1,18 +1,19 @@
 import { Form, TooltipProvider } from "@vector-im/compound-web";
 import type React from "react";
-import { useEffect, useState, type JSX } from "react";
-import { List, type ListRowProps } from "react-virtualized/dist/commonjs/List";
+import { useSyncExternalStore } from "react";
+import { type JSX, useEffect, useState } from "react";
 import { AutoSizer } from "react-virtualized";
+import { List, type ListRowProps } from "react-virtualized/dist/commonjs/List";
 
 import { Flex } from "../utils/Flex";
+import BaseCard from "./BaseCard";
+import { MemberListHeaderView } from "./MemberListHeaderView";
 import {
     type MemberListStore,
     type MemberWithSeparator,
     SEPARATOR,
 } from "./MemberListStore";
 import { RoomMemberTileView } from "./tiles/RoomMemberTileView";
-import { MemberListHeaderView } from "./MemberListHeaderView";
-import BaseCard from "./BaseCard";
 import "./MemberList.css";
 
 interface IProps {
@@ -21,13 +22,11 @@ interface IProps {
 
 const MemberListView: React.FC<IProps> = (props: IProps) => {
     const { vm } = props;
-    const [totalRows, setTotalRows] = useState(0);
-    const [members, setMembers] = useState<MemberWithSeparator[]>([]);
 
-    useEffect(() => {
-        setTotalRows(vm.memberCount);
-        setMembers(vm.members);
-    }, [vm.memberCount, vm.members]);
+    const { members, memberCount } = useSyncExternalStore(
+        vm.subscribe,
+        vm.getSnapshot,
+    );
 
     const getRowComponent = (item: MemberWithSeparator): JSX.Element => {
         if (item === SEPARATOR) {
@@ -53,7 +52,7 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
              * joined and invited members.
              */
             return 2;
-        } else if (totalRows && index === totalRows) {
+        } else if (memberCount && index === memberCount) {
             /**
              * The empty spacer div rendered at the bottom should
              * have a height of 32px.
@@ -68,7 +67,7 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
     };
 
     const rowRenderer = ({ key, index, style }: ListRowProps): JSX.Element => {
-        if (index === totalRows) {
+        if (index === memberCount) {
             // We've rendered all the members,
             // now we render an empty div to add some space to the end of the list.
             return <div key={key} style={style} />;
@@ -105,7 +104,7 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
                                 rowRenderer={rowRenderer}
                                 rowHeight={getRowHeight}
                                 // The +1 refers to the additional empty div that we render at the end of the list.
-                                rowCount={totalRows + 1}
+                                rowCount={memberCount + 1}
                                 // Subtract the height of MemberlistHeaderView so that the parent div does not overflow.
                                 height={height - 113}
                                 width={width}

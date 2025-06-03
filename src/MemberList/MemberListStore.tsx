@@ -6,6 +6,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
+import type { RoomListItem } from "../RoomListStore";
 import {
     type ClientInterface,
     MembershipState_Tags,
@@ -32,6 +33,7 @@ export class MemberListStore {
     roomId: string;
     private collator: Intl.Collator;
     private client: ClientInterface;
+    listeners: Array<CallableFunction> = [];
 
     public members: MemberWithSeparator[] = [];
     public memberCount = 0;
@@ -82,6 +84,7 @@ export class MemberListStore {
         this.setMemberCount(joinedSdk.length + invitedSdk.length);
         console.log("memberlist store run count", this.memberCount);
         console.log("memberlist store run newMemberMap", newMemberMap);
+        this.emit();
     }
 
     /**
@@ -120,11 +123,13 @@ export class MemberListStore {
     }
 
     private async loadMembers(roomId: string): Promise<RoomMember[]> {
-        const room = await this.client.getRoom(roomId);
+        if (!roomId) return [];
+        const room = this.client.getRoom(roomId);
 
         if (!room) {
             return [];
         }
+
         const members = await room.members();
         const allMembers: RoomMember[] = [];
 
@@ -250,4 +255,33 @@ export class MemberListStore {
     public search(query: string) {
         this.run(query);
     }
+
+    subscribe = (listener: CallableFunction) => {
+        this.listeners = [...this.listeners, listener];
+        return () => {
+            this.listeners = this.listeners.filter((l) => l !== listener);
+        };
+    };
+
+    snapshot: {
+        members: MemberWithSeparator[];
+        memberCount: number;
+    } = { members: [], memberCount: 0 };
+    getSnapshot = (): {
+        members: MemberWithSeparator[];
+        memberCount: number;
+    } => {
+        return this.snapshot;
+    };
+
+    emit = () => {
+        this.snapshot = {
+            members: this.members,
+            memberCount: this.memberCount,
+        };
+
+        for (const listener of this.listeners) {
+            listener();
+        }
+    };
 }
