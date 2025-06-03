@@ -3,11 +3,9 @@ import type React from "react";
 import { useState } from "react";
 import ClientStore from "./ClientStore";
 
-
 export interface LoginProps {
     clientStore: ClientStore;
 }
-
 
 export const Login: React.FC<LoginProps> = ({ clientStore }) => {
     const [username, setUsername] = useState("");
@@ -35,21 +33,30 @@ export const Login: React.FC<LoginProps> = ({ clientStore }) => {
                                     <Form.Label>Username</Form.Label>
                                     <Form.TextControl
                                         value={username}
-                                        onChange={(e) => setUsername(e.target.value)} />
+                                        onChange={(e) =>
+                                            setUsername(e.target.value)
+                                        }
+                                    />
                                 </Form.Field>
 
                                 <Form.Field name="password">
                                     <Form.Label>Password</Form.Label>
                                     <Form.PasswordControl
                                         value={password}
-                                        onChange={(e) => setPassword(e.target.value)} />
+                                        onChange={(e) =>
+                                            setPassword(e.target.value)
+                                        }
+                                    />
                                 </Form.Field>
 
                                 <Form.Field name="server">
                                     <Form.Label>Server</Form.Label>
                                     <Form.TextControl
                                         value={server}
-                                        onChange={(e) => setServer(e.target.value)} />
+                                        onChange={(e) =>
+                                            setServer(e.target.value)
+                                        }
+                                    />
                                 </Form.Field>
 
                                 <Form.Submit

@@ -17,6 +17,8 @@
 .mx_RoomListItemView {
     all: unset;
     cursor: pointer;
+    height: 48px;
+    width: 100%;
 
     &:hover {
         background-color: var(--cpd-color-bg-action-secondary-hovered);
