@@ -19,12 +19,13 @@ Please see LICENSE files in the repository root for full details.
         align-items: center;
         gap: var(--cpd-space-2x);
         overflow: hidden;
+        width: 100%;
     }
 
     .mx_MemberTileView_left {
-        flex-basis: 209px;
         flex-grow: 1;
-        min-width: 0;
+        min-width: 140px;
+        white-space: nowrap;
     }
 
     .mx_MemberTileView_name {
