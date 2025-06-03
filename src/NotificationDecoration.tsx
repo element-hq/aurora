@@ -16,83 +16,85 @@ import type { HTMLProps, JSX } from "react";
 import type { NotificationState } from "./RoomListStore";
 import { Flex } from "./utils/Flex";
 interface NotificationDecorationProps extends HTMLProps<HTMLDivElement> {
-	/**
-	 * The notification state of the room or thread.
-	 */
-	notificationState: NotificationState;
-	/**
-	 * Whether the room has a video call.
-	 */
-	hasVideoCall: boolean;
+    /**
+     * The notification state of the room or thread.
+     */
+    notificationState: NotificationState;
+    /**
+     * Whether the room has a video call.
+     */
+    hasVideoCall: boolean;
 }
 
 /**
  * Displays the notification decoration for a room or a thread.
  */
 export function NotificationDecoration({
-	notificationState,
-	hasVideoCall,
-	...props
+    notificationState,
+    hasVideoCall,
+    ...props
 }: NotificationDecorationProps): JSX.Element | null {
-	// Listen to the notification state and update the component when it changes
-	const {
-		hasAnyNotificationOrActivity,
-		isUnsentMessage,
-		invited,
-		isMention,
-		isActivityNotification,
-		isNotification,
-		count,
-		muted,
-	} = notificationState;
+    // Listen to the notification state and update the component when it changes
+    const {
+        hasAnyNotificationOrActivity,
+        isUnsentMessage,
+        invited,
+        isMention,
+        isActivityNotification,
+        isNotification,
+        count,
+        muted,
+    } = notificationState;
 
-	if (!hasAnyNotificationOrActivity && !muted && !hasVideoCall) return null;
+    if (!hasAnyNotificationOrActivity && !muted && !hasVideoCall) return null;
 
-	return (
-		<Flex
-			align="center"
-			justify="center"
-			gap="var(--cpd-space-1x)"
-			{...props}
-			data-testid="notification-decoration"
-		>
-			{isUnsentMessage && (
-				<ErrorIcon
-					width="20px"
-					height="20px"
-					fill="var(--cpd-color-icon-critical-primary)"
-				/>
-			)}
-			{hasVideoCall && (
-				<VideoCallIcon
-					width="20px"
-					height="20px"
-					fill="var(--cpd-color-icon-accent-primary)"
-				/>
-			)}
-			{invited && (
-				<EmailIcon
-					width="20px"
-					height="20px"
-					fill="var(--cpd-color-icon-accent-primary)"
-				/>
-			)}
-			{isMention && (
-				<MentionIcon
-					width="20px"
-					height="20px"
-					fill="var(--cpd-color-icon-accent-primary)"
-				/>
-			)}
-			{(isMention || isNotification) && <UnreadCounter count={count || null} />}
-			{isActivityNotification && <Unread />}
-			{muted && (
-				<NotificationOffIcon
-					width="20px"
-					height="20px"
-					fill="var(--cpd-color-icon-tertiary)"
-				/>
-			)}
-		</Flex>
-	);
+    return (
+        <Flex
+            align="center"
+            justify="center"
+            gap="var(--cpd-space-1x)"
+            {...props}
+            data-testid="notification-decoration"
+        >
+            {isUnsentMessage && (
+                <ErrorIcon
+                    width="20px"
+                    height="20px"
+                    fill="var(--cpd-color-icon-critical-primary)"
+                />
+            )}
+            {hasVideoCall && (
+                <VideoCallIcon
+                    width="20px"
+                    height="20px"
+                    fill="var(--cpd-color-icon-accent-primary)"
+                />
+            )}
+            {invited && (
+                <EmailIcon
+                    width="20px"
+                    height="20px"
+                    fill="var(--cpd-color-icon-accent-primary)"
+                />
+            )}
+            {isMention && (
+                <MentionIcon
+                    width="20px"
+                    height="20px"
+                    fill="var(--cpd-color-icon-accent-primary)"
+                />
+            )}
+            {(isMention || isNotification) && (
+                <UnreadCounter count={count || null} />
+            )}
+            {isActivityNotification && <Unread />}
+            {muted && (
+                <NotificationOffIcon
+                    width="20px"
+                    height="20px"
+                    fill="var(--cpd-color-icon-tertiary)"
+                />
+            )}
+        </Flex>
+    );
 }
