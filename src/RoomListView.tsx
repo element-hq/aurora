@@ -6,11 +6,11 @@
  */
 
 import "./RoomListView.css";
+import { InlineSpinner } from "@vector-im/compound-web";
 import { type JSX, useCallback, useSyncExternalStore } from "react";
 import { Virtuoso } from "react-virtuoso";
 import { RoomListItemView } from "./RoomListItemView";
 import type RoomListStore from "./RoomListStore";
-import type { RoomListItem } from "./RoomListStore";
 
 type RoomListViewProps = {
     vm: RoomListStore;
@@ -56,7 +56,10 @@ export function RoomListView({
                     );
                 }}
                 components={{
-                    Footer: numRooms > rooms.length ? Footer : undefined,
+                    Footer:
+                        vm.isAllFilter() && numRooms > rooms.length
+                            ? Footer
+                            : undefined,
                 }}
             />
         </div>
@@ -72,7 +75,7 @@ const Footer = () => {
                 justifyContent: "center",
             }}
         >
-            Loading...
+            <InlineSpinner />
         </div>
     );
 };
