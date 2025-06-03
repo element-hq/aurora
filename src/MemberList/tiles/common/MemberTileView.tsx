@@ -10,39 +10,39 @@ import type React from "react";
 import type { JSX } from "react";
 
 interface Props {
-	avatarJsx: JSX.Element;
-	nameJsx: JSX.Element | string;
-	onClick: () => void;
-	title?: string;
-	presenceJsx?: JSX.Element;
-	userLabel?: React.ReactNode;
-	iconJsx?: JSX.Element;
+    avatarJsx: JSX.Element;
+    nameJsx: JSX.Element | string;
+    onClick: () => void;
+    title?: string;
+    presenceJsx?: JSX.Element;
+    userLabel?: React.ReactNode;
+    iconJsx?: JSX.Element;
 }
 
 export function MemberTileView(props: Props): JSX.Element {
-	let userLabelJsx: React.ReactNode;
-	if (props.userLabel) {
-		userLabelJsx = (
-			<div className="mx_MemberTileView_userLabel">{props.userLabel}</div>
-		);
-	}
+    let userLabelJsx: React.ReactNode;
+    if (props.userLabel) {
+        userLabelJsx = (
+            <div className="mx_MemberTileView_userLabel">{props.userLabel}</div>
+        );
+    }
 
-	return (
-		<div
-			className="mx_MemberTileView"
-			title={props.title}
-			onClick={props.onClick}
-		>
-			<div className="mx_MemberTileView_left">
-				<div className="mx_MemberTileView_avatar">
-					{props.avatarJsx} {props.presenceJsx}
-				</div>
-				<div className="mx_MemberTileView_name">{props.nameJsx}</div>
-			</div>
-			<div className="mx_MemberTileView_right">
-				{userLabelJsx}
-				{props.iconJsx}
-			</div>
-		</div>
-	);
+    return (
+        <div
+            className="mx_MemberTileView"
+            title={props.title}
+            onClick={props.onClick}
+        >
+            <div className="mx_MemberTileView_left">
+                <div className="mx_MemberTileView_avatar">
+                    {props.avatarJsx} {props.presenceJsx}
+                </div>
+                <div className="mx_MemberTileView_name">{props.nameJsx}</div>
+            </div>
+            <div className="mx_MemberTileView_right">
+                {userLabelJsx}
+                {props.iconJsx}
+            </div>
+        </div>
+    );
 }

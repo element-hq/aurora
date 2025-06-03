@@ -12,24 +12,18 @@ import { type JSX, useCallback, useSyncExternalStore } from "react";
 import SearchIcon from "@vector-im/compound-design-tokens/assets/web/icons/search";
 import ExploreIcon from "@vector-im/compound-design-tokens/assets/web/icons/explore";
 
-type RoomSearchViewProps = {
-};
+type RoomSearchViewProps = {};
 
-export function RoomSearchView({
-}: RoomSearchViewProps): JSX.Element {
+export function RoomSearchView({}: RoomSearchViewProps): JSX.Element {
     return (
         <div className="mx_RoomSearch">
             <button className="mx_RoomSearch_search">
-                <SearchIcon
-                    fill="var(--cpd-color-icon-secondary)"
-                />
+                <SearchIcon fill="var(--cpd-color-icon-secondary)" />
                 <div className="mx_RoomSearch_label">Search</div>
                 <div className="mx_RoomSearch_shortcut">⌘ K</div>
             </button>
             <button className="mx_RoomSearch_icon">
-                <ExploreIcon
-                    fill="var(--cpd-color-icon-secondary)"
-                />
+                <ExploreIcon fill="var(--cpd-color-icon-secondary)" />
             </button>
         </div>
     );
