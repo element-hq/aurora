@@ -1,6 +1,17 @@
-import { invoke } from "@tauri-apps/api/tauri";
-import { applyDiff } from "./DiffUtils.ts";
 import { Mutex } from "async-mutex";
+import {
+	EventOrTransactionId,
+	type EventTimelineItem,
+	MessageType,
+	type ProfileDetails,
+	type RoomInterface,
+	TimelineChange,
+	type TimelineDiffInterface,
+	type TimelineInterface,
+	type TimelineItemContent,
+	type TimelineItemInterface,
+	VirtualTimelineItem,
+} from "./generated/matrix_sdk_ffi.ts";
 
 // XXX: should we use purely abstract interfaces here, and entirely separate the code
 // for parsing the JSON from the types (rather than using a mix of classes and types)?
@@ -13,93 +24,69 @@ export enum TimelineItemKind {
 	Virtual = 1,
 }
 
-export class TimelineItem {
-	item: any;
-	kind: TimelineItemKind;
+export function isVirtualEvent(
+	item: TimelineItem<any>,
+): item is TimelineItem<TimelineItemKind.Virtual> {
+	return item.kind === TimelineItemKind.Virtual;
+}
 
-	constructor(item: any) {
+export class TimelineItem<
+	K extends TimelineItemKind.Event | TimelineItemKind.Virtual,
+> {
+	item: K extends TimelineItemKind.Event
+		? EventTimelineItem
+		: VirtualTimelineItem;
+	kind: K;
+
+	constructor(
+		kind: K,
+		item: K extends TimelineItemKind.Event
+			? EventTimelineItem
+			: VirtualTimelineItem,
+	) {
+		this.kind = kind;
 		this.item = item;
-		this.kind =
-			TimelineItemKind[
-				Object.keys(item.kind)[0] as keyof typeof TimelineItemKind
-			];
 	}
 
-	getInternalId = (): number => {
-		return this.item.internal_id;
-	};
-}
-
-// VirtualTimelineItems Inner (i.e. item.kind.Virtual) Types
-
-export enum VirtualTimelineItemInnerType {
-	DayDivider = 0,
-	ReadMarker = 1,
-}
-
-export class VirtualTimelineItemInner {
-	innerItem: any;
-	type: VirtualTimelineItemInnerType;
-
-	constructor(innerItem: any) {
-		this.innerItem = innerItem;
-		this.type =
-			typeof innerItem === "string"
-				? VirtualTimelineItemInnerType[
-						innerItem as keyof typeof VirtualTimelineItemInnerType
-					]
-				: VirtualTimelineItemInnerType[
-						Object.keys(
-							innerItem,
-						)[0] as keyof typeof VirtualTimelineItemInnerType
-					];
-	}
-}
-
-export class DayDivider extends VirtualTimelineItemInner {
-	getDate = (): Date => {
-		return new Date(this.innerItem.DayDivider);
-	};
-}
-
-export class ReadMarker extends VirtualTimelineItemInner {}
-
-export class VirtualTimelineItem extends TimelineItem {
-	virtualItem?: VirtualTimelineItemInner;
-
-	constructor(item: any) {
-		super(item);
-		const type =
-			typeof item.kind.Virtual === "string"
-				? VirtualTimelineItemInnerType[
-						item.kind.Virtual as keyof typeof VirtualTimelineItemInnerType
-					]
-				: VirtualTimelineItemInnerType[
-						Object.keys(
-							item.kind.Virtual,
-						)[0] as keyof typeof VirtualTimelineItemInnerType
-					];
-
-		switch (type) {
-			case VirtualTimelineItemInnerType.DayDivider:
-				this.virtualItem = new DayDivider(item.kind.Virtual);
-				break;
-			case VirtualTimelineItemInnerType.ReadMarker:
-				this.virtualItem = new ReadMarker(item.kind.Virtual);
-				break;
-			default:
-				console.error("unrecognised virtual item", item.kind.Virtual);
+	getInternalId = (): string => {
+		if (isVirtualEvent(this)) {
+			if (VirtualTimelineItem.TimelineStart.instanceOf(this.item)) {
+				return "start";
+			}
+			if (VirtualTimelineItem.DateDivider.instanceOf(this.item)) {
+				return `divider-${this.item.inner.ts}`;
+			}
+			if (VirtualTimelineItem.ReadMarker.instanceOf(this.item)) {
+				return "readmarker";
+			}
+			return "0";
 		}
+		const event = this.item as EventTimelineItem;
+		if (EventOrTransactionId.EventId.instanceOf(event.eventOrTransactionId)) {
+			return event.eventOrTransactionId.inner.eventId;
+		}
+		if (
+			EventOrTransactionId.TransactionId.instanceOf(event.eventOrTransactionId)
+		) {
+			return event.eventOrTransactionId.inner.transactionId;
+		}
+		return "1";
+	};
+}
+
+export class WrapperVirtualTimelineItem extends TimelineItem<TimelineItemKind.Virtual> {
+	constructor(item: VirtualTimelineItem) {
+		super(TimelineItemKind.Virtual, item);
 	}
 }
 
 // EventTimelineItem Content types
 
 class Content {
-	protected content: any;
+	protected content: TimelineItemContent;
 	type: string;
 
-	constructor(content: any) {
+	constructor(content: TimelineItemContent) {
 		this.content = content;
 		this.type = typeof content === "string" ? content : Object.keys(content)[0];
 	}
@@ -126,7 +113,7 @@ interface Message {
 
 export class MessageContent extends Content {
 	getMessage = (): Message => {
-		return this.content.Message;
+		return this.content.inner;
 	};
 }
 
@@ -145,26 +132,6 @@ export class ProfileChangeContent extends Content {
 	getProfileChange = (): ProfileChange => {
 		return this.content.ProfileChange;
 	};
-}
-
-export enum MembershipChange {
-	None = 0,
-	Error = 1,
-	Joined = 2,
-	Left = 3,
-	Banned = 4,
-	Unbanned = 5,
-	Kicked = 6,
-	Invited = 7,
-	KickedAndBanned = 8,
-	InvitationAccepted = 9,
-	InvitationRejected = 10,
-	InvitationRevoked = 11,
-	Knocked = 12,
-	KnockAccepted = 13,
-	KnockRetracted = 14,
-	KnockDenied = 15,
-	NotImplemented = 16,
 }
 
 interface RoomMembershipChange {
@@ -194,134 +161,164 @@ interface SenderProfile {
 	display_name_ambiguous: boolean;
 }
 
-export class EventTimelineItem extends TimelineItem {
+export class RealEventTimelineItem extends TimelineItem<TimelineItemKind.Event> {
 	content: Content;
 
-	constructor(item: any) {
-		super(item);
-		const contentType = Object.keys(this.item.kind.Event.content)[0];
+	constructor(item: EventTimelineItem) {
+		super(TimelineItemKind.Event, item);
+		const contentType = Object.keys(this.item.content)[0];
 		switch (contentType) {
 			case ContentType[ContentType.Message]:
-				this.content = new MessageContent(this.item.kind.Event.content);
+				this.content = new MessageContent(this.item.content);
 				break;
 			case ContentType[ContentType.ProfileChange]:
-				this.content = new ProfileChangeContent(this.item.kind.Event.content);
+				this.content = new ProfileChangeContent(this.item.content);
 				break;
 			case ContentType[ContentType.MembershipChange]:
-				this.content = new MembershipChangeContent(
-					this.item.kind.Event.content,
-				);
+				this.content = new MembershipChangeContent(this.item.content);
 				break;
 			default:
-				this.content = new Content(this.item.kind.Event.content);
+				this.content = new Content(this.item.content);
 		}
 	}
 
-	getSenderProfile = (): SenderProfile | undefined => {
-		return this.item.kind.Event.sender_profile.Ready;
+	getSenderProfile = (): ProfileDetails => {
+		return this.item.senderProfile;
 	};
 
 	getSender = (): string => {
-		return this.item.kind.Event.sender;
+		return this.item.sender;
 	};
 
 	getContent = (): Content => {
 		return this.content;
 	};
 
-	getTimestamp = (): number => {
-		return this.item.kind.Event.timestamp;
+	getTimestamp = (): bigint => {
+		return this.item.timestamp;
 	};
 }
 
 class TimelineStore {
-	roomId: string;
-	running: boolean = false;
-	items: TimelineItem[] = [];
+	running = false;
+	items: TimelineItem<any>[] = [];
 	listeners: CallableFunction[] = [];
 
-	// for now, lock between subs/unsubs across all timeline instances
-	// hence static, until the rust layer can handle multiple timelines simultaneously
-	static mutex: Mutex = new Mutex();
+	mutex: Mutex = new Mutex();
+	private timelinePromise: Promise<TimelineInterface>;
 
-	constructor(roomId: string) {
-		this.roomId = roomId;
+	constructor(private readonly room: RoomInterface) {
+		this.timelinePromise = this.room.timeline();
 	}
 
-	private parseItem(item: any): TimelineItem {
-		const kind: TimelineItemKind =
-			TimelineItemKind[
-				Object.keys(item.kind)[0] as keyof typeof TimelineItemKind
-			];
-		switch (kind) {
-			case TimelineItemKind.Event:
-				return new EventTimelineItem(item);
-			case TimelineItemKind.Virtual:
-				return new VirtualTimelineItem(item);
+	private async parseItem(
+		item?: TimelineItemInterface,
+	): Promise<TimelineItem<any>> {
+		if (item?.asEvent()) {
+			return new RealEventTimelineItem(item.asEvent()!);
+		}
+		if (item?.asVirtual()) {
+			return new WrapperVirtualTimelineItem(item.asVirtual()!);
 		}
 	}
 
 	sendMessage = async (msg: string) => {
-		await invoke("send_message", { roomId: this.roomId, msg });
+		try {
+			const timeline = await this.timelinePromise;
+			const event = timeline.createMessageContent(
+				MessageType.Text.new({
+					content: {
+						body: msg,
+						formatted: undefined,
+					},
+				}),
+			)!;
+			await timeline.send(event);
+		} catch (e) {
+			console.error("Failed to send message", e, e.inner);
+		}
+	};
+
+	onUpdate = async (updates: TimelineDiffInterface[]): Promise<void> => {
+		const release = await this.mutex.acquire();
+
+		let newItems = [...this.items];
+
+		for (const update of updates) {
+			console.log("@@ timelineStoreUpdate", update.change(), update.reset());
+			switch (update.change()) {
+				case TimelineChange.Set: {
+					newItems[update.set()!.index] = await this.parseItem(
+						update.set()?.item,
+					);
+					newItems = [...newItems];
+					break;
+				}
+				case TimelineChange.PushBack:
+					newItems = [...newItems, await this.parseItem(update.pushBack())];
+					break;
+				case TimelineChange.PushFront:
+					newItems = [await this.parseItem(update.pushFront()), ...newItems];
+					break;
+				case TimelineChange.Clear:
+					newItems = [];
+					break;
+				case TimelineChange.PopFront:
+					newItems.shift();
+					newItems = [...newItems];
+					break;
+				case TimelineChange.PopBack:
+					newItems.pop();
+					newItems = [...newItems];
+					break;
+				case TimelineChange.Insert:
+					newItems.splice(
+						update.insert()!.index,
+						0,
+						await this.parseItem(update.insert()?.item),
+					);
+					newItems = [...newItems];
+					break;
+				case TimelineChange.Remove:
+					newItems.splice(update.remove()!, 1);
+					newItems = [...newItems];
+					break;
+				case TimelineChange.Truncate:
+					newItems = newItems.slice(0, update.truncate()!);
+					break;
+				case TimelineChange.Reset:
+					newItems = [
+						...(await Promise.all(update.reset()!.map(this.parseItem))),
+					];
+					break;
+				case TimelineChange.Append:
+					newItems = [
+						...newItems,
+						...(await Promise.all(update.append()!.map(this.parseItem))),
+					];
+					break;
+			}
+		}
+
+		release();
+		this.items = newItems;
+		this.emit();
 	};
 
 	run = () => {
-		if (!this.roomId) return;
+		if (!this.room) return;
 
 		(async () => {
-			console.log("=> acquiring lock while subscribing to", this.roomId);
-			const release = await TimelineStore.mutex.acquire();
-			console.log("<= got lock while subscribing to", this.roomId);
-			if (this.running)
-				console.warn(
-					"got timeline lock while TLS already running for",
-					this.roomId,
-				);
-			console.log("subscribing to timeline", this.roomId);
-			const rawItems: any[] = await invoke("subscribe_timeline", {
-				roomId: this.roomId,
-			});
-			console.log("subscribed to timeline", this.roomId);
+			console.log("subscribing to timeline", this.room.id);
+			const timelineInterface = await this.room.timeline();
+			await timelineInterface.addListener(this);
+			await timelineInterface.paginateBackwards(10);
+			console.log("subscribed to timeline", this.room.id);
 			this.running = true;
-
-			this.items = rawItems.map(this.parseItem);
-			this.emit();
-
-			console.log("timeline items", this.items);
-			//this.logItems(timeline_items);
-
-			// TODO: recover from network outages and laptop sleeping
-			while (this.running) {
-				//await new Promise(r => setTimeout(r, 250));
-
-				let diff: any = undefined;
-				try {
-					diff = await invoke("get_timeline_update");
-				} catch (error) {
-					console.info(error);
-				}
-				if (!diff) {
-					console.info("stopping timeline poll due to empty diff");
-					this.running = false;
-					break;
-				}
-
-				console.log("timeline diff", diff);
-				//console.log(JSON.stringify(diff, undefined, 4));
-
-				this.items = applyDiff<TimelineItem>(diff, this.items, this.parseItem);
-				this.emit();
-			}
-			console.log(
-				"== releasing lock after timeline subscription & polling",
-				this.roomId,
-			);
-			release();
-			console.log("no longer subscribed to", this.roomId);
 		})();
 	};
 
-	subscribe = (listener: any) => {
+	subscribe = (listener: CallableFunction) => {
 		this.listeners = [...this.listeners, listener];
 
 		return () => {
@@ -329,14 +326,14 @@ class TimelineStore {
 				// XXX: we should grab a mutex to avoid overlapping unsubscribes
 				// and ensure we only unsubscribe from the timeline we think we're
 				// unsubscribing to.
-				await invoke("unsubscribe_timeline", { roomId: this.roomId });
+				// await invoke("unsubscribe_timeline", { roomId: this.room.id });
 				this.running = false;
 			})();
 			this.listeners = this.listeners.filter((l) => l !== listener);
 		};
 	};
 
-	getSnapshot = (): TimelineItem[] => {
+	getSnapshot = (): TimelineItem<any>[] => {
 		return this.items;
 	};
 

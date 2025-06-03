@@ -1,6 +1,6 @@
 import { Mutex } from "async-mutex";
+import { applyDiff } from "./DiffUtils.ts";
 import {
-	type ClientInterface,
 	type RoomInfo,
 	type RoomInterface,
 	RoomListEntriesDynamicFilterKind,
@@ -76,10 +76,7 @@ class RoomListStore {
 
 	mutex: Mutex = new Mutex();
 
-	constructor(
-		private readonly client: ClientInterface,
-		private readonly roomListService: RoomListServiceInterface,
-	) {
+	constructor(private readonly roomListService: RoomListServiceInterface) {
 		console.log("RoomListStore constructed");
 	}
 
@@ -92,68 +89,10 @@ class RoomListStore {
 		return rli;
 	}
 
-	onUpdate = async (
-		roomEntriesUpdate: RoomListEntriesUpdate[],
-	): Promise<void> => {
+	onUpdate = async (updates: RoomListEntriesUpdate[]): Promise<void> => {
 		const release = await this.mutex.acquire();
-
-		let rooms = [...this.rooms];
-
-		for (const update of roomEntriesUpdate) {
-			// console.log("@@ roomListUpdate", update, rooms);
-			switch (update.tag) {
-				case "Set":
-					rooms[update.inner.index] = await this.parseRoom(update.inner.value);
-					rooms = [...rooms];
-					break;
-				case "PushBack":
-					rooms = [...rooms, await this.parseRoom(update.inner.value)];
-					break;
-				case "PushFront":
-					rooms = [await this.parseRoom(update.inner.value), ...rooms];
-					break;
-				case "Clear":
-					rooms = [];
-					break;
-				case "PopFront":
-					rooms.shift();
-					rooms = [...rooms];
-					break;
-				case "PopBack":
-					rooms.pop();
-					rooms = [...rooms];
-					break;
-				case "Insert":
-					rooms.splice(
-						update.inner.index,
-						0,
-						await this.parseRoom(update.inner.value),
-					);
-					rooms = [...rooms];
-					break;
-				case "Remove":
-					rooms.splice(update.inner.index, 1);
-					rooms = [...rooms];
-					break;
-				case "Truncate":
-					rooms = rooms.slice(0, update.inner.length);
-					break;
-				case "Reset":
-					rooms = [
-						...(await Promise.all(update.inner.values.map(this.parseRoom))),
-					];
-					break;
-				case "Append":
-					rooms = [
-						...rooms,
-						...(await Promise.all(update.inner.values.map(this.parseRoom))),
-					];
-					break;
-			}
-		}
-
-		// console.log("@@ roomListUpdated", rooms);
-		this.rooms = rooms;
+		this.rooms = await applyDiff(this.rooms, updates, this.parseRoom);
+		console.log("@@ roomListUpdated", this.rooms);
 		this.emit();
 		release();
 	};
@@ -172,7 +111,7 @@ class RoomListStore {
 			const p = await this.roomListService.allRooms({
 				signal: abortController.signal,
 			});
-			const v = p.entriesWithDynamicAdapters(100, this);
+			const v = p.entriesWithDynamicAdapters(30, this);
 			const controller = v.controller();
 			controller.setFilter(new RoomListEntriesDynamicFilterKind.NonLeft());
 			controller.addOnePage();

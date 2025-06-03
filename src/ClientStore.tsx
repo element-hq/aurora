@@ -94,7 +94,7 @@ class ClientStore {
 		release();
 		let store = this.timelineStores.get(roomId);
 		if (!store) {
-			store = new TimelineStore(roomId);
+			store = new TimelineStore(this.client!.getRoom(roomId)!);
 			this.timelineStores.set(roomId, store);
 		}
 		return store;
@@ -103,10 +103,7 @@ class ClientStore {
 	getRoomListStore = async () => {
 		const release = await this.mutex.acquire();
 		release();
-		this.roomListStore ||= new RoomListStore(
-			this.client!,
-			this.roomListService!,
-		);
+		this.roomListStore ||= new RoomListStore(this.roomListService!);
 		return this.roomListStore;
 	};
 
