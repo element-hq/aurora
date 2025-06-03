@@ -347,37 +347,37 @@ const Client: React.FC<ClientProps> = ({ clientStore }) => {
                 tls.run();
             }
 
-			setRoomListStore(rls);
-			setTimelineStore(tls);
-		})();
-	});
-	return (
-		<>
-			<header className="mx_Header"> </header>
-			<section className="mx_Client">
-				<nav className="mx_RoomList">
-					{roomListStore ? (
-						<>
-							<RoomListFiltersView store={roomListStore} />
-							<RoomListView
-								vm={roomListStore}
-								currentRoomId={currentRoomId}
-								onRoomSelected={(roomId) => {
-									setCurrentRoomId(roomId);
-								}}
-							/>
-						</>
-					) : null}
-				</nav>
-				{timelineStore ? (
-					<main className="mx_MainPanel">
-						<Timeline timelineStore={timelineStore} />
-						<Composer timelineStore={timelineStore} />
-					</main>
-				) : null}
-			</section>
-		</>
-	);
+            setRoomListStore(rls);
+            setTimelineStore(tls);
+        })();
+    });
+    return (
+        <>
+            <header className="mx_Header"> </header>
+            <section className="mx_Client">
+                <nav className="mx_RoomList">
+                    {roomListStore ? (
+                        <>
+                            <RoomListFiltersView store={roomListStore} />
+                            <RoomListView
+                                vm={roomListStore}
+                                currentRoomId={currentRoomId}
+                                onRoomSelected={(roomId) => {
+                                    setCurrentRoomId(roomId);
+                                }}
+                            />
+                        </>
+                    ) : null}
+                </nav>
+                {timelineStore ? (
+                    <main className="mx_MainPanel">
+                        <Timeline timelineStore={timelineStore} />
+                        <Composer timelineStore={timelineStore} />
+                    </main>
+                ) : null}
+            </section>
+        </>
+    );
 };
 
 interface LoginProps {

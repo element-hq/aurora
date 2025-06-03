@@ -15,48 +15,60 @@ import { RoomListEntriesDynamicFilterKind_Tags } from "./generated/matrix_sdk_ff
 import { Flex } from "./utils/Flex";
 
 interface RoomListFiltersViewProps {
-	store: RoomListStore;
+    store: RoomListStore;
 }
 
 /**
  * The primary filters for the room list
  */
 export function RoomListFiltersView({
-	store,
+    store,
 }: RoomListFiltersViewProps): JSX.Element {
-	const vm = useRoomListViewModel(store);
+    const vm = useRoomListViewModel(store);
 
-	return (
-		<Flex
-			as="ul"
-			role="listbox"
-			className="mx_RoomListFilters"
-			align="center"
-			gap="var(--cpd-space-2x)"
-			wrap="wrap"
-		>
-			{vm.filters.map((filter) => (
-				<li role="option" aria-selected={filter.active} key={filter.name}>
-					<ChatFilter selected={filter.active} onClick={filter.toggle}>
-						{filter.name}
-					</ChatFilter>
-				</li>
-			))}
-		</Flex>
-	);
+    return (
+        <Flex
+            as="ul"
+            role="listbox"
+            className="mx_RoomListFilters"
+            align="center"
+            gap="var(--cpd-space-2x)"
+            wrap="wrap"
+        >
+            {vm.filters.map((filter) => (
+                <li
+                    role="option"
+                    aria-selected={filter.active}
+                    key={filter.name}
+                >
+                    <ChatFilter
+                        selected={filter.active}
+                        onClick={filter.toggle}
+                    >
+                        {filter.name}
+                    </ChatFilter>
+                </li>
+            ))}
+        </Flex>
+    );
 }
 
 function useRoomListViewModel(store: RoomListStore) {
-	return {
-		filters: Object.entries(FILTERS)
-			.filter(([key]) => key !== RoomListEntriesDynamicFilterKind_Tags.NonLeft)
-			.map(([key, value]) => {
-				return {
-					active: key === store.filter,
-					name: value.name,
-					toggle: () =>
-						store.toggleFilter(key as RoomListEntriesDynamicFilterKind_Tags),
-				};
-			}),
-	};
+    return {
+        filters: Object.entries(FILTERS)
+            .filter(
+                ([key]) =>
+                    key !== RoomListEntriesDynamicFilterKind_Tags.NonLeft,
+            )
+            .map(([key, value]) => {
+                return {
+                    active: key === store.filter,
+                    name: value.name,
+                    toggle: () =>
+                        store.toggleFilter(
+                            key as RoomListEntriesDynamicFilterKind_Tags,
+                        ),
+                };
+            }),
+    };
 }

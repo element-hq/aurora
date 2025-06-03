@@ -4,7 +4,7 @@ import {
     Membership,
     type RoomInfo,
     type RoomInterface,
-	RoomListEntriesDynamicFilterKind_Tags,
+    RoomListEntriesDynamicFilterKind_Tags,
     type RoomListEntriesUpdate,
     type RoomListServiceInterface,
 } from "./index.web";
@@ -85,7 +85,7 @@ class RoomListStore {
     running = false;
     rooms: Array<RoomListItem> = [];
     listeners: Array<CallableFunction> = [];
-	filter = RoomListEntriesDynamicFilterKind_Tags.NonLeft;
+    filter = RoomListEntriesDynamicFilterKind_Tags.NonLeft;
 
     mutex: Mutex = new Mutex();
 
@@ -144,21 +144,21 @@ class RoomListStore {
     };
 
     toggleFilter = (filter: RoomListEntriesDynamicFilterKind_Tags) => {
-		console.log("Toggling filter", filter, this.filter);
-		if (filter === this.filter) {
-			console.log("Filter is already set, resetting to 'All'");
-			this.filter = RoomListEntriesDynamicFilterKind_Tags.NonLeft;
-		} else {
-			console.log("Setting filter to", filter);
-			this.filter = filter;
-		}
+        console.log("Toggling filter", filter, this.filter);
+        if (filter === this.filter) {
+            console.log("Filter is already set, resetting to 'All'");
+            this.filter = RoomListEntriesDynamicFilterKind_Tags.NonLeft;
+        } else {
+            console.log("Setting filter to", filter);
+            this.filter = filter;
+        }
 
-		this.run();
-	};
+        this.run();
+    };
 
-	getSnapshot = (): RoomListItem[] => {
-		return this.rooms;
-	};
+    getSnapshot = (): RoomListItem[] => {
+        return this.rooms;
+    };
 
     subscribe = (listener: CallableFunction) => {
         this.listeners = [...this.listeners, listener];
