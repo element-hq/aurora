@@ -11,31 +11,33 @@ export const Composer: React.FC<ComposerProps> = ({ timelineStore }) => {
 
     return (
         <div className="mx_Composer">
-            <textarea
-                id="mx_Composer_textarea"
-                placeholder="Send a message"
-                rows={1}
-                value={composer}
-                onChange={(e) => setComposer(e.currentTarget.value)}
-                onKeyDown={(e) => {
-                    if (e.key === "Enter" && composer) {
-                        timelineStore.sendMessage(composer);
-                        setComposer("");
-                        e.preventDefault();
-                    }
-                }}
-            ></textarea>
-            <button
-                id="mx_Composer_send"
-                onClick={() => {
-                    if (composer) {
-                        timelineStore.sendMessage(composer);
-                        setComposer("");
-                    }
-                }}
-            >
-                Send
-            </button>
+            <div className="mx_Composer_wrapper">
+                <textarea
+                    id="mx_Composer_textarea"
+                    placeholder="Send a message"
+                    rows={1}
+                    value={composer}
+                    onChange={(e) => setComposer(e.currentTarget.value)}
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter" && composer) {
+                            timelineStore.sendMessage(composer);
+                            setComposer("");
+                            e.preventDefault();
+                        }
+                    }}
+                ></textarea>
+                {/* <button
+                    id="mx_Composer_send"
+                    onClick={() => {
+                        if (composer) {
+                            timelineStore.sendMessage(composer);
+                            setComposer("");
+                        }
+                    }}
+                >
+                    Send
+                </button> */}
+            </div>
         </div>
     );
 };
