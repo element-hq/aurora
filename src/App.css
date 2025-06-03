@@ -2,6 +2,7 @@ html {
     height: 100%;
     overflow: hidden;
     background-color: var(--cpd-color-bg-canvas-default);
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
 }
 
 body {
