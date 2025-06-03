@@ -146,7 +146,7 @@ class ClientStore {
     sync = async () => {
         try {
             const syncServiceBuilder = this.client!.syncService();
-            this.syncService = await syncServiceBuilder.finish();
+            this.syncService = await syncServiceBuilder.withOfflineMode().finish();
             this.roomListService = this.syncService.roomListService();
             await this.syncService.start();
             console.log("syncing...");
@@ -160,7 +160,7 @@ class ClientStore {
 
     getTimelineStore = async (roomId: string) => {
         if (roomId === "") return;
-        const release = await this.mutex.acquire();
+        const release = await this.mutex.acquire(); // to block during login
         release();
         let store = this.timelineStores.get(roomId);
         if (!store) {
@@ -171,13 +171,15 @@ class ClientStore {
     };
 
     getRoomListStore = async () => {
-        const release = await this.mutex.acquire();
-        release();
-        this.roomListStore ||= new RoomListStore(this.roomListService!);
+        await this.mutex.waitForUnlock(); // to block during login
+        this.roomListStore ||= new RoomListStore(
+            this.syncService!,
+            this.roomListService!,
+        );
         return this.roomListStore;
     };
 
-    subscribe = (listener: any) => {
+    subscribe = (listener: CallableFunction) => {
         this.listeners = [...this.listeners, listener];
         return () => {
             this.listeners = this.listeners.filter((l) => l !== listener);

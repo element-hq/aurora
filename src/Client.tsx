@@ -2,6 +2,7 @@ import type React from "react";
 import { useEffect, useState } from "react";
 import "./App.css";
 import type ClientStore from "./ClientStore.tsx";
+import { RoomListHeaderView } from "./RoomListHeaderView";
 import { Composer } from "./Composer.tsx";
 import { RoomListFiltersView } from "./RoomListFiltersView";
 import type RoomListStore from "./RoomListStore.tsx";
@@ -54,6 +55,7 @@ export const Client: React.FC<ClientProps> = ({ clientStore }) => {
                 <nav className="mx_RoomList">
                     {roomListStore ? (
                         <>
+                            <RoomListHeaderView />
                             <RoomListFiltersView store={roomListStore} />
                             <RoomListView
                                 vm={roomListStore}
