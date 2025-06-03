@@ -55,10 +55,9 @@ export class MemberListStore {
 		});
 	}
 
-	public async run() {
+	public async run(searchQuery?: string) {
 		console.log("Running memberliist store", this.roomId);
-		const { joined: joinedSdk, invited: invitedSdk } =
-			await this.loadMemberList();
+		const { joined: joinedSdk, invited: invitedSdk } = await this.loadMemberList(searchQuery);
 
 		console.log("members", joinedSdk, invitedSdk);
 		const newMemberMap = new Map<string, MemberWithSeparator>();
@@ -90,9 +89,9 @@ export class MemberListStore {
 	 * @param searchQuery Optional search query to filter the list.
 	 * @returns A list of filtered and sorted room members, grouped by membership.
 	 */
-	public async loadMemberList(): Promise<
-		Record<"joined" | "invited", RoomMember[]>
-	> {
+	public async loadMemberList(
+		searchQuery?: string,
+	): Promise<Record<"joined" | "invited", RoomMember[]>> {
 		if (!this.client) {
 			return {
 				joined: [],
@@ -104,7 +103,7 @@ export class MemberListStore {
 
 		// Filter then sort as it's more efficient than sorting tons of members we will just filter out later.
 		// Also sort each group, as there's no point comparing invited/joined users when they aren't in the same list!
-		const membersByMembership = this.filterMembers(members);
+		const membersByMembership = this.filterMembers(members, searchQuery);
 		console.log("filtered members in loadmemberlist", membersByMembership);
 		membersByMembership.joined.sort((a: RoomMember, b: RoomMember) => {
 			return this.sortMembers(a, b);
@@ -151,6 +150,7 @@ export class MemberListStore {
 	 */
 	private filterMembers(
 		members: Array<RoomMember>,
+		query?: string,
 	): Record<"joined" | "invited", RoomMember[]> {
 		const result: Record<"joined" | "invited", RoomMember[]> = {
 			joined: [],
@@ -162,6 +162,15 @@ export class MemberListStore {
 				m.membership.tag !== MembershipState_Tags.Invite
 			) {
 				continue; // bail early for left/banned users
+			}
+
+			if (query) {
+				const queryString = query.toLowerCase();
+				const matchesName = m.displayName?.toLowerCase().includes(queryString);
+				const matchesId = m.userId.toLowerCase().includes(queryString);
+				if (!matchesName && !matchesId) {
+					continue;
+				}
 			}
 
 			switch (m.membership.tag) {
@@ -233,9 +242,6 @@ export class MemberListStore {
 	}
 
 	public search(query: string) {
-		const filteredMembers = this.members.filter((m) => {
-			return m.displayName?.toLowerCase().includes(query.toLowerCase());
-		});
-		this.setMemberMap(new Map(filteredMembers.map((m) => [m.userId, m])));
+		this.run(query);
 	}
 }

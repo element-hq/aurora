@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Com
 Please see LICENSE files in the repository root for full details.
 */
 
-import React, { type JSX } from "react";
+import React, { useEffect, useState, type JSX } from "react";
 
 // import DisambiguatedProfile from "../../../messages/DisambiguatedProfile";
 import {
@@ -27,7 +27,13 @@ interface IProps {
 export function RoomMemberTileView(props: IProps): JSX.Element {
 	const vm = props;
 
-	const member = vm.member;
+	const [member, setMember] = useState(vm.member);
+
+	useEffect(() => {
+		setMember(vm.member);
+	}, [vm.member]);
+
+	
 	const av = (
 		<BaseAvatar
 			size="32px"

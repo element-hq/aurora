@@ -25,11 +25,9 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
 	const [members, setMembers] = useState<MemberWithSeparator[]>([]);
 
 	useEffect(() => {
-		setTotalRows(vm.members.length);
-		if (vm.members.length > 0) {
-			setMembers(vm.members);
-		}
-	}, [vm]);
+		setTotalRows(vm.memberCount);
+		setMembers(vm.members);
+	}, [vm.memberCount, vm.members]);
 
 	const getRowComponent = (item: MemberWithSeparator): JSX.Element => {
 		if (item === SEPARATOR) {
