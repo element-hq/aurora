@@ -33,7 +33,7 @@ export function RoomListView({
 
     // The first div is needed to make the virtualized list take all the remaining space and scroll correctly
     return (
-        <div className="mx_RoomList">
+        <div className="mx_RoomListView">
             <Virtuoso
                 data={rooms}
                 endReached={vm.loadMore}
