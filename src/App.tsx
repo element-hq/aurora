@@ -14,14 +14,13 @@ import { ClientState } from "./ClientStore.tsx";
 import type RoomListStore from "./RoomListStore.tsx";
 import { RoomListView } from "./RoomListView";
 import type TimelineStore from "./TimelineStore.tsx";
+import { isRealEvent } from "./TimelineStore.tsx";
 import {
-	ContentType,
 	type TimelineItem,
-	TimelineItemKind,
+	type TimelineItemKind,
 	isVirtualEvent,
 } from "./TimelineStore.tsx";
 import {
-	type EventTimelineItem,
 	MembershipChange,
 	MessageFormat_Tags,
 	MessageType,
@@ -74,13 +73,14 @@ const EventTile: React.FC<EventTileProp> = ({ item, continuation }) => {
 
 	const event = item as TimelineItem<TimelineItemKind.Event>;
 
-	const senderProfile = event.item.senderProfile;
-	if (!ProfileDetails.Ready.instanceOf(senderProfile)) {
-		throw new Error("TEST3");
-	}
+	const senderProfile: Partial<{
+		displayName?: string;
+		displayNameAmbiguous?: boolean;
+		avatarUrl?: string;
+	}> = ProfileDetails.Ready.instanceOf(event.item.senderProfile) ? event.item.senderProfile.inner : {};
 
 	let body: string | ReactElement | undefined;
-	let stateChange: string | undefined = undefined;
+	let stateChange: ReactNode[] | ReactNode | undefined = undefined;
 	if (TimelineItemContent.MsgLike.instanceOf(event.item.content)) {
 		const message = event.item.content.inner.content;
 
@@ -122,7 +122,7 @@ const EventTile: React.FC<EventTileProp> = ({ item, continuation }) => {
 				"avatar from ",
 				<Avatar
 					className="mx_StateAvatar"
-					name={senderProfile.inner.displayName}
+					name={senderProfile.displayName || event.item.sender}
 					id={event.item.sender}
 					src={
 						event.item.content.inner.prevAvatarUrl
@@ -134,7 +134,7 @@ const EventTile: React.FC<EventTileProp> = ({ item, continuation }) => {
 				" to ",
 				<Avatar
 					className="mx_StateAvatar"
-					name={senderProfile.inner.displayName}
+					name={senderProfile.displayName || event.item.sender}
 					id={event.item.sender}
 					src={
 						event.item.content.inner.avatarUrl
@@ -179,11 +179,11 @@ const EventTile: React.FC<EventTileProp> = ({ item, continuation }) => {
 			<div className="mx_StateEventTile">
 				<Avatar
 					className="mx_StateAvatar"
-					name={senderProfile.inner.displayName}
+					name={senderProfile.displayName || event.item.sender}
 					id={event.item.sender}
 					src={
-						senderProfile.inner.avatarUrl
-							? mxcToUrl(senderProfile.inner.avatarUrl)
+						senderProfile.avatarUrl
+							? mxcToUrl(senderProfile.avatarUrl)
 							: ""
 					}
 					size="16px"
@@ -206,17 +206,17 @@ const EventTile: React.FC<EventTileProp> = ({ item, continuation }) => {
 				<>
 					<span className="mx_Avatar">
 						<Avatar
-							name={senderProfile.inner.displayName}
+							name={senderProfile.displayName || event.item.sender}
 							id={event.item.sender}
 							src={
-								senderProfile.inner.avatarUrl
-									? mxcToUrl(senderProfile.inner.avatarUrl)
+								senderProfile.avatarUrl
+									? mxcToUrl(senderProfile.avatarUrl)
 									: ""
 							}
 							size="32px"
 						/>
 					</span>
-					<span className="mx_Sender">{senderProfile.inner.displayName}</span>
+					<span className="mx_Sender">{senderProfile.displayName}</span>
 				</>
 			) : null}
 			<span className="mx_Content">{body}</span>
@@ -234,24 +234,26 @@ const Timeline: React.FC<TimelineProps> = ({ timelineStore: timeline }) => {
 	return (
 		<div className="mx_Timeline">
 			<ol>
-				{items.map((item, i) => (
-					<li key={item.getInternalId()} value={item.getInternalId()}>
-						<EventTile
-							item={item}
-							continuation={
-								i > 0 &&
-								item.kind === TimelineItemKind.Event &&
-								items[i - 1].kind === TimelineItemKind.Event &&
-								(item as EventTimelineItem).getContent().type ===
-									ContentType[ContentType.Message] &&
-								(items[i - 1] as EventTimelineItem).getContent().type ===
-									ContentType[ContentType.Message] &&
-								(item as EventTimelineItem).getSender() ===
-									(items[i - 1] as EventTimelineItem).getSender()
-							}
-						/>
-					</li>
-				))}
+				{items.map((item, i) => {
+					const prevItem = items[i - 1];
+					return (
+						<li key={item.getInternalId()} value={item.getInternalId()}>
+							<EventTile
+								item={item}
+								continuation={
+									prevItem &&
+									isRealEvent(item) &&
+									isRealEvent(prevItem) &&
+									TimelineItemContent.MsgLike.instanceOf(item.item.content) &&
+									TimelineItemContent.MsgLike.instanceOf(
+										prevItem.item.content,
+									) &&
+									item.item.sender === prevItem.item.sender
+								}
+							/>
+						</li>
+					);
+				})}
 			</ol>
 		</div>
 	);

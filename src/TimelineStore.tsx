@@ -8,16 +8,10 @@ import {
 	TimelineChange,
 	type TimelineDiffInterface,
 	type TimelineInterface,
-	type TimelineItemContent,
 	type TimelineItemInterface,
 	VirtualTimelineItem,
 } from "./generated/matrix_sdk_ffi.ts";
-
-// XXX: should we use purely abstract interfaces here, and entirely separate the code
-// for parsing the JSON from the types (rather than using a mix of classes and types)?
-
-// XXX: gen these types via uniffi from the rust?
-// keeping it in sync manually is going to be very error prone.
+import { printRustError } from "./utils.ts";
 
 export enum TimelineItemKind {
 	Event = 0,
@@ -25,9 +19,15 @@ export enum TimelineItemKind {
 }
 
 export function isVirtualEvent(
-	item: TimelineItem<any>,
+	item: TimelineItem<any> | undefined,
 ): item is TimelineItem<TimelineItemKind.Virtual> {
-	return item.kind === TimelineItemKind.Virtual;
+	return item?.kind === TimelineItemKind.Virtual;
+}
+
+export function isRealEvent(
+	item: TimelineItem<any> | undefined,
+): item is TimelineItem<TimelineItemKind.Event> {
+	return item?.kind === TimelineItemKind.Event;
 }
 
 export class TimelineItem<
@@ -80,123 +80,10 @@ export class WrapperVirtualTimelineItem extends TimelineItem<TimelineItemKind.Vi
 	}
 }
 
-// EventTimelineItem Content types
-
-class Content {
-	protected content: TimelineItemContent;
-	type: string;
-
-	constructor(content: TimelineItemContent) {
-		this.content = content;
-		this.type = typeof content === "string" ? content : Object.keys(content)[0];
-	}
-}
-
-export enum ContentType {
-	Message = 0,
-	ProfileChange = 1,
-	MembershipChange = 2,
-	RedactedMessage = 3,
-}
-
-interface Message {
-	edited?: boolean;
-	in_reply_to?: string;
-	msgtype?: {
-		body: string;
-		msgtype: string;
-		format?: string;
-		formatted_body?: string;
-	};
-	thread_root?: string;
-}
-
-export class MessageContent extends Content {
-	getMessage = (): Message => {
-		return this.content.inner;
-	};
-}
-
-interface ProfileChange {
-	avatar_url_change: {
-		old?: string;
-		new?: string;
-	};
-	displayname_change: {
-		old?: string;
-		new?: string;
-	};
-}
-
-export class ProfileChangeContent extends Content {
-	getProfileChange = (): ProfileChange => {
-		return this.content.ProfileChange;
-	};
-}
-
-interface RoomMembershipChange {
-	user_id: string;
-	change?: string; // string of type MembershipChange
-	content: {
-		Original?: {
-			displayname?: string;
-			avatar_url?: string;
-			membership: string;
-		};
-		Redacted?: {
-			membership: string;
-		};
-	};
-}
-
-export class MembershipChangeContent extends Content {
-	getMembershipChange = (): RoomMembershipChange => {
-		return this.content.MembershipChange;
-	};
-}
-
-interface SenderProfile {
-	avatar_url: string;
-	display_name: string;
-	display_name_ambiguous: boolean;
-}
-
 export class RealEventTimelineItem extends TimelineItem<TimelineItemKind.Event> {
-	content: Content;
-
 	constructor(item: EventTimelineItem) {
 		super(TimelineItemKind.Event, item);
-		const contentType = Object.keys(this.item.content)[0];
-		switch (contentType) {
-			case ContentType[ContentType.Message]:
-				this.content = new MessageContent(this.item.content);
-				break;
-			case ContentType[ContentType.ProfileChange]:
-				this.content = new ProfileChangeContent(this.item.content);
-				break;
-			case ContentType[ContentType.MembershipChange]:
-				this.content = new MembershipChangeContent(this.item.content);
-				break;
-			default:
-				this.content = new Content(this.item.content);
-		}
 	}
-
-	getSenderProfile = (): ProfileDetails => {
-		return this.item.senderProfile;
-	};
-
-	getSender = (): string => {
-		return this.item.sender;
-	};
-
-	getContent = (): Content => {
-		return this.content;
-	};
-
-	getTimestamp = (): bigint => {
-		return this.item.timestamp;
-	};
 }
 
 class TimelineStore {
@@ -220,6 +107,7 @@ class TimelineStore {
 		if (item?.asVirtual()) {
 			return new WrapperVirtualTimelineItem(item.asVirtual()!);
 		}
+		throw new Error("Something unknown");
 	}
 
 	sendMessage = async (msg: string) => {
@@ -235,7 +123,7 @@ class TimelineStore {
 			)!;
 			await timeline.send(event);
 		} catch (e) {
-			console.error("Failed to send message", e, e.inner);
+			printRustError("Failed to send message", e);
 		}
 	};
 
