@@ -1,6 +1,7 @@
 html {
     height: 100%;
     overflow: hidden;
+    background-color: var(--cpd-color-bg-canvas-default);
 }
 
 body {
@@ -25,7 +26,7 @@ body {
 /* room for the tauri window header */
 .mx_Header {
     flex: 0 0 auto;
-    height: 30px;
+    height: 0px;
 }
 
 .mx_Client {
@@ -235,7 +236,7 @@ body {
     display: flex;
     flex-direction: row;
     width: 100%;
-    border-top: 1px solid var(--cpd-color-border-interactive-primary)
+    border-top: 1px solid var(--cpd-color-border-interactive-primary);
 }
 
 #mx_Composer_textarea {

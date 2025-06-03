@@ -1,21 +1,20 @@
-import { Mutex } from "async-mutex";
 import { applyDiff } from "./DiffUtils.ts";
 import {
-    Membership,
+    type EventTimelineItem,
     type RoomInfo,
     type RoomInterface,
+    type RoomListDynamicEntriesControllerInterface,
+    RoomListEntriesDynamicFilterKind,
     RoomListEntriesDynamicFilterKind_Tags,
     type RoomListEntriesUpdate,
+    RoomListEntriesWithDynamicAdaptersResult,
+    type RoomListEntriesWithDynamicAdaptersResultInterface,
+    RoomListLoadingState,
     type RoomListServiceInterface,
+    type SyncServiceInterface,
 } from "./index.web";
 
 import { FILTERS, type SupportedFilters } from "./Filter";
-
-export enum RoomListEntry {
-    Empty = 0,
-    Invalidated = 1,
-    Filled = 2,
-}
 
 interface Event {
     sender: string;
@@ -29,25 +28,50 @@ interface Event {
 
 export interface NotificationState {
     hasAnyNotificationOrActivity: boolean;
-    isUnsentMessage: boolean;
     invited: boolean;
     isMention: boolean;
     isActivityNotification: boolean;
     isNotification: boolean;
-    count: number;
-    muted: boolean;
 }
 
 export class RoomListItem {
-    entry: RoomListEntry;
-    roomId: string;
-    info: Partial<RoomInfo>;
+    info?: RoomInfo;
+    latestEvent?: EventTimelineItem;
+    listeners: CallableFunction[] = [];
 
-    constructor(entry: RoomListEntry, roomId: string, info: Partial<RoomInfo>) {
-        this.entry = entry;
-        this.roomId = roomId;
-        this.info = info;
+    constructor(private readonly room: RoomInterface) {
+        this.load();
     }
+
+    get roomId() {
+        return this.room.id();
+    }
+
+    load = async () => {
+        [this.info, this.latestEvent] = await Promise.all([
+            this.room.roomInfo(),
+            this.room.latestEvent(),
+        ]);
+        this.emit();
+    };
+
+    subscribe = (listener: CallableFunction) => {
+        this.listeners = [...this.listeners, listener];
+
+        return () => {
+            this.listeners = this.listeners.filter((l) => l !== listener);
+        };
+    };
+
+    getSnapshot = (): RoomInfo | undefined => {
+        return this.info;
+    };
+
+    emit = () => {
+        for (const listener of this.listeners) {
+            listener();
+        }
+    };
 
     getName = () => {
         return this.info?.displayName;
@@ -57,59 +81,58 @@ export class RoomListItem {
         return this.info?.avatarUrl;
     };
 
-    getLatestEvent = (): Event | undefined => {
-        return undefined;
-        // return this.info?.latest_event?.event?.event;
-    };
-
-    getNotifications = (): NotificationState => {
-        return {
-            count: Number(this.info.notificationCount),
-            isMention: Number(this.info.numUnreadMentions) > 0,
-            isNotification: Number(this.info.numUnreadNotifications) > 0,
-            isActivityNotification: Number(this.info.numUnreadMessages) > 0,
-            hasAnyNotificationOrActivity:
-                Number(this.info.notificationCount) > 0,
-            invited: this.info.membership === Membership.Invited,
-            muted: false, // TODO
-            isUnsentMessage: false, // TODO
-        };
-    };
-
     hasVideoCall = (): boolean => {
-        return Boolean(this.info.hasRoomCall);
+        return Boolean(this.info?.hasRoomCall);
     };
 }
 
 class RoomListStore {
     running = false;
     rooms: Array<RoomListItem> = [];
+    numRooms = -1;
     listeners: Array<CallableFunction> = [];
     filter: SupportedFilters = RoomListEntriesDynamicFilterKind_Tags.NonLeft;
 
-    mutex: Mutex = new Mutex();
+    controller?: RoomListDynamicEntriesControllerInterface;
 
-    constructor(private readonly roomListService: RoomListServiceInterface) {
+    constructor(
+        private readonly syncServiceInterface: SyncServiceInterface,
+        private readonly roomListService: RoomListServiceInterface,
+    ) {
         console.log("RoomListStore constructed");
     }
 
-    private async parseRoom(room: RoomInterface): Promise<RoomListItem> {
-        const roomId = room.id();
-        const info = await room.roomInfo();
-
-        // console.trace("@@ room info", roomId, info);
-        const rli = new RoomListItem(RoomListEntry.Filled, roomId, info);
+    private parseRoom(room: RoomInterface): RoomListItem {
+        const rli = new RoomListItem(room);
         return rli;
     }
 
     onUpdate = async (updates: RoomListEntriesUpdate[]): Promise<void> => {
-        const release = await this.mutex.acquire();
-        this.rooms = await applyDiff(this.rooms, updates, this.parseRoom);
-        console.log("@@ roomListUpdated", this.rooms);
+        this.rooms = applyDiff(this.rooms, updates, this.parseRoom);
+        // console.log("@@ roomListUpdated", this.rooms);
+        for (const update of updates) {
+            console.log("~~update", update.tag, {
+                index: (update as any).inner?.index,
+                value: (update as any).inner?.value?.id(),
+                values: (update as any).inner?.values?.map((l: any) => l.id()),
+            });
+        }
         this.emit();
-        release();
     };
 
+    loadingState?: RoomListLoadingState;
+    onLoadingStateUpdate = (state: RoomListLoadingState) => {
+        this.loadingState = state;
+        if (
+            RoomListLoadingState.Loaded.instanceOf(state) &&
+            state.inner.maximumNumberOfRooms !== undefined
+        ) {
+            this.numRooms = state.inner.maximumNumberOfRooms;
+            this.emit();
+        }
+    };
+
+    roomListEntriesWithDynamicAdapters?: RoomListEntriesWithDynamicAdaptersResultInterface;
     run = () => {
         console.log("Running roomlist store with state", this.running);
 
@@ -121,26 +144,38 @@ class RoomListStore {
 
             this.running = true;
             const abortController = new AbortController();
-            const p = await this.roomListService.allRooms({
+            const roomListInterface = await this.roomListService.allRooms({
                 signal: abortController.signal,
             });
-            const v = p.entriesWithDynamicAdapters(30, this);
-            const controller = v.controller();
+            this.loadingState ||= roomListInterface.loadingState({
+                onUpdate: this.onLoadingStateUpdate,
+            }).state;
+            this.roomListEntriesWithDynamicAdapters ||=
+                roomListInterface.entriesWithDynamicAdapters(20, this);
+            this.controller =
+                this.roomListEntriesWithDynamicAdapters.controller();
             console.log("Apply filter", this.filter);
-            controller.setFilter(FILTERS[this.filter].method);
-            controller.addOnePage();
+            this.controller.setFilter(FILTERS[this.filter].method);
+            this.controller.addOnePage();
 
             this.emit();
-
-            // while (this.running) {
-            // 	// TODO
-            // }
-
-            // console.log("== releasing lock after roomlist subscription & polling");
-            // release();
-
-            // console.log("stopped polling");
         })();
+    };
+
+    snapshot?: {
+        rooms: RoomListItem[];
+        numRooms: number;
+    };
+    getSnapshot = (): {
+        rooms: RoomListItem[];
+        numRooms: number;
+    } => {
+        return this.snapshot!;
+    };
+
+    loadMore = (): void => {
+        console.log("Loading more rooms", this.loadingState?.tag);
+        this.controller?.addOnePage();
     };
 
     toggleFilter = (filter: SupportedFilters) => {
@@ -156,24 +191,18 @@ class RoomListStore {
         this.run();
     };
 
-    getSnapshot = (): RoomListItem[] => {
-        return this.rooms;
-    };
-
     subscribe = (listener: CallableFunction) => {
         this.listeners = [...this.listeners, listener];
         return () => {
-            console.log("unsubscribing roomlist");
-            (async () => {
-                // XXX: we should grab a mutex to avoid overlapping unsubscribes
-                // await invoke("unsubscribe_roomlist");
-                // this.running = false;
-            })();
             this.listeners = this.listeners.filter((l) => l !== listener);
         };
     };
 
     emit = () => {
+        this.snapshot = {
+            rooms: this.rooms,
+            numRooms: this.numRooms,
+        };
         for (const listener of this.listeners) {
             listener();
         }
