@@ -16,8 +16,8 @@ import {
 // import { E2EIconView } from "./common/E2EIconView";
 // import AvatarPresenceIconView from "./common/PresenceIconView";
 import BaseAvatar from "../BaseAvatar";
-import { MemberTileView } from "./common/MemberTileView";
 import { InvitedIconView } from "./common/InvitedIconView";
+import { MemberTileView } from "./common/MemberTileView";
 
 interface IProps {
     member: RoomMember;
@@ -67,10 +67,10 @@ export function RoomMemberTileView(props: IProps): JSX.Element {
             title={member.displayName}
             onClick={() => {}}
             avatarJsx={av}
-            presenceJsx={undefined}
             nameJsx={nameJSX}
             userLabel={member.userId}
             iconJsx={iconJsx}
+            role={member.suggestedRoleForPowerLevel}
         />
     );
 }

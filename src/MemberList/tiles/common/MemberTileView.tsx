@@ -6,26 +6,21 @@ Please see LICENSE files in the repository root for full details.
 */
 import "./MemberTileView.css";
 
-import type React from "react";
-import type { JSX } from "react";
+import React, { type JSX } from "react";
+import { RoomMemberRole } from "../../../generated/matrix_sdk";
 
 interface Props {
     avatarJsx: JSX.Element;
     nameJsx: JSX.Element | string;
     onClick: () => void;
     title?: string;
-    presenceJsx?: JSX.Element;
-    userLabel?: React.ReactNode;
+    userLabel: string;
     iconJsx?: JSX.Element;
+    role: RoomMemberRole;
 }
 
 export function MemberTileView(props: Props): JSX.Element {
-    let userLabelJsx: React.ReactNode;
-    if (props.userLabel) {
-        userLabelJsx = (
-            <div className="mx_MemberTileView_userLabel">{props.userLabel}</div>
-        );
-    }
+    const userRoleLabel = getUserRole(props.role);
 
     return (
         <div
@@ -35,14 +30,24 @@ export function MemberTileView(props: Props): JSX.Element {
         >
             <div className="mx_MemberTileView_left">
                 <div className="mx_MemberTileView_avatar">
-                    {props.avatarJsx} {props.presenceJsx}
+                    {props.avatarJsx}
                 </div>
                 <div className="mx_MemberTileView_name">{props.nameJsx}</div>
             </div>
-            <div className="mx_MemberTileView_right">
-                {userLabelJsx}
-                {props.iconJsx}
-            </div>
+            {userRoleLabel && (
+                <div className="mx_MemberTileView_right">{userRoleLabel}</div>
+            )}
         </div>
     );
+}
+
+function getUserRole(role: RoomMemberRole): string | null {
+    switch (role) {
+        case RoomMemberRole.Administrator:
+            return "Admin";
+        case RoomMemberRole.Moderator:
+            return "Moderator";
+        default:
+            return null;
+    }
 }

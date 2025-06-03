@@ -11,6 +11,7 @@
     flex: 0 0 var(--cpd-space-16x);
     gap: var(--cpd-space-6x);
     align-items: center;
+    box-sizing: border-box;
 }
 
 .mx_RoomHeader_avatar {

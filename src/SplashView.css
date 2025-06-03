@@ -5,8 +5,9 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-.mx_RoomListView {
-    height: 100%;
-    width: 300px;
-    flex: 1;
+.mx_Splash {
+    text-align: center;
+    align-content: center;
+    flex: 1 1 0;
+    opacity: 0.8;
 }

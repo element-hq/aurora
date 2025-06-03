@@ -2,6 +2,7 @@ html {
     height: 100%;
     overflow: hidden;
     background-color: var(--cpd-color-bg-canvas-default);
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
 }
 
 body {
@@ -236,21 +237,30 @@ body {
     display: flex;
     flex-direction: row;
     width: 100%;
-    border-top: 1px solid var(--cpd-color-border-interactive-primary);
+}
+
+.mx_Composer_wrapper {
+    border: 1px solid var(--cpd-color-border-interactive-secondary);
+    border-radius: var(--cpd-space-12x);
+    height: var(--cpd-space-12x);
+    margin: var(--cpd-space-4x);
+    display: flex;
+    flex-direction: column;    
+    flex: 1 1 auto;
+    justify-content: center;
 }
 
 #mx_Composer_textarea {
+    border: 0px;
+    font: var(--cpd-font-body-md-regular);
     background-color: var(--cpd-color-bg-canvas-default);
     color: var(--cpd-color-text-primary);
-    border: 0px;
-    font-size: 16px;
-    flex: 1 1 auto;
-    padding: var(--cpd-space-3x);
-    margin-top: var(--cpd-space-2x);
-    margin-bottom: var(--cpd-space-2x);
-    border-radius: 32px;
+    margin-left: var(--cpd-space-3x);
+    margin-right: var(--cpd-space-3x);
+    outline: none;
     resize: none;
 }
+
 #mx_Composer_textarea::placeholder {
     color: var(--cpd-color-text-secondary);
 }

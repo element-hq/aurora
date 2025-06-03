@@ -10,6 +10,7 @@
     border-bottom: 1px solid var(--cpd-color-bg-subtle-primary);
     flex: 0 0 var(--cpd-space-16x);
     align-items: center;
+    box-sizing: border-box;
 }
 
 .mx_RoomSearch_search {
