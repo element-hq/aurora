@@ -5,6 +5,7 @@ import {
 } from "react";
 import "./App.css";
 import type ClientStore from "./ClientStore.tsx";
+import { RoomListHeaderView } from "./RoomListHeaderView";
 import { RoomListFiltersView } from "./RoomListFiltersView";
 import type RoomListStore from "./RoomListStore.tsx";
 import { RoomListView } from "./RoomListView";
@@ -57,6 +58,7 @@ export const Client: React.FC<ClientProps> = ({ clientStore }) => {
                 <nav className="mx_RoomList">
                     {roomListStore ? (
                         <>
+                            <RoomListHeaderView />
                             <RoomListFiltersView store={roomListStore} />
                             <RoomListView
                                 vm={roomListStore}
