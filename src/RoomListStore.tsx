@@ -3,6 +3,7 @@ import {
     type EventTimelineItem,
     type RoomInfo,
     type RoomInterface,
+    RoomListEntriesDynamicFilterKind_Tags,
     type RoomListDynamicEntriesControllerInterface,
     RoomListEntriesDynamicFilterKind,
     type RoomListEntriesUpdate,
@@ -10,6 +11,8 @@ import {
     type RoomListServiceInterface,
     type SyncServiceInterface,
 } from "./index.web";
+
+import { FILTERS, type SupportedFilters } from "./Filter";
 
 interface Event {
     sender: string;
@@ -89,6 +92,7 @@ class RoomListStore {
     rooms: Array<RoomListItem> = [];
     numRooms = -1;
     listeners: Array<CallableFunction> = [];
+    filter: SupportedFilters = RoomListEntriesDynamicFilterKind_Tags.NonLeft;
 
     controller?: RoomListDynamicEntriesControllerInterface;
 
@@ -149,9 +153,9 @@ class RoomListStore {
             }).state;
             const v = roomListInterface.entriesWithDynamicAdapters(20, this);
             this.controller = v.controller();
-            this.controller.setFilter(
-                new RoomListEntriesDynamicFilterKind.NonLeft(),
-            );
+            console.log("Apply filter", this.filter);
+            this.controller.setFilter(FILTERS[this.filter].method);
+            this.controller.addOnePage();
 
             this.emit();
         })();
@@ -171,6 +175,19 @@ class RoomListStore {
     loadMore = (): void => {
         console.log("Loading more rooms", this.loadingState?.tag);
         this.controller?.addOnePage();
+    };
+
+    toggleFilter = (filter: SupportedFilters) => {
+        console.log("Toggling filter", filter, this.filter);
+        if (filter === this.filter) {
+            console.log("Filter is already set, resetting to 'All'");
+            this.filter = RoomListEntriesDynamicFilterKind_Tags.NonLeft;
+        } else {
+            console.log("Setting filter to", filter);
+            this.filter = filter;
+        }
+
+        this.run();
     };
 
     subscribe = (listener: CallableFunction) => {
