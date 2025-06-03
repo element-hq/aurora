@@ -4,10 +4,13 @@ import {
 	Membership,
 	type RoomInfo,
 	type RoomInterface,
-	RoomListEntriesDynamicFilterKind,
+	type RoomListEntriesDynamicFilterKind,
+	RoomListEntriesDynamicFilterKind_Tags,
 	type RoomListEntriesUpdate,
 	type RoomListServiceInterface,
 } from "./index.web";
+
+import { FILTERS } from "./Filter";
 
 export enum RoomListEntry {
 	Empty = 0,
@@ -82,6 +85,7 @@ class RoomListStore {
 	running = false;
 	rooms: Array<RoomListItem> = [];
 	listeners: Array<CallableFunction> = [];
+	filter = RoomListEntriesDynamicFilterKind_Tags.NonLeft;
 
 	mutex: Mutex = new Mutex();
 
@@ -183,7 +187,9 @@ class RoomListStore {
 			});
 			const v = p.entriesWithDynamicAdapters(100, this);
 			const controller = v.controller();
-			controller.setFilter(new RoomListEntriesDynamicFilterKind.NonLeft());
+
+			console.log("Apply filter", this.filter);
+			controller.setFilter(FILTERS[this.filter].method);
 			controller.addOnePage();
 
 			this.emit();
@@ -197,6 +203,19 @@ class RoomListStore {
 
 			// console.log("stopped polling");
 		})();
+	};
+
+	toggleFilter = (filter: RoomListEntriesDynamicFilterKind_Tags) => {
+		console.log("Toggling filter", filter, this.filter);
+		if (filter === this.filter) {
+			console.log("Filter is already set, resetting to 'All'");
+			this.filter = RoomListEntriesDynamicFilterKind_Tags.NonLeft;
+		} else {
+			console.log("Setting filter to", filter);
+			this.filter = filter;
+		}
+
+		this.run();
 	};
 
 	getSnapshot = (): RoomListItem[] => {

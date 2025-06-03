@@ -10,6 +10,7 @@ import { Avatar, Form, Glass, TooltipProvider } from "@vector-im/compound-web";
 import sanitizeHtml from "sanitize-html";
 import type ClientStore from "./ClientStore.tsx";
 import { ClientState } from "./ClientStore.tsx";
+import { RoomListFiltersView } from "./RoomListFiltersView";
 import type RoomListStore from "./RoomListStore.tsx";
 import { RoomListView } from "./RoomListView";
 import type TimelineStore from "./TimelineStore.tsx";
@@ -326,13 +327,16 @@ const Client: React.FC<ClientProps> = ({ clientStore }) => {
 			<section className="mx_Client">
 				<nav className="mx_RoomList">
 					{roomListStore ? (
-						<RoomListView
-							vm={roomListStore}
-							currentRoomId={currentRoomId}
-							onRoomSelected={(roomId) => {
-								setCurrentRoomId(roomId);
-							}}
-						/>
+						<>
+							<RoomListFiltersView store={roomListStore} />
+							<RoomListView
+								vm={roomListStore}
+								currentRoomId={currentRoomId}
+								onRoomSelected={(roomId) => {
+									setCurrentRoomId(roomId);
+								}}
+							/>
+						</>
 					) : null}
 				</nav>
 				{timelineStore ? (
