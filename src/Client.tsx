@@ -13,6 +13,7 @@ import { RoomListView } from "./RoomListView";
 import { RoomSearchView } from "./RoomSearchView";
 import { SidePanelView } from "./SidePanelView.tsx";
 import { Timeline } from "./Timeline.tsx";
+import { SplashView } from "./SplashView.tsx";
 import type TimelineStore from "./TimelineStore.tsx";
 
 console.log("running App.tsx");
@@ -91,7 +92,7 @@ export const Client: React.FC<ClientProps> = ({ clientStore }) => {
                         </main>
                         <MemberListView vm={memberListStore} />
                     </>
-                ) : null}
+                ) :  <SplashView />}
             </section>
         </>
     );
