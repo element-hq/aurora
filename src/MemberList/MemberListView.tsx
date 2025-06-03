@@ -6,9 +6,9 @@ import { AutoSizer } from "react-virtualized";
 
 import { Flex } from "../utils/Flex";
 import {
-  type MemberListStore,
+	type MemberListStore,
 	type MemberWithSeparator,
-  SEPARATOR,
+	SEPARATOR,
 } from "./MemberListStore";
 import { RoomMemberTileView } from "./tiles/RoomMemberTileView";
 import { MemberListHeaderView } from "./MemberListHeaderView";
@@ -16,11 +16,11 @@ import BaseCard from "./BaseCard";
 import "./MemberList.css";
 
 interface IProps {
-  vm: MemberListStore;
+	vm: MemberListStore;
 }
 
 const MemberListView: React.FC<IProps> = (props: IProps) => {
-  const { vm } = props
+	const { vm } = props;
 
 	const totalRows = vm.members.length;
 
@@ -30,10 +30,7 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
 			// } else if (item.member) {
 		}
 		return (
-			<RoomMemberTileView
-				member={item}
-				showPresence={vm.isPresenceEnabled()}
-			/>
+			<RoomMemberTileView member={item} showPresence={vm.isPresenceEnabled()} />
 		);
 		// }
 		// } else {

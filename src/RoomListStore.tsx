@@ -1,6 +1,7 @@
 import { Mutex } from "async-mutex";
 import {
 	type ClientInterface,
+	Membership,
 	type RoomInfo,
 	type RoomInterface,
 	RoomListEntriesDynamicFilterKind,
@@ -14,18 +15,6 @@ export enum RoomListEntry {
 	Filled = 2,
 }
 
-interface ReadReceipts {
-	num_mentions: number;
-	num_notifications: number;
-	num_unread: number;
-	pending: string[];
-}
-
-interface NotificationCounts {
-	highlight_count: number;
-	notification_count: number;
-}
-
 interface Event {
 	sender: string;
 	type: string;
@@ -34,6 +23,17 @@ interface Event {
 		body?: string;
 		msgtype?: string;
 	};
+}
+
+export interface NotificationState {
+	hasAnyNotificationOrActivity: boolean;
+	isUnsentMessage: boolean;
+	invited: boolean;
+	isMention: boolean;
+	isActivityNotification: boolean;
+	isNotification: boolean;
+	count: number;
+	muted: boolean;
 }
 
 export class RoomListItem {
@@ -55,17 +55,26 @@ export class RoomListItem {
 		return this.info?.avatarUrl;
 	};
 
-	// getReadReceipts = (): ReadReceipts => {
-	// 	return this.info?.read_receipts;
-	// };
-	//
-	// getNotificationCounts = (): NotificationCounts => {
-	// 	return this.info?.notification_counts;
-	// };
-
 	getLatestEvent = (): Event | undefined => {
 		return undefined;
 		// return this.info?.latest_event?.event?.event;
+	};
+
+	getNotifications = (): NotificationState => {
+		return {
+			count: Number(this.info.notificationCount),
+			isMention: Number(this.info.numUnreadMentions) > 0,
+			isNotification: Number(this.info.numUnreadNotifications) > 0,
+			isActivityNotification: Number(this.info.numUnreadMessages) > 0,
+			hasAnyNotificationOrActivity: Number(this.info.notificationCount) > 0,
+			invited: this.info.membership === Membership.Invited,
+			muted: false, // TODO
+			isUnsentMessage: false, // TODO
+		};
+	};
+
+	hasVideoCall = (): boolean => {
+		return Boolean(this.info.hasRoomCall);
 	};
 }
 
@@ -95,6 +104,8 @@ class RoomListStore {
 	onUpdate = async (
 		roomEntriesUpdate: RoomListEntriesUpdate[],
 	): Promise<void> => {
+		const release = await this.mutex.acquire();
+
 		let rooms = [...this.rooms];
 
 		for (const update of roomEntriesUpdate) {
@@ -153,16 +164,16 @@ class RoomListStore {
 		// console.log("@@ roomListUpdated", rooms);
 		this.rooms = rooms;
 		this.emit();
+		release();
 	};
 
 	run = () => {
 		console.log("Running roomlist store with state", this.running);
 
 		(async () => {
-			console.log("=> acquiring lock while subscribing to roomlist");
-			const release = await this.mutex.acquire();
-			console.log("<= got lock while subscribing to roomlist");
-			if (this.running) console.warn("got RLS lock while RLS already running");
+			// console.log("=> acquiring lock while subscribing to roomlist");
+			// console.log("<= got lock while subscribing to roomlist");
+			// if (this.running) console.warn("got RLS lock while RLS already running");
 			console.log("subscribing to roomlist");
 
 			this.running = true;

@@ -35,7 +35,7 @@ const OptionalTooltip: React.FC<TooltipProps> = ({ canInvite, children }) => {
 };
 
 interface Props {
-  vm: MemberListStore;
+	vm: MemberListStore;
 }
 
 const InviteButton: React.FC<Props> = ({ vm }) => {

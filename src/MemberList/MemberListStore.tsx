@@ -41,16 +41,15 @@ export class MemberListStore {
 	public shouldShowSearch = true;
 	public isLoading = false;
 	public canInvite = false;
-	
-	public onInviteButtonClick = (ev: ButtonEvent) => {
-	};
+
+	public onInviteButtonClick = (ev: ButtonEvent) => {};
 
 	public constructor(roomId: string, client: ClientInterface) {
 		if (!roomId || !client) {
 			console.error("roomId and client are required");
 			return;
 		}
-		
+
 		console.log("MemberListStore constructor", roomId);
 		this.roomId = roomId;
 		this.client = client;
@@ -58,11 +57,9 @@ export class MemberListStore {
 		this.createMemberListWithSeperator();
 	}
 
-	private async createMemberListWithSeperator () {
+	private async createMemberListWithSeperator() {
 		const { joined: joinedSdk, invited: invitedSdk } =
-			await this.loadMemberList(
-				this.roomId
-			);
+			await this.loadMemberList(this.roomId);
 
 		console.log("members", joinedSdk, invitedSdk);
 		const newMemberMap = new Map<string, MemberWithSeparator>();
@@ -73,7 +70,7 @@ export class MemberListStore {
 		}
 
 		// Then a separator if needed
-		if ( joinedSdk.length > 0 && invitedSdk.length > 0 ) {
+		if (joinedSdk.length > 0 && invitedSdk.length > 0) {
 			newMemberMap.set(SEPARATOR, SEPARATOR);
 		}
 
@@ -81,7 +78,6 @@ export class MemberListStore {
 		for (const member of invitedSdk) {
 			newMemberMap.set(member.userId, member);
 		}
-
 
 		this.setMemberMap(newMemberMap);
 		this.setMemberCount(joinedSdk.length + invitedSdk.length);
@@ -240,7 +236,6 @@ export class MemberListStore {
 		if (!userA && !userB) return 0;
 		if (userA && !userB) return -1;
 		if (!userA && userB) return 1;
-
 
 		// Second by power level
 		if (memberA.powerLevel !== memberB.powerLevel) {
