@@ -35,7 +35,6 @@ export function RoomListView({
     return (
         <div className="mx_RoomList">
             <Virtuoso
-                style={{ height: "100%" }}
                 data={rooms}
                 endReached={vm.loadMore}
                 increaseViewportBy={200}

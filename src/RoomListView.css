@@ -8,4 +8,5 @@
 .mx_RoomList {
     height: 100%;
     width: 300px;
+    flex: 1;
 }
