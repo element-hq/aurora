@@ -109,15 +109,17 @@ export const RoomListItemView = memo(function RoomListItemView({
 
 function useRoomListItemViewModel(room: RoomListItem) {
     const info = useSyncExternalStore(room.subscribe, room.getSnapshot);
+    const isNotification = Number(info?.numUnreadMessages) > 0;
+
     const notificationState = {
-        count: Number(info?.notificationCount),
         isMention: Number(info?.numUnreadMentions) > 0,
-        isNotification: Number(info?.numUnreadNotifications) > 0,
-        isActivityNotification: Number(info?.numUnreadMessages) > 0,
-        hasAnyNotificationOrActivity: Number(info?.notificationCount) > 0,
+        isNotification,
+        isActivityNotification:
+            Number(info?.numUnreadNotifications) > 0 && !isNotification,
+        hasAnyNotificationOrActivity:
+            Number(info?.numUnreadNotifications) > 0,
         invited: info?.membership === Membership.Invited,
-        muted: false, // TODO
-        isUnsentMessage: false, // TODO
+
     };
     const avatar = room.getAvatar();
     return {
