@@ -5,20 +5,21 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { type HTMLProps, type JSX } from "react";
-import MentionIcon from "@vector-im/compound-design-tokens/assets/web/icons/mention";
+import EmailIcon from "@vector-im/compound-design-tokens/assets/web/icons/email-solid";
 import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error-solid";
+import MentionIcon from "@vector-im/compound-design-tokens/assets/web/icons/mention";
 import NotificationOffIcon from "@vector-im/compound-design-tokens/assets/web/icons/notifications-off-solid";
 import VideoCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/video-call-solid";
-import EmailIcon from "@vector-im/compound-design-tokens/assets/web/icons/email-solid";
-import { UnreadCounter, Unread } from "@vector-im/compound-web";
+import { Unread, UnreadCounter } from "@vector-im/compound-web";
+import type { HTMLProps, JSX } from "react";
 
+import type { NotificationState } from "./RoomListStore";
 import { Flex } from "./utils/Flex";
 interface NotificationDecorationProps extends HTMLProps<HTMLDivElement> {
 	/**
 	 * The notification state of the room or thread.
 	 */
-	notificationState: any;
+	notificationState: NotificationState;
 	/**
 	 * Whether the room has a video call.
 	 */
@@ -43,23 +44,7 @@ export function NotificationDecoration({
 		isNotification,
 		count,
 		muted,
-	} = {} as any;
-
-	//     useTypedEventEmitterState(
-	// 	notificationState,
-	// 	NotificationStateEvents.Update,
-	// 	() => ({
-	// 		hasAnyNotificationOrActivity:
-	// 			notificationState.hasAnyNotificationOrActivity,
-	// 		isUnsentMessage: notificationState.isUnsentMessage,
-	// 		invited: notificationState.invited,
-	// 		isMention: notificationState.isMention,
-	// 		isActivityNotification: notificationState.isActivityNotification,
-	// 		isNotification: notificationState.isNotification,
-	// 		count: notificationState.count,
-	// 		muted: notificationState.muted,
-	// 	}),
-	// );
+	} = notificationState;
 
 	if (!hasAnyNotificationOrActivity && !muted && !hasVideoCall) return null;
 
