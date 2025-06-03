@@ -1,8 +1,5 @@
 import type React from "react";
-import {
-    useEffect,
-    useState,
-} from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import type ClientStore from "./ClientStore.tsx";
 import { RoomListFiltersView } from "./RoomListFiltersView";

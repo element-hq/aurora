@@ -1,13 +1,9 @@
 import type React from "react";
-import {
-    useSyncExternalStore,
-} from "react";
+import { useSyncExternalStore } from "react";
 import "./App.css";
 import type ClientStore from "./ClientStore.tsx";
 import { ClientState } from "./ClientStore.tsx";
-import {
-    MembershipChange,
-} from "./index.web.ts";
+import { MembershipChange } from "./index.web.ts";
 import { Login } from "./Login.tsx";
 import { Client } from "./Client.tsx";
 
@@ -26,7 +22,7 @@ export const App: React.FC<AppProps> = ({ clientStore }) => {
     return (
         <div className="mx_App cpd-theme-dark">
             {clientState == ClientState.Unknown ? null : clientState ==
-                ClientState.LoggedIn ? (
+              ClientState.LoggedIn ? (
                 <Client clientStore={clientStore} />
             ) : (
                 <Login clientStore={clientStore} />
@@ -37,7 +33,9 @@ export const App: React.FC<AppProps> = ({ clientStore }) => {
 
 export default App;
 
-export function getChangeDescription(membershipChange: MembershipChange): string {
+export function getChangeDescription(
+    membershipChange: MembershipChange,
+): string {
     switch (membershipChange) {
         case MembershipChange.None:
             return "did nothing";

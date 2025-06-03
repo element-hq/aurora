@@ -3,10 +3,12 @@ import {
     type EventTimelineItem,
     type RoomInfo,
     type RoomInterface,
-    RoomListEntriesDynamicFilterKind_Tags,
     type RoomListDynamicEntriesControllerInterface,
     RoomListEntriesDynamicFilterKind,
+    RoomListEntriesDynamicFilterKind_Tags,
     type RoomListEntriesUpdate,
+    RoomListEntriesWithDynamicAdaptersResult,
+    type RoomListEntriesWithDynamicAdaptersResultInterface,
     RoomListLoadingState,
     type RoomListServiceInterface,
     type SyncServiceInterface,
@@ -113,9 +115,9 @@ class RoomListStore {
         // console.log("@@ roomListUpdated", this.rooms);
         for (const update of updates) {
             console.log("~~update", update.tag, {
-                index: update.inner?.index,
-                value: update.inner?.value?.id(),
-                values: update.inner?.values?.map((l) => l.id()),
+                index: (update as any).inner?.index,
+                value: (update as any).inner?.value?.id(),
+                values: (update as any).inner?.values?.map((l: any) => l.id()),
             });
         }
         this.emit();
@@ -133,8 +135,8 @@ class RoomListStore {
         }
     };
 
+    roomListEntriesWithDynamicAdapters?: RoomListEntriesWithDynamicAdaptersResultInterface;
     run = () => {
-        if (this.running) return;
         console.log("Running roomlist store with state", this.running);
 
         (async () => {
@@ -148,11 +150,13 @@ class RoomListStore {
             const roomListInterface = await this.roomListService.allRooms({
                 signal: abortController.signal,
             });
-            this.loadingState = roomListInterface.loadingState({
+            this.loadingState ||= roomListInterface.loadingState({
                 onUpdate: this.onLoadingStateUpdate,
             }).state;
-            const v = roomListInterface.entriesWithDynamicAdapters(20, this);
-            this.controller = v.controller();
+            this.roomListEntriesWithDynamicAdapters ||=
+                roomListInterface.entriesWithDynamicAdapters(20, this);
+            this.controller =
+                this.roomListEntriesWithDynamicAdapters.controller();
             console.log("Apply filter", this.filter);
             this.controller.setFilter(FILTERS[this.filter].method);
             this.controller.addOnePage();
