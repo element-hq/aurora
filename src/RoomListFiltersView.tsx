@@ -9,7 +9,7 @@ import { ChatFilter } from "@vector-im/compound-web";
 import React, { type JSX } from "react";
 import "./RoomListFiltersView.css";
 
-import { FILTERS } from "./Filter";
+import { FILTERS, type SupportedFilters } from "./Filter";
 import type RoomListStore from "./RoomListStore";
 import { RoomListEntriesDynamicFilterKind_Tags } from "./generated/matrix_sdk_ffi";
 import { Flex } from "./utils/Flex";
@@ -64,10 +64,7 @@ function useRoomListViewModel(store: RoomListStore) {
                 return {
                     active: key === store.filter,
                     name: value.name,
-                    toggle: () =>
-                        store.toggleFilter(
-                            key as RoomListEntriesDynamicFilterKind_Tags,
-                        ),
+                    toggle: () => store.toggleFilter(key as SupportedFilters),
                 };
             }),
     };
