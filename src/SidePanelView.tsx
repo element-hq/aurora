@@ -6,12 +6,13 @@
  */
 
 import "./SidePanelView.css";
-import type { JSX } from "react";
+import React, { type JSX, useEffect, useState } from "react";
 
 import ChatIcon from "@vector-im/compound-design-tokens/assets/web/icons/chat";
 import LeaveIcon from "@vector-im/compound-design-tokens/assets/web/icons/leave";
 import SettingsIcon from "@vector-im/compound-design-tokens/assets/web/icons/settings";
 import type ClientStore from "./ClientStore.tsx";
+import BaseAvatar from "./MemberList/BaseAvatar";
 
 type SidePanelViewProps = {
     clientStore: ClientStore;
@@ -25,12 +26,35 @@ function onSettingsClick() {
     // TODO
 }
 
+function mxcToUrl(mxcUrl: string): string {
+    return `${mxcUrl.replace(
+        /^mxc:\/\//,
+        "https://matrix.org/_matrix/media/v3/thumbnail/",
+    )}?width=48&height=48`;
+}
+
 export function SidePanelView({
     clientStore,
 }: SidePanelViewProps): JSX.Element {
+    const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+
+    useEffect(() => {
+        clientStore.client?.avatarUrl()?.then((avatarUrl) => {
+            avatarUrl ? setAvatarUrl(mxcToUrl(avatarUrl)) : setAvatarUrl(null);
+        });
+    }, [clientStore]);
+
     return (
         <>
-            <button className="mx_SidePanel_avatar" type="button" />
+            <BaseAvatar
+                className="mx_SidePanel_avatar"
+                size="32px"
+                name={clientStore.client?.userId()}
+                idName={clientStore.client?.userId()}
+                title={clientStore.client?.userId()}
+                url={avatarUrl}
+                altText={"User"}
+            />
             <button
                 className="mx_SidePanel_icon mx_SidePanel_icon_selected"
                 onClick={() => onSpaceClick()}

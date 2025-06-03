@@ -14,15 +14,6 @@
     flex-direction: column;
 }
 
-.mx_SidePanel_avatar {
-    cursor: pointer;
-    border: 0px;
-    width: var(--cpd-space-8x);
-    height: var(--cpd-space-8x);
-    border-radius: var(--cpd-space-8x);
-    background-color: var(--cpd-color-text-decorative-3);
-}
-
 .mx_SidePanel_avatar,
 .mx_SidePanel_icon {
     margin: var(--cpd-space-4x);
