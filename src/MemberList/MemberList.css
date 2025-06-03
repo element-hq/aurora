@@ -1,18 +1,20 @@
 .mx_MemberListView {
-	flex: 1;
-	display: flex;
-	flex-direction: column;
-	min-height: 0;
-	max-width: 300px;
-	min-width: 300px;
+    margin-left: auto;
+    margin-right: 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    max-width: 300px;
+    min-width: 300px;
 
-	.mx_MemberListView_container {
-		height: 100%;
-	}
+    .mx_MemberListView_container {
+        height: 100%;
+    }
 
-	.mx_MemberListView_separator {
-		margin: 0;
-		border: none;
-		border-top: 2px solid var(--cpd-color-bg-subtle-primary);
-	}
+    .mx_MemberListView_separator {
+        margin: 0;
+        border: none;
+        border-top: 2px solid var(--cpd-color-bg-subtle-primary);
+    }
 }
