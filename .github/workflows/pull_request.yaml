@@ -18,6 +18,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           deploy-message: "Deploy from GitHub Actions"
           enable-pull-request-comment: false
+          enable-commit-comment: false
           production-deploy: false
           github-deployment-environment: Netlify
           github-deployment-description: Preview build
