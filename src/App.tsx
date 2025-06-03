@@ -11,7 +11,6 @@ import sanitizeHtml from "sanitize-html";
 import type ClientStore from "./ClientStore.tsx";
 import { ClientState } from "./ClientStore.tsx";
 import type RoomListStore from "./RoomListStore.tsx";
-import { RoomListEntry, type RoomListItem } from "./RoomListStore.tsx";
 import { RoomListView } from "./RoomListView";
 import type TimelineStore from "./TimelineStore.tsx";
 import {
@@ -27,7 +26,6 @@ import {
 	type VirtualTimelineItem,
 	VirtualTimelineItemInnerType,
 } from "./TimelineStore.tsx";
-import { RoomInterface } from "./index.web.ts";
 
 console.log("running App.tsx");
 
@@ -250,77 +248,6 @@ const Timeline: React.FC<TimelineProps> = ({ timelineStore: timeline }) => {
 				))}
 			</ol>
 		</div>
-	);
-};
-
-interface RoomTileProp {
-	room: RoomListItem;
-}
-
-const RoomTile: React.FC<RoomTileProp> = ({ room }) => {
-	let preview;
-	if (room.getLatestEvent()?.content?.body) {
-		preview = `${room.getLatestEvent()?.content?.body}`;
-	}
-	return (
-		<div className="mx_RoomTile">
-			{room.entry !== RoomListEntry.Empty ? (
-				<>
-					<Avatar
-						className="mx_RoomTile_avatar"
-						id={room.roomId}
-						name={room.getName()}
-						src={room.getAvatar() ? mxcToUrl(room.getAvatar()) : ""}
-						size="26px"
-					/>
-					<div className="mx_RoomTile_name" title={room.getName()}>
-						{room.getName()}
-					</div>
-					<div className="mx_RoomTile_preview" title={preview}>
-						{preview ? preview : <>&nbsp;</>}
-					</div>
-				</>
-			) : (
-				" "
-			)}
-		</div>
-	);
-};
-
-interface RoomListProps {
-	roomListStore: RoomListStore;
-	selectedRoomId: string;
-	setRoom: (roomId: string) => void;
-}
-
-const RoomList: React.FC<RoomListProps> = ({
-	roomListStore: roomList,
-	selectedRoomId,
-	setRoom,
-}) => {
-	const rooms: RoomListItem[] = useSyncExternalStore(
-		roomList.subscribe,
-		roomList.getSnapshot,
-	);
-
-	return (
-		<ol start={0}>
-			{rooms.map((r: RoomListItem) => {
-				return (
-					<li
-						key={r.roomId}
-						className={
-							r.roomId === selectedRoomId ? "mx_RoomTile_selected" : ""
-						}
-						onClick={() => {
-							if (r.roomId) setRoom(r.roomId);
-						}}
-					>
-						<RoomTile room={r} />
-					</li>
-				);
-			})}
-		</ol>
 	);
 };
 
