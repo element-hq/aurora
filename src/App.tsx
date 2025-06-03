@@ -26,15 +26,10 @@ import {
 	MembershipChange,
 	MessageFormat_Tags,
 	MessageType,
-	MessageType_Tags,
 	MsgLikeKind,
-	MsgLikeKind_Tags,
 	ProfileDetails,
-	ProfileDetails_Tags,
 	TimelineItemContent,
-	TimelineItemContent_Tags,
 	VirtualTimelineItem,
-	VirtualTimelineItem_Tags,
 } from "./index.web.ts";
 
 console.log("running App.tsx");
