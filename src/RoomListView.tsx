@@ -7,7 +7,7 @@
 
 import "./RoomListView.css";
 import { type JSX, useCallback, useSyncExternalStore } from "react";
-import { AutoSizer, List, type ListRowProps } from "react-virtualized";
+import { Virtuoso } from "react-virtuoso";
 import { RoomListItemView } from "./RoomListItemView";
 import type RoomListStore from "./RoomListStore";
 import type { RoomListItem } from "./RoomListStore";
@@ -26,41 +26,53 @@ export function RoomListView({
     onRoomSelected,
     currentRoomId,
 }: RoomListViewProps): JSX.Element {
-    const rooms: RoomListItem[] = useSyncExternalStore(
+    const { rooms, numRooms } = useSyncExternalStore(
         vm.subscribe,
         vm.getSnapshot,
-    );
-
-    const roomRendererMemoized = useCallback(
-        ({ key, index, style }: ListRowProps) =>
-            rooms[index] ? (
-                <RoomListItemView
-                    room={rooms[index]}
-                    key={key}
-                    style={style}
-                    isSelected={currentRoomId === rooms[index].roomId}
-                    onClick={() => onRoomSelected(rooms[index].roomId)}
-                />
-            ) : null,
-        [rooms, currentRoomId, onRoomSelected],
     );
 
     // The first div is needed to make the virtualized list take all the remaining space and scroll correctly
     return (
         <div className="mx_RoomList">
-            <AutoSizer>
-                {({ height, width }) => (
-                    <List
-                        className="mx_RoomList_List"
-                        rowRenderer={roomRendererMemoized}
-                        rowCount={rooms.length}
-                        rowHeight={48}
-                        height={height}
-                        width={width}
-                        tabIndex={-1}
-                    />
-                )}
-            </AutoSizer>
+            <Virtuoso
+                style={{ height: "100%" }}
+                data={rooms}
+                endReached={vm.loadMore}
+                increaseViewportBy={200}
+                totalCount={numRooms >= 0 ? numRooms : undefined}
+                fixedItemHeight={48}
+                context={{ currentRoomId, onRoomSelected }}
+                itemContent={(
+                    index,
+                    room,
+                    { currentRoomId, onRoomSelected },
+                ) => {
+                    return (
+                        <RoomListItemView
+                            room={room}
+                            isSelected={currentRoomId === room.roomId}
+                            onClick={() => onRoomSelected(room.roomId)}
+                        />
+                    );
+                }}
+                components={{
+                    Footer: numRooms > rooms.length ? Footer : undefined,
+                }}
+            />
         </div>
     );
 }
+
+const Footer = () => {
+    return (
+        <div
+            style={{
+                padding: "2rem",
+                display: "flex",
+                justifyContent: "center",
+            }}
+        >
+            Loading...
+        </div>
+    );
+};

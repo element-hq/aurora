@@ -7,12 +7,19 @@
 
 import classNames from "classnames";
 import type React from "react";
+import { useSyncExternalStore } from "react";
 import { type JSX, memo } from "react";
 import "./RoomListItemView.css";
 
 import { Avatar } from "@vector-im/compound-web";
 import { NotificationDecoration } from "./NotificationDecoration";
 import type { RoomListItem } from "./RoomListStore";
+import {
+    Membership,
+    MsgLikeContent,
+    MsgLikeKind,
+    TimelineItemContent,
+} from "./generated/matrix_sdk_ffi.ts";
 import { Flex } from "./utils/Flex";
 
 function mxcToUrl(mxcUrl: string): string {
@@ -101,7 +108,17 @@ export const RoomListItemView = memo(function RoomListItemView({
 });
 
 function useRoomListItemViewModel(room: RoomListItem) {
-    const notificationState = room.getNotifications();
+    const info = useSyncExternalStore(room.subscribe, room.getSnapshot);
+    const notificationState = {
+        count: Number(info?.notificationCount),
+        isMention: Number(info?.numUnreadMentions) > 0,
+        isNotification: Number(info?.numUnreadNotifications) > 0,
+        isActivityNotification: Number(info?.numUnreadMessages) > 0,
+        hasAnyNotificationOrActivity: Number(info?.notificationCount) > 0,
+        invited: info?.membership === Membership.Invited,
+        muted: false, // TODO
+        isUnsentMessage: false, // TODO
+    };
     const avatar = room.getAvatar();
     return {
         name: room.getName() || "placeholder name",
@@ -110,7 +127,14 @@ function useRoomListItemViewModel(room: RoomListItem) {
             notificationState.hasAnyNotificationOrActivity,
         notificationState,
         hasParticipantInCall: room.hasVideoCall(),
-        messagePreview: "",
+        messagePreview:
+            room.latestEvent &&
+            TimelineItemContent.MsgLike.instanceOf(room.latestEvent.content) &&
+            MsgLikeKind.Message.instanceOf(
+                room.latestEvent.content.inner.content.kind,
+            )
+                ? room.latestEvent.content.inner.content.kind.inner.content.body
+                : undefined,
         isBold: notificationState.hasAnyNotificationOrActivity,
     };
 }
