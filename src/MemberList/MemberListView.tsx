@@ -1,9 +1,8 @@
 import { Form, TooltipProvider } from "@vector-im/compound-web";
 import type React from "react";
 import { useSyncExternalStore } from "react";
-import { type JSX, useEffect, useState } from "react";
-import { AutoSizer } from "react-virtualized";
-import { List, type ListRowProps } from "react-virtualized/dist/commonjs/List";
+import { type JSX } from "react";
+import { Virtuoso } from "react-virtuoso";
 
 import { Flex } from "../utils/Flex";
 import BaseCard from "./BaseCard";
@@ -66,16 +65,31 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
         }
     };
 
-    const rowRenderer = ({ key, index, style }: ListRowProps): JSX.Element => {
+    const rowRenderer = ({
+        index,
+        data,
+    }: { index: number; data: MemberWithSeparator }): JSX.Element => {
         if (index === memberCount) {
             // We've rendered all the members,
             // now we render an empty div to add some space to the end of the list.
-            return <div key={key} style={style} />;
+            return (
+                <div
+                    key={`key_${index}_spacer`}
+                    style={{ height: getRowHeight({ index }) }}
+                />
+            );
         }
-        const item = members[index];
+
         return (
-            <div key={key} style={style}>
-                {getRowComponent(item)}
+            <div
+                key={
+                    data === SEPARATOR
+                        ? "separator"
+                        : `key_${index}_${data.displayName ?? "separator"}`
+                }
+                style={{ height: getRowHeight({ index }) }}
+            >
+                {getRowComponent(data)}
             </div>
         );
     };
@@ -98,20 +112,13 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
                     <Form.Root>
                         <MemberListHeaderView vm={vm} />
                     </Form.Root>
-                    <AutoSizer>
-                        {({ height, width }) => (
-                            <List
-                                rowRenderer={rowRenderer}
-                                rowHeight={getRowHeight}
-                                // The +1 refers to the additional empty div that we render at the end of the list.
-                                rowCount={memberCount + 1}
-                                // Subtract the height of MemberlistHeaderView so that the parent div does not overflow.
-                                height={height - 113}
-                                width={width}
-                                overscanRowCount={15}
-                            />
-                        )}
-                    </AutoSizer>
+                    <Virtuoso
+                        totalCount={memberCount}
+                        data={members}
+                        itemContent={(index, data) =>
+                            rowRenderer({ index, data })
+                        }
+                    />
                 </Flex>
             </BaseCard>
         </TooltipProvider>
