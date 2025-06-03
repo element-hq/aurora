@@ -23,7 +23,8 @@
     background-color: var(--cpd-color-text-decorative-3);
 }
 
-.mx_SidePanel_avatar, .mx_SidePanel_icon {
+.mx_SidePanel_avatar,
+.mx_SidePanel_icon {
     margin: var(--cpd-space-4x);
 }
 
@@ -52,6 +53,7 @@
 
 .mx_SidePanel_bottom {
     display: flex;
-    flex: 1 1 0;
+    margin-top: auto;
     align-items: end;
+    flex-direction: column;
 }
