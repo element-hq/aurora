@@ -235,6 +235,7 @@ body {
     display: flex;
     flex-direction: row;
     width: 100%;
+    border-top: 1px solid var(--cpd-color-border-interactive-primary)
 }
 
 #mx_Composer_textarea {
@@ -248,6 +249,9 @@ body {
     margin-bottom: var(--cpd-space-2x);
     border-radius: 32px;
     resize: none;
+}
+#mx_Composer_textarea::placeholder {
+    color: var(--cpd-color-text-secondary);
 }
 
 #mx_Composer_send {
