@@ -21,25 +21,25 @@ import initAsync from "./generated/wasm-bindgen/index.js";
 import wasmPath from "./generated/wasm-bindgen/index_bg.wasm?url";
 
 export async function uniffiInitAsync() {
-	await initAsync({ module_or_path: wasmPath });
+    await initAsync({ module_or_path: wasmPath });
 
-	// Initialize the generated bindings: mostly checksums, but also callbacks.
-	// - the boolean flag ensures this loads exactly once, even if the JS code
-	//   is reloaded (e.g. during development with metro).
-	matrix_sdk.default.initialize();
-	matrix_sdk_base.default.initialize();
-	matrix_sdk_common.default.initialize();
-	matrix_sdk_crypto.default.initialize();
-	matrix_sdk_ffi.default.initialize();
-	matrix_sdk_ui.default.initialize();
+    // Initialize the generated bindings: mostly checksums, but also callbacks.
+    // - the boolean flag ensures this loads exactly once, even if the JS code
+    //   is reloaded (e.g. during development with metro).
+    matrix_sdk.default.initialize();
+    matrix_sdk_base.default.initialize();
+    matrix_sdk_common.default.initialize();
+    matrix_sdk_crypto.default.initialize();
+    matrix_sdk_ffi.default.initialize();
+    matrix_sdk_ui.default.initialize();
 }
 
 // Export the crates as individually namespaced objects.
 export default {
-	matrix_sdk,
-	matrix_sdk_base,
-	matrix_sdk_common,
-	matrix_sdk_crypto,
-	matrix_sdk_ffi,
-	matrix_sdk_ui,
+    matrix_sdk,
+    matrix_sdk_base,
+    matrix_sdk_common,
+    matrix_sdk_crypto,
+    matrix_sdk_ffi,
+    matrix_sdk_ui,
 };

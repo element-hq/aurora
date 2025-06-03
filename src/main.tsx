@@ -12,7 +12,7 @@ const clientStore = new ClientStore();
 // clientStore.login({ username: "", password: "", server: "https://matrix.org" });
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-	<React.StrictMode>
-		<App clientStore={clientStore} />
-	</React.StrictMode>,
+    <React.StrictMode>
+        <App clientStore={clientStore} />
+    </React.StrictMode>,
 );
