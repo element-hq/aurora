@@ -207,6 +207,10 @@ class RoomListStore {
             listener();
         }
     };
+
+    isAllFilter = (): boolean => {
+        return this.filter === RoomListEntriesDynamicFilterKind_Tags.NonLeft;
+    };
 }
 
 export default RoomListStore;
