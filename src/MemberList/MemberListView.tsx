@@ -46,7 +46,7 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
 	};
 
 	const getRowHeight = ({ index }: { index: number }): number => {
-		if (vm.members[index] === SEPARATOR) {
+		if (members[index] === SEPARATOR) {
 			/**
 			 * This is a separator of 2px height rendered between
 			 * joined and invited members.
@@ -72,7 +72,7 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
 			// now we render an empty div to add some space to the end of the list.
 			return <div key={key} style={style} />;
 		}
-		const item = vm.members[index];
+		const item = members[index];
 		return (
 			<div key={key} style={style}>
 				{getRowComponent(item)}

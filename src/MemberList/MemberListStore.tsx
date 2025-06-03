@@ -9,11 +9,9 @@ Please see LICENSE files in the repository root for full details.
 import {
 	type ClientInterface,
 	MembershipState_Tags,
-	type RoomInterface,
 	type RoomMember,
-	RoomMembersIteratorInterface,
 } from "../index.web";
-import { ButtonEvent } from "../utils/ButtonEvent";
+import type { ButtonEvent } from "../utils/ButtonEvent";
 
 // Regex applied to filter our punctuation in member names before applying sort, to fuzzy it a little
 // matches all ASCII punctuation: !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
@@ -234,7 +232,7 @@ export class MemberListStore {
 		this.memberCount = count;
 	}
 
-	private search(query: string) {
+	public search(query: string) {
 		const filteredMembers = this.members.filter((m) => {
 			return m.displayName?.toLowerCase().includes(query.toLowerCase());
 		});

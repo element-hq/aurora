@@ -13,53 +13,54 @@ import type RoomListStore from "./RoomListStore";
 import type { RoomListItem } from "./RoomListStore";
 
 type RoomListViewProps = {
-	vm: RoomListStore;
-	onRoomSelected: (roomId: string) => void;
-	currentRoomId: string;
+    vm: RoomListStore;
+    onRoomSelected: (roomId: string) => void;
+    currentRoomId: string;
 };
 
 /**
  * A virtualized list of rooms.
  */
 export function RoomListView({
-	vm,
-	onRoomSelected,
-	currentRoomId,
+    vm,
+    onRoomSelected,
+    currentRoomId,
 }: RoomListViewProps): JSX.Element {
-	const rooms: RoomListItem[] = useSyncExternalStore(
-		vm.subscribe,
-		vm.getSnapshot,
-	);
+    const rooms: RoomListItem[] = useSyncExternalStore(
+        vm.subscribe,
+        vm.getSnapshot,
+    );
 
-	const roomRendererMemoized = useCallback(
-		({ key, index, style }: ListRowProps) => (
-			<RoomListItemView
-				room={rooms[index]}
-				key={key}
-				style={style}
-				isSelected={currentRoomId === rooms[index].roomId}
-				onClick={() => onRoomSelected(rooms[index].roomId)}
-			/>
-		),
-		[rooms, currentRoomId, onRoomSelected],
-	);
+    const roomRendererMemoized = useCallback(
+        ({ key, index, style }: ListRowProps) =>
+            rooms[index] ? (
+                <RoomListItemView
+                    room={rooms[index]}
+                    key={key}
+                    style={style}
+                    isSelected={currentRoomId === rooms[index].roomId}
+                    onClick={() => onRoomSelected(rooms[index].roomId)}
+                />
+            ) : null,
+        [rooms, currentRoomId, onRoomSelected],
+    );
 
-	// The first div is needed to make the virtualized list take all the remaining space and scroll correctly
-	return (
-		<div className="mx_RoomList">
-			<AutoSizer>
-				{({ height, width }) => (
-					<List
-						className="mx_RoomList_List"
-						rowRenderer={roomRendererMemoized}
-						rowCount={rooms.length}
-						rowHeight={48}
-						height={height}
-						width={width}
-						tabIndex={-1}
-					/>
-				)}
-			</AutoSizer>
-		</div>
-	);
+    // The first div is needed to make the virtualized list take all the remaining space and scroll correctly
+    return (
+        <div className="mx_RoomList">
+            <AutoSizer>
+                {({ height, width }) => (
+                    <List
+                        className="mx_RoomList_List"
+                        rowRenderer={roomRendererMemoized}
+                        rowCount={rooms.length}
+                        rowHeight={48}
+                        height={height}
+                        width={width}
+                        tabIndex={-1}
+                    />
+                )}
+            </AutoSizer>
+        </div>
+    );
 }

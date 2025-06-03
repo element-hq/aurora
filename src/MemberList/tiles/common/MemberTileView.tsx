@@ -30,7 +30,8 @@ export function MemberTileView(props: Props): JSX.Element {
 	return (
 		// The wrapping div is required to make the magic mouse listener work, for some reason.
 		<div>
-			<button
+			<div
+				type="button"
 				className="mx_MemberTileView"
 				title={props.title}
 				onClick={props.onClick}
@@ -45,7 +46,7 @@ export function MemberTileView(props: Props): JSX.Element {
 					{userLabelJsx}
 					{props.iconJsx}
 				</div>
-			</button>
+			</div>
 		</div>
 	);
 }

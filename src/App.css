@@ -1,259 +1,263 @@
 html {
-	height: 100%;
-	overflow: hidden;
-	background-color: var(--cpd-color-bg-canvas-default);
-	color: var(--cpd-color-text-primary);
+    height: 100%;
+    overflow: hidden;
 }
 
 body {
-	width: 100%;
-	height: 100%;
-	margin: 0px;
+    width: 100%;
+    height: 100%;
+    margin: 0px;
 }
 
 #root {
-	height: 100%;
+    height: 100%;
 }
 
 .mx_App {
-	display: flex;
-	flex-direction: column;
-	width: 100%;
-	height: 100%;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    background-color: var(--cpd-color-bg-canvas-default);
+    color: var(--cpd-color-text-primary);
 }
 
 /* room for the tauri window header */
 .mx_Header {
-	flex: 0 0 auto;
-	height: 30px;
+    flex: 0 0 auto;
+    height: 30px;
 }
 
 .mx_Client {
-	display: flex;
-	flex: 1 1 auto;
-	flex-direction: row;
-	width: 100%;
-	height: 100%;
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
 }
 
 .mx_LoginPage {
-	background-image: url("assets/backgroundGradient.svg");
-	background-position: center;
-	background-size: cover;
+    background-image: url("assets/backgroundGradient.svg");
+    background-position: center;
+    background-size: cover;
 
-	display: flex;
-	width: 100%;
-	height: 100%;
-	align-items: center;
-	justify-content: center;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
 }
 
 .mx_Login {
-	width: 400px;
+    width: 400px;
 }
 
 .mx_Login_dialog {
-	background: var(--cpd-color-bg-canvas-default);
+    background: var(--cpd-color-bg-canvas-default);
 }
 
 .mx_RoomList {
-	display: flex;
-	/* this is important, to stop roomlist pushing the composer off the bottom */
-	flex-direction: column;
-	flex: 0 0 auto;
-	border-right: 1px solid #262628;
+    display: flex;
+    /* this is important, to stop roomlist pushing the composer off the bottom */
+    flex-direction: column;
+    flex: 0 0 auto;
+    border-right: 1px solid #262628;
 }
 
 .mx_RoomList ol {
-	overflow: scroll;
-	/* this is important, to stop roomlist pushing the composer off the bottom */
-	flex: 1 1 0;
-	margin: 0px;
-	padding: 0px;
+    overflow: scroll;
+    /* this is important, to stop roomlist pushing the composer off the bottom */
+    flex: 1 1 0;
+    margin: 0px;
+    padding: 0px;
 }
 
 .mx_RoomList li {
-	list-style-type: none;
+    list-style-type: none;
 }
 
 .mx_RoomTile {
-	position: relative;
-	max-width: 300px;
-	cursor: pointer;
-	background-color: #0f0f12bf;
-	padding-top: var(--cpd-space-2x);
-	padding-bottom: var(--cpd-space-2x);
-	border-bottom: 1px solid #262628;
+    position: relative;
+    max-width: 300px;
+    cursor: pointer;
+    background-color: #0f0f12bf;
+    padding-top: var(--cpd-space-2x);
+    padding-bottom: var(--cpd-space-2x);
+    border-bottom: 1px solid #262628;
 }
 
 .mx_RoomTile_selected {
-	background-color: #a0a0a088;
+    background-color: #a0a0a088;
 }
 
 .mx_RoomTile_avatar {
-	top: var(--cpd-space-2x);
-	left: var(--cpd-space-4x);
-	position: absolute;
+    top: var(--cpd-space-2x);
+    left: var(--cpd-space-4x);
+    position: absolute;
 }
 
 .mx_RoomTile_name {
-	margin-left: var(--cpd-space-14x);
-	overflow: hidden;
-	text-overflow: ellipsis;
-	font-size: var(--cpd-font-size-body-sm);
-	font-weight: var(--cpd-font-weight-semibold);
-	white-space: nowrap;
+    margin-left: var(--cpd-space-14x);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: var(--cpd-font-size-body-sm);
+    font-weight: var(--cpd-font-weight-semibold);
+    white-space: nowrap;
 }
 
 .mx_RoomTile_preview {
-	margin-left: var(--cpd-space-14x);
-	overflow: hidden;
-	text-overflow: ellipsis;
-	font-size: var(--cpd-font-size-body-xs);
-	font-weight: var(--cpd-font-weight-normal);
-	white-space: nowrap;
+    margin-left: var(--cpd-space-14x);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: var(--cpd-font-size-body-xs);
+    font-weight: var(--cpd-font-weight-normal);
+    white-space: nowrap;
 }
 
 .mx_MainPanel {
-	flex: 1 1 auto;
-	display: flex;
-	height: 100%;
-	flex-direction: column;
-	margin-left: var(--cpd-space-2x);
-	margin-right: var(--cpd-space-2x);
-	margin-bottom: var(--cpd-space-1x);
+    flex: 1 1 auto;
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    margin-left: var(--cpd-space-2x);
+    margin-right: var(--cpd-space-2x);
+    margin-bottom: var(--cpd-space-1x);
 }
 
 .mx_Timeline {
-	/* important to stop the header pushing the composer off the bottom */
-	flex: 1 1 0;
-	overflow: scroll;
-	position: relative;
-	display: flex;
+    /* important to stop the header pushing the composer off the bottom */
+    flex: 1 1 0;
+    overflow: auto;
+    position: relative;
+    display: flex;
 }
 
 .mx_Timeline ol {
-	width: 100%;
-	margin: 0px;
-	padding: 0px;
-	align-content: end;
-	list-style: none;
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+    align-content: end;
+    list-style: none;
 }
 
 .mx_Timeline ol li::marker {
-	color: var(--cpd-color-text-placeholder);
+    color: var(--cpd-color-text-placeholder);
 }
 
 .mx_Timestamp {
-	display: none;
-	position: absolute;
-	left: 1em;
+    display: none;
+    position: absolute;
+    left: 1em;
 }
 
 .mx_EventTile .mx_Avatar {
-	position: absolute;
-	left: var(--cpd-space-2x);
+    position: absolute;
+    left: var(--cpd-space-2x);
 }
 
 .mx_Sender {
-	display: block;
-	margin-left: var(--cpd-space-14x);
-	margin-bottom: var(--cpd-space-1x);
-	font-size: var(--cpd-font-size-body-sm);
-	font-weight: var(--cpd-font-weight-semibold);
-	color: var(--cpd-color-text-secondary);
+    display: block;
+    margin-left: var(--cpd-space-14x);
+    margin-bottom: var(--cpd-space-1x);
+    font-size: var(--cpd-font-size-body-sm);
+    font-weight: var(--cpd-font-weight-semibold);
+    color: var(--cpd-color-text-secondary);
 }
 
 .mx_Content {
-	display: block;
-	margin-left: var(--cpd-space-14x);
-	font-size: var(--cpd-font-size-body-md);
-	color: var(--cpd-color-text-primary);
+    display: block;
+    margin-left: var(--cpd-space-14x);
+    font-size: var(--cpd-font-size-body-md);
+    color: var(--cpd-color-text-primary);
 }
 
 .mx_EventTile {
-	margin-top: var(--cpd-space-2x);
-	margin-bottom: var(--cpd-space-2x);
-	display: block;
-	overflow-wrap: anywhere;
+    margin-top: var(--cpd-space-2x);
+    margin-bottom: var(--cpd-space-2x);
+    display: block;
+    overflow-wrap: anywhere;
 }
 
 .mx_EventTile_continuation {
-	margin: 0px;
+    margin: 0px;
 }
 
 .mx_StateEventTile {
-	margin-top: var(--cpd-space-0-5x);
-	margin-bottom: var(--cpd-space-0-5x);
-	margin-left: var(--cpd-space-14x);
-	font-weight: var(--cpd-font-weight-semibold);
-	color: var(--cpd-color-text-secondary);
-	font-size: var(--cpd-font-size-body-xs);
+    margin-top: var(--cpd-space-0-5x);
+    margin-bottom: var(--cpd-space-0-5x);
+    margin-left: var(--cpd-space-14x);
+    font-weight: var(--cpd-font-weight-semibold);
+    color: var(--cpd-color-text-secondary);
+    font-size: var(--cpd-font-size-body-xs);
 }
 
 .mx_StateAvatar {
-	position: relative;
-	top: var(--cpd-space-1x);
+    position: relative;
+    top: var(--cpd-space-1x);
 }
 
 .mx_Separator {
-	width: 100%;
-	margin-top: var(--cpd-space-4x);
-	margin-bottom: 0px;
-	border-top: 1px solid var(--cpd-color-border-interactive-primary);
-	font-size: var(--cpd-font-size-body-sm);
-	color: var(--cpd-color-text-secondary);
-	text-align: center;
+    width: 100%;
+    margin-top: var(--cpd-space-4x);
+    margin-bottom: 0px;
+    border-top: 1px solid var(--cpd-color-border-interactive-primary);
+    font-size: var(--cpd-font-size-body-sm);
+    color: var(--cpd-color-text-secondary);
+    text-align: center;
 }
 
 .mx_Separator span {
-	background-color: var(--cpd-color-bg-canvas-default);
-	position: relative;
-	top: -9px;
+    background-color: var(--cpd-color-bg-canvas-default);
+    position: relative;
+    top: -9px;
 }
 
 .mx_ReadMarker {
-	border-color: var(--cpd-color-icon-accent-tertiary);
+    border-color: var(--cpd-color-icon-accent-tertiary);
 }
 
 .mx_ReadMarker span {
-	color: var(--cpd-color-icon-accent-tertiary);
+    color: var(--cpd-color-icon-accent-tertiary);
 }
 
 /* hack for iamb content */
 .mx_EventTile > .mx_Content > span > p {
-	margin: 0px;
+    margin: 0px;
 }
 
 .mx_EventTile_redacted {
-	color: var(--cpd-color-text-secondary);
-	font-style: italic;
+    color: var(--cpd-color-text-secondary);
+    font-style: italic;
 }
 
 .mx_Composer {
-	flex: 0 0 auto;
-	display: flex;
-	flex-direction: row;
-	width: 100%;
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    border-top: 1px solid var(--cpd-color-border-interactive-primary)
 }
 
 #mx_Composer_textarea {
-	background-color: var(--cpd-color-bg-canvas-default);
-	color: var(--cpd-color-text-primary);
-	border: 0px;
-	font-size: 16px;
-	flex: 1 1 auto;
-	padding: var(--cpd-space-3x);
-	margin-top: var(--cpd-space-2x);
-	margin-bottom: var(--cpd-space-2x);
-	border-radius: 32px;
-	resize: none;
+    background-color: var(--cpd-color-bg-canvas-default);
+    color: var(--cpd-color-text-primary);
+    border: 0px;
+    font-size: 16px;
+    flex: 1 1 auto;
+    padding: var(--cpd-space-3x);
+    margin-top: var(--cpd-space-2x);
+    margin-bottom: var(--cpd-space-2x);
+    border-radius: 32px;
+    resize: none;
+}
+#mx_Composer_textarea::placeholder {
+    color: var(--cpd-color-text-secondary);
 }
 
 #mx_Composer_send {
-	display: none;
-	width: 4em;
-	flex: 0 0 auto;
-	font-size: 16px;
-	margin: 4px;
+    display: none;
+    width: 4em;
+    flex: 0 0 auto;
+    font-size: 16px;
+    margin: 4px;
 }

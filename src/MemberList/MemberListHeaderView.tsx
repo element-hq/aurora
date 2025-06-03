@@ -12,7 +12,7 @@ import {
 	Tooltip,
 	InlineSpinner,
 } from "@vector-im/compound-web";
-import React from "react";
+import type React from "react";
 import InviteIcon from "@vector-im/compound-design-tokens/assets/web/icons/user-add-solid";
 import { UserAddIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 

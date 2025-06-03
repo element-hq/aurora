@@ -6,10 +6,10 @@ Please see LICENSE files in the repository root for full details.
 */
 
 .mx_Flex {
-	display: var(--mx-flex-display, unset);
-	flex-direction: var(--mx-flex-direction, unset);
-	align-items: var(--mx-flex-align, unset);
-	justify-content: var(--mx-flex-justify, unset);
-	gap: var(--mx-flex-gap, unset);
-	flex-wrap: var(--mx-flex-wrap, unset);
+    display: var(--mx-flex-display, unset);
+    flex-direction: var(--mx-flex-direction, unset);
+    align-items: var(--mx-flex-align, unset);
+    justify-content: var(--mx-flex-justify, unset);
+    gap: var(--mx-flex-gap, unset);
+    flex-wrap: var(--mx-flex-wrap, unset);
 }

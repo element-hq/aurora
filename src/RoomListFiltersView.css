@@ -1,0 +1,5 @@
+.mx_RoomListFilters {
+    margin: unset;
+    list-style-type: none;
+    padding: var(--cpd-space-2x) var(--cpd-space-3x);
+}

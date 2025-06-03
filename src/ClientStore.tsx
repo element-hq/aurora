@@ -2,27 +2,27 @@ import { Mutex } from "async-mutex";
 import RoomListStore from "./RoomListStore.tsx";
 import TimelineStore from "./TimelineStore.tsx";
 import {
-	ClientBuilder,
-	type ClientInterface,
-	LogLevel,
-	type RoomListServiceInterface,
-	SlidingSyncVersionBuilder,
-	type SyncServiceInterface,
-	initPlatform,
+    ClientBuilder,
+    type ClientInterface,
+    LogLevel,
+    type RoomListServiceInterface,
+    SlidingSyncVersionBuilder,
+    type SyncServiceInterface,
+    initPlatform,
 } from "./index.web.ts";
 import { MemberListStore } from "./MemberList/MemberListStore.tsx";
-// import { MemberListStore } from "./MemberList/MemberListStore.tsx";
+import { printRustError } from "./utils.ts";
 
 interface LoginParams {
-	username: string;
-	password: string;
-	server: string;
+    username: string;
+    password: string;
+    server: string;
 }
 
 export enum ClientState {
-	Unknown = 0,
-	LoggedIn = 1,
-	LoggedOut = 2,
+    Unknown = 0,
+    LoggedIn = 1,
+    LoggedOut = 2,
 }
 
 class ClientStore {
@@ -33,85 +33,82 @@ class ClientStore {
 	memberListStore: Map<string, MemberListStore> = new Map();
 	roomListService?: RoomListServiceInterface;
 
-	mutex: Mutex = new Mutex();
+    mutex: Mutex = new Mutex();
 
-	// XXX: if we had any form of persistence then the state would be unknown until we loaded it,
-	// for now we do not so we initialise in a logged out state
-	clientState: ClientState = ClientState.LoggedOut;
-	listeners: CallableFunction[] = [];
+    // XXX: if we had any form of persistence then the state would be unknown until we loaded it,
+    // for now we do not so we initialise in a logged out state
+    clientState: ClientState = ClientState.LoggedOut;
+    listeners: CallableFunction[] = [];
 
-	login = async ({ username, password, server }: LoginParams) => {
-		const release = await this.mutex.acquire();
-		const client = await new ClientBuilder()
-			.slidingSyncVersionBuilder(SlidingSyncVersionBuilder.DiscoverNative)
-			.homeserverUrl(server)
-			.build();
+    login = async ({ username, password, server }: LoginParams) => {
+        const release = await this.mutex.acquire();
+        const client = await new ClientBuilder()
+            .slidingSyncVersionBuilder(SlidingSyncVersionBuilder.DiscoverNative)
+            .homeserverUrl(server)
+            .build();
 
-		console.log("starting sdk...");
-		try {
-			initPlatform(
-				{
-					logLevel: LogLevel.Trace,
-					traceLogPacks: [],
-					extraTargets: [],
-					writeToStdoutOrSystem: true,
-					writeToFiles: undefined,
-					sentryDsn: undefined,
-				},
-				true,
-			);
+        console.log("starting sdk...");
+        try {
+            initPlatform(
+                {
+                    logLevel: LogLevel.Trace,
+                    traceLogPacks: [],
+                    extraTargets: [],
+                    writeToStdoutOrSystem: true,
+                    writeToFiles: undefined,
+                    sentryDsn: undefined,
+                },
+                true,
+            );
 
-			await client.login(username, password, "rust-sdk", undefined);
-			console.log("logged in...");
-			this.client = client;
-			this.clientState = ClientState.LoggedIn;
-		} catch (e) {
-			console.log("login failed", e, e.inner);
-			this.clientState = ClientState.Unknown;
-			this.emit();
-			release();
-			return;
-		}
+            await client.login(username, password, "rust-sdk", undefined);
+            console.log("logged in...");
+            this.client = client;
+            this.clientState = ClientState.LoggedIn;
+        } catch (e) {
+            printRustError("login failed", e);
+            this.clientState = ClientState.Unknown;
+            this.emit();
+            release();
+            return;
+        }
 
-		try {
-			const syncServiceBuilder = client.syncService();
-			this.syncService = await syncServiceBuilder.finish();
-			this.roomListService = this.syncService.roomListService();
-			await this.syncService.start();
-			console.log("syncing...");
-		} catch (e) {
-			console.log("syncing failed", e, e.inner);
-			this.clientState = ClientState.Unknown;
-			this.emit();
-			release();
-			return;
-		}
+        try {
+            const syncServiceBuilder = client.syncService();
+            this.syncService = await syncServiceBuilder.finish();
+            this.roomListService = this.syncService.roomListService();
+            await this.syncService.start();
+            console.log("syncing...");
+        } catch (e) {
+            printRustError("syncing failed", e);
+            this.clientState = ClientState.Unknown;
+            this.emit();
+            release();
+            return;
+        }
 
-		this.emit();
-		release();
-	};
+        this.emit();
+        release();
+    };
 
-	getTimelineStore = async (roomId: string) => {
-		if (roomId === "") return;
-		const release = await this.mutex.acquire();
-		release();
-		let store = this.timelineStores.get(roomId);
-		if (!store) {
-			store = new TimelineStore(roomId);
-			this.timelineStores.set(roomId, store);
-		}
-		return store;
-	};
+    getTimelineStore = async (roomId: string) => {
+        if (roomId === "") return;
+        const release = await this.mutex.acquire();
+        release();
+        let store = this.timelineStores.get(roomId);
+        if (!store) {
+            store = new TimelineStore(this.client!.getRoom(roomId)!);
+            this.timelineStores.set(roomId, store);
+        }
+        return store;
+    };
 
-	getRoomListStore = async () => {
-		const release = await this.mutex.acquire();
-		release();
-		this.roomListStore ||= new RoomListStore(
-			this.client!,
-			this.roomListService!,
-		);
-		return this.roomListStore;
-	};
+    getRoomListStore = async () => {
+        const release = await this.mutex.acquire();
+        release();
+        this.roomListStore ||= new RoomListStore(this.roomListService!);
+        return this.roomListStore;
+    };
 
 	getMemberListStore = async (roomId: string) => {
 		const release = await this.mutex.acquire();
@@ -131,15 +128,15 @@ class ClientStore {
 		};
 	};
 
-	getSnapshot = (): ClientState => {
-		return this.clientState;
-	};
+    getSnapshot = (): ClientState => {
+        return this.clientState;
+    };
 
-	emit = () => {
-		for (const listener of this.listeners) {
-			listener();
-		}
-	};
+    emit = () => {
+        for (const listener of this.listeners) {
+            listener();
+        }
+    };
 }
 
 export default ClientStore;
