@@ -1,4 +1,5 @@
 import { Mutex } from "async-mutex";
+import { MemberListStore } from "./MemberList/MemberListStore.tsx";
 import RoomListStore from "./RoomListStore.tsx";
 import TimelineStore from "./TimelineStore.tsx";
 import {
@@ -11,7 +12,6 @@ import {
     type SyncServiceInterface,
     initPlatform,
 } from "./index.web.ts";
-import { MemberListStore } from "./MemberList/MemberListStore.tsx";
 import { printRustError } from "./utils.ts";
 
 interface LoginParams {
@@ -58,6 +58,40 @@ class ClientStore {
 
     clientState: ClientState = ClientState.Unknown;
     listeners: CallableFunction[] = [];
+
+    async registerServiceWorker() {
+        const registration = await navigator.serviceWorker.register("sw.js");
+        if (!registration) {
+            throw new Error("Service worker registration failed");
+        }
+
+        navigator.serviceWorker.addEventListener(
+            "message",
+            this.onServiceWorkerPostMessage,
+        );
+        await registration.update();
+    }
+
+    private onServiceWorkerPostMessage = (event: MessageEvent): void => {
+        if (!this.client) return;
+        try {
+            if (
+                event.origin === window.origin &&
+                (event.data as any)?.type === "userinfo" &&
+                (event.data as any)?.responseKey
+            ) {
+                const accessToken = this.client.session().accessToken;
+                const homeserver = this.client.homeserver();
+                event.source?.postMessage({
+                    responseKey: (event.data as any).responseKey,
+                    accessToken,
+                    homeserver,
+                });
+            }
+        } catch (e) {
+            console.error("Error responding to service worker: ", e);
+        }
+    };
 
     getClientBuilder = () =>
         new ClientBuilder().slidingSyncVersionBuilder(
@@ -146,6 +180,8 @@ class ClientStore {
     };
 
     sync = async () => {
+        this.registerServiceWorker();
+
         try {
             const syncServiceBuilder = this.client!.syncService();
             this.syncService = await syncServiceBuilder
