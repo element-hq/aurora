@@ -11,6 +11,7 @@ import {
     type SyncServiceInterface,
     initPlatform,
 } from "./index.web.ts";
+import { MemberListStore } from "./MemberList/MemberListStore.tsx";
 import { printRustError } from "./utils.ts";
 
 interface LoginParams {
@@ -44,13 +45,14 @@ class SessionStore {
 }
 
 class ClientStore {
-    sessionStore = new SessionStore();
+	sessionStore = new SessionStore();
 
     timelineStores: Map<string, TimelineStore> = new Map();
     roomListStore?: RoomListStore;
     client?: ClientInterface;
     syncService?: SyncServiceInterface;
-    roomListService?: RoomListServiceInterface;
+    memberListStore: Map<string, MemberListStore> = new Map();
+	roomListService?: RoomListServiceInterface;
 
     mutex: Mutex = new Mutex();
 
@@ -179,12 +181,25 @@ class ClientStore {
         return this.roomListStore;
     };
 
-    subscribe = (listener: CallableFunction) => {
-        this.listeners = [...this.listeners, listener];
-        return () => {
-            this.listeners = this.listeners.filter((l) => l !== listener);
-        };
+
+    getMemberListStore = async (roomId: string) => {
+      const release = await this.mutex.acquire();
+      release();
+      let store = this.memberListStore.get(roomId);
+      if (!store) {
+        store = new MemberListStore(roomId, this.client!);
+        this.memberListStore.set(roomId, store);
+      }
+      return store;
     };
+
+    subscribe = (listener: any) => {
+      this.listeners = [...this.listeners, listener];
+      return () => {
+        this.listeners = this.listeners.filter((l) => l !== listener);
+      };
+    };
+
 
     getSnapshot = (): ClientState => {
         return this.clientState;

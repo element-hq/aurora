@@ -12,6 +12,7 @@ import NotificationOffIcon from "@vector-im/compound-design-tokens/assets/web/ic
 import VideoCallIcon from "@vector-im/compound-design-tokens/assets/web/icons/video-call-solid";
 import { Unread, UnreadCounter } from "@vector-im/compound-web";
 import type { HTMLProps, JSX } from "react";
+import "./NotificationDecoration.css";
 
 import type { NotificationState } from "./RoomListStore";
 import { Flex } from "./utils/Flex";
@@ -37,32 +38,23 @@ export function NotificationDecoration({
     // Listen to the notification state and update the component when it changes
     const {
         hasAnyNotificationOrActivity,
-        isUnsentMessage,
         invited,
         isMention,
         isActivityNotification,
         isNotification,
-        count,
-        muted,
     } = notificationState;
 
-    if (!hasAnyNotificationOrActivity && !muted && !hasVideoCall) return null;
+    if (!hasAnyNotificationOrActivity && !hasVideoCall) return null;
 
     return (
         <Flex
+            className="mx_NotificationDecoration"
             align="center"
             justify="center"
             gap="var(--cpd-space-1x)"
             {...props}
             data-testid="notification-decoration"
         >
-            {isUnsentMessage && (
-                <ErrorIcon
-                    width="20px"
-                    height="20px"
-                    fill="var(--cpd-color-icon-critical-primary)"
-                />
-            )}
             {hasVideoCall && (
                 <VideoCallIcon
                     width="20px"
@@ -84,17 +76,8 @@ export function NotificationDecoration({
                     fill="var(--cpd-color-icon-accent-primary)"
                 />
             )}
-            {(isMention || isNotification) && (
-                <UnreadCounter count={count || null} />
-            )}
+            {(isMention || isNotification) && <Unread data-color="green" />}
             {isActivityNotification && <Unread />}
-            {muted && (
-                <NotificationOffIcon
-                    width="20px"
-                    height="20px"
-                    fill="var(--cpd-color-icon-tertiary)"
-                />
-            )}
         </Flex>
     );
 }

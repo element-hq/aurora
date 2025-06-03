@@ -1,0 +1,7 @@
+.mx_NotificationDecoration {
+    div[data-color="green"] {
+        div {
+            background-color: var(--cpd-color-icon-accent-primary);
+        }
+    }
+}
