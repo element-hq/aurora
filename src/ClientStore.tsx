@@ -10,6 +10,7 @@ import {
 	type SyncServiceInterface,
 	initPlatform,
 } from "./index.web.ts";
+import { printRustError } from "./utils.ts";
 
 interface LoginParams {
 	username: string;
@@ -63,7 +64,7 @@ class ClientStore {
 			this.client = client;
 			this.clientState = ClientState.LoggedIn;
 		} catch (e) {
-			console.log("login failed", e, e.inner);
+			printRustError("login failed", e);
 			this.clientState = ClientState.Unknown;
 			this.emit();
 			release();
@@ -77,7 +78,7 @@ class ClientStore {
 			await this.syncService.start();
 			console.log("syncing...");
 		} catch (e) {
-			console.log("syncing failed", e, e.inner);
+			printRustError("syncing failed", e);
 			this.clientState = ClientState.Unknown;
 			this.emit();
 			release();
@@ -94,7 +95,7 @@ class ClientStore {
 		release();
 		let store = this.timelineStores.get(roomId);
 		if (!store) {
-			store = new TimelineStore(roomId);
+			store = new TimelineStore(this.client!.getRoom(roomId)!);
 			this.timelineStores.set(roomId, store);
 		}
 		return store;
@@ -103,10 +104,7 @@ class ClientStore {
 	getRoomListStore = async () => {
 		const release = await this.mutex.acquire();
 		release();
-		this.roomListStore ||= new RoomListStore(
-			this.client!,
-			this.roomListService!,
-		);
+		this.roomListStore ||= new RoomListStore(this.roomListService!);
 		return this.roomListStore;
 	};
 

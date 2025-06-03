@@ -32,15 +32,16 @@ export function RoomListView({
 	);
 
 	const roomRendererMemoized = useCallback(
-		({ key, index, style }: ListRowProps) => (
-			<RoomListItemView
-				room={rooms[index]}
-				key={key}
-				style={style}
-				isSelected={currentRoomId === rooms[index].roomId}
-				onClick={() => onRoomSelected(rooms[index].roomId)}
-			/>
-		),
+		({ key, index, style }: ListRowProps) =>
+			rooms[index] ? (
+				<RoomListItemView
+					room={rooms[index]}
+					key={key}
+					style={style}
+					isSelected={currentRoomId === rooms[index].roomId}
+					onClick={() => onRoomSelected(rooms[index].roomId)}
+				/>
+			) : null,
 		[rooms, currentRoomId, onRoomSelected],
 	);
 
