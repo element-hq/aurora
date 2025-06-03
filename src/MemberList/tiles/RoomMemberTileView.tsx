@@ -8,10 +8,10 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX } from "react";
 
 // import DisambiguatedProfile from "../../../messages/DisambiguatedProfile";
-import { type RoomMember } from "../../generated/matrix_sdk_ffi";
+import type { RoomMember } from "../../generated/matrix_sdk_ffi";
 // import { useMemberTileViewModel } from "../../../../viewmodels/memberlist/tiles/MemberTileViewModel";
 // import { E2EIconView } from "./common/E2EIconView";
-import AvatarPresenceIconView from "./common/PresenceIconView";
+// import AvatarPresenceIconView from "./common/PresenceIconView";
 import BaseAvatar from "../BaseAvatar";
 import { MemberTileView } from "./common/MemberTileView";
 import { InvitedIconView } from "./common/InvitedIconView";
@@ -49,13 +49,13 @@ export function RoomMemberTileView(props: IProps): JSX.Element {
 	// );
 	const nameJSX = vm.name;
 
-	const presenceState = member.presenceState;
-	let presenceJSX: JSX.Element | undefined;
-	if (vm.showPresence && presenceState) {
-		presenceJSX = <AvatarPresenceIconView presenceState={presenceState} />;
-	}
+	// const presenceState = member.presenceState;
+	// let presenceJSX: JSX.Element | undefined;
+	// if (vm.showPresence && presenceState) {
+	// 	presenceJSX = <AvatarPresenceIconView presenceState={presenceState} />;
+	// }
 
-	let iconJsx;
+	let iconJsx: JSX.Element | undefined;
 	// if (vm.e2eStatus) {
 	// 	iconJsx = <E2EIconView status={vm.e2eStatus} />;
 	// }
@@ -68,7 +68,7 @@ export function RoomMemberTileView(props: IProps): JSX.Element {
 			title={vm.title}
 			onClick={vm.onClick}
 			avatarJsx={av}
-			presenceJsx={presenceJSX}
+			presenceJsx={undefined}
 			nameJsx={nameJSX}
 			userLabel={vm.userLabel}
 			iconJsx={iconJsx}

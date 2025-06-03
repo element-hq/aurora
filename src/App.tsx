@@ -398,30 +398,32 @@ const Client: React.FC<ClientProps> = ({ clientStore }) => {
 		})();
 	});
 	return (
-		<>
-			<header className="mx_Header"> </header>
-			<section className="mx_Client">
-				<nav className="mx_RoomList">
-					{roomListStore ? (
-						<RoomListView
-							vm={roomListStore}
-							currentRoomId={currentRoomId}
-							onRoomSelected={(roomId) => {
-								setCurrentRoomId(roomId);
-							}}
-						/>
-					) : null}
-				</nav>
-				{timelineStore ? (
-					<main className="mx_MainPanel">
-						<Timeline timelineStore={timelineStore} />
-						<Composer timelineStore={timelineStore} />
-					</main>
-				) : null}
-				<MemberListView roomId={currentRoomId} />
-			</section>
-		</>
-	);
+    <>
+      <header className="mx_Header"> </header>
+      <section className="mx_Client">
+        <nav className="mx_RoomList">
+          {roomListStore ? (
+            <RoomListView
+              vm={roomListStore}
+              currentRoomId={currentRoomId}
+              onRoomSelected={(roomId) => {
+                setCurrentRoomId(roomId);
+              }}
+            />
+          ) : null}
+        </nav>
+        {timelineStore ? (
+          <main className="mx_MainPanel">
+            <Timeline timelineStore={timelineStore} />
+            <Composer timelineStore={timelineStore} />
+          </main>
+        ) : null}
+        {memberListStore ? (
+          <MemberListView vm={memberListStore} />
+        ) : null}
+      </section>
+    </>
+  );
 };
 
 interface LoginProps {

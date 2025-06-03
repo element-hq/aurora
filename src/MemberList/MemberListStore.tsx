@@ -7,17 +7,20 @@ Please see LICENSE files in the repository root for full details.
 */
 
 import {
-	ClientInterface,
-	MembershipState,
+	type ClientInterface,
 	MembershipState_Tags,
-	RoomInterface,
-	type Room,
+	type RoomInterface,
 	type RoomMember,
 } from "../index.web";
+import { ButtonEvent } from "../utils/ButtonEvent";
 
 // Regex applied to filter our punctuation in member names before applying sort, to fuzzy it a little
 // matches all ASCII punctuation: !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
 const SORT_REGEX = /[\x21-\x2F\x3A-\x40\x5B-\x60\x7B-\x7E]+/g;
+
+export const SEPARATOR = "SEPARATOR";
+export type MemberWithSeparator = RoomMember | typeof SEPARATOR;
+
 //
 /**
  * A class for storing application state for MemberList.
@@ -27,13 +30,61 @@ export class MemberListStore {
 	private readonly sortNames = new Map<string, string>();
 	// list of room IDs that have been lazy loaded
 	private readonly loadedRooms = new Set<string>();
-	private readonly roomId: string;
+	private readonly roomId!: string;
 	private collator?: Intl.Collator;
-	private client: ClientInterface;
+	private client!: ClientInterface;
+
+	public members: MemberWithSeparator[] = [];
+	public memberCount = 0;
+
+	public shouldShowInvite = false;
+	public shouldShowSearch = true;
+	public isLoading = false;
+	public canInvite = false;
+	
+	public onInviteButtonClick = (ev: ButtonEvent) => {
+	};
+
 	public constructor(roomId: string, client: ClientInterface) {
+		if (!roomId || !client) {
+			console.error("roomId and client are required");
+			return;
+		}
+		
 		console.log("MemberListStore constructor", roomId);
 		this.roomId = roomId;
 		this.client = client;
+
+		this.createMemberListWithSeperator();
+	}
+
+	private async createMemberListWithSeperator () {
+		const { joined: joinedSdk, invited: invitedSdk } =
+			await this.loadMemberList(
+				this.roomId
+			);
+
+		console.log("members", joinedSdk, invitedSdk);
+		const newMemberMap = new Map<string, MemberWithSeparator>();
+
+		// First add the joined room members
+		for (const member of joinedSdk) {
+			newMemberMap.set(member.userId, member);
+		}
+
+		// Then a separator if needed
+		if ( joinedSdk.length > 0 && invitedSdk.length > 0 ) {
+			newMemberMap.set(SEPARATOR, SEPARATOR);
+		}
+
+		// Then add the invited room members
+		for (const member of invitedSdk) {
+			newMemberMap.set(member.userId, member);
+		}
+
+
+		this.setMemberMap(newMemberMap);
+		this.setMemberCount(joinedSdk.length + invitedSdk.length);
 	}
 
 	/**
@@ -66,6 +117,7 @@ export class MemberListStore {
 		membersByMembership.invited.sort((a: RoomMember, b: RoomMember) => {
 			return this.sortMembers(a, b);
 		});
+
 		return {
 			joined: membersByMembership.joined,
 			invited: membersByMembership.invited,
@@ -189,38 +241,11 @@ export class MemberListStore {
 		if (userA && !userB) return -1;
 		if (!userA && userB) return 1;
 
-		const showPresence = this.isPresenceEnabled();
-
-		// First by presence
-		// if (showPresence) {
-		//   const convertPresence = (p: string): string =>
-		//     p === "unavailable" ? "online" : p;
-		//   const presenceIndex = (p: string): number => {
-		//     const order = ["active", "online", "offline"];
-		//     const idx = order.indexOf(convertPresence(p));
-		//     return idx === -1 ? order.length : idx; // unknown states at the end
-		//   };
-
-		//   const idxA = presenceIndex(
-		//     userA!. currentlyActive ? "active" : userA!.presence
-		//   );
-		//   const idxB = presenceIndex(
-		//     userB!.currentlyActive ? "active" : userB!.presence
-		//   );
-		//   if (idxA !== idxB) {
-		//     return idxA - idxB;
-		//   }
-		// }
 
 		// Second by power level
 		if (memberA.powerLevel !== memberB.powerLevel) {
 			return memberB.powerLevel - memberA.powerLevel;
 		}
-
-		// // Third by last active
-		// if (showPresence && userA!.getLastActiveTs() !== userB!.getLastActiveTs()) {
-		//   return userB!.getLastActiveTs() - userA!.getLastActiveTs();
-		// }
 
 		// Fourth by name (alphabetical)
 		return this.collator!.compare(
@@ -242,5 +267,13 @@ export class MemberListStore {
 		result = (name[0] === "@" ? name.slice(1) : name).replace(SORT_REGEX, "");
 		this.sortNames.set(name, result);
 		return result;
+	}
+
+	private setMemberMap(newMemberMap: Map<string, MemberWithSeparator>) {
+		this.members = Array.from(newMemberMap.values());
+	}
+
+	private setMemberCount(count: number) {
+		this.memberCount = count;
 	}
 }

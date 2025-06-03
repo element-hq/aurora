@@ -17,7 +17,7 @@ import InviteIcon from "@vector-im/compound-design-tokens/assets/web/icons/user-
 import { UserAddIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
 
 import { Flex } from "../utils/Flex";
-import { type MemberListViewState } from "./MemberListViewModel";
+import type { MemberListStore } from "./MemberListStore";
 
 interface TooltipProps {
 	canInvite: boolean;
@@ -35,7 +35,7 @@ const OptionalTooltip: React.FC<TooltipProps> = ({ canInvite, children }) => {
 };
 
 interface Props {
-	vm: MemberListViewState;
+  vm: MemberListStore;
 }
 
 const InviteButton: React.FC<Props> = ({ vm }) => {
@@ -91,7 +91,7 @@ const InviteButton: React.FC<Props> = ({ vm }) => {
  * Member count of the room when there's nothing in the search field.
  * Number of matching members during search or 'No result' if search found nothing.
  */
-function getHeaderLabelJSX(vm: MemberListViewState): React.ReactNode {
+function getHeaderLabelJSX(vm: MemberListStore): React.ReactNode {
 	if (vm.isLoading) {
 		return (
 			<Flex align="center" gap="8px">
