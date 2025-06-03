@@ -120,13 +120,13 @@ body {
     display: flex;
     height: 100%;
     flex-direction: column;
-    margin-left: var(--cpd-space-2x);
-    margin-right: var(--cpd-space-2x);
     margin-bottom: var(--cpd-space-1x);
 }
 
 .mx_Timeline {
     /* important to stop the header pushing the composer off the bottom */
+    margin-left: var(--cpd-space-2x);
+    margin-right: var(--cpd-space-2x);
     flex: 1 1 0;
     overflow: auto;
     position: relative;

@@ -9,10 +9,11 @@
     display: flex;
     border-bottom: 1px solid var(--cpd-color-bg-subtle-primary);
     flex: 0 0 var(--cpd-space-16x);
+    align-items: center;
 }
 
 .mx_RoomSearch_search {
-    margin: var(--cpd-space-4x);
+    margin-left: var(--cpd-space-4x);
     border: 0px;
     flex: 1 1 0;
     display: flex;
@@ -38,11 +39,12 @@
 }
 
 .mx_RoomSearch_icon {
-    margin: var(--cpd-space-4x);
-    margin-left: 0px;
+    margin-left: var(--cpd-space-4x);
+    margin-right: var(--cpd-space-4x);
     border: 1px solid var(--cpd-color-border-interactive-secondary);
     border-radius: var(--cpd-space-9x);
     width: var(--cpd-space-9x);
+    height: var(--cpd-space-9x);
     background-color: transparent;
 }
 
