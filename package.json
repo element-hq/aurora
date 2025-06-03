@@ -12,6 +12,7 @@
         "build": "tsc && vite build",
         "preview": "vite preview",
         "tauri": "tauri",
+        "ubrn:web:build:release": "ubrn build web --config ubrn.config.yaml --release",
         "ubrn:web:build": "ubrn build web --config ubrn.config.yaml",
         "ubrn:checkout": "ubrn checkout --config ubrn.config.yaml",
         "ubrn:clean": "rm -Rf cpp/ src/generated/ src/index.web.ts*",
