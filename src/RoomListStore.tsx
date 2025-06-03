@@ -28,13 +28,10 @@ interface Event {
 
 export interface NotificationState {
     hasAnyNotificationOrActivity: boolean;
-    isUnsentMessage: boolean;
     invited: boolean;
     isMention: boolean;
     isActivityNotification: boolean;
     isNotification: boolean;
-    count: number;
-    muted: boolean;
 }
 
 export class RoomListItem {
