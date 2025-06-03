@@ -7,29 +7,47 @@
 
 import "./RoomHeaderView.css";
 import "./TimelineStore";
-import { type JSX, useCallback, useSyncExternalStore } from "react";
-import TimelineStore from "./TimelineStore";
+import { Avatar } from "@vector-im/compound-web";
+import type React from "react";
+import { useMemo, useSyncExternalStore } from "react";
+import type RoomListStore from "./RoomListStore.tsx";
 
 type RoomHeaderViewProps = {
-    timelineStore: TimelineStore;
+    roomListStore: RoomListStore;
+    currentRoomId: string;
 };
 
+function mxcToUrl(mxcUrl: string): string {
+    return `${mxcUrl.replace(
+        /^mxc:\/\//,
+        "https://matrix.org/_matrix/media/v3/thumbnail/",
+    )}?width=48&height=48`;
+}
+
 export const RoomHeaderView: React.FC<RoomHeaderViewProps> = ({
-    timelineStore: timeline,
+    roomListStore,
+    currentRoomId,
 }) => {
-    const items = useSyncExternalStore(
-        timeline.subscribe,
-        timeline.getSnapshot,
+    const { rooms } = useSyncExternalStore(
+        roomListStore.subscribe,
+        roomListStore.getSnapshot,
+    );
+    const room = useMemo(
+        () => rooms.find((room) => room.roomId === currentRoomId),
+        [currentRoomId, rooms],
     );
 
     return (
         <div className="mx_RoomHeader">
             <div className="mx_RoomHeader_avatar">
-                <img src=""/>
+                <Avatar
+                    id={currentRoomId}
+                    name={room?.getName() ?? ""}
+                    src={room?.getAvatar() ? mxcToUrl(room.getAvatar()!) : ""}
+                    size="40px"
+                />
             </div>
-            <div className="mx_RoomHeader_name">
-                timeline.
-            </div>
+            <div className="mx_RoomHeader_name">{room?.getName()}</div>
         </div>
     );
-}
+};

@@ -2,18 +2,18 @@ import type React from "react";
 import { useEffect, useState } from "react";
 import "./App.css";
 import type ClientStore from "./ClientStore.tsx";
-import { RoomListHeaderView } from "./RoomListHeaderView";
 import { Composer } from "./Composer.tsx";
+import type { MemberListStore } from "./MemberList/MemberListStore.tsx";
+import MemberListView from "./MemberList/MemberListView.tsx";
+import { RoomHeaderView } from "./RoomHeaderView";
 import { RoomListFiltersView } from "./RoomListFiltersView";
+import { RoomListHeaderView } from "./RoomListHeaderView";
 import type RoomListStore from "./RoomListStore.tsx";
 import { RoomListView } from "./RoomListView";
 import { RoomSearchView } from "./RoomSearchView";
-import type TimelineStore from "./TimelineStore.tsx";
-import { RoomHeaderView } from "./RoomHeaderView";
-import { Timeline } from "./Timeline.tsx";
 import { SidePanelView } from "./SidePanelView.tsx";
-import type { MemberListStore } from "./MemberList/MemberListStore.tsx";
-import MemberListView from "./MemberList/MemberListView.tsx";
+import { Timeline } from "./Timeline.tsx";
+import type TimelineStore from "./TimelineStore.tsx";
 
 console.log("running App.tsx");
 
@@ -81,7 +81,10 @@ export const Client: React.FC<ClientProps> = ({ clientStore }) => {
                 </nav>
                 {timelineStore ? (
                     <main className="mx_MainPanel">
-                        <RoomHeaderView timelineStore={timelineStore}/>
+                        <RoomHeaderView
+                            roomListStore={roomListStore!}
+                            currentRoomId={currentRoomId}
+                        />
                         <Timeline timelineStore={timelineStore} />
                         <Composer timelineStore={timelineStore} />
                     </main>

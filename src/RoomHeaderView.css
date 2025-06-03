@@ -16,6 +16,7 @@
 .mx_RoomHeader_avatar {
     width: var(--cpd-space-10x);
     height: var(--cpd-space-10x);
+    margin-left: var(--cpd-space-4x);
 }
 
 .mx_RoomHeader_name {

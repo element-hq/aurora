@@ -98,7 +98,7 @@ class TimelineStore {
     mutex: Mutex = new Mutex();
     private timelinePromise: Promise<TimelineInterface>;
 
-    constructor(private readonly room: RoomInterface) {
+    constructor(public readonly room: RoomInterface) {
         this.timelinePromise = this.room.timeline();
     }
 
