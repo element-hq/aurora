@@ -8,7 +8,10 @@ Please see LICENSE files in the repository root for full details.
 import React, { type JSX } from "react";
 
 // import DisambiguatedProfile from "../../../messages/DisambiguatedProfile";
-import type { RoomMember } from "../../generated/matrix_sdk_ffi";
+import {
+	MembershipState_Tags,
+	type RoomMember,
+} from "../../generated/matrix_sdk_ffi";
 // import { useMemberTileViewModel } from "../../../../viewmodels/memberlist/tiles/MemberTileViewModel";
 // import { E2EIconView } from "./common/E2EIconView";
 // import AvatarPresenceIconView from "./common/PresenceIconView";
@@ -22,32 +25,23 @@ interface IProps {
 }
 
 export function RoomMemberTileView(props: IProps): JSX.Element {
-	// const vm = useMemberTileViewModel(props);
-	const vm = {
-		member: {
-			name: "Test",
-			userId: "Test",
-		},
-		onClick: () => {},
-		userLabel: "Test",
-	} as any;
+	const vm = props;
 
 	const member = vm.member;
 	const av = (
 		<BaseAvatar
 			size="32px"
-			name={member.name}
+			name={member.displayName}
 			idName={member.userId}
-			title={member.displayUserId}
-			url={member.avatarThumbnailUrl}
+			title={member.userId}
+			url={member.avatarUrl}
 			altText={"User avatar"}
 		/>
 	);
-	const name = vm.name;
 	// const nameJSX = (
 	// 	<DisambiguatedProfile member={member} fallbackName={name || ""} />
 	// );
-	const nameJSX = vm.name;
+	const nameJSX = member.displayName || member.userId;
 
 	// const presenceState = member.presenceState;
 	// let presenceJSX: JSX.Element | undefined;
@@ -59,18 +53,18 @@ export function RoomMemberTileView(props: IProps): JSX.Element {
 	// if (vm.e2eStatus) {
 	// 	iconJsx = <E2EIconView status={vm.e2eStatus} />;
 	// }
-	if (member.isInvite) {
+	if (member.membership.tag === MembershipState_Tags.Invite) {
 		iconJsx = <InvitedIconView isThreePid={false} />;
 	}
 
 	return (
 		<MemberTileView
-			title={vm.title}
-			onClick={vm.onClick}
+			title={member.displayName}
+			onClick={() => {}}
 			avatarJsx={av}
 			presenceJsx={undefined}
 			nameJsx={nameJSX}
-			userLabel={vm.userLabel}
+			userLabel={member.userId}
 			iconJsx={iconJsx}
 		/>
 	);

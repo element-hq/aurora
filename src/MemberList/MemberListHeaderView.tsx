@@ -106,15 +106,8 @@ function getHeaderLabelJSX(vm: MemberListStore): React.ReactNode {
 }
 
 export const MemberListHeaderView: React.FC<Props> = (props: Props) => {
-	// const vm = props.vm;
-	const vm = {
-		shouldShowSearch: true,
-		shouldShowInvite: true,
-		canInvite: true,
-		memberCount: 10,
-		isLoading: false,
-	} as any;
-
+	const vm = props.vm;
+	console.log("memberlist header view render", vm.memberCount);
 	let contentJSX: React.ReactNode;
 
 	if (vm.shouldShowSearch) {

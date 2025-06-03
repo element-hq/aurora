@@ -1,6 +1,6 @@
 import { Form, TooltipProvider } from "@vector-im/compound-web";
 import type React from "react";
-import type { JSX } from "react";
+import { useEffect, useState, type JSX } from "react";
 import { List, type ListRowProps } from "react-virtualized/dist/commonjs/List";
 import { AutoSizer } from "react-virtualized";
 
@@ -21,8 +21,15 @@ interface IProps {
 
 const MemberListView: React.FC<IProps> = (props: IProps) => {
 	const { vm } = props;
+	const [totalRows, setTotalRows] = useState(0);
+	const [members, setMembers] = useState<MemberWithSeparator[]>([]);
 
-	const totalRows = vm.members.length;
+	useEffect(() => {
+		setTotalRows(vm.members.length);
+		if (vm.members.length > 0) {
+			setMembers(vm.members);
+		}
+	}, [vm]);
 
 	const getRowComponent = (item: MemberWithSeparator): JSX.Element => {
 		if (item === SEPARATOR) {

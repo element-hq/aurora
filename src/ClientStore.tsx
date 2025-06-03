@@ -30,7 +30,7 @@ class ClientStore {
 	roomListStore?: RoomListStore;
 	client?: ClientInterface;
 	syncService?: SyncServiceInterface;
-	memberListStore?: MemberListStore;
+	memberListStore: Map<string, MemberListStore> = new Map();
 	roomListService?: RoomListServiceInterface;
 
 	mutex: Mutex = new Mutex();
@@ -116,8 +116,12 @@ class ClientStore {
 	getMemberListStore = async (roomId: string) => {
 		const release = await this.mutex.acquire();
 		release();
-		this.memberListStore ||= new MemberListStore(roomId, this.client!);
-		return this.memberListStore;
+		let store = this.memberListStore.get(roomId);
+		if (!store) {
+			store = new MemberListStore(roomId, this.client!);
+			this.memberListStore.set(roomId, store);
+		}
+		return store;
 	};
 
 	subscribe = (listener: any) => {

@@ -11,6 +11,7 @@ import {
 	MembershipState_Tags,
 	type RoomInterface,
 	type RoomMember,
+	RoomMembersIteratorInterface,
 } from "../index.web";
 import { ButtonEvent } from "../utils/ButtonEvent";
 
@@ -30,9 +31,9 @@ export class MemberListStore {
 	private readonly sortNames = new Map<string, string>();
 	// list of room IDs that have been lazy loaded
 	private readonly loadedRooms = new Set<string>();
-	private readonly roomId!: string;
-	private collator?: Intl.Collator;
-	private client!: ClientInterface;
+	roomId: string;
+	private collator: Intl.Collator;
+	private client: ClientInterface;
 
 	public members: MemberWithSeparator[] = [];
 	public memberCount = 0;
@@ -45,21 +46,21 @@ export class MemberListStore {
 	public onInviteButtonClick = (ev: ButtonEvent) => {};
 
 	public constructor(roomId: string, client: ClientInterface) {
-		if (!roomId || !client) {
-			console.error("roomId and client are required");
-			return;
-		}
-
 		console.log("MemberListStore constructor", roomId);
 		this.roomId = roomId;
 		this.client = client;
 
-		this.createMemberListWithSeperator();
+		const language = "en";
+		this.collator = new Intl.Collator(language, {
+			sensitivity: "base",
+			ignorePunctuation: false,
+		});
 	}
 
-	private async createMemberListWithSeperator() {
+	public async run() {
+		console.log("Running memberliist store", this.roomId);
 		const { joined: joinedSdk, invited: invitedSdk } =
-			await this.loadMemberList(this.roomId);
+			await this.loadMemberList();
 
 		console.log("members", joinedSdk, invitedSdk);
 		const newMemberMap = new Map<string, MemberWithSeparator>();
@@ -81,6 +82,8 @@ export class MemberListStore {
 
 		this.setMemberMap(newMemberMap);
 		this.setMemberCount(joinedSdk.length + invitedSdk.length);
+		console.log("memberlist store run count", this.memberCount);
+		console.log("memberlist store run newMemberMap", newMemberMap);
 	}
 
 	/**
@@ -89,24 +92,22 @@ export class MemberListStore {
 	 * @param searchQuery Optional search query to filter the list.
 	 * @returns A list of filtered and sorted room members, grouped by membership.
 	 */
-	public async loadMemberList(
-		searchQuery?: string,
-	): Promise<Record<"joined" | "invited", RoomMember[]>> {
+	public async loadMemberList(): Promise<
+		Record<"joined" | "invited", RoomMember[]>
+	> {
 		if (!this.client) {
 			return {
 				joined: [],
 				invited: [],
 			};
 		}
-		const language = "en";
-		this.collator = new Intl.Collator(language, {
-			sensitivity: "base",
-			ignorePunctuation: false,
-		});
+
 		const members = await this.loadMembers(this.roomId);
+
 		// Filter then sort as it's more efficient than sorting tons of members we will just filter out later.
 		// Also sort each group, as there's no point comparing invited/joined users when they aren't in the same list!
-		const membersByMembership = this.filterMembers(members, searchQuery);
+		const membersByMembership = this.filterMembers(members);
+		console.log("filtered members in loadmemberlist", membersByMembership);
 		membersByMembership.joined.sort((a: RoomMember, b: RoomMember) => {
 			return this.sortMembers(a, b);
 		});
@@ -120,56 +121,24 @@ export class MemberListStore {
 		};
 	}
 
-	private async loadMembers(roomId: string): Promise<Array<RoomMember>> {
-		const room = this.client!.getRoom(roomId);
+	private async loadMembers(roomId: string): Promise<RoomMember[]> {
+		const room = await this.client.getRoom(roomId);
+
 		if (!room) {
 			return [];
 		}
-
-		if (
-			this.loadedRooms.has(roomId) ||
-			!(await this.isLazyLoadingEnabled(roomId))
-		) {
-			// nice and easy, we must already have all the members so just return them.
-			return this.loadMembersInRoom(room);
-		}
-		// remember that we have loaded the members so we don't hit /members all the time. We
-		// will forget this on refresh which is fine as we only store the data in-memory.
-		this.loadedRooms.add(roomId);
-		return this.loadMembersInRoom(room);
-	}
-
-	private async loadMembersInRoom(
-		room: RoomInterface,
-	): Promise<Array<RoomMember>> {
 		const members = await room.members();
-		const allMembers = Object.values(members);
-		allMembers.forEach(async (member) => {
-			// work around a race where you might have a room member object
-			// before the user object exists. This may or may not cause
-			// https://github.com/vector-im/vector-web/issues/186
-			if (!member.user) {
-				member.user = (await room.member(member.userId)) || undefined;
-			}
-		});
-		return allMembers;
-	}
+		const allMembers: RoomMember[] = [];
 
-	/**
-	 * Check if this room should be lazy loaded. Lazy loading means fetching the member list in
-	 * a delayed or incremental fashion. It means the `Room` object doesn't have all the members.
-	 * @param roomId The room to check if lazy loading is enabled
-	 * @returns True if enabled
-	 */
-	private async isLazyLoadingEnabled(roomId: string): Promise<boolean> {
-		// if (SettingsStore.getValue("feature_simplified_sliding_sync")) {
-		// 	// only unencrypted rooms use lazy loading
-		// 	return !(await this.stores.client
-		// 		?.getCrypto()
-		// 		?.isEncryptionEnabledInRoom(roomId));
-		// }
-		// return this.stores.client!.hasLazyLoadMembersEnabled();
-		return Promise.resolve(false);
+		if (members.len()) {
+			let chunk = members.nextChunk(100);
+			while (chunk) {
+				allMembers.push(...chunk);
+				chunk = members.nextChunk(100);
+			}
+		}
+
+		return allMembers;
 	}
 
 	public isPresenceEnabled(): boolean {
@@ -184,27 +153,19 @@ export class MemberListStore {
 	 */
 	private filterMembers(
 		members: Array<RoomMember>,
-		query?: string,
 	): Record<"joined" | "invited", RoomMember[]> {
 		const result: Record<"joined" | "invited", RoomMember[]> = {
 			joined: [],
 			invited: [],
 		};
-		members.forEach((m) => {
+		for (const m of members) {
 			if (
 				m.membership.tag !== MembershipState_Tags.Join &&
 				m.membership.tag !== MembershipState_Tags.Invite
 			) {
-				return; // bail early for left/banned users
+				continue; // bail early for left/banned users
 			}
-			if (query) {
-				query = query.toLowerCase();
-				const matchesName = m.displayName?.toLowerCase().includes(query);
-				const matchesId = m.userId.toLowerCase().includes(query);
-				if (!matchesName && !matchesId) {
-					return;
-				}
-			}
+
 			switch (m.membership.tag) {
 				case MembershipState_Tags.Join:
 					result.joined.push(m);
@@ -213,7 +174,7 @@ export class MemberListStore {
 					result.invited.push(m);
 					break;
 			}
-		});
+		}
 		return result;
 	}
 
@@ -239,13 +200,14 @@ export class MemberListStore {
 
 		// Second by power level
 		if (memberA.powerLevel !== memberB.powerLevel) {
-			return memberB.powerLevel - memberA.powerLevel;
+			// Convert to Number in case powerLevel is bigint
+			return Number(memberB.powerLevel) - Number(memberA.powerLevel);
 		}
 
 		// Fourth by name (alphabetical)
-		return this.collator!.compare(
-			this.canonicalisedName(memberA.displayName || ""),
-			this.canonicalisedName(memberB.displayName || ""),
+		return this.collator.compare(
+			this.canonicalisedName(memberA.displayName ?? ""),
+			this.canonicalisedName(memberB.displayName ?? ""),
 		);
 	}
 
@@ -270,5 +232,12 @@ export class MemberListStore {
 
 	private setMemberCount(count: number) {
 		this.memberCount = count;
+	}
+
+	private search(query: string) {
+		const filteredMembers = this.members.filter((m) => {
+			return m.displayName?.toLowerCase().includes(query.toLowerCase());
+		});
+		this.setMemberMap(new Map(filteredMembers.map((m) => [m.userId, m])));
 	}
 }

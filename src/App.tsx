@@ -305,7 +305,7 @@ const Client: React.FC<ClientProps> = ({ clientStore }) => {
 		// is this the right place to get SDK to subscribe? or should it be done in the store before passing it here somehow?
 		// the double-start in strict mode is pretty horrible
 		(async () => {
-			// console.log("trying to get tls for ", currentRoomId);
+			console.log("trying to get tls for ", currentRoomId);
 			const rls = await clientStore.getRoomListStore();
 			const tls = await clientStore.getTimelineStore(currentRoomId);
 			const mls = await clientStore.getMemberListStore(currentRoomId);
@@ -318,6 +318,11 @@ const Client: React.FC<ClientProps> = ({ clientStore }) => {
 			if (tls && tls !== timelineStore) {
 				console.log("(re)running timelineStore");
 				tls.run();
+			}
+
+			if (mls && mls !== memberListStore) {
+				console.log("(re)running memberListStore");
+				mls.run();
 			}
 
 			setRoomListStore(rls);
