@@ -1,16 +1,17 @@
 import type React from "react";
-import {
-    useEffect,
-    useState,
-} from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import type ClientStore from "./ClientStore.tsx";
+import { RoomListHeaderView } from "./RoomListHeaderView";
+import { Composer } from "./Composer.tsx";
 import { RoomListFiltersView } from "./RoomListFiltersView";
 import type RoomListStore from "./RoomListStore.tsx";
 import { RoomListView } from "./RoomListView";
-import type TimelineStore from "./TimelineStore.tsx";
+import { SidePanelView } from "./SidePanelView.tsx";
 import { Timeline } from "./Timeline.tsx";
-import { Composer } from "./Composer.tsx";
+import type TimelineStore from "./TimelineStore.tsx";
+import type { MemberListStore } from "./MemberList/MemberListStore.tsx";
+import MemberListView from "./MemberList/MemberListView.tsx";
 
 console.log("running App.tsx");
 
@@ -23,6 +24,7 @@ export const Client: React.FC<ClientProps> = ({ clientStore }) => {
 
     const [roomListStore, setRoomListStore] = useState<RoomListStore>();
     const [timelineStore, setTimelineStore] = useState<TimelineStore>();
+    const [memberListStore, setMemberListStore] = useState<MemberListStore>();
 
     useEffect(() => {
         // is this the right place to get SDK to subscribe? or should it be done in the store before passing it here somehow?
@@ -31,6 +33,7 @@ export const Client: React.FC<ClientProps> = ({ clientStore }) => {
             // console.log("trying to get tls for ", currentRoomId);
             const rls = await clientStore.getRoomListStore();
             const tls = await clientStore.getTimelineStore(currentRoomId);
+            const mls = await clientStore.getMemberListStore(currentRoomId);
             // console.log("got tls for ", currentRoomId, tls);
 
             if (rls && rls !== roomListStore) {
@@ -41,18 +44,27 @@ export const Client: React.FC<ClientProps> = ({ clientStore }) => {
                 console.log("(re)running timelineStore");
                 tls.run();
             }
+            if (mls && mls !== memberListStore) {
+                console.log("(re)running memberListStore");
+                mls.run();
+            }
 
             setRoomListStore(rls);
             setTimelineStore(tls);
+            setMemberListStore(mls);
         })();
     });
     return (
         <>
             <header className="mx_Header"> </header>
             <section className="mx_Client">
+                <nav className="mx_SidePanel">
+                    <SidePanelView clientStore={clientStore} />
+                </nav>
                 <nav className="mx_RoomList">
                     {roomListStore ? (
                         <>
+                            <RoomListHeaderView />
                             <RoomListFiltersView store={roomListStore} />
                             <RoomListView
                                 vm={roomListStore}
@@ -69,6 +81,9 @@ export const Client: React.FC<ClientProps> = ({ clientStore }) => {
                         <Timeline timelineStore={timelineStore} />
                         <Composer timelineStore={timelineStore} />
                     </main>
+                ) : null}
+                {memberListStore ? (
+                    <MemberListView vm={memberListStore} />
                 ) : null}
             </section>
         </>

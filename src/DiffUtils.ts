@@ -81,25 +81,24 @@ type Update<V> =
     | ResetUpdate<V>
     | AppendUpdate<V>;
 
-export async function applyDiff<I, V>(
+export function applyDiff<I, V>(
     items: V[],
     updates: Update<I>[],
-    mapper: (value: I) => Promise<V>,
-): Promise<Array<V>> {
+    mapper: (value: I) => V,
+): Array<V> {
     let newItems = [...items];
 
     for (const update of updates) {
-        console.log("@@ roomListUpdate", update, newItems);
         switch (update.tag) {
             case "Set":
-                newItems[update.inner.index] = await mapper(update.inner.value);
+                newItems[update.inner.index] = mapper(update.inner.value);
                 newItems = [...newItems];
                 break;
             case "PushBack":
-                newItems = [...newItems, await mapper(update.inner.value)];
+                newItems = [...newItems, mapper(update.inner.value)];
                 break;
             case "PushFront":
-                newItems = [await mapper(update.inner.value), ...newItems];
+                newItems = [mapper(update.inner.value), ...newItems];
                 break;
             case "Clear":
                 newItems = [];
@@ -116,7 +115,7 @@ export async function applyDiff<I, V>(
                 newItems.splice(
                     update.inner.index,
                     0,
-                    await mapper(update.inner.value),
+                    mapper(update.inner.value),
                 );
                 newItems = [...newItems];
                 break;
@@ -128,15 +127,10 @@ export async function applyDiff<I, V>(
                 newItems = newItems.slice(0, update.inner.length);
                 break;
             case "Reset":
-                newItems = [
-                    ...(await Promise.all(update.inner.values.map(mapper))),
-                ];
+                newItems = [...update.inner.values.map(mapper)];
                 break;
             case "Append":
-                newItems = [
-                    ...newItems,
-                    ...(await Promise.all(update.inner.values.map(mapper))),
-                ];
+                newItems = [...newItems, ...update.inner.values.map(mapper)];
                 break;
         }
     }

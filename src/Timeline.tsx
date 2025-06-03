@@ -8,10 +8,12 @@ export interface TimelineProps {
     timelineStore: TimelineStore;
 }
 
-export const Timeline: React.FC<TimelineProps> = ({ timelineStore: timeline }) => {
+export const Timeline: React.FC<TimelineProps> = ({
+    timelineStore: timeline,
+}) => {
     const items = useSyncExternalStore(
         timeline.subscribe,
-        timeline.getSnapshot
+        timeline.getSnapshot,
     );
 
     return (
@@ -26,16 +28,19 @@ export const Timeline: React.FC<TimelineProps> = ({ timelineStore: timeline }) =
                         >
                             <EventTile
                                 item={item}
-                                continuation={prevItem &&
+                                continuation={
+                                    prevItem &&
                                     isRealEvent(item) &&
                                     isRealEvent(prevItem) &&
                                     TimelineItemContent.MsgLike.instanceOf(
-                                        item.item.content
+                                        item.item.content,
                                     ) &&
                                     TimelineItemContent.MsgLike.instanceOf(
-                                        prevItem.item.content
+                                        prevItem.item.content,
                                     ) &&
-                                    item.item.sender === prevItem.item.sender} />
+                                    item.item.sender === prevItem.item.sender
+                                }
+                            />
                         </li>
                     );
                 })}
