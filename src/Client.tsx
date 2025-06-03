@@ -7,9 +7,10 @@ import { Composer } from "./Composer.tsx";
 import { RoomListFiltersView } from "./RoomListFiltersView";
 import type RoomListStore from "./RoomListStore.tsx";
 import { RoomListView } from "./RoomListView";
-import { SidePanelView } from "./SidePanelView.tsx";
-import { Timeline } from "./Timeline.tsx";
+import { RoomSearchView } from "./RoomSearchView";
 import type TimelineStore from "./TimelineStore.tsx";
+import { Timeline } from "./Timeline.tsx";
+import { SidePanelView } from "./SidePanelView.tsx";
 import type { MemberListStore } from "./MemberList/MemberListStore.tsx";
 import MemberListView from "./MemberList/MemberListView.tsx";
 
@@ -62,6 +63,7 @@ export const Client: React.FC<ClientProps> = ({ clientStore }) => {
                     <SidePanelView clientStore={clientStore} />
                 </nav>
                 <nav className="mx_RoomList">
+                    <RoomSearchView />
                     {roomListStore ? (
                         <>
                             <RoomListHeaderView />
