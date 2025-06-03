@@ -2,7 +2,6 @@ import { Avatar } from "@vector-im/compound-web";
 import type React from "react";
 import type { ReactElement, ReactNode } from "react";
 import sanitizeHtml from "sanitize-html";
-import { getChangeDescription } from "./App";
 import {
     VirtualTimelineItem,
     ProfileDetails,
@@ -10,6 +9,7 @@ import {
     MsgLikeKind,
     MessageType,
     MessageFormat_Tags,
+    MembershipChange,
 } from "./index.web";
 import {
     type TimelineItem,
@@ -29,6 +29,48 @@ function mxcToUrl(mxcUrl: string): string {
         ) + "?width=48&height=48"
     );
 }
+
+export function getChangeDescription(
+    membershipChange: MembershipChange,
+): string {
+    switch (membershipChange) {
+        case MembershipChange.None:
+            return "did nothing";
+        case MembershipChange.Error:
+            return "<error>";
+        case MembershipChange.Joined:
+            return "joined";
+        case MembershipChange.Left:
+            return "left";
+        case MembershipChange.Banned:
+            return "was banned";
+        case MembershipChange.Unbanned:
+            return "was unbanned";
+        case MembershipChange.Kicked:
+            return "was kicked";
+        case MembershipChange.Invited:
+            return "was invited";
+        case MembershipChange.InvitationAccepted:
+            return "accepted an invite";
+        case MembershipChange.InvitationRejected:
+            return "rejected an invite";
+        case MembershipChange.InvitationRevoked:
+            return "was uninvited";
+        case MembershipChange.Knocked:
+            return "knocked";
+        case MembershipChange.KnockAccepted:
+            return "was accepted";
+        case MembershipChange.KnockRetracted:
+            return "stoped knocking";
+        case MembershipChange.KnockDenied:
+            return "was rejected";
+        case MembershipChange.NotImplemented:
+            return "<unimplemented>";
+        default:
+            return "<unknown>";
+    }
+}
+
 export const EventTile: React.FC<EventTileProp> = ({ item, continuation }) => {
     let showAvatar = !continuation;
 
