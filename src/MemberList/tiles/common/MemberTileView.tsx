@@ -15,18 +15,11 @@ interface Props {
     onClick: () => void;
     title?: string;
     presenceJsx?: JSX.Element;
-    userLabel?: React.ReactNode;
+    userLabel: string;
     iconJsx?: JSX.Element;
 }
 
 export function MemberTileView(props: Props): JSX.Element {
-    let userLabelJsx: React.ReactNode;
-    if (props.userLabel) {
-        userLabelJsx = (
-            <div className="mx_MemberTileView_userLabel">{props.userLabel}</div>
-        );
-    }
-
     return (
         <div
             className="mx_MemberTileView"
@@ -40,7 +33,12 @@ export function MemberTileView(props: Props): JSX.Element {
                 <div className="mx_MemberTileView_name">{props.nameJsx}</div>
             </div>
             <div className="mx_MemberTileView_right">
-                {userLabelJsx}
+                <div
+                    className="mx_MemberTileView_userLabel"
+                    title={props.userLabel}
+                >
+                    {props.userLabel}
+                </div>
                 {props.iconJsx}
             </div>
         </div>
