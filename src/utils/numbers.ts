@@ -14,26 +14,26 @@ Please see LICENSE files in the repository root for full details.
  * @returns {number} Either the value or the default value, whichever is a number.
  */
 export function defaultNumber(i: unknown, def: number): number {
-	return Number.isFinite(i) ? Number(i) : def;
+    return Number.isFinite(i) ? Number(i) : def;
 }
 
 export function clamp(i: number, min: number, max: number): number {
-	return Math.min(Math.max(i, min), max);
+    return Math.min(Math.max(i, min), max);
 }
 
 export function sum(...i: number[]): number {
-	return [...i].reduce((p, c) => c + p, 0);
+    return [...i].reduce((p, c) => c + p, 0);
 }
 
 export function percentageWithin(
-	pct: number,
-	min: number,
-	max: number,
+    pct: number,
+    min: number,
+    max: number,
 ): number {
-	return pct * (max - min) + min;
+    return pct * (max - min) + min;
 }
 
 export function percentageOf(val: number, min: number, max: number): number {
-	const percentage = (val - min) / (max - min);
-	return Number.isNaN(percentage) ? 0 : percentage;
+    const percentage = (val - min) / (max - min);
+    return Number.isNaN(percentage) ? 0 : percentage;
 }

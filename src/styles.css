@@ -2,8 +2,8 @@
 @import "@vector-im/compound-web/dist/style.css";
 
 :root {
-	--primary-content: var(--cpd-color-text-primary);
-	--secondary-content: var(--cpd-color-text-secondary);
+    --primary-content: var(--cpd-color-text-primary);
+    --secondary-content: var(--cpd-color-text-secondary);
 }
 
 /* cargo-culted from element call */

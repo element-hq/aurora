@@ -45,14 +45,14 @@ class SessionStore {
 }
 
 class ClientStore {
-	sessionStore = new SessionStore();
+    sessionStore = new SessionStore();
 
     timelineStores: Map<string, TimelineStore> = new Map();
     roomListStore?: RoomListStore;
     client?: ClientInterface;
     syncService?: SyncServiceInterface;
     memberListStore: Map<string, MemberListStore> = new Map();
-	roomListService?: RoomListServiceInterface;
+    roomListService?: RoomListServiceInterface;
 
     mutex: Mutex = new Mutex();
 
@@ -148,7 +148,9 @@ class ClientStore {
     sync = async () => {
         try {
             const syncServiceBuilder = this.client!.syncService();
-            this.syncService = await syncServiceBuilder.withOfflineMode().finish();
+            this.syncService = await syncServiceBuilder
+                .withOfflineMode()
+                .finish();
             this.roomListService = this.syncService.roomListService();
             await this.syncService.start();
             console.log("syncing...");
@@ -181,25 +183,23 @@ class ClientStore {
         return this.roomListStore;
     };
 
-
     getMemberListStore = async (roomId: string) => {
-      const release = await this.mutex.acquire();
-      release();
-      let store = this.memberListStore.get(roomId);
-      if (!store) {
-        store = new MemberListStore(roomId, this.client!);
-        this.memberListStore.set(roomId, store);
-      }
-      return store;
+        const release = await this.mutex.acquire();
+        release();
+        let store = this.memberListStore.get(roomId);
+        if (!store) {
+            store = new MemberListStore(roomId, this.client!);
+            this.memberListStore.set(roomId, store);
+        }
+        return store;
     };
 
     subscribe = (listener: any) => {
-      this.listeners = [...this.listeners, listener];
-      return () => {
-        this.listeners = this.listeners.filter((l) => l !== listener);
-      };
+        this.listeners = [...this.listeners, listener];
+        return () => {
+            this.listeners = this.listeners.filter((l) => l !== listener);
+        };
     };
-
 
     getSnapshot = (): ClientState => {
         return this.clientState;

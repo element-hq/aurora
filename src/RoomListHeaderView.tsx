@@ -12,23 +12,17 @@ import { type JSX, useCallback, useSyncExternalStore } from "react";
 import FilterIcon from "@vector-im/compound-design-tokens/assets/web/icons/filter";
 import ComposeIcon from "@vector-im/compound-design-tokens/assets/web/icons/compose";
 
-type RoomListHeaderViewProps = {
-};
+type RoomListHeaderViewProps = {};
 
-export function RoomListHeaderView({
-}: RoomListHeaderViewProps): JSX.Element {
+export function RoomListHeaderView({}: RoomListHeaderViewProps): JSX.Element {
     return (
         <div className="mx_RoomListHeader">
             <div className="mx_RoomListHeader_name">Chats</div>
             <button className="mx_RoomListHeader_icon">
-                <FilterIcon
-                    fill="var(--cpd-color-icon-secondary)"
-                />
+                <FilterIcon fill="var(--cpd-color-icon-secondary)" />
             </button>
             <button className="mx_RoomListHeader_icon">
-                <ComposeIcon
-                    fill="var(--cpd-color-icon-secondary)"
-                />
+                <ComposeIcon fill="var(--cpd-color-icon-secondary)" />
             </button>
         </div>
     );

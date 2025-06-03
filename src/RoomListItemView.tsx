@@ -116,10 +116,8 @@ function useRoomListItemViewModel(room: RoomListItem) {
         isNotification,
         isActivityNotification:
             Number(info?.numUnreadNotifications) > 0 && !isNotification,
-        hasAnyNotificationOrActivity:
-            Number(info?.numUnreadNotifications) > 0,
+        hasAnyNotificationOrActivity: Number(info?.numUnreadNotifications) > 0,
         invited: info?.membership === Membership.Invited,
-
     };
     const avatar = room.getAvatar();
     return {
