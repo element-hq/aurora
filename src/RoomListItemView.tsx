@@ -7,8 +7,7 @@
 
 import classNames from "classnames";
 import type React from "react";
-import { useSyncExternalStore } from "react";
-import { type JSX, memo } from "react";
+import { type JSX, memo, useSyncExternalStore } from "react";
 import "./RoomListItemView.css";
 
 import { Avatar } from "@vector-im/compound-web";
@@ -16,7 +15,6 @@ import { NotificationDecoration } from "./NotificationDecoration";
 import type { RoomListItem } from "./RoomListStore";
 import {
     Membership,
-    MsgLikeContent,
     MsgLikeKind,
     TimelineItemContent,
 } from "./generated/matrix_sdk_ffi.ts";
@@ -110,6 +108,7 @@ export const RoomListItemView = memo(function RoomListItemView({
 function useRoomListItemViewModel(room: RoomListItem) {
     const info = useSyncExternalStore(room.subscribe, room.getSnapshot);
     const isNotification = Number(info?.numUnreadMessages) > 0;
+    const invited = info?.membership === Membership.Invited;
 
     const notificationState = {
         isMention: Number(info?.numUnreadMentions) > 0,
@@ -117,9 +116,8 @@ function useRoomListItemViewModel(room: RoomListItem) {
         isActivityNotification:
             Number(info?.numUnreadNotifications) > 0 && !isNotification,
         hasAnyNotificationOrActivity:
-            Number(info?.numUnreadNotifications) > 0,
-        invited: info?.membership === Membership.Invited,
-
+            Number(info?.numUnreadNotifications) > 0 || invited,
+        invited,
     };
     const avatar = room.getAvatar();
     return {

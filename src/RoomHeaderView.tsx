@@ -37,13 +37,20 @@ export const RoomHeaderView: React.FC<RoomHeaderViewProps> = ({
         [currentRoomId, rooms],
     );
 
+    const roomInfo = useSyncExternalStore(
+        room?.subscribe || (() => () => undefined),
+        room?.getSnapshot || (() => undefined),
+    );
+
     return (
         <div className="mx_RoomHeader">
             <div className="mx_RoomHeader_avatar">
                 <Avatar
                     id={currentRoomId}
-                    name={room?.getName() ?? ""}
-                    src={room?.getAvatar() ? mxcToUrl(room.getAvatar()!) : ""}
+                    name={roomInfo?.displayName || ""}
+                    src={
+                        roomInfo?.avatarUrl ? mxcToUrl(roomInfo.avatarUrl) : ""
+                    }
                     size="40px"
                 />
             </div>

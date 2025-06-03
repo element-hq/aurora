@@ -162,10 +162,12 @@ class RoomListStore {
     snapshot?: {
         rooms: RoomListItem[];
         numRooms: number;
+        filter: SupportedFilters;
     };
     getSnapshot = (): {
         rooms: RoomListItem[];
         numRooms: number;
+        filter: SupportedFilters;
     } => {
         return this.snapshot!;
     };
@@ -199,6 +201,7 @@ class RoomListStore {
         this.snapshot = {
             rooms: this.rooms,
             numRooms: this.numRooms,
+            filter: this.filter,
         };
         for (const listener of this.listeners) {
             listener();

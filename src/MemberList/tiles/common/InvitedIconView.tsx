@@ -12,14 +12,14 @@ import UserAddIcon from "@vector-im/compound-design-tokens/assets/web/icons/user
 import { Flex } from "../../../utils/Flex";
 
 interface Props {
-	isThreePid: boolean;
+    isThreePid: boolean;
 }
 
 export function InvitedIconView({ isThreePid }: Props): JSX.Element {
-	const Icon = isThreePid ? EmailIcon : UserAddIcon;
-	return (
-		<Flex align="center" className="mx_InvitedIconView">
-			<Icon height="16px" width="16px" />
-		</Flex>
-	);
+    const Icon = isThreePid ? EmailIcon : UserAddIcon;
+    return (
+        <Flex align="center" className="mx_InvitedIconView">
+            <Icon height="16px" width="16px" />
+        </Flex>
+    );
 }
