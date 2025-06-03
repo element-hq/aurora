@@ -137,9 +137,6 @@ class RoomListStore {
         console.log("Running roomlist store with state", this.running);
 
         (async () => {
-            // console.log("=> acquiring lock while subscribing to roomlist");
-            // console.log("<= got lock while subscribing to roomlist");
-            // if (this.running) console.warn("got RLS lock while RLS already running");
             console.log("subscribing to roomlist");
 
             this.running = true;

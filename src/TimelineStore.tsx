@@ -1,10 +1,9 @@
-import { Mutex } from "async-mutex";
 import {
     EventOrTransactionId,
     type EventTimelineItem,
     MessageType,
-    type ProfileDetails,
     type RoomInterface,
+    type TaskHandleInterface,
     TimelineChange,
     type TimelineDiffInterface,
     type TimelineInterface,
@@ -95,16 +94,13 @@ class TimelineStore {
     items: TimelineItem<any>[] = [];
     listeners: CallableFunction[] = [];
 
-    mutex: Mutex = new Mutex();
     private timelinePromise: Promise<TimelineInterface>;
 
     constructor(public readonly room: RoomInterface) {
         this.timelinePromise = this.room.timeline();
     }
 
-    private async parseItem(
-        item?: TimelineItemInterface,
-    ): Promise<TimelineItem<any>> {
+    private parseItem(item?: TimelineItemInterface): TimelineItem<any> {
         if (item?.asEvent()) {
             return new RealEventTimelineItem(item.asEvent()!);
         }
@@ -131,9 +127,7 @@ class TimelineStore {
         }
     };
 
-    onUpdate = async (updates: TimelineDiffInterface[]): Promise<void> => {
-        const release = await this.mutex.acquire();
-
+    onUpdate = (updates: TimelineDiffInterface[]): void => {
         let newItems = [...this.items];
 
         for (const update of updates) {
@@ -144,21 +138,18 @@ class TimelineStore {
             );
             switch (update.change()) {
                 case TimelineChange.Set: {
-                    newItems[update.set()!.index] = await this.parseItem(
+                    newItems[update.set()!.index] = this.parseItem(
                         update.set()?.item,
                     );
                     newItems = [...newItems];
                     break;
                 }
                 case TimelineChange.PushBack:
-                    newItems = [
-                        ...newItems,
-                        await this.parseItem(update.pushBack()),
-                    ];
+                    newItems = [...newItems, this.parseItem(update.pushBack())];
                     break;
                 case TimelineChange.PushFront:
                     newItems = [
-                        await this.parseItem(update.pushFront()),
+                        this.parseItem(update.pushFront()),
                         ...newItems,
                     ];
                     break;
@@ -177,7 +168,7 @@ class TimelineStore {
                     newItems.splice(
                         update.insert()!.index,
                         0,
-                        await this.parseItem(update.insert()?.item),
+                        this.parseItem(update.insert()?.item),
                     );
                     newItems = [...newItems];
                     break;
@@ -189,37 +180,31 @@ class TimelineStore {
                     newItems = newItems.slice(0, update.truncate()!);
                     break;
                 case TimelineChange.Reset:
-                    newItems = [
-                        ...(await Promise.all(
-                            update.reset()!.map(this.parseItem),
-                        )),
-                    ];
+                    newItems = [...update.reset()!.map(this.parseItem)];
                     break;
                 case TimelineChange.Append:
                     newItems = [
                         ...newItems,
-                        ...(await Promise.all(
-                            update.append()!.map(this.parseItem),
-                        )),
+                        ...update.append()!.map(this.parseItem),
                     ];
                     break;
             }
         }
 
-        release();
         this.items = newItems;
         this.emit();
     };
 
+    timelineListener?: TaskHandleInterface;
     run = () => {
         if (!this.room) return;
 
         (async () => {
-            console.log("subscribing to timeline", this.room.id);
+            console.log("subscribing to timeline", this.room.id());
             const timelineInterface = await this.room.timeline();
-            await timelineInterface.addListener(this);
+            this.timelineListener = await timelineInterface.addListener(this);
             await timelineInterface.paginateBackwards(10);
-            console.log("subscribed to timeline", this.room.id);
+            console.log("subscribed to timeline", this.room.id());
             this.running = true;
         })();
     };
@@ -229,10 +214,6 @@ class TimelineStore {
 
         return () => {
             (async () => {
-                // XXX: we should grab a mutex to avoid overlapping unsubscribes
-                // and ensure we only unsubscribe from the timeline we think we're
-                // unsubscribing to.
-                // await invoke("unsubscribe_timeline", { roomId: this.room.id });
                 this.running = false;
             })();
             this.listeners = this.listeners.filter((l) => l !== listener);
