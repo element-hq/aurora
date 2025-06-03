@@ -25,7 +25,7 @@ body {
 /* room for the tauri window header */
 .mx_Header {
     flex: 0 0 auto;
-    height: 30px;
+    height: 0px;
 }
 
 .mx_Client {
