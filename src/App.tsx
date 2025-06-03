@@ -301,6 +301,7 @@ const Composer: React.FC<ComposerProps> = ({ timelineStore }) => {
                     if (e.key === "Enter" && composer) {
                         timelineStore.sendMessage(composer);
                         setComposer("");
+                        e.preventDefault();
                     }
                 }}
             ></textarea>
