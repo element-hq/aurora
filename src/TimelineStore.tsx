@@ -208,6 +208,14 @@ class TimelineStore {
             this.running = true;
         })();
     };
+    stop = () => {
+        (async () => {
+            console.log("unsubscribing to timeline", this.room.id());
+            this.timelineListener?.cancel();
+            this.running = false;
+            console.log("unsubscribed to timeline", this.room.id());
+        })();
+    };
 
     subscribe = (listener: CallableFunction) => {
         this.listeners = [...this.listeners, listener];

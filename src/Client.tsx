@@ -45,6 +45,7 @@ export const Client: React.FC<ClientProps> = ({ clientStore }) => {
             }
             if (tls && tls !== timelineStore) {
                 console.log("(re)running timelineStore");
+                timelineStore?.stop();
                 tls.run();
             }
             if (mls && mls !== memberListStore) {
