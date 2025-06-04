@@ -3,30 +3,30 @@ import type React from "react";
 import type { ReactElement, ReactNode } from "react";
 import sanitizeHtml from "sanitize-html";
 import {
-    VirtualTimelineItem,
+    type TimelineItem,
+    type TimelineItemKind,
+    isVirtualEvent,
+} from "./TimelineStore";
+import {
+    MessageFormat_Tags,
+    MessageType,
+    MsgLikeKind,
     ProfileDetails,
     TimelineItemContent,
-    MsgLikeKind,
-    MessageType,
-    MessageFormat_Tags,
+    VirtualTimelineItem,
     MembershipChange,
 } from "./index.web";
-import {
-    type TimelineItem,
-    isVirtualEvent,
-    type TimelineItemKind,
-} from "./TimelineStore";
 
 interface EventTileProp {
     item: TimelineItem<any>;
     continuation: boolean;
 }
-function mxcToUrl(mxcUrl: string): string {
+function mxcToUrl(mxcUrl: string, size = 48): string {
     return (
         mxcUrl.replace(
             /^mxc:\/\//,
             "https://matrix.org/_matrix/media/v3/thumbnail/",
-        ) + "?width=48&height=48"
+        ) + `?width=${size}&height=${size}`
     );
 }
 
@@ -116,32 +116,40 @@ export const EventTile: React.FC<EventTileProp> = ({ item, continuation }) => {
             body = "Redacted";
         } else if (MsgLikeKind.UnableToDecrypt.instanceOf(message.kind)) {
             body = "UTD";
-        } else if (
-            MsgLikeKind.Message.instanceOf(message.kind) &&
-            MessageType.Text.instanceOf(message.kind.inner.content.msgType)
-        ) {
+        } else if (MsgLikeKind.Message.instanceOf(message.kind)) {
             if (
-                message.kind.inner.content.msgType.inner.content.formatted
-                    ?.body &&
-                message.kind.inner.content.msgType.inner.content.formatted
-                    ?.format?.tag === MessageFormat_Tags.Html
+                MessageType.Image.instanceOf(message.kind.inner.content.msgType)
             ) {
-                const html = sanitizeHtml(
+                const mxc =
+                    message.kind.inner.content.msgType.inner.content.source.url();
+                body = <img src={mxcToUrl(mxc, 500)} height={250} />;
+            } else if (
+                MessageType.Text.instanceOf(message.kind.inner.content.msgType)
+            ) {
+                if (
                     message.kind.inner.content.msgType.inner.content.formatted
-                        .body,
-                    {
-                        // FIXME: actually implement full sanitization as per react-sdk
-                        transformTags: {
-                            a: sanitizeHtml.simpleTransform("a", {
-                                target: "_blank",
-                            }),
+                        ?.body &&
+                    message.kind.inner.content.msgType.inner.content.formatted
+                        ?.format?.tag === MessageFormat_Tags.Html
+                ) {
+                    const html = sanitizeHtml(
+                        message.kind.inner.content.msgType.inner.content
+                            .formatted.body,
+                        {
+                            // FIXME: actually implement full sanitization as per react-sdk
+                            transformTags: {
+                                a: sanitizeHtml.simpleTransform("a", {
+                                    target: "_blank",
+                                }),
+                            },
                         },
-                    },
-                );
-                body = <span dangerouslySetInnerHTML={{ __html: html }} />;
-            } else {
-                body =
-                    message.kind.inner.content.msgType.inner.content.body || "";
+                    );
+                    body = <span dangerouslySetInnerHTML={{ __html: html }} />;
+                } else {
+                    body =
+                        message.kind.inner.content.msgType.inner.content.body ||
+                        "";
+                }
             }
         }
     } else if (
