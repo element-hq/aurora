@@ -19,7 +19,6 @@ import {
 
 interface EventTileProp {
     item: TimelineItem<any>;
-    continuation: boolean;
 }
 function mxcToUrl(mxcUrl: string): string {
     return (
@@ -71,8 +70,8 @@ export function getChangeDescription(
     }
 }
 
-export const EventTile: React.FC<EventTileProp> = ({ item, continuation }) => {
-    let showAvatar = !continuation;
+export const EventTile: React.FC<EventTileProp> = ({ item }) => {
+    let showAvatar = !item.continuation;
 
     if (isVirtualEvent(item)) {
         showAvatar = false;
@@ -229,7 +228,7 @@ export const EventTile: React.FC<EventTileProp> = ({ item, continuation }) => {
 
     return (
         <div
-            className={`mx_EventTile${continuation ? " mx_EventTile_continuation" : ""}`}
+            className={`mx_EventTile${item.continuation ? " mx_EventTile_continuation" : ""}`}
         >
             <span className="mx_Timestamp">
                 {new Date(Number(event.item.timestamp)).toLocaleTimeString()}

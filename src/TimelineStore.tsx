@@ -7,6 +7,7 @@ import {
     TimelineChange,
     type TimelineDiffInterface,
     type TimelineInterface,
+    TimelineItemContent,
     type TimelineItemInterface,
     VirtualTimelineItem,
 } from "./generated/matrix_sdk_ffi.ts";
@@ -36,6 +37,7 @@ export class TimelineItem<
         ? EventTimelineItem
         : VirtualTimelineItem;
     kind: K;
+    continuation = false;
 
     constructor(
         kind: K,
@@ -75,6 +77,16 @@ export class TimelineItem<
         }
         return "1";
     };
+
+    updateContinuation(prevItem: TimelineItem<any>) {
+        this.continuation =
+            prevItem &&
+            isRealEvent(this) &&
+            isRealEvent(prevItem) &&
+            TimelineItemContent.MsgLike.instanceOf(this.item.content) &&
+            TimelineItemContent.MsgLike.instanceOf(prevItem.item.content) &&
+            this.item.sender === prevItem.item.sender;
+    }
 }
 
 export class WrapperVirtualTimelineItem extends TimelineItem<TimelineItemKind.Virtual> {
@@ -191,6 +203,12 @@ class TimelineStore {
             }
         }
 
+        newItems.map((curr, i, arr) => {
+            if (i > 0) {
+                curr.updateContinuation(arr[i - 1]);
+            }
+            return curr;
+        });
         this.items = newItems;
         this.emit();
     };
