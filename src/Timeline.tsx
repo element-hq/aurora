@@ -32,6 +32,7 @@ export const Timeline: React.FC<TimelineProps> = ({
                             <EventTile item={item} />
                         </li>
                     )}
+                    followOutput={true}
                 />
             </ol>
         </div>

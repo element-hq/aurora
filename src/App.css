@@ -132,14 +132,12 @@ body {
     overflow: auto;
     position: relative;
     display: flex;
-    height: 100%;
 }
 
 .mx_Timeline ol {
     width: 100%;
     margin: 0px;
     padding: 0px;
-    align-content: end;
     list-style: none;
 }
 
