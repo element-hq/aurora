@@ -132,6 +132,7 @@ body {
     overflow: auto;
     position: relative;
     display: flex;
+    height: 100%;
 }
 
 .mx_Timeline ol {
@@ -245,7 +246,7 @@ body {
     height: var(--cpd-space-12x);
     margin: var(--cpd-space-4x);
     display: flex;
-    flex-direction: column;    
+    flex-direction: column;
     flex: 1 1 auto;
     justify-content: center;
 }

@@ -1,9 +1,8 @@
 import type React from "react";
-import { useSyncExternalStore } from "react";
+import { useRef, useSyncExternalStore } from "react";
 import { EventTile } from "./EventTile";
-import { TimelineItemContent } from "./index.web";
 import type TimelineStore from "./TimelineStore";
-import { isRealEvent } from "./TimelineStore";
+import { Virtuoso, type VirtuosoHandle } from "react-virtuoso";
 
 export interface TimelineProps {
     timelineStore: TimelineStore;
@@ -16,21 +15,24 @@ export const Timeline: React.FC<TimelineProps> = ({
         timeline.subscribe,
         timeline.getSnapshot,
     );
+    const virtuosoRef = useRef<VirtuosoHandle | null>(null);
 
     return (
         <div className="mx_Timeline">
             <ol>
-                {items.map((item, i) => {
-                    const prevItem = items[i - 1];
-                    return (
+                <Virtuoso
+                    ref={virtuosoRef}
+                    data={items}
+                    alignToBottom={true}
+                    itemContent={(i, item, context) => (
                         <li
                             key={item.getInternalId()}
                             value={item.getInternalId()}
                         >
                             <EventTile item={item} />
                         </li>
-                    );
-                })}
+                    )}
+                />
             </ol>
         </div>
     );
