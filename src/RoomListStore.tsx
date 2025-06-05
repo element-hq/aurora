@@ -14,6 +14,7 @@ import {
     type SyncServiceInterface,
 } from "./index.web";
 
+import type { ListRange } from "react-virtuoso";
 import { FILTERS, type SupportedFilters } from "./Filter";
 
 interface Event {
@@ -170,6 +171,11 @@ class RoomListStore {
         filter: SupportedFilters;
     } => {
         return this.snapshot!;
+    };
+
+    rangeChanged = (range: ListRange): void => {
+        const rooms = this.rooms.slice(range.startIndex, range.endIndex);
+        this.roomListService.subscribeToRooms(rooms.map((room) => room.roomId));
     };
 
     loadMore = (): void => {
