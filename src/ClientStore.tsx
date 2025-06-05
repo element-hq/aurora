@@ -207,6 +207,7 @@ class ClientStore {
             store = new TimelineStore(this.client!.getRoom(roomId)!);
             this.timelineStores.set(roomId, store);
         }
+        this.roomListService?.subscribeToRooms([roomId]);
         return store;
     };
 
