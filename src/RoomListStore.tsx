@@ -99,13 +99,13 @@ class RoomListStore {
     onUpdate = async (updates: RoomListEntriesUpdate[]): Promise<void> => {
         this.rooms = applyDiff(this.rooms, updates, this.parseRoom);
         // console.log("@@ roomListUpdated", this.rooms);
-        for (const update of updates) {
-            console.log("~~update", update.tag, {
-                index: (update as any).inner?.index,
-                value: (update as any).inner?.value?.id(),
-                values: (update as any).inner?.values?.map((l: any) => l.id()),
-            });
-        }
+        // for (const update of updates) {
+        //     console.log("~~update", update.tag, {
+        //         index: (update as any).inner?.index,
+        //         value: (update as any).inner?.value?.id(),
+        //         values: (update as any).inner?.values?.map((l: any) => l.id()),
+        //     });
+        // }
         this.emit();
     };
 

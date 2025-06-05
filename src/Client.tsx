@@ -16,7 +16,7 @@ import { SplashView } from "./SplashView.tsx";
 import { Timeline } from "./Timeline.tsx";
 import type TimelineStore from "./TimelineStore.tsx";
 
-console.log("running App.tsx");
+console.log("running Client.tsx");
 
 interface ClientProps {
     clientStore: ClientStore;
