@@ -167,9 +167,13 @@ class RoomListStore {
         if (this.activeRoom) rooms.add(this.activeRoom);
         this.roomListService.subscribeToRooms([...rooms]);
     };
-    subscribeToRoomsDebounced = debounce((): void => {
-        this.subscribeToRooms();
-    }, 500);
+    subscribeToRoomsDebounced = debounce(
+        (): void => {
+            this.subscribeToRooms();
+        },
+        500,
+        { trailing: true },
+    );
 
     activeRoom?: string;
     setActiveRoom = (roomId: string) => {
