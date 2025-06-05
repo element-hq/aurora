@@ -41,6 +41,7 @@ export function RoomListView({
                 totalCount={numRooms >= 0 ? numRooms : undefined}
                 fixedItemHeight={48}
                 context={{ currentRoomId, onRoomSelected }}
+                rangeChanged={vm.rangeChanged}
                 itemContent={(
                     index,
                     room,

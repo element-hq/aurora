@@ -1,30 +1,19 @@
+import { debounce } from "lodash-es";
+import type { ListRange } from "react-virtuoso";
 import { applyDiff } from "./DiffUtils.ts";
+import { FILTERS, type SupportedFilters } from "./Filter";
 import {
     type EventTimelineItem,
     type RoomInfo,
     type RoomInterface,
     type RoomListDynamicEntriesControllerInterface,
-    RoomListEntriesDynamicFilterKind,
     RoomListEntriesDynamicFilterKind_Tags,
     type RoomListEntriesUpdate,
-    RoomListEntriesWithDynamicAdaptersResult,
     type RoomListEntriesWithDynamicAdaptersResultInterface,
     RoomListLoadingState,
     type RoomListServiceInterface,
     type SyncServiceInterface,
 } from "./index.web";
-
-import { FILTERS, type SupportedFilters } from "./Filter";
-
-interface Event {
-    sender: string;
-    type: string;
-    origin_server_ts: number;
-    content: {
-        body?: string;
-        msgtype?: string;
-    };
-}
 
 export interface NotificationState {
     hasAnyNotificationOrActivity: boolean;
@@ -110,13 +99,13 @@ class RoomListStore {
     onUpdate = async (updates: RoomListEntriesUpdate[]): Promise<void> => {
         this.rooms = applyDiff(this.rooms, updates, this.parseRoom);
         // console.log("@@ roomListUpdated", this.rooms);
-        for (const update of updates) {
-            console.log("~~update", update.tag, {
-                index: (update as any).inner?.index,
-                value: (update as any).inner?.value?.id(),
-                values: (update as any).inner?.values?.map((l: any) => l.id()),
-            });
-        }
+        // for (const update of updates) {
+        //     console.log("~~update", update.tag, {
+        //         index: (update as any).inner?.index,
+        //         value: (update as any).inner?.value?.id(),
+        //         values: (update as any).inner?.values?.map((l: any) => l.id()),
+        //     });
+        // }
         this.emit();
     };
 
@@ -170,6 +159,33 @@ class RoomListStore {
         filter: SupportedFilters;
     } => {
         return this.snapshot!;
+    };
+
+    visibleRooms: string[] = [];
+    subscribeToRooms = (): void => {
+        const rooms = new Set(this.visibleRooms);
+        if (this.activeRoom) rooms.add(this.activeRoom);
+        this.roomListService.subscribeToRooms([...rooms]);
+    };
+    subscribeToRoomsDebounced = debounce(
+        (): void => {
+            this.subscribeToRooms();
+        },
+        500,
+        { trailing: true },
+    );
+
+    activeRoom?: string;
+    setActiveRoom = (roomId: string) => {
+        this.activeRoom = roomId;
+        this.subscribeToRooms();
+    };
+
+    rangeChanged = (range: ListRange): void => {
+        this.visibleRooms = this.rooms
+            .slice(range.startIndex, range.endIndex)
+            .map((room) => room.roomId);
+        this.subscribeToRoomsDebounced();
     };
 
     loadMore = (): void => {

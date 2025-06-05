@@ -12,11 +12,11 @@ import type RoomListStore from "./RoomListStore.tsx";
 import { RoomListView } from "./RoomListView";
 import { RoomSearchView } from "./RoomSearchView";
 import { SidePanelView } from "./SidePanelView.tsx";
-import { Timeline } from "./Timeline.tsx";
 import { SplashView } from "./SplashView.tsx";
+import { Timeline } from "./Timeline.tsx";
 import type TimelineStore from "./TimelineStore.tsx";
 
-console.log("running App.tsx");
+console.log("running Client.tsx");
 
 interface ClientProps {
     clientStore: ClientStore;
@@ -58,6 +58,11 @@ export const Client: React.FC<ClientProps> = ({ clientStore }) => {
             setMemberListStore(mls);
         })();
     });
+
+    useEffect(() => {
+        roomListStore?.setActiveRoom(currentRoomId);
+    }, [roomListStore, currentRoomId]);
+
     return (
         <>
             <header className="mx_Header"> </header>
@@ -93,7 +98,9 @@ export const Client: React.FC<ClientProps> = ({ clientStore }) => {
                         </main>
                         <MemberListView vm={memberListStore} />
                     </>
-                ) :  <SplashView />}
+                ) : (
+                    <SplashView />
+                )}
             </section>
         </>
     );
