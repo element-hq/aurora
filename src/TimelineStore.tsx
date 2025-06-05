@@ -121,7 +121,9 @@ class TimelineStore {
                     },
                 }),
             )!;
+            console.log("sending", msg);
             await timeline.send(event);
+            console.log("sent", msg);
         } catch (e) {
             printRustError("Failed to send message", e);
         }
@@ -133,8 +135,18 @@ class TimelineStore {
         for (const update of updates) {
             console.log(
                 "@@ timelineStoreUpdate",
-                update.change(),
-                update.reset(),
+                TimelineChange[update.change()],
+                update.change() == TimelineChange.Set ? [update.set()!.index, this.parseItem(update.set()?.item)] :
+                update.change() == TimelineChange.PushBack ? this.parseItem(update.pushBack()) :
+                update.change() == TimelineChange.PushFront ? this.parseItem(update.pushFront()) :
+                update.change() == TimelineChange.Clear ? '' :
+                update.change() == TimelineChange.PopFront ? '' :
+                update.change() == TimelineChange.PopBack ? '' :
+                update.change() == TimelineChange.Insert ? [update.insert()!.index, this.parseItem(update.insert()?.item)] :
+                update.change() == TimelineChange.Remove ? update.remove() :
+                update.change() == TimelineChange.Truncate ? update.truncate() :
+                update.change() == TimelineChange.Reset ? update.reset()!.map(this.parseItem) :
+                update.change() == TimelineChange.Append ? update.append()!.map(this.parseItem) : 'unknown'
             );
             switch (update.change()) {
                 case TimelineChange.Set: {
