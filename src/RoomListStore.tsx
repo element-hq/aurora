@@ -1,31 +1,19 @@
+import { debounce } from "lodash-es";
+import type { ListRange } from "react-virtuoso";
 import { applyDiff } from "./DiffUtils.ts";
+import { FILTERS, type SupportedFilters } from "./Filter";
 import {
     type EventTimelineItem,
     type RoomInfo,
     type RoomInterface,
     type RoomListDynamicEntriesControllerInterface,
-    RoomListEntriesDynamicFilterKind,
     RoomListEntriesDynamicFilterKind_Tags,
     type RoomListEntriesUpdate,
-    RoomListEntriesWithDynamicAdaptersResult,
     type RoomListEntriesWithDynamicAdaptersResultInterface,
     RoomListLoadingState,
     type RoomListServiceInterface,
     type SyncServiceInterface,
 } from "./index.web";
-
-import type { ListRange } from "react-virtuoso";
-import { FILTERS, type SupportedFilters } from "./Filter";
-
-interface Event {
-    sender: string;
-    type: string;
-    origin_server_ts: number;
-    content: {
-        body?: string;
-        msgtype?: string;
-    };
-}
 
 export interface NotificationState {
     hasAnyNotificationOrActivity: boolean;
@@ -173,9 +161,27 @@ class RoomListStore {
         return this.snapshot!;
     };
 
+    visibleRooms: string[] = [];
+    subscribeToRooms = (): void => {
+        const rooms = new Set(this.visibleRooms);
+        if (this.activeRoom) rooms.add(this.activeRoom);
+        this.roomListService.subscribeToRooms([...rooms]);
+    };
+    subscribeToRoomsDebounced = debounce((): void => {
+        this.subscribeToRooms();
+    }, 500);
+
+    activeRoom?: string;
+    setActiveRoom = (roomId: string) => {
+        this.activeRoom = roomId;
+        this.subscribeToRooms();
+    };
+
     rangeChanged = (range: ListRange): void => {
-        const rooms = this.rooms.slice(range.startIndex, range.endIndex);
-        this.roomListService.subscribeToRooms(rooms.map((room) => room.roomId));
+        this.visibleRooms = this.rooms
+            .slice(range.startIndex, range.endIndex)
+            .map((room) => room.roomId);
+        this.subscribeToRoomsDebounced();
     };
 
     loadMore = (): void => {
