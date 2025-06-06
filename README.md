@@ -27,12 +27,19 @@ yarn ubrn:web:build
 ## To run
 
 ```bash
-yarn tauri dev
+yarn & yarn dev
 ```
 
 ## To build:
 
 ```bash
+yarn build
+```
+
+## For tauri
+
+```bash
+yarn tauri dev
 yarn tauri build
 ```
 
