@@ -11,7 +11,17 @@ import {
     type TimelineItemInterface,
     VirtualTimelineItem,
 } from "./generated/matrix_sdk_ffi.ts";
+import {
+    RoomPaginationStatus,
+    RoomPaginationStatus_Tags,
+} from "./index.web.ts";
 import { printRustError } from "./utils.ts";
+
+interface TimelineViewState {
+    items: TimelineItem<any>[];
+    showTopSpinner: boolean;
+    firstItemIndex: number;
+}
 
 export enum TimelineItemKind {
     Event = 0,
@@ -103,8 +113,15 @@ export class RealEventTimelineItem extends TimelineItem<TimelineItemKind.Event> 
 
 class TimelineStore {
     running = false;
-    items: TimelineItem<any>[] = [];
     listeners: CallableFunction[] = [];
+
+    paginationStatus?: RoomPaginationStatus;
+    // items: TimelineItem<any>[] = [];
+    viewState: TimelineViewState = {
+        items: [],
+        showTopSpinner: false,
+        firstItemIndex: 10000,
+    };
 
     private timelinePromise: Promise<TimelineInterface>;
 
@@ -141,24 +158,59 @@ class TimelineStore {
         }
     };
 
+    backPaginate = async (i: number): Promise<void> => {
+        console.log(`!! backPaginate ${i}.`);
+        console.log();
+        if (RoomPaginationStatus.Paginating.instanceOf(this.paginationStatus)) {
+            return;
+        }
+        const timeline = await this.timelinePromise;
+        await timeline.paginateBackwards(10);
+    };
+
+    onPaginationStatusUpdate = async (status: RoomPaginationStatus) => {
+        this.paginationStatus = status;
+        this.viewState = {
+            ...this.viewState,
+            showTopSpinner: RoomPaginationStatus.Paginating.instanceOf(status),
+        };
+        this.emit();
+    };
+
     onUpdate = (updates: TimelineDiffInterface[]): void => {
-        let newItems = [...this.items];
+        console.log("onUpdate!!!!");
+        let newItems = [...this.viewState.items];
 
         for (const update of updates) {
             console.log(
                 "@@ timelineStoreUpdate",
                 TimelineChange[update.change()],
-                update.change() == TimelineChange.Set ? [update.set()!.index, this.parseItem(update.set()?.item)] :
-                update.change() == TimelineChange.PushBack ? this.parseItem(update.pushBack()) :
-                update.change() == TimelineChange.PushFront ? this.parseItem(update.pushFront()) :
-                update.change() == TimelineChange.Clear ? '' :
-                update.change() == TimelineChange.PopFront ? '' :
-                update.change() == TimelineChange.PopBack ? '' :
-                update.change() == TimelineChange.Insert ? [update.insert()!.index, this.parseItem(update.insert()?.item)] :
-                update.change() == TimelineChange.Remove ? update.remove() :
-                update.change() == TimelineChange.Truncate ? update.truncate() :
-                update.change() == TimelineChange.Reset ? update.reset()!.map(this.parseItem) :
-                update.change() == TimelineChange.Append ? update.append()!.map(this.parseItem) : 'unknown'
+                update.change() == TimelineChange.Set
+                    ? [update.set()!.index, this.parseItem(update.set()?.item)]
+                    : update.change() == TimelineChange.PushBack
+                      ? this.parseItem(update.pushBack())
+                      : update.change() == TimelineChange.PushFront
+                        ? this.parseItem(update.pushFront())
+                        : update.change() == TimelineChange.Clear
+                          ? ""
+                          : update.change() == TimelineChange.PopFront
+                            ? ""
+                            : update.change() == TimelineChange.PopBack
+                              ? ""
+                              : update.change() == TimelineChange.Insert
+                                ? [
+                                      update.insert()!.index,
+                                      this.parseItem(update.insert()?.item),
+                                  ]
+                                : update.change() == TimelineChange.Remove
+                                  ? update.remove()
+                                  : update.change() == TimelineChange.Truncate
+                                    ? update.truncate()
+                                    : update.change() == TimelineChange.Reset
+                                      ? update.reset()!.map(this.parseItem)
+                                      : update.change() == TimelineChange.Append
+                                        ? update.append()!.map(this.parseItem)
+                                        : "unknown",
             );
             switch (update.change()) {
                 case TimelineChange.Set: {
@@ -214,14 +266,19 @@ class TimelineStore {
                     break;
             }
         }
-
         newItems.map((curr, i, arr) => {
             if (i > 0) {
                 curr.updateContinuation(arr[i - 1]);
             }
             return curr;
         });
-        this.items = newItems;
+
+        const diffCount = newItems.length - this.viewState.items.length;
+        const firstItemIndex = this.viewState.firstItemIndex - diffCount;
+        // this.items = newItems;
+        console.log("newItems");
+        console.log(newItems);
+        this.viewState = { ...this.viewState, items: newItems, firstItemIndex };
         this.emit();
     };
 
@@ -231,9 +288,14 @@ class TimelineStore {
 
         (async () => {
             console.log("subscribing to timeline", this.room.id());
-            const timelineInterface = await this.room.timeline();
-            this.timelineListener = await timelineInterface.addListener(this);
-            await timelineInterface.paginateBackwards(10);
+            const timeline = await this.room.timeline();
+            this.timelineListener = await timeline.addListener(this);
+            timeline.subscribeToBackPaginationStatus({
+                onUpdate: this.onPaginationStatusUpdate,
+            });
+            // await timeline.paginateBackwards(10);
+            // await timeline.paginateBackwards(10);
+            // await timeline.paginateBackwards(10);
             console.log("subscribed to timeline", this.room.id());
             this.running = true;
         })();
@@ -258,8 +320,8 @@ class TimelineStore {
         };
     };
 
-    getSnapshot = (): TimelineItem<any>[] => {
-        return this.items;
+    getSnapshot = (): TimelineViewState => {
+        return this.viewState;
     };
 
     emit = () => {
