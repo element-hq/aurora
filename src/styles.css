@@ -1,28 +1,33 @@
 @import "@vector-im/compound-design-tokens/assets/web/css/compound-design-tokens.css";
 @import "@vector-im/compound-web/dist/style.css";
 
+:root {
+    --primary-content: var(--cpd-color-text-primary);
+    --secondary-content: var(--cpd-color-text-secondary);
+}
+
 /* cargo-culted from element call */
 a {
-  color: var(--cpd-color-text-link-external);
-  text-decoration: none;
+    color: var(--cpd-color-text-link-external);
+    text-decoration: none;
 }
 
 a:hover,
 a:active {
-  opacity: 0.8;
+    opacity: 0.8;
 }
 
 a:hover {
-  text-decoration: underline;
+    text-decoration: underline;
 }
 
 .mx_Tauri_Titlebar {
-  height: 30px;
-  user-select: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+    height: 30px;
+    user-select: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
 }
 
 /* :root {
@@ -43,7 +48,9 @@ a:hover {
 } */
 
 @supports (font-variation-settings: normal) {
-  :root { font-family: InterVariable, sans-serif; }
+    :root {
+        font-family: InterVariable, sans-serif;
+    }
 }
 
 /*

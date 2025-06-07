@@ -1,0 +1,62 @@
+/*
+ * Copyright 2025 New Vector Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+.mx_RoomSearch {
+    display: flex;
+    border-bottom: 1px solid var(--cpd-color-bg-subtle-primary);
+    flex: 0 0 var(--cpd-space-16x);
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.mx_RoomSearch_search {
+    margin-left: var(--cpd-space-4x);
+    border: 0px;
+    flex: 1 1 0;
+    display: flex;
+    height: var(--cpd-space-9x);
+    background-color: transparent;
+    color: var(--cpd-color-text-secondary);
+    border: 1px solid var(--cpd-color-border-interactive-secondary);
+    border-radius: var(--cpd-space-9x);
+    align-items: center;
+}
+
+.mx_RoomSearch_search svg {
+    margin: var(--cpd-space-2x);
+}
+
+.mx_RoomSearch_label {
+    flex: 1 1 0;
+    text-align: left;
+}
+
+.mx_RoomSearch_shortcut {
+    margin: var(--cpd-space-2x);
+}
+
+.mx_RoomSearch_icon {
+    margin-left: var(--cpd-space-4x);
+    margin-right: var(--cpd-space-4x);
+    border: 1px solid var(--cpd-color-border-interactive-secondary);
+    border-radius: var(--cpd-space-9x);
+    width: var(--cpd-space-9x);
+    height: var(--cpd-space-9x);
+    background-color: transparent;
+}
+
+.mx_RoomSearch_icon svg {
+    flex: 1 1 0;
+    width: var(--cpd-space-5x);
+    height: var(--cpd-space-5x);
+    margin-top: 2px;
+}
+
+.mx_RoomSearch_search svg {
+    width: var(--cpd-space-5x);
+    height: var(--cpd-space-5x);
+}

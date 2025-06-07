@@ -1,0 +1,29 @@
+on:
+  pull_request: {}
+jobs:
+  netlify:
+    name: Deploy preview to Netlify
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          cache: "yarn"
+          node-version: "lts/*"
+      - run: yarn install --frozen-lockfile
+      - run: yarn build
+      - uses: nwtgck/actions-netlify@v3.0
+        with:
+          publish-dir: './dist'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          deploy-message: "Deploy from GitHub Actions"
+          enable-pull-request-comment: false
+          enable-commit-comment: false
+          production-deploy: false
+          github-deployment-environment: Netlify
+          github-deployment-description: Preview build
+          alias: deploy-preview-${{ github.event.number }}
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ vars.NETLIFY_SITE_ID }}
+        timeout-minutes: 1

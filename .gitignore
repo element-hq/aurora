@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+/rust_modules
+# /src/generated
+# /src/index.web.ts

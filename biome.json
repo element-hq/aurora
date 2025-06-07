@@ -1,0 +1,10 @@
+{
+    "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+    "files": {
+        "ignore": ["src/generated", "rust_modules", "dist"]
+    },
+    "formatter": {
+        "indentStyle": "space",
+        "indentWidth": 4
+    }
+}

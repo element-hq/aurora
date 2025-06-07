@@ -47,6 +47,7 @@ tracing-subscriber = "0.3.18"
 thiserror = "1.0.57"
 url = "2.5.0"
 anyhow = "1.0.79"
+time = "0.3.35"
 
 [target.'cfg(windows)'.dependencies]
 matrix-sdk-sqlite = { git = "https://github.com/matrix-org/matrix-rust-sdk.git", rev = "bf5aeb8a69498499cccd595b3a0e4290c3a78642", features = ["bundled"] }
