@@ -27,7 +27,7 @@ yarn ubrn:web:build
 ## To run
 
 ```bash
-yarn & yarn dev
+yarn && yarn dev
 ```
 
 ## To build:
