@@ -127,8 +127,6 @@ body {
 .mx_Timeline {
     /* important to stop the header pushing the composer off the bottom */
     flex: 1 1 0;
-    /* overflow: auto; */
-    /* position: relative; */
     display: flex;
 }
 
