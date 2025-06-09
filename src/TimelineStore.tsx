@@ -26,7 +26,10 @@ interface TimelineViewState {
 export enum TimelineItemKind {
     Event = 0,
     Virtual = 1,
+    Spinner = 2,
 }
+
+export const Spinner = "spinner";
 
 export function isVirtualEvent(
     item: TimelineItem<any> | undefined,
@@ -41,11 +44,13 @@ export function isRealEvent(
 }
 
 export class TimelineItem<
-    K extends TimelineItemKind.Event | TimelineItemKind.Virtual,
+    K extends TimelineItemKind.Event | TimelineItemKind.Virtual | "spinner",
 > {
     item: K extends TimelineItemKind.Event
         ? EventTimelineItem
-        : VirtualTimelineItem;
+        : K extends "spinner"
+          ? "spinner"
+          : VirtualTimelineItem;
     kind: K;
     continuation = false;
 
@@ -53,13 +58,18 @@ export class TimelineItem<
         kind: K,
         item: K extends TimelineItemKind.Event
             ? EventTimelineItem
-            : VirtualTimelineItem,
+            : K extends "spinner"
+              ? "spinner"
+              : VirtualTimelineItem,
     ) {
         this.kind = kind;
         this.item = item;
     }
 
     getInternalId = (): string => {
+        if (this.kind === "spinner") {
+            return "spinner";
+        }
         if (isVirtualEvent(this)) {
             if (VirtualTimelineItem.TimelineStart.instanceOf(this.item)) {
                 return "start";
@@ -111,15 +121,18 @@ export class RealEventTimelineItem extends TimelineItem<TimelineItemKind.Event> 
     }
 }
 
+const INITIAL_FIRST_TIME_INDEX = 10000;
 class TimelineStore {
     running = false;
     listeners: CallableFunction[] = [];
 
     paginationStatus?: RoomPaginationStatus;
+    firstItemId?: string;
+    hasMoreItems = true;
     // items: TimelineItem<any>[] = [];
     viewState: TimelineViewState = {
         items: [],
-        showTopSpinner: false,
+        showTopSpinner: true,
         firstItemIndex: 10000,
     };
 
@@ -158,27 +171,27 @@ class TimelineStore {
         }
     };
 
-    backPaginate = async (i: number): Promise<void> => {
-        console.log(`!! backPaginate ${i}.`);
-        console.log();
-        if (RoomPaginationStatus.Paginating.instanceOf(this.paginationStatus)) {
-            return;
-        }
+    backPaginate = async (): Promise<void> => {
+        console.log("backPaginate");
         const timeline = await this.timelinePromise;
-        await timeline.paginateBackwards(10);
+        const hasMore = !(await timeline.paginateBackwards(50));
+        const shouldEmit = this.hasMoreItems !== hasMore;
+        this.hasMoreItems = hasMore;
+        if (shouldEmit) {
+            this.viewState = {
+                ...this.viewState,
+                showTopSpinner: hasMore,
+            };
+            this.emit();
+        }
     };
 
     onPaginationStatusUpdate = async (status: RoomPaginationStatus) => {
         this.paginationStatus = status;
-        this.viewState = {
-            ...this.viewState,
-            showTopSpinner: RoomPaginationStatus.Paginating.instanceOf(status),
-        };
-        this.emit();
+        console.log("onPaginationStatusUpdate", status);
     };
 
     onUpdate = (updates: TimelineDiffInterface[]): void => {
-        console.log("onUpdate!!!!");
         let newItems = [...this.viewState.items];
 
         for (const update of updates) {
@@ -266,6 +279,16 @@ class TimelineStore {
                     break;
             }
         }
+
+        function findFirstEventItemId(
+            items: TimelineItem<any>[],
+        ): string | undefined {
+            const eventItem = items.find(
+                (item) => item?.kind === TimelineItemKind.Event,
+            );
+            return eventItem?.getInternalId();
+        }
+
         newItems.map((curr, i, arr) => {
             if (i > 0) {
                 curr.updateContinuation(arr[i - 1]);
@@ -273,16 +296,38 @@ class TimelineStore {
             return curr;
         });
 
-        const diffCount = newItems.length - this.viewState.items.length;
-        const firstItemIndex = this.viewState.firstItemIndex - diffCount;
-        // this.items = newItems;
-        console.log("newItems");
-        console.log(newItems);
+        // virtuoso requires us to track the "firstItemIndex" so that it knows how to prepend items
+        // to the list while maintaining the scroll position without jumps.
+        // We use a large number, as per their docs it should never be negative.
+        // https://virtuoso.dev/virtuoso-api/interfaces/VirtuosoProps/#firstitemindex
+        let firstItemIndex: number = INITIAL_FIRST_TIME_INDEX;
+        // We keep a reference to the first item by it's id.
+        if (this.firstItemId) {
+            // If we have a firstItemId, we need to find its index in the new items
+            // and calculate the firstItemIndex based on that.
+            const foundIndex = newItems.findIndex(
+                (item) => item.getInternalId() === this.firstItemId,
+            );
+
+            if (foundIndex) {
+                // If we found the item, we set the firstItemIndex to the difference
+                // between the initial index and the found index.
+                firstItemIndex = INITIAL_FIRST_TIME_INDEX - foundIndex;
+            } else {
+                // If we didn't find the item, we set the firstItemId to the first event
+                this.firstItemId = findFirstEventItemId(newItems);
+            }
+        } else {
+            // If we don't have a firstItemId, we find the first event item id
+            this.firstItemId = findFirstEventItemId(newItems);
+        }
+
         this.viewState = { ...this.viewState, items: newItems, firstItemIndex };
         this.emit();
     };
 
     timelineListener?: TaskHandleInterface;
+    pagintationListener?: TaskHandleInterface;
     run = () => {
         if (!this.room) return;
 
@@ -290,12 +335,10 @@ class TimelineStore {
             console.log("subscribing to timeline", this.room.id());
             const timeline = await this.room.timeline();
             this.timelineListener = await timeline.addListener(this);
-            timeline.subscribeToBackPaginationStatus({
-                onUpdate: this.onPaginationStatusUpdate,
-            });
-            // await timeline.paginateBackwards(10);
-            // await timeline.paginateBackwards(10);
-            // await timeline.paginateBackwards(10);
+            this.pagintationListener =
+                await timeline.subscribeToBackPaginationStatus({
+                    onUpdate: this.onPaginationStatusUpdate,
+                });
             console.log("subscribed to timeline", this.room.id());
             this.running = true;
         })();

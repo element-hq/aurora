@@ -1,4 +1,4 @@
-import { Avatar } from "@vector-im/compound-web";
+import { Avatar, InlineSpinner } from "@vector-im/compound-web";
 import type React from "react";
 import type { ReactElement, ReactNode } from "react";
 import sanitizeHtml from "sanitize-html";
@@ -73,6 +73,14 @@ export function getChangeDescription(
 export const EventTile: React.FC<EventTileProp> = ({ item }) => {
     let showAvatar = !item.continuation;
 
+    if (item.kind === "spinner") {
+        return (
+            <div className="mx_TimelineSpinner" key="_topSpinner">
+                <InlineSpinner size={40} />
+            </div>
+        );
+    }
+
     if (isVirtualEvent(item)) {
         showAvatar = false;
         if (VirtualTimelineItem.DateDivider.instanceOf(item.item)) {
@@ -146,8 +154,7 @@ export const EventTile: React.FC<EventTileProp> = ({ item }) => {
                     body = <span dangerouslySetInnerHTML={{ __html: html }} />;
                 } else {
                     body =
-                        message.kind.inner.content.msgType.inner.content.body ||
-                        "";
+                        message.kind.inner.content.msgType.inner.content.body;
                 }
             }
         }
@@ -262,7 +269,7 @@ export const EventTile: React.FC<EventTileProp> = ({ item }) => {
                     </span>
                 </>
             ) : null}
-            <span className="mx_Content">{body}</span>
+            <span className="mx_Content">{body || "No content"}</span>
         </div>
     );
 };
