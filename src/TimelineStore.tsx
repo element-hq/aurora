@@ -11,10 +11,7 @@ import {
     type TimelineItemInterface,
     VirtualTimelineItem,
 } from "./generated/matrix_sdk_ffi.ts";
-import {
-    RoomPaginationStatus,
-    RoomPaginationStatus_Tags,
-} from "./index.web.ts";
+import type { RoomPaginationStatus } from "./index.web.ts";
 import { printRustError } from "./utils.ts";
 
 interface TimelineViewState {

@@ -25,44 +25,20 @@ interface ClientProps {
 export const Client: React.FC<ClientProps> = ({ clientStore }) => {
     const [currentRoomId, setCurrentRoomId] = useState("");
 
-    const [roomListStore, setRoomListStore] = useState<RoomListStore>();
-    const [timelineStore, setTimelineStore] = useState<TimelineStore>();
-    const [memberListStore, setMemberListStore] = useState<MemberListStore>();
-
+    const rls = clientStore.getRoomListStore();
     useEffect(() => {
-        // is this the right place to get SDK to subscribe? or should it be done in the store before passing it here somehow?
-        // the double-start in strict mode is pretty horrible
-        (async () => {
-            // console.log("trying to get tls for ", currentRoomId);
-            const rls = await clientStore.getRoomListStore();
-            const tls = await clientStore.getTimelineStore(currentRoomId);
-            const mls = await clientStore.getMemberListStore(currentRoomId);
-            // console.log("got tls for ", currentRoomId, tls);
+        rls.setActiveRoom(currentRoomId);
+    }, [rls, currentRoomId]);
 
-            if (rls && rls !== roomListStore) {
-                console.log("(re)running roomListStore");
-                rls.run();
-            }
-            if (tls && tls !== timelineStore) {
-                console.log("(re)running timelineStore");
-                timelineStore?.stop();
-                tls.run();
-            }
-            if (mls && mls !== memberListStore) {
-                console.log("(re)running memberListStore");
-                mls.run();
-            }
-
-            setRoomListStore(rls);
-            setTimelineStore(tls);
-            setMemberListStore(mls);
-        })();
-    });
-
-    useEffect(() => {
-        roomListStore?.setActiveRoom(currentRoomId);
-    }, [roomListStore, currentRoomId]);
-
+    const tls = currentRoomId
+        ? clientStore.getTimelineStore(currentRoomId)
+        : undefined;
+    const mls = currentRoomId
+        ? clientStore.getMemberListStore(currentRoomId)
+        : undefined;
+    console.log(
+        `rls: ${rls}, tls: ${tls}, mls: ${mls}, currentRoomId: ${currentRoomId}`,
+    );
     return (
         <>
             <header className="mx_Header"> </header>
@@ -72,34 +48,34 @@ export const Client: React.FC<ClientProps> = ({ clientStore }) => {
                 </nav>
                 <nav className="mx_RoomList">
                     <RoomSearchView />
-                    {roomListStore ? (
+                    {
                         <>
                             <RoomListHeaderView />
-                            <RoomListFiltersView store={roomListStore} />
+                            <RoomListFiltersView store={rls} />
                             <RoomListView
-                                vm={roomListStore}
+                                vm={rls}
                                 currentRoomId={currentRoomId}
                                 onRoomSelected={(roomId) => {
                                     setCurrentRoomId(roomId);
                                 }}
                             />
                         </>
-                    ) : null}
+                    }
                 </nav>
-                {timelineStore && memberListStore ? (
+                {tls && mls ? (
                     <>
                         <main className="mx_MainPanel">
                             <RoomHeaderView
-                                roomListStore={roomListStore!}
+                                roomListStore={rls}
                                 currentRoomId={currentRoomId}
                             />
                             <Timeline
-                                timelineStore={timelineStore}
+                                timelineStore={tls}
                                 currentRoomId={currentRoomId}
                             />
-                            <Composer timelineStore={timelineStore} />
+                            <Composer timelineStore={tls} />
                         </main>
-                        <MemberListView vm={memberListStore} />
+                        <MemberListView vm={mls} />
                     </>
                 ) : (
                     <SplashView />

@@ -54,7 +54,7 @@ export function RoomListFiltersView({
 }
 
 function useRoomListViewModel(store: RoomListStore) {
-    const { filter } = useSyncExternalStore(store.subscribe, store.getSnapshot);
+    const state = useSyncExternalStore(store.subscribe, store.getSnapshot);
 
     return {
         filters: Object.entries(FILTERS)
@@ -64,7 +64,7 @@ function useRoomListViewModel(store: RoomListStore) {
             )
             .map(([key, value]) => {
                 return {
-                    active: key === filter,
+                    active: key === state?.filter,
                     name: value.name,
                     toggle: () => store.toggleFilter(key as SupportedFilters),
                 };

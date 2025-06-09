@@ -48,11 +48,11 @@ class SessionStore {
 class ClientStore {
     sessionStore = new SessionStore();
 
-    timelineStores: Map<string, TimelineStore> = new Map();
+    timelineStore?: TimelineStore;
     roomListStore?: RoomListStore;
     client?: ClientInterface;
     syncService?: SyncServiceInterface;
-    memberListStore: Map<string, MemberListStore> = new Map();
+    memberListStore?: MemberListStore;
     roomListService?: RoomListServiceInterface;
 
     clientState: ClientState = ClientState.Unknown;
@@ -127,7 +127,7 @@ class ClientStore {
     logout = () => {
         this.sessionStore.clear();
         this.client = undefined;
-        this.timelineStores = new Map();
+        this.timelineStore = undefined;
         this.roomListStore = undefined;
         this.roomListService = undefined;
         this.syncService = undefined;
@@ -193,17 +193,19 @@ class ClientStore {
         }
     };
 
-    getTimelineStore = async (roomId: string) => {
+    getTimelineStore = (roomId: string) => {
         if (roomId === "") return;
-        let store = this.timelineStores.get(roomId);
-        if (!store) {
-            store = new TimelineStore(this.client!.getRoom(roomId)!);
-            this.timelineStores.set(roomId, store);
+        if (this.timelineStore?.room.id() !== roomId) {
+            this.timelineStore?.stop();
+            const store = new TimelineStore(this.client!.getRoom(roomId)!);
+            store.run();
+            this.timelineStore = store;
         }
-        return store;
+        return this.timelineStore;
     };
 
-    getRoomListStore = async () => {
+    getRoomListStore = () => {
+        console.log("getRoomListStore called");
         if (!this.roomListStore) {
             const store = new RoomListStore(
                 this.syncService!,
@@ -215,13 +217,14 @@ class ClientStore {
         return this.roomListStore;
     };
 
-    getMemberListStore = async (roomId: string) => {
-        let store = this.memberListStore.get(roomId);
-        if (!store) {
-            store = new MemberListStore(roomId, this.client!);
-            this.memberListStore.set(roomId, store);
+    getMemberListStore = (roomId: string) => {
+        if (roomId === "") return;
+        if (this.memberListStore?.roomId !== roomId) {
+            const store = new MemberListStore(roomId, this.client!);
+            store.run();
+            this.memberListStore = store;
         }
-        return store;
+        return this.memberListStore;
     };
 
     subscribe = (listener: any) => {
