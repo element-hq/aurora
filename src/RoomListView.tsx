@@ -42,11 +42,7 @@ export function RoomListView({
                 fixedItemHeight={48}
                 context={{ currentRoomId, onRoomSelected }}
                 rangeChanged={vm.rangeChanged}
-                itemContent={(
-                    index,
-                    room,
-                    { currentRoomId, onRoomSelected },
-                ) => {
+                itemContent={(_, room, { currentRoomId, onRoomSelected }) => {
                     return (
                         <RoomListItemView
                             room={room}
