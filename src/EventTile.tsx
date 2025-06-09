@@ -1,4 +1,4 @@
-import { Avatar } from "@vector-im/compound-web";
+import { Avatar, InlineSpinner } from "@vector-im/compound-web";
 import type React from "react";
 import type { ReactElement, ReactNode } from "react";
 import sanitizeHtml from "sanitize-html";
@@ -19,7 +19,6 @@ import {
 
 interface EventTileProp {
     item: TimelineItem<any>;
-    continuation: boolean;
 }
 function mxcToUrl(mxcUrl: string, size = 48): string {
     return (
@@ -71,8 +70,16 @@ export function getChangeDescription(
     }
 }
 
-export const EventTile: React.FC<EventTileProp> = ({ item, continuation }) => {
-    let showAvatar = !continuation;
+export const EventTile: React.FC<EventTileProp> = ({ item }) => {
+    let showAvatar = !item.continuation;
+
+    if (item.kind === "spinner") {
+        return (
+            <div className="mx_TimelineSpinner" key="_topSpinner">
+                <InlineSpinner size={40} />
+            </div>
+        );
+    }
 
     if (isVirtualEvent(item)) {
         showAvatar = false;
@@ -147,8 +154,7 @@ export const EventTile: React.FC<EventTileProp> = ({ item, continuation }) => {
                     body = <span dangerouslySetInnerHTML={{ __html: html }} />;
                 } else {
                     body =
-                        message.kind.inner.content.msgType.inner.content.body ||
-                        "";
+                        message.kind.inner.content.msgType.inner.content.body;
                 }
             }
         }
@@ -237,7 +243,7 @@ export const EventTile: React.FC<EventTileProp> = ({ item, continuation }) => {
 
     return (
         <div
-            className={`mx_EventTile${continuation ? " mx_EventTile_continuation" : ""}`}
+            className={`mx_EventTile${item.continuation ? " mx_EventTile_continuation" : ""}`}
         >
             <span className="mx_Timestamp">
                 {new Date(Number(event.item.timestamp)).toLocaleTimeString()}
@@ -263,7 +269,7 @@ export const EventTile: React.FC<EventTileProp> = ({ item, continuation }) => {
                     </span>
                 </>
             ) : null}
-            <span className="mx_Content">{body}</span>
+            <span className="mx_Content">{body || "No content"}</span>
         </div>
     );
 };

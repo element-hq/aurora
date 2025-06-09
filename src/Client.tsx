@@ -93,7 +93,10 @@ export const Client: React.FC<ClientProps> = ({ clientStore }) => {
                                 roomListStore={roomListStore!}
                                 currentRoomId={currentRoomId}
                             />
-                            <Timeline timelineStore={timelineStore} />
+                            <Timeline
+                                timelineStore={timelineStore}
+                                currentRoomId={currentRoomId}
+                            />
                             <Composer timelineStore={timelineStore} />
                         </main>
                         <MemberListView vm={memberListStore} />

@@ -7,15 +7,29 @@ import {
     TimelineChange,
     type TimelineDiffInterface,
     type TimelineInterface,
+    TimelineItemContent,
     type TimelineItemInterface,
     VirtualTimelineItem,
 } from "./generated/matrix_sdk_ffi.ts";
+import {
+    RoomPaginationStatus,
+    RoomPaginationStatus_Tags,
+} from "./index.web.ts";
 import { printRustError } from "./utils.ts";
+
+interface TimelineViewState {
+    items: TimelineItem<any>[];
+    showTopSpinner: boolean;
+    firstItemIndex: number;
+}
 
 export enum TimelineItemKind {
     Event = 0,
     Virtual = 1,
+    Spinner = 2,
 }
+
+export const Spinner = "spinner";
 
 export function isVirtualEvent(
     item: TimelineItem<any> | undefined,
@@ -30,24 +44,32 @@ export function isRealEvent(
 }
 
 export class TimelineItem<
-    K extends TimelineItemKind.Event | TimelineItemKind.Virtual,
+    K extends TimelineItemKind.Event | TimelineItemKind.Virtual | "spinner",
 > {
     item: K extends TimelineItemKind.Event
         ? EventTimelineItem
-        : VirtualTimelineItem;
+        : K extends "spinner"
+          ? "spinner"
+          : VirtualTimelineItem;
     kind: K;
+    continuation = false;
 
     constructor(
         kind: K,
         item: K extends TimelineItemKind.Event
             ? EventTimelineItem
-            : VirtualTimelineItem,
+            : K extends "spinner"
+              ? "spinner"
+              : VirtualTimelineItem,
     ) {
         this.kind = kind;
         this.item = item;
     }
 
     getInternalId = (): string => {
+        if (this.kind === "spinner") {
+            return "spinner";
+        }
         if (isVirtualEvent(this)) {
             if (VirtualTimelineItem.TimelineStart.instanceOf(this.item)) {
                 return "start";
@@ -75,6 +97,16 @@ export class TimelineItem<
         }
         return "1";
     };
+
+    updateContinuation(prevItem: TimelineItem<any>) {
+        this.continuation =
+            prevItem &&
+            isRealEvent(this) &&
+            isRealEvent(prevItem) &&
+            TimelineItemContent.MsgLike.instanceOf(this.item.content) &&
+            TimelineItemContent.MsgLike.instanceOf(prevItem.item.content) &&
+            this.item.sender === prevItem.item.sender;
+    }
 }
 
 export class WrapperVirtualTimelineItem extends TimelineItem<TimelineItemKind.Virtual> {
@@ -89,10 +121,20 @@ export class RealEventTimelineItem extends TimelineItem<TimelineItemKind.Event> 
     }
 }
 
+const INITIAL_FIRST_TIME_INDEX = 10000;
 class TimelineStore {
     running = false;
-    items: TimelineItem<any>[] = [];
     listeners: CallableFunction[] = [];
+
+    paginationStatus?: RoomPaginationStatus;
+    firstItemId?: string;
+    hasMoreItems = true;
+    // items: TimelineItem<any>[] = [];
+    viewState: TimelineViewState = {
+        items: [],
+        showTopSpinner: true,
+        firstItemIndex: 10000,
+    };
 
     private timelinePromise: Promise<TimelineInterface>;
 
@@ -129,24 +171,59 @@ class TimelineStore {
         }
     };
 
+    backPaginate = async (): Promise<void> => {
+        console.log("backPaginate");
+        const timeline = await this.timelinePromise;
+        const hasMore = !(await timeline.paginateBackwards(50));
+        const shouldEmit = this.hasMoreItems !== hasMore;
+        this.hasMoreItems = hasMore;
+        if (shouldEmit) {
+            this.viewState = {
+                ...this.viewState,
+                showTopSpinner: hasMore,
+            };
+            this.emit();
+        }
+    };
+
+    onPaginationStatusUpdate = async (status: RoomPaginationStatus) => {
+        this.paginationStatus = status;
+        console.log("onPaginationStatusUpdate", status);
+    };
+
     onUpdate = (updates: TimelineDiffInterface[]): void => {
-        let newItems = [...this.items];
+        let newItems = [...this.viewState.items];
 
         for (const update of updates) {
             console.log(
                 "@@ timelineStoreUpdate",
                 TimelineChange[update.change()],
-                update.change() == TimelineChange.Set ? [update.set()!.index, this.parseItem(update.set()?.item)] :
-                update.change() == TimelineChange.PushBack ? this.parseItem(update.pushBack()) :
-                update.change() == TimelineChange.PushFront ? this.parseItem(update.pushFront()) :
-                update.change() == TimelineChange.Clear ? '' :
-                update.change() == TimelineChange.PopFront ? '' :
-                update.change() == TimelineChange.PopBack ? '' :
-                update.change() == TimelineChange.Insert ? [update.insert()!.index, this.parseItem(update.insert()?.item)] :
-                update.change() == TimelineChange.Remove ? update.remove() :
-                update.change() == TimelineChange.Truncate ? update.truncate() :
-                update.change() == TimelineChange.Reset ? update.reset()!.map(this.parseItem) :
-                update.change() == TimelineChange.Append ? update.append()!.map(this.parseItem) : 'unknown'
+                update.change() == TimelineChange.Set
+                    ? [update.set()!.index, this.parseItem(update.set()?.item)]
+                    : update.change() == TimelineChange.PushBack
+                      ? this.parseItem(update.pushBack())
+                      : update.change() == TimelineChange.PushFront
+                        ? this.parseItem(update.pushFront())
+                        : update.change() == TimelineChange.Clear
+                          ? ""
+                          : update.change() == TimelineChange.PopFront
+                            ? ""
+                            : update.change() == TimelineChange.PopBack
+                              ? ""
+                              : update.change() == TimelineChange.Insert
+                                ? [
+                                      update.insert()!.index,
+                                      this.parseItem(update.insert()?.item),
+                                  ]
+                                : update.change() == TimelineChange.Remove
+                                  ? update.remove()
+                                  : update.change() == TimelineChange.Truncate
+                                    ? update.truncate()
+                                    : update.change() == TimelineChange.Reset
+                                      ? update.reset()!.map(this.parseItem)
+                                      : update.change() == TimelineChange.Append
+                                        ? update.append()!.map(this.parseItem)
+                                        : "unknown",
             );
             switch (update.change()) {
                 case TimelineChange.Set: {
@@ -203,19 +280,65 @@ class TimelineStore {
             }
         }
 
-        this.items = newItems;
+        function findFirstEventItemId(
+            items: TimelineItem<any>[],
+        ): string | undefined {
+            const eventItem = items.find(
+                (item) => item?.kind === TimelineItemKind.Event,
+            );
+            return eventItem?.getInternalId();
+        }
+
+        newItems.map((curr, i, arr) => {
+            if (i > 0) {
+                curr.updateContinuation(arr[i - 1]);
+            }
+            return curr;
+        });
+
+        // virtuoso requires us to track the "firstItemIndex" so that it knows how to prepend items
+        // to the list while maintaining the scroll position without jumps.
+        // We use a large number, as per their docs it should never be negative.
+        // https://virtuoso.dev/virtuoso-api/interfaces/VirtuosoProps/#firstitemindex
+        let firstItemIndex: number = INITIAL_FIRST_TIME_INDEX;
+        // We keep a reference to the first item by it's id.
+        if (this.firstItemId) {
+            // If we have a firstItemId, we need to find its index in the new items
+            // and calculate the firstItemIndex based on that.
+            const foundIndex = newItems.findIndex(
+                (item) => item.getInternalId() === this.firstItemId,
+            );
+
+            if (foundIndex) {
+                // If we found the item, we set the firstItemIndex to the difference
+                // between the initial index and the found index.
+                firstItemIndex = INITIAL_FIRST_TIME_INDEX - foundIndex;
+            } else {
+                // If we didn't find the item, we set the firstItemId to the first event
+                this.firstItemId = findFirstEventItemId(newItems);
+            }
+        } else {
+            // If we don't have a firstItemId, we find the first event item id
+            this.firstItemId = findFirstEventItemId(newItems);
+        }
+
+        this.viewState = { ...this.viewState, items: newItems, firstItemIndex };
         this.emit();
     };
 
     timelineListener?: TaskHandleInterface;
+    pagintationListener?: TaskHandleInterface;
     run = () => {
         if (!this.room) return;
 
         (async () => {
             console.log("subscribing to timeline", this.room.id());
-            const timelineInterface = await this.room.timeline();
-            this.timelineListener = await timelineInterface.addListener(this);
-            await timelineInterface.paginateBackwards(10);
+            const timeline = await this.room.timeline();
+            this.timelineListener = await timeline.addListener(this);
+            this.pagintationListener =
+                await timeline.subscribeToBackPaginationStatus({
+                    onUpdate: this.onPaginationStatusUpdate,
+                });
             console.log("subscribed to timeline", this.room.id());
             this.running = true;
         })();
@@ -240,8 +363,8 @@ class TimelineStore {
         };
     };
 
-    getSnapshot = (): TimelineItem<any>[] => {
-        return this.items;
+    getSnapshot = (): TimelineViewState => {
+        return this.viewState;
     };
 
     emit = () => {
