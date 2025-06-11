@@ -1,225 +1,211 @@
-import { invoke } from "@tauri-apps/api/tauri";
-import { Mutex } from 'async-mutex';
+import { debounce } from "lodash-es";
+import type { ListRange } from "react-virtuoso";
+import { applyDiff } from "./DiffUtils.ts";
+import { FILTERS, type SupportedFilters } from "./Filter";
+import {
+    type EventTimelineItem,
+    type RoomInfo,
+    type RoomInterface,
+    type RoomListDynamicEntriesControllerInterface,
+    RoomListEntriesDynamicFilterKind_Tags,
+    type RoomListEntriesUpdate,
+    type RoomListEntriesWithDynamicAdaptersResultInterface,
+    RoomListLoadingState,
+    type RoomListServiceInterface,
+    type SyncServiceInterface,
+    type TaskHandleInterface,
+} from "./index.web";
+import { StateStore } from "./StateStore.tsx";
 
-export enum RoomListEntry {
-    Empty,
-    Invalidated,
-    Filled,
-}
-
-interface ReadReceipts {
-    num_mentions: number,
-    num_notifications: number,
-    num_unread: number,
-    pending: string[],
-}
-
-interface NotificationCounts {
-    highlight_count: number,
-    notification_count: number,
-}
-
-interface Event {
-    sender: string,
-    type: string,
-    origin_server_ts: number,
-    content: {
-        body?: string,
-        msgtype?: string,
-    }
+export interface NotificationState {
+    hasAnyNotificationOrActivity: boolean;
+    invited: boolean;
+    isMention: boolean;
+    isActivityNotification: boolean;
+    isNotification: boolean;
 }
 
 export class RoomListItem {
-    entry: RoomListEntry;
-    roomId: string;
-    info: any;
+    info?: RoomInfo;
+    latestEvent?: EventTimelineItem;
+    listeners: CallableFunction[] = [];
 
-    constructor(entry: RoomListEntry, roomId: string, info: any) {
-        this.entry = entry;
-        this.roomId = roomId;
-        this.info = info;
+    constructor(private readonly room: RoomInterface) {
+        this.load();
     }
+
+    get roomId() {
+        return this.room.id();
+    }
+
+    load = async () => {
+        [this.info, this.latestEvent] = await Promise.all([
+            this.room.roomInfo(),
+            this.room.latestEvent(),
+        ]);
+        this.emit();
+    };
+
+    subscribe = (listener: CallableFunction) => {
+        this.listeners = [...this.listeners, listener];
+
+        return () => {
+            this.listeners = this.listeners.filter((l) => l !== listener);
+        };
+    };
+
+    getSnapshot = (): RoomInfo | undefined => {
+        return this.info;
+    };
+
+    emit = () => {
+        for (const listener of this.listeners) {
+            listener();
+        }
+    };
 
     getName = () => {
-        return this.info?.base_info.name?.Original?.content.name;
-    }
+        return this.info?.displayName;
+    };
 
     getAvatar = () => {
-        return this.info?.base_info.avatar?.Original?.content.url;
-    }
+        return this.info?.avatarUrl;
+    };
 
-    getReadReceipts = (): ReadReceipts => {
-        return this.info?.read_receipts;
-    }
-
-    getNotificationCounts = (): NotificationCounts => {
-        return this.info?.notification_counts;
-    }
-
-    getLatestEvent = (): Event | undefined => {
-        return this.info?.latest_event?.event?.event;
-    }
+    hasVideoCall = (): boolean => {
+        return Boolean(this.info?.hasRoomCall);
+    };
 }
 
-class RoomListStore {
+interface RoomListViewState {
+    rooms: Array<RoomListItem>;
+    numRooms: number;
+    filter: SupportedFilters;
+}
 
-    running: Boolean = false;
-    rooms: Array<RoomListItem> = [];
-    listeners: Array<CallableFunction> = [];
+class RoomListStore extends StateStore<RoomListViewState> {
+    running = false;
+    controller?: RoomListDynamicEntriesControllerInterface;
+    activeRoom?: string;
+    loadingState?: RoomListLoadingState;
+    stateStream?: TaskHandleInterface;
+    visibleRooms: string[] = [];
 
-    mutex: Mutex = new Mutex();
-
-    constructor() {
+    constructor(
+        private readonly syncServiceInterface: SyncServiceInterface,
+        private readonly roomListService: RoomListServiceInterface,
+    ) {
+        super({
+            rooms: [],
+            numRooms: -1,
+            filter: RoomListEntriesDynamicFilterKind_Tags.NonLeft,
+        });
         console.log("RoomListStore constructed");
     }
 
-    // turn the wodges of JSON from rust-sdk into something typed
-    private async parseRoom(room: any): Promise<RoomListItem> {
-        const entry: RoomListEntry = typeof room === 'string' ? 
-            RoomListEntry[room as keyof typeof RoomListEntry] :
-            RoomListEntry[Object.keys(room)[0] as keyof typeof RoomListEntry];
-
-        if (entry === RoomListEntry.Empty) {
-            return new RoomListItem(entry, '', {});
-        }
-
-        const roomId: string = Object.values(room)[0] as string;
-        // XXX: is hammering on invoke like this a good idea?
-        const info: any = await invoke("get_room_info", { roomId });
-
-        //console.log(JSON.stringify(info));
-        const rli = new RoomListItem(entry, roomId, info);
-        return (rli);
+    private parseRoom(room: RoomInterface): RoomListItem {
+        const rli = new RoomListItem(room);
+        return rli;
     }
 
+    onUpdate = async (updates: RoomListEntriesUpdate[]): Promise<void> => {
+        this.setState({
+            ...this.viewState,
+            rooms: applyDiff(this.viewState.rooms, updates, this.parseRoom),
+        });
+    };
+
+    onLoadingStateUpdate = (state: RoomListLoadingState) => {
+        this.loadingState = state;
+        if (
+            RoomListLoadingState.Loaded.instanceOf(state) &&
+            state.inner.maximumNumberOfRooms !== undefined
+        ) {
+            this.setState({
+                ...this.viewState,
+                numRooms: state.inner.maximumNumberOfRooms,
+            });
+        }
+    };
+
+    roomListEntriesWithDynamicAdapters?: RoomListEntriesWithDynamicAdaptersResultInterface;
     run = () => {
         console.log("Running roomlist store with state", this.running);
 
         (async () => {
-            console.log("=> acquiring lock while subscribing to roomlist");
-            let release = await this.mutex.acquire();
-            console.log("<= got lock while subscribing to roomlist");
-            if (this.running) console.warn("got RLS lock while RLS already running");
             console.log("subscribing to roomlist");
-            const rawRooms: Array<any> = await invoke("subscribe_roomlist");
+
             this.running = true;
-
-            this.rooms = await Promise.all(rawRooms.map(async room => await this.parseRoom(room)));
-            this.emit();
-        
-            // TODO: recover from network outages and laptop sleeping
-            while(this.running) {
-                //console.log("waiting for roomlist_update");
-
-                let diffs: any;
-                try {
-                    diffs = await invoke("get_roomlist_update");
-                }
-                catch (error) {
-                    if (error) {
-                        console.info(error);
-                    }
-                    else {
-                        console.info("unexpected error");
-                    }                    
-                }
-
-                if (!diffs) {
-                    console.info("stopping roomlist poll due to empty diff");
-                    this.running = false;
-                    break;
-                }
-
-                for (const diff of diffs) {                
-                    const k = Object.keys(diff)[0];
-                    const v = Object.values(diff)[0] as any;
-
-                    //console.log("got roomlist_update", diff);
-
-                    let room: RoomListItem;
-                    let rooms: RoomListItem[];
-
-                    // XXX: deduplicate VecDiff processing with the TimelineStore
-                    switch (k) {
-                        case "Set":
-                            room = await this.parseRoom(v.value);
-                            this.rooms[v.index] = room;
-                            this.rooms = [...this.rooms];
-                            break;
-                        case "PushBack":
-                            room = await this.parseRoom(v.value);
-                            this.rooms = [...this.rooms, room];
-                            break;
-                        case "PushFront":
-                            room = await this.parseRoom(v.value);
-                            this.rooms = [room, ...this.rooms];
-                            break;
-                        case "Clear":
-                            this.rooms = [];
-                            break;
-                        case "PopFront":
-                            this.rooms.shift();
-                            this.rooms = [...this.rooms];
-                            break;
-                        case "PopBack":
-                            this.rooms.pop();
-                            this.rooms = [...this.rooms];
-                            break;    
-                        case "Insert":
-                            room = await this.parseRoom(v.value);
-                            this.rooms.splice(v.index, 0, room);
-                            this.rooms = [...this.rooms];
-                            break;
-                        case "Remove":
-                            this.rooms.splice(v.index, 1);
-                            this.rooms = [...this.rooms];
-                            break;
-                        case "Truncate":
-                            this.rooms = this.rooms.slice(0, v.length);
-                            break;
-                        case "Reset":
-                            rooms = await Promise.all(v.values.map(async (room: any) => await this.parseRoom(room)));
-                            this.rooms = [...rooms];
-                            break;
-                        case "Append":
-                            rooms = await Promise.all(v.values.map(async (room: any) => await this.parseRoom(room)));
-                            this.rooms = [...this.rooms, ...rooms];
-                            break;
-                    }
-                }
-                this.emit();
-            }
-
-            console.log("== releasing lock after roomlist subscription & polling");
-            release();
-
-            console.log("stopped polling");
+            const abortController = new AbortController();
+            const roomList = await this.roomListService.allRooms({
+                signal: abortController.signal,
+            });
+            const { state, stateStream } = roomList.loadingState({
+                onUpdate: this.onLoadingStateUpdate,
+            });
+            this.stateStream = stateStream;
+            this.loadingState = state;
+            this.roomListEntriesWithDynamicAdapters ||=
+                roomList.entriesWithDynamicAdapters(50, this);
+            this.controller =
+                this.roomListEntriesWithDynamicAdapters.controller();
+            console.log("Apply filter", this.viewState.filter);
+            this.controller.setFilter(FILTERS[this.viewState.filter].method);
+            this.controller.addOnePage();
         })();
     };
 
-    getSnapshot = (): RoomListItem[] => {
-        return this.rooms;
-    }
-
-    subscribe = (listener: CallableFunction) => {
-        this.listeners = [...this.listeners, listener];
-        return () => {
-            console.log("unsubscribing roomlist");
-            (async () => {
-                // XXX: we should grab a mutex to avoid overlapping unsubscribes
-                await invoke("unsubscribe_roomlist");
-                this.running = false;
-            })();
-            this.listeners = this.listeners.filter(l => l !== listener);
-        };
+    subscribeToRooms = (): void => {
+        const rooms = new Set(this.visibleRooms);
+        if (this.activeRoom) rooms.add(this.activeRoom);
+        this.roomListService.subscribeToRooms([...rooms]);
     };
 
-    emit = () => {
-        for (let listener of this.listeners) {
-            listener();
-        }        
-    }   
-}
+    subscribeToRoomsDebounced = debounce(
+        (): void => {
+            this.subscribeToRooms();
+        },
+        500,
+        { trailing: true },
+    );
 
+    setActiveRoom = (roomId: string) => {
+        this.activeRoom = roomId;
+        this.subscribeToRooms();
+    };
+
+    rangeChanged = (range: ListRange): void => {
+        this.visibleRooms = this.viewState.rooms
+            .slice(range.startIndex, range.endIndex)
+            .map((room) => room.roomId);
+        this.subscribeToRoomsDebounced();
+    };
+
+    loadMore = (): void => {
+        console.log("Loading more rooms", this.loadingState?.tag);
+        this.controller?.addOnePage();
+    };
+
+    toggleFilter = (filter: SupportedFilters) => {
+        console.log("Toggling filter", filter, this.viewState.filter);
+        if (filter === this.viewState.filter) {
+            console.log("Filter is already set, resetting to 'All'");
+            this.viewState.filter =
+                RoomListEntriesDynamicFilterKind_Tags.NonLeft;
+        } else {
+            console.log("Setting filter to", filter);
+            this.viewState.filter = filter;
+        }
+
+        this.run();
+    };
+
+    isAllFilter = (): boolean => {
+        return (
+            this.viewState.filter ===
+            RoomListEntriesDynamicFilterKind_Tags.NonLeft
+        );
+    };
+}
 
 export default RoomListStore;

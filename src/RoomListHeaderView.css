@@ -1,0 +1,35 @@
+/*
+ * Copyright 2025 New Vector Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+.mx_RoomListHeader {
+    font: var(--cpd-font-heading-sm-semibold);
+    padding-top: var(--cpd-space-4x);
+    padding-bottom: var(--cpd-space-2x);
+    padding-left: var(--cpd-space-4x);
+    padding-right: var(--cpd-space-4x);
+    display: flex;
+    flex-direction: row;
+}
+
+.mx_RoomListHeader_name {
+    flex: 1 1 0;
+}
+
+.mx_RoomListHeader_icon {
+    cursor: pointer;
+    background-color: transparent;
+    border: 0px;
+    width: var(--cpd-space-8x);
+    height: var(--cpd-space-8x);
+    padding: 0px;
+    margin-top: -4px; /* hack to match design */
+}
+
+.mx_RoomListHeader_icon svg {
+    width: var(--cpd-space-5x);
+    height: var(--cpd-space-5x);
+}

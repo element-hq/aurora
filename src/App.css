@@ -1,6 +1,8 @@
 html {
     height: 100%;
     overflow: hidden;
+    background-color: var(--cpd-color-bg-canvas-default);
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
 }
 
 body {
@@ -18,12 +20,23 @@ body {
     flex-direction: column;
     width: 100%;
     height: 100%;
+    background-color: var(--cpd-color-bg-canvas-default);
+    color: var(--cpd-color-text-primary);
+}
+
+.mx_LoadingSession {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
 }
 
 /* room for the tauri window header */
 .mx_Header {
     flex: 0 0 auto;
-    height: 30px;
+    height: 0px;
 }
 
 .mx_Client {
@@ -110,36 +123,36 @@ body {
     font-size: var(--cpd-font-size-body-xs);
     font-weight: var(--cpd-font-weight-normal);
     white-space: nowrap;
-}    
+}
 
 .mx_MainPanel {
     flex: 1 1 auto;
     display: flex;
     height: 100%;
     flex-direction: column;
-    margin-left: var(--cpd-space-2x);
-    margin-right: var(--cpd-space-2x);
     margin-bottom: var(--cpd-space-1x);
 }
 
 .mx_Timeline {
     /* important to stop the header pushing the composer off the bottom */
     flex: 1 1 0;
-    overflow: scroll;
-    position: relative;
     display: flex;
 }
 
 .mx_Timeline ol {
+    padding-left: var(--cpd-space-2x);
+    padding-right: var(--cpd-space-2x);
     width: 100%;
     margin: 0px;
-    padding: 0px;
-    align-content: end;
     list-style: none;
 }
 
 .mx_Timeline ol li::marker {
     color: var(--cpd-color-text-placeholder);
+}
+
+.mx_TimelineSpinner {
+    text-align: center;
 }
 
 .mx_Timestamp {
@@ -150,28 +163,39 @@ body {
 
 .mx_EventTile .mx_Avatar {
     position: absolute;
-    left: var(--cpd-space-2x);
+    padding-left: var(--cpd-space-2x);
 }
 
 .mx_Sender {
     display: block;
-    margin-left: var(--cpd-space-14x);
-    margin-bottom: var(--cpd-space-1x);
+    padding-left: var(--cpd-space-14x);
     font-size: var(--cpd-font-size-body-sm);
     font-weight: var(--cpd-font-weight-semibold);
     color: var(--cpd-color-text-secondary);
+    position: relative;
+}
+
+.mx_Sender::after {
+    content: "";
+    display: block;
+    height: var(--cpd-space-1x);
+    width: 100%;
 }
 
 .mx_Content {
     display: block;
-    margin-left: var(--cpd-space-14x);
+    padding-left: var(--cpd-space-14x);
     font-size: var(--cpd-font-size-body-md);
     color: var(--cpd-color-text-primary);
 }
 
+.mx_EventTile:not(.mx_EventTile_continuation)::before {
+    content: "";
+    display: block;
+    height: var(--cpd-space-2x);
+}
+
 .mx_EventTile {
-    margin-top: var(--cpd-space-2x);
-    margin-bottom: var(--cpd-space-2x);
     display: block;
     overflow-wrap: anywhere;
 }
@@ -181,12 +205,27 @@ body {
 }
 
 .mx_StateEventTile {
-    margin-top: var(--cpd-space-0-5x);
-    margin-bottom: var(--cpd-space-0-5x);
-    margin-left: var(--cpd-space-14x);
+    display: block;
     font-weight: var(--cpd-font-weight-semibold);
     color: var(--cpd-color-text-secondary);
     font-size: var(--cpd-font-size-body-xs);
+    position: relative;
+}
+
+.mx_StateEventTile::before {
+    content: "";
+    display: block;
+    height: var(--cpd-space-0-5x);
+}
+
+.mx_StateEventTile::after {
+    content: "";
+    display: block;
+    height: var(--cpd-space-0-5x);
+}
+
+.mx_StateEventTile {
+    padding-left: var(--cpd-space-14x);
 }
 
 .mx_StateAvatar {
@@ -196,18 +235,25 @@ body {
 
 .mx_Separator {
     width: 100%;
-    margin-top: var(--cpd-space-4x);
-    margin-bottom: 0px;
-    border-top: 1px solid var(--cpd-color-border-interactive-primary);
+    display: flex;
+    align-items: center;
     font-size: var(--cpd-font-size-body-sm);
     color: var(--cpd-color-text-secondary);
     text-align: center;
+    padding-top: var(--cpd-space-4x);
+}
+
+.mx_Separator::before,
+.mx_Separator::after {
+    content: "";
+    flex: 1;
+    border-top: 1px solid var(--cpd-color-border-interactive-primary);
+    height: 0;
 }
 
 .mx_Separator span {
-    background-color: var(--cpd-color-bg-canvas-default);
-    position: relative;
-    top: -9px;
+    padding: 0 em;
+    /* background-color: var(--cpd-color-bg-canvas-default); */
 }
 
 .mx_ReadMarker {
@@ -235,19 +281,32 @@ body {
     width: 100%;
 }
 
+.mx_Composer_wrapper {
+    border: 1px solid var(--cpd-color-border-interactive-secondary);
+    border-radius: var(--cpd-space-12x);
+    height: var(--cpd-space-12x);
+    margin: var(--cpd-space-4x);
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    justify-content: center;
+}
+
 #mx_Composer_textarea {
+    border: 0px;
+    font: var(--cpd-font-body-md-regular);
     background-color: var(--cpd-color-bg-canvas-default);
     color: var(--cpd-color-text-primary);
-    border: 0px;
-    font-size: 16px;
-    flex: 1 1 auto;
-    padding: var(--cpd-space-3x);
-    margin-top: var(--cpd-space-2x);
-    margin-bottom: var(--cpd-space-2x);
-    border-radius: 32px;
+    margin-left: var(--cpd-space-3x);
+    margin-right: var(--cpd-space-3x);
+    outline: none;
     resize: none;
 }
- 
+
+#mx_Composer_textarea::placeholder {
+    color: var(--cpd-color-text-secondary);
+}
+
 #mx_Composer_send {
     display: none;
     width: 4em;
@@ -255,4 +314,3 @@ body {
     font-size: 16px;
     margin: 4px;
 }
- 
