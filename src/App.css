@@ -24,6 +24,15 @@ body {
     color: var(--cpd-color-text-primary);
 }
 
+.mx_LoadingSession {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
 /* room for the tauri window header */
 .mx_Header {
     flex: 0 0 auto;

@@ -1,4 +1,3 @@
-import { Mutex } from "async-mutex";
 import { MemberListStore } from "./MemberList/MemberListStore.tsx";
 import RoomListStore from "./RoomListStore.tsx";
 import TimelineStore from "./TimelineStore.tsx";
@@ -22,8 +21,10 @@ interface LoginParams {
 
 export enum ClientState {
     Unknown = 0,
-    LoggedIn = 1,
-    LoggedOut = 2,
+    LoadingSession = 1,
+    LoggedOut = 3,
+    LoggingIn = 4,
+    LoggedIn = 2,
 }
 
 /**
@@ -47,14 +48,12 @@ class SessionStore {
 class ClientStore {
     sessionStore = new SessionStore();
 
-    timelineStores: Map<string, TimelineStore> = new Map();
+    timelineStore?: TimelineStore;
     roomListStore?: RoomListStore;
     client?: ClientInterface;
     syncService?: SyncServiceInterface;
-    memberListStore: Map<string, MemberListStore> = new Map();
+    memberListStore?: MemberListStore;
     roomListService?: RoomListServiceInterface;
-
-    mutex: Mutex = new Mutex();
 
     clientState: ClientState = ClientState.Unknown;
     listeners: CallableFunction[] = [];
@@ -99,13 +98,12 @@ class ClientStore {
         );
 
     tryLoadSession = async () => {
-        const release = await this.mutex.acquire();
+        this.clientState = ClientState.LoadingSession;
+        this.emit();
         try {
             const session = this.sessionStore.load();
             if (!session) {
-                this.clientState = ClientState.LoggedOut;
-                this.emit();
-                return;
+                throw new Error("No session found");
             }
 
             const client = await this.getClientBuilder()
@@ -117,20 +115,19 @@ class ClientStore {
             this.clientState = ClientState.LoggedIn;
         } catch (e) {
             printRustError("Failed to restore session", e);
-        } finally {
-            release();
+            this.clientState = ClientState.LoggedOut;
+            this.emit();
+            return;
         }
 
         await this.sync();
-
         this.emit();
-        release();
     };
 
     logout = () => {
         this.sessionStore.clear();
         this.client = undefined;
-        this.timelineStores = new Map();
+        this.timelineStore = undefined;
         this.roomListStore = undefined;
         this.roomListService = undefined;
         this.syncService = undefined;
@@ -139,7 +136,8 @@ class ClientStore {
     };
 
     login = async ({ username, password, server }: LoginParams) => {
-        const release = await this.mutex.acquire();
+        this.clientState = ClientState.LoggingIn;
+        this.emit();
         const client = await this.getClientBuilder()
             .homeserverUrl(server)
             .build();
@@ -169,14 +167,11 @@ class ClientStore {
             printRustError("login failed", e);
             this.clientState = ClientState.Unknown;
             this.emit();
-            release();
             return;
         }
 
         await this.sync();
-
         this.emit();
-        release();
     };
 
     sync = async () => {
@@ -198,36 +193,38 @@ class ClientStore {
         }
     };
 
-    getTimelineStore = async (roomId: string) => {
+    getTimelineStore = (roomId: string) => {
         if (roomId === "") return;
-        const release = await this.mutex.acquire(); // to block during login
-        release();
-        let store = this.timelineStores.get(roomId);
-        if (!store) {
-            store = new TimelineStore(this.client!.getRoom(roomId)!);
-            this.timelineStores.set(roomId, store);
+        if (this.timelineStore?.room.id() !== roomId) {
+            this.timelineStore?.stop();
+            const store = new TimelineStore(this.client!.getRoom(roomId)!);
+            store.run();
+            this.timelineStore = store;
         }
-        return store;
+        return this.timelineStore;
     };
 
-    getRoomListStore = async () => {
-        await this.mutex.waitForUnlock(); // to block during login
-        this.roomListStore ||= new RoomListStore(
-            this.syncService!,
-            this.roomListService!,
-        );
+    getRoomListStore = () => {
+        console.log("getRoomListStore called");
+        if (!this.roomListStore) {
+            const store = new RoomListStore(
+                this.syncService!,
+                this.roomListService!,
+            );
+            store.run();
+            this.roomListStore = store;
+        }
         return this.roomListStore;
     };
 
-    getMemberListStore = async (roomId: string) => {
-        const release = await this.mutex.acquire();
-        release();
-        let store = this.memberListStore.get(roomId);
-        if (!store) {
-            store = new MemberListStore(roomId, this.client!);
-            this.memberListStore.set(roomId, store);
+    getMemberListStore = (roomId: string) => {
+        if (roomId === "") return;
+        if (this.memberListStore?.roomId !== roomId) {
+            const store = new MemberListStore(roomId, this.client!);
+            store.run();
+            this.memberListStore = store;
         }
-        return store;
+        return this.memberListStore;
     };
 
     subscribe = (listener: any) => {
