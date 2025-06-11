@@ -12,6 +12,7 @@ import {
     VirtualTimelineItem,
 } from "./generated/matrix_sdk_ffi.ts";
 import type { RoomPaginationStatus } from "./index.web.ts";
+import { StateStore } from "./StateStore.tsx";
 import { printRustError } from "./utils.ts";
 
 interface TimelineViewState {
@@ -119,23 +120,19 @@ export class RealEventTimelineItem extends TimelineItem<TimelineItemKind.Event> 
 }
 
 const INITIAL_FIRST_TIME_INDEX = 10000;
-class TimelineStore {
+class TimelineStore extends StateStore<TimelineViewState> {
     running = false;
-    listeners: CallableFunction[] = [];
-
     paginationStatus?: RoomPaginationStatus;
     firstItemId?: string;
     hasMoreItems = true;
-    // items: TimelineItem<any>[] = [];
-    viewState: TimelineViewState = {
-        items: [],
-        showTopSpinner: true,
-        firstItemIndex: 10000,
-    };
-
     private timelinePromise: Promise<TimelineInterface>;
 
     constructor(public readonly room: RoomInterface) {
+        super({
+            items: [],
+            showTopSpinner: true,
+            firstItemIndex: INITIAL_FIRST_TIME_INDEX,
+        });
         this.timelinePromise = this.room.timeline();
     }
 
@@ -175,11 +172,10 @@ class TimelineStore {
         const shouldEmit = this.hasMoreItems !== hasMore;
         this.hasMoreItems = hasMore;
         if (shouldEmit) {
-            this.viewState = {
+            this.setState({
                 ...this.viewState,
                 showTopSpinner: hasMore,
-            };
-            this.emit();
+            });
         }
     };
 
@@ -319,8 +315,11 @@ class TimelineStore {
             this.firstItemId = findFirstEventItemId(newItems);
         }
 
-        this.viewState = { ...this.viewState, items: newItems, firstItemIndex };
-        this.emit();
+        this.setState({
+            ...this.viewState,
+            items: newItems,
+            firstItemIndex,
+        });
     };
 
     timelineListener?: TaskHandleInterface;
@@ -348,50 +347,6 @@ class TimelineStore {
             console.log("unsubscribed to timeline", this.room.id());
         })();
     };
-
-    subscribe = (listener: CallableFunction) => {
-        this.listeners = [...this.listeners, listener];
-
-        return () => {
-            (async () => {
-                this.running = false;
-            })();
-            this.listeners = this.listeners.filter((l) => l !== listener);
-        };
-    };
-
-    getSnapshot = (): TimelineViewState => {
-        return this.viewState;
-    };
-
-    emit = () => {
-        for (const listener of this.listeners) {
-            listener();
-        }
-    };
-
-    // private logItems(timeline_items: any[]) {
-    //     console.log("timeline items", timeline_items);
-    //     for (let i = 0; i < timeline_items.length; i++) {
-    //         const value = timeline_items[i];
-    //         const kind = value.kind ? Object.keys(value.kind)[0] : null;
-    //         const event = value?.kind.Event;
-    //         const content = event?.content;
-    //         console.log(`Item index=${i} internal_id=${value.internal_id} sender=${event?.sender_profile.Ready ?
-    //                 event?.sender_profile.Ready.display_name :
-    //                 event?.sender} kind=${kind} content=${content?.Message?.msgtype?.body || content}`);
-    //     }
-    // }
-
-    // private logDiff(k: string, v: any) {
-    //     const kind = v.value?.kind ? Object.keys(v.value?.kind)[0] : null;
-    //     const event = v.value?.kind.Event;
-    //     const content = v.value?.kind.Event?.content;
-
-    //     console.log(`${k} index=${v.index} internal_id=${v.value?.internal_id} sender=${event?.sender_profile.Ready ?
-    //             event?.sender_profile.Ready.display_name :
-    //             event?.sender} kind=${kind} content=${content?.Message?.msgtype?.body || content}`);
-    // }
 }
 
 export default TimelineStore;
