@@ -31,7 +31,7 @@ export const Login: React.FC<LoginProps> = ({ clientStore, loggingIn }) => {
                                     clientStore.login({
                                         username,
                                         password,
-                                        server: `https://${server}`,
+                                        server,
                                     });
                                 }}
                             >

@@ -139,7 +139,7 @@ class ClientStore {
         this.clientState = ClientState.LoggingIn;
         this.emit();
         const client = await this.getClientBuilder()
-            .homeserverUrl(server)
+            .serverNameOrHomeserverUrl(server)
             .build();
 
         console.log("starting sdk...");
