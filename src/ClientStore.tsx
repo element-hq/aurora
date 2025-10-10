@@ -144,7 +144,6 @@ class ClientStore {
                     extraTargets: [],
                     writeToStdoutOrSystem: true,
                     writeToFiles: undefined,
-                    sentryDsn: undefined,
                 },
                 true,
             );

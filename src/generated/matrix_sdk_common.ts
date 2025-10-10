@@ -65,7 +65,12 @@ export enum ShieldStateCode {
     /**
      * The sender was previously verified but changed their identity.
      */
-    VerificationViolation
+    VerificationViolation,
+    /**
+     * The `sender` field on the event does not match the owner of the device
+     * that established the Megolm session.
+     */
+    MismatchedSender
 }
 
 const FfiConverterTypeShieldStateCode = (() => {
@@ -80,6 +85,7 @@ const FfiConverterTypeShieldStateCode = (() => {
                 case 4: return ShieldStateCode.UnverifiedIdentity;
                 case 5: return ShieldStateCode.SentInClear;
                 case 6: return ShieldStateCode.VerificationViolation;
+                case 7: return ShieldStateCode.MismatchedSender;
                 default: throw new UniffiInternalError.UnexpectedEnumCase();
             }
         }
@@ -91,6 +97,7 @@ const FfiConverterTypeShieldStateCode = (() => {
                 case ShieldStateCode.UnverifiedIdentity: return ordinalConverter.write(4, into);
                 case ShieldStateCode.SentInClear: return ordinalConverter.write(5, into);
                 case ShieldStateCode.VerificationViolation: return ordinalConverter.write(6, into);
+                case ShieldStateCode.MismatchedSender: return ordinalConverter.write(7, into);
             }
         }
         allocationSize(value: TypeName): number {

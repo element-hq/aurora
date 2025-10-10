@@ -1,5 +1,5 @@
 rust:
-  repo: https://github.com/filament-dm/matrix-rust-sdk
+  repo: https://github.com/langleyd/matrix-rust-sdk
   branch: wasm_mega_pr
   manifestPath: bindings/matrix-sdk-ffi-web/Cargo.toml
 web:
