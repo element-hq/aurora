@@ -25,7 +25,7 @@ export function RoomListView({
     vm,
     onRoomSelected,
 }: RoomListViewProps): JSX.Element {
-    const { sections, visibleRooms, groupCounts, currentRoomId, loading } =
+    const { rooms, sections, visibleRooms, groupCounts, currentRoomId, loading } =
         useViewModel(vm);
 
     // Show centered spinner while waiting for room list to load
@@ -43,6 +43,11 @@ export function RoomListView({
                 <InlineSpinner />
             </div>
         );
+    }
+
+    // If there are no rooms at all, show empty state
+    if (rooms.length === 0) {
+        return <div className="mx_RoomListView">No rooms</div>;
     }
 
     // The first div is needed to make the virtualized list take all the remaining space and scroll correctly
