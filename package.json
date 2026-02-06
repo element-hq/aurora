@@ -20,10 +20,10 @@
         "biome:format": "yarn biome format --write ."
     },
     "dependencies": {
-        "@element-hq/web-shared-components": "0.0.1",
+        "@element-hq/web-shared-components": "0.0.2",
         "@tauri-apps/api": "^1.5.2",
         "@vector-im/compound-design-tokens": "^6.0.0",
-        "@vector-im/compound-web": "^8.2.1",
+        "@vector-im/compound-web": "^8.3.6",
         "async-mutex": "^0.4.1",
         "classnames": "^2.5.1",
         "lodash-es": "^4.17.21",

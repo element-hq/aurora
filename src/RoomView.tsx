@@ -12,7 +12,6 @@ import MemberListView from "./MemberList/MemberListView";
 import { RoomHeaderView } from "./RoomHeaderView";
 import { Timeline } from "./Timeline";
 import type { RoomViewModel } from "./viewmodel/RoomViewModel";
-import type { RoomListViewModel } from "./viewmodel/RoomListViewModel";
 
 interface RoomViewProps {
     roomViewModel: RoomViewModel;
