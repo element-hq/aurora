@@ -2,9 +2,7 @@ import type React from "react";
 import "./App.css";
 import { useViewModel } from "@element-hq/web-shared-components";
 import { useClientStoreContext } from "./context/ClientStoreContext";
-import { RoomListHeader, RoomListSearch } from "./RoomList";
-import { RoomListFiltersView } from "./RoomListFiltersView";
-import { RoomListView } from "./RoomListView";
+import { RoomListHeader, RoomListSearch, RoomListView } from "./RoomList";
 import { RoomView } from "./RoomView";
 import { SidePanelView } from "./SidePanelView.tsx";
 import { SplashView } from "./SplashView.tsx";
@@ -19,16 +17,8 @@ export const Client: React.FC<ClientProps> = ({ onAddAccount }) => {
     const [clientViewModel] = useClientStoreContext();
     const { roomListViewModel, roomViewModel } = useViewModel(clientViewModel);
 
-    // Handle room changes
-    const handleRoomSelected = (roomId: string) => {
-        clientViewModel.setCurrentRoom(roomId);
-    };
-
+    // Room list view model must be available to render
     if (!roomListViewModel) return null;
-
-    console.log(
-        `roomListViewModel: ${roomListViewModel}, roomViewModel: ${roomViewModel}`,
-    );
 
     return (
         <>
@@ -42,16 +32,8 @@ export const Client: React.FC<ClientProps> = ({ onAddAccount }) => {
                 </nav>
                 <nav className="mx_RoomList">
                     <RoomListSearch />
-                    {
-                        <>
-                            <RoomListHeader />
-                            <RoomListFiltersView vm={roomListViewModel} />
-                            <RoomListView
-                                vm={roomListViewModel}
-                                onRoomSelected={handleRoomSelected}
-                            />
-                        </>
-                    }
+                    <RoomListHeader />
+                    <RoomListView vm={roomListViewModel} />
                 </nav>
                 {roomViewModel ? (
                     <RoomView roomViewModel={roomViewModel} />

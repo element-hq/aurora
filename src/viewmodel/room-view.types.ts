@@ -10,7 +10,7 @@
 import type { RoomInterface } from "../index.web";
 import type { MemberListViewModel } from "./MemberListViewModel";
 import type { TimelineViewModel } from "./TimelineViewModel";
-import type { RoomSummary } from "./RoomSummary";
+import type { RoomSummary } from "../RoomList/RoomSummary";
 
 export interface RoomViewSnapshot {
     timelineViewModel: TimelineViewModel;

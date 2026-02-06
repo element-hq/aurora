@@ -7,3 +7,4 @@
 
 export { RoomListHeader } from "./RoomListHeader";
 export { RoomListSearch } from "./RoomListSearch";
+export { RoomListView } from "./RoomListView";

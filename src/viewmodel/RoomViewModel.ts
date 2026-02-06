@@ -10,7 +10,7 @@
 import { BaseViewModel } from "@element-hq/web-shared-components";
 import { MemberListViewModel } from "./MemberListViewModel";
 import { TimelineViewModel } from "./TimelineViewModel";
-import { buildRoomSummary, type RoomSummary } from "./RoomSummary";
+import { buildRoomSummary, type RoomSummary } from "../RoomList/RoomSummary";
 import type { Props, RoomViewSnapshot } from "./room-view.types";
 
 export class RoomViewModel extends BaseViewModel<RoomViewSnapshot, Props> {

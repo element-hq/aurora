@@ -11,7 +11,7 @@ import type { TimelineViewModel } from "./TimelineViewModel";
 import type { ClientViewModel } from "./ClientViewModel";
 import type { EncryptionViewModel } from "./EncryptionViewModel";
 import type { LoginViewModel } from "./LoginViewModel";
-import type { RoomListViewModel } from "./RoomListViewModel";
+import type { RoomListViewViewModel } from "../RoomList/RoomListViewViewModel";
 import type { RoomViewModel } from "./RoomViewModel";
 
 export enum ClientState {
@@ -52,7 +52,7 @@ export interface ClientViewSnapshot {
     loginViewModel?: LoginViewModel;
 
     /** ViewModel for the list of all rooms */
-    roomListViewModel?: RoomListViewModel;
+    roomListViewModel?: RoomListViewViewModel;
 
     /** ViewModel for encryption and recovery management */
     encryptionViewModel?: EncryptionViewModel;

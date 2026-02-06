@@ -13,7 +13,7 @@ import {
     validateNativeSlidingSync,
 } from "../utils/clientBuilder";
 import { BaseViewModel } from "@element-hq/web-shared-components";
-import { MemberListViewModel } from "./MemberListViewModel";
+import { MemberListViewModel } from "./MemberListViewModel.ts";
 import { TimelineViewModel } from "./TimelineViewModel";
 import { RoomViewModel } from "./RoomViewModel";
 import {
@@ -41,7 +41,7 @@ import {
 import type { Credential } from "./credentials.types";
 import { EncryptionViewModel } from "./EncryptionViewModel";
 import { LoginViewModel } from "./LoginViewModel";
-import { RoomListViewModel } from "./RoomListViewModel";
+import { RoomListViewViewModel } from "../RoomList/RoomListViewViewModel";
 
 export class ClientViewModel
     extends BaseViewModel<ClientViewSnapshot, Props>
@@ -549,9 +549,11 @@ export class ClientViewModel
             this.roomListService = this.syncService.roomListService();
 
             // Initialize room list view model now that sync services are ready
-            const roomListViewModel = new RoomListViewModel({
+            const roomListViewModel = new RoomListViewViewModel({
                 syncServiceInterface: this.syncService,
                 roomListService: this.roomListService,
+                client: this.client,
+                openRoom: this.openRoom.bind(this),
             });
 
             console.log("Sync services created, transitioning to Syncing");
@@ -595,5 +597,9 @@ export class ClientViewModel
         });
 
         snapshot.roomListViewModel?.setActiveRoom(roomId);
+    }
+
+    public openRoom(roomId: string): void {
+        this.setCurrentRoom(roomId);
     }
 }

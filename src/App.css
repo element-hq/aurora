@@ -68,7 +68,8 @@ body {
     display: flex;
     /* this is important, to stop roomlist pushing the composer off the bottom */
     flex-direction: column;
-    flex: 0 0 auto;
+    flex: 0 0 320px;
+    width: 320px;
     border-right: 1px solid #262628;
 }
 
