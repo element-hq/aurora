@@ -110,8 +110,9 @@ export function buildRoomSummary(
         isNotification: hasNotifications || isMarkedUnread,
         // Activity notification = has unread messages but no notification-level unreads
         // OR the room is explicitly marked as unread (and has no notifications)
-        isActivityNotification: (hasUnreadMessages && !hasNotifications),
-        hasAnyNotificationOrActivity: hasUnreadMessages || hasNotifications || invited || isMarkedUnread,
+        isActivityNotification: hasUnreadMessages && !hasNotifications,
+        hasAnyNotificationOrActivity:
+            hasUnreadMessages || hasNotifications || invited || isMarkedUnread,
         invited,
     };
 

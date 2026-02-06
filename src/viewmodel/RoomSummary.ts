@@ -110,8 +110,10 @@ export function buildRoomSummary(
         isNotification: hasNotifications || isMarkedUnread,
         // Activity notification = has unread messages but no notification-level unreads AND not marked as unread
         // This ensures we don't show both the notification badge and activity dot at the same time
-        isActivityNotification: (hasUnreadMessages && !hasNotifications && !isMarkedUnread),
-        hasAnyNotificationOrActivity: hasUnreadMessages || hasNotifications || invited || isMarkedUnread,
+        isActivityNotification:
+            hasUnreadMessages && !hasNotifications && !isMarkedUnread,
+        hasAnyNotificationOrActivity:
+            hasUnreadMessages || hasNotifications || invited || isMarkedUnread,
         invited,
     };
 

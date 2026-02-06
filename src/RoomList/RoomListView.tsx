@@ -5,11 +5,12 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import {
-    RoomListView as SharedRoomListView,
-} from "@element-hq/web-shared-components";
+import { RoomListView as SharedRoomListView } from "@element-hq/web-shared-components";
 import type { ReactNode } from "react";
-import type { RoomListViewViewModel, RoomDisplayInfo } from "./RoomListViewViewModel";
+import type {
+    RoomListViewViewModel,
+    RoomDisplayInfo,
+} from "./RoomListViewViewModel";
 import BaseAvatar from "../MemberList/BaseAvatar";
 
 interface RoomListViewProps {

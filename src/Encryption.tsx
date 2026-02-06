@@ -1,6 +1,6 @@
 /*
  *
- *  * Copyright 2025 New Vector Ltd.
+ *  * Copyright 2026 New Vector Ltd.
  *  *
  *  * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
  *  * Please see LICENSE files in the repository root for full details.
@@ -8,12 +8,12 @@
  */
 
 import {
-    Glass,
     InlineSpinner,
     TooltipProvider,
     IconButton,
 } from "@vector-im/compound-web";
-import { useViewModel } from "@element-hq/web-shared-components";
+import { useViewModel, MockViewModel } from "@element-hq/web-shared-components";
+import { useEffect, useRef } from "react";
 import type React from "react";
 import type { EncryptionViewModel } from "./viewmodel/EncryptionViewModel";
 import { EncryptionFlow } from "./viewmodel/encryption-view.types";
@@ -29,6 +29,11 @@ import { EnablingRecoveryScreen } from "./EnablingRecoveryScreen";
 import { SaveRecoveryKeyScreen } from "./SaveRecoveryKeyScreen";
 import { ResetIdentityWarningScreen } from "./ResetIdentityWarningScreen";
 import { ResetIdentityPasswordScreen } from "./ResetIdentityPasswordScreen";
+import { ModalManager, type DialogHandle } from "./ModalManager.tsx";
+import type {
+    DialogViewSnapshot,
+    DialogViewActions,
+} from "./viewmodel/dialog-view.types";
 import styles from "./Encryption.module.css";
 
 export interface EncryptionProps {
@@ -167,6 +172,9 @@ export const Encryption: React.FC<EncryptionProps> = ({
         }
     };
 
+    const dialogShownRef = useRef(false);
+    const dialogHandleRef = useRef<DialogHandle | null>(null);
+
     const handleGoBack = () => {
         encryptionViewModel.goBack();
     };
@@ -175,66 +183,126 @@ export const Encryption: React.FC<EncryptionProps> = ({
     const isCriticalFlow = flow === EncryptionFlow.ResetIdentityWarning;
     const learnMoreLink = getLearnMoreLink();
 
-    return (
-        <div className="mx_LoginPage">
-            <div className="mx_Login">
-                <Glass>
-                    <div className={`mx_Login_dialog ${styles.dialog}`}>
-                        <TooltipProvider>
-                            {canGoBack && (
-                                <div className={styles.backButton}>
-                                    <IconButton
-                                        kind="secondary"
-                                        onClick={handleGoBack}
-                                        aria-label="Go back"
-                                    >
-                                        <ChevronLeftIcon />
-                                    </IconButton>
-                                </div>
-                            )}
-
-                            <div className={styles.header}>
-                                <div
-                                    className={`${styles.iconContainer} ${isCriticalFlow ? styles.iconContainerCritical : ""}`}
-                                >
-                                    <Icon
-                                        width="32px"
-                                        height="32px"
-                                        className={
-                                            isCriticalFlow
-                                                ? styles.iconCritical
-                                                : styles.icon
-                                        }
-                                    />
-                                </div>
-
-                                <h2 className={styles.title}>{getTitle()}</h2>
-
-                                {getSubtitle() && (
-                                    <p className={styles.subtitle}>
-                                        {getSubtitle()}
-                                    </p>
-                                )}
-
-                                {learnMoreLink && (
-                                    <div className={styles.learnMore}>
-                                        <a
-                                            href={learnMoreLink}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className={styles.learnMoreLink}
-                                        >
-                                            Learn more
-                                        </a>
-                                    </div>
-                                )}
-                            </div>
-
-                            {renderFlow()}
-                        </TooltipProvider>
+    const dialogContent = (
+        <div className={styles.dialog}>
+            <TooltipProvider>
+                {canGoBack && (
+                    <div className={styles.backButton}>
+                        <IconButton
+                            kind="secondary"
+                            onClick={handleGoBack}
+                            aria-label="Go back"
+                        >
+                            <ChevronLeftIcon />
+                        </IconButton>
                     </div>
-                </Glass>
-            </div>
+                )}
+
+                <div className={styles.header}>
+                    <div
+                        className={`${styles.iconContainer} ${isCriticalFlow ? styles.iconContainerCritical : ""}`}
+                    >
+                        <Icon
+                            width="32px"
+                            height="32px"
+                            className={
+                                isCriticalFlow
+                                    ? styles.iconCritical
+                                    : styles.icon
+                            }
+                        />
+                    </div>
+
+                    <h2 className={styles.title}>{getTitle()}</h2>
+
+                    {getSubtitle() && (
+                        <p className={styles.subtitle}>{getSubtitle()}</p>
+                    )}
+
+                    {learnMoreLink && (
+                        <div className={styles.learnMore}>
+                            <a
+                                href={learnMoreLink}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className={styles.learnMoreLink}
+                            >
+                                Learn more
+                            </a>
+                        </div>
+                    )}
+                </div>
+
+                {renderFlow()}
+            </TooltipProvider>
         </div>
     );
+
+    useEffect(() => {
+        if (!dialogShownRef.current) {
+            dialogShownRef.current = true;
+
+            // Create a mock dialog view model (no submit/cancel for encryption flows)
+            const dialogVM = new MockViewModel<DialogViewSnapshot>({
+                canSubmit: false,
+                title: "",
+                actionLabel: "",
+                isSubmitting: false,
+            }) as unknown as MockViewModel<DialogViewSnapshot> &
+                DialogViewActions;
+
+            dialogVM.submit = async () => {};
+            dialogVM.cancel = () => {};
+            dialogVM.setCanSubmit = () => {};
+            dialogVM.setError = () => {};
+            dialogVM.clearError = () => {};
+
+            const handle = ModalManager.showDialog(
+                dialogVM,
+                dialogContent,
+                "aurora_EncryptionDialog",
+                false, // not dismissible
+                false, // no backdrop
+            );
+            dialogHandleRef.current = handle;
+        }
+    }, []);
+
+    // Close dialog when encryption flow is complete
+    useEffect(() => {
+        if (flow === EncryptionFlow.Complete && dialogHandleRef.current) {
+            dialogHandleRef.current.close();
+            dialogHandleRef.current = null;
+        }
+    }, [flow]);
+
+    // Re-render dialog content when flow changes
+    useEffect(() => {
+        if (dialogShownRef.current && flow !== EncryptionFlow.Complete) {
+            const dialogVM = new MockViewModel<DialogViewSnapshot>({
+                canSubmit: false,
+                title: "",
+                actionLabel: "",
+                isSubmitting: false,
+            }) as unknown as MockViewModel<DialogViewSnapshot> &
+                DialogViewActions;
+
+            dialogVM.submit = async () => {};
+            dialogVM.cancel = () => {};
+            dialogVM.setCanSubmit = () => {};
+            dialogVM.setError = () => {};
+            dialogVM.clearError = () => {};
+
+            const handle = ModalManager.showDialog(
+                dialogVM,
+                dialogContent,
+                "aurora_EncryptionDialog",
+                false, // not dismissible
+                false, // no backdrop
+            );
+            dialogHandleRef.current = handle;
+        }
+    }, [flow, canGoBack]);
+
+    return <div className="mx_LoginPage" />;
 };
