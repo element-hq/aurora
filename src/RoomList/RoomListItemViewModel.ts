@@ -11,6 +11,7 @@ import {
     RoomNotifState,
 } from "@element-hq/web-shared-components";
 import type { RoomSummary } from "./RoomSummary.ts";
+import { buildRoomSummary } from "./RoomSummary.ts";
 import type { RoomDisplayInfo } from "./RoomListViewViewModel";
 import { ReceiptType, RoomNotificationMode, type ClientInterface } from "../generated/matrix_sdk_ffi.ts";
 
@@ -64,7 +65,7 @@ export class RoomListItemViewModel extends BaseViewModel<
                 isActivityNotification: summary.notificationState.isActivityNotification,
                 isNotification: summary.notificationState.isNotification,
                 hasUnreadCount: summary.unreadMessagesCount > 0,
-                count: summary.unreadMessagesCount,
+                count: 0, // Don't show counts for now, EXMobile doesn't either.
                 muted: false,
             },
             showMoreOptionsMenu: true,
@@ -80,6 +81,9 @@ export class RoomListItemViewModel extends BaseViewModel<
         
         // Fetch the actual notification mode
         this.fetchNotificationMode();
+        
+        // Subscribe to room info updates to reactively update notification state
+        this.subscribeToRoomInfoUpdates();
     }
 
     /**
@@ -96,6 +100,40 @@ export class RoomListItemViewModel extends BaseViewModel<
         } catch (error) {
             console.error(`Failed to fetch notification mode for room ${this.props.summary.id}:`, error);
         }
+    }
+
+    /**
+     * Subscribe to room info updates to reactively update when notification state changes
+     */
+    private subscribeToRoomInfoUpdates(): void {
+        console.log(`[RoomListItemViewModel] Subscribing to room info updates for ${this.props.summary.name} (${this.props.summary.id})`);
+        
+        const roomInfoToken = this.props.summary.room.subscribeToRoomInfoUpdates({
+            call: async (roomInfo) => {
+                console.log(`[RoomListItemViewModel] Received room info update for ${this.props.summary.name}:`, {
+                    numUnreadNotifications: roomInfo.numUnreadNotifications,
+                    numUnreadMentions: roomInfo.numUnreadMentions,
+                    numUnreadMessages: roomInfo.numUnreadMessages,
+                    isMarkedUnread: roomInfo.isMarkedUnread,
+                });
+                
+                // When room info changes (including unread counts), rebuild the summary
+                const latestEvent = await this.props.summary.room.latestEvent();
+                const updatedSummary = buildRoomSummary(
+                    this.props.summary.room,
+                    roomInfo,
+                    latestEvent,
+                );
+                
+                // Update the snapshot with the new notification state
+                this.updateSummary(updatedSummary);
+            },
+        });
+
+        this.disposables.track(() => {
+            console.log(`[RoomListItemViewModel] Unsubscribing from room info updates for ${this.props.summary.name} (${this.props.summary.id})`);
+            roomInfoToken.cancel();
+        });
     }
 
     /**
@@ -126,7 +164,7 @@ export class RoomListItemViewModel extends BaseViewModel<
                 isActivityNotification: summary.notificationState.isActivityNotification,
                 isNotification: summary.notificationState.isNotification,
                 hasUnreadCount: summary.unreadMessagesCount > 0,
-                count: summary.unreadMessagesCount,
+                count: 0, // Don't show counts for now, EXMobile doesn't either.
                 muted: false,
             },
             isFavourite: summary.isFavourite,
@@ -140,7 +178,10 @@ export class RoomListItemViewModel extends BaseViewModel<
 
     // Action implementations
     public onOpenRoom = (): void => {
+        
         this.props.openRoom(this.props.summary.id);
+        
+        this.onMarkAsRead();
     };
 
     public onMarkAsRead = async (): Promise<void> => {
