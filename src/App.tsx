@@ -35,7 +35,7 @@ const App: React.FC = () => {
         return <OidcCallback />;
     }
 
-    const { clientState, loginViewModel, encryptionViewModel } =
+    const { clientState, loginFlowViewModel, encryptionViewModel } =
         useViewModel(clientViewModel);
     console.log("App rendering with clientState:", clientState);
 
@@ -77,8 +77,8 @@ const App: React.FC = () => {
         clientState === ClientState.LoggedOut ||
         clientState === ClientState.LoggingIn
     ) {
-        component = loginViewModel ? (
-            <Login loginViewModel={loginViewModel} />
+        component = loginFlowViewModel ? (
+            <Login loginFlowViewModel={loginFlowViewModel} />
         ) : null;
     }
 

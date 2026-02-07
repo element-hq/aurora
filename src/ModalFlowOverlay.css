@@ -1,0 +1,39 @@
+/*
+ * Copyright 2026 New Vector Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+.aurora_ModalFlowOverlay {
+    position: fixed;
+    inset: 0;
+    z-index: 4000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.aurora_ModalFlowOverlay_backdrop {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.aurora_ModalFlowOverlay_container {
+    position: relative;
+    z-index: 1;
+    max-width: 480px;
+    width: 100%;
+    margin: var(--cpd-space-4x);
+}
+
+.aurora_ModalFlowOverlay_glass {
+    border-radius: var(--cpd-space-9x);
+}
+
+.aurora_ModalFlowOverlay_content {
+    background-color: var(--cpd-color-bg-canvas-default);
+    border-radius: var(--cpd-space-6x);
+    overflow: hidden;
+}
