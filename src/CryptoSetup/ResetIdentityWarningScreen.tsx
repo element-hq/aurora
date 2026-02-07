@@ -15,7 +15,7 @@ import type {
     ResetIdentityWarningStepViewSnapshot,
 } from "./ResetIdentityWarningStepViewModel";
 import type { ScreenProps } from "./screenRegistry.types";
-import { SetupScreenLayout, SetupScreenHeader } from "../SetupScreen";
+import { SetupScreenLayout, SetupScreenHeader, setupScreenStyles } from "../SetupScreen";
 
 /**
  * Screen warning user about identity reset consequences.
@@ -30,13 +30,7 @@ export const ResetIdentityWarningScreen: React.FC<
 
     return (
         <SetupScreenLayout>
-            <div
-                style={{
-                    position: "absolute",
-                    top: "var(--cpd-space-4x)",
-                    left: "var(--cpd-space-4x)",
-                }}
-            >
+            <div className={setupScreenStyles.backButton}>
                 <IconButton
                     onClick={() => viewModel.back()}
                     aria-label="Go back"

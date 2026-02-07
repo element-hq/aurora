@@ -12,3 +12,4 @@ export type {
 } from "./SetupScreenHeader";
 export { SetupScreenLayout } from "./SetupScreenLayout";
 export type { SetupScreenLayoutProps } from "./SetupScreenLayout";
+export { default as setupScreenStyles } from "./SetupScreenLayout.module.css";
