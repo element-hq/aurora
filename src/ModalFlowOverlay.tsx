@@ -17,7 +17,7 @@ import { screenRegistry } from "./screenRegistry";
 import type {
     LoginFlowViewModel,
     LoginFlowViewSnapshot,
-} from "./viewmodel/LoginFlowViewModel";
+} from "./Login/LoginFlowViewModel";
 import "./ModalFlowOverlay.css";
 
 /**

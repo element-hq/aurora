@@ -1,0 +1,71 @@
+/*
+ * Copyright 2026 New Vector Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+.header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--cpd-space-2x);
+    margin-bottom: var(--cpd-space-9x);
+}
+
+.iconContainer {
+    width: 64px;
+    height: 64px;
+    border-radius: 14px;
+    background-color: var(--cpd-color-bg-subtle-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--cpd-space-2x);
+}
+
+.iconContainerSuccess {
+    background-color: var(--cpd-color-bg-success-subtle);
+}
+
+.iconContainerCritical {
+    background-color: var(--cpd-color-bg-critical-subtle);
+}
+
+.icon {
+    color: var(--cpd-color-icon-secondary);
+}
+
+.iconSuccess {
+    color: var(--cpd-color-icon-success-primary);
+}
+
+.iconCritical {
+    color: var(--cpd-color-icon-critical-primary);
+}
+
+.title {
+    text-align: center;
+    margin: 0;
+    font-size: var(--cpd-font-size-heading-md);
+    font-weight: var(--cpd-font-weight-semibold);
+}
+
+.subtitle {
+    text-align: center;
+    margin: 0;
+    color: var(--cpd-color-text-secondary);
+}
+
+.subtitleContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--cpd-space-2x);
+}
+
+.subtitleContainer p {
+    text-align: center;
+    margin: 0;
+    color: var(--cpd-color-text-secondary);
+}

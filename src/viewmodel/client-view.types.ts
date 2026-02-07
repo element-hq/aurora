@@ -9,8 +9,8 @@ import type { MemberListViewModel } from "./MemberListViewModel";
 import type { SessionStore } from "../SessionStore";
 import type { TimelineViewModel } from "./TimelineViewModel";
 import type { ClientViewModel } from "./ClientViewModel";
-import type { EncryptionViewModel } from "./EncryptionViewModel";
-import type { LoginFlowViewModel } from "./LoginFlowViewModel";
+import type { EncryptionFlowViewModel } from "../CryptoSetup";
+import type { LoginFlowViewModel } from "../Login/LoginFlowViewModel";
 import type { RoomListViewViewModel } from "../RoomList/RoomListViewViewModel";
 import type { RoomViewModel } from "./RoomViewModel";
 
@@ -55,7 +55,7 @@ export interface ClientViewSnapshot {
     roomListViewModel?: RoomListViewViewModel;
 
     /** ViewModel for encryption and recovery management */
-    encryptionViewModel?: EncryptionViewModel;
+    encryptionFlowViewModel?: EncryptionFlowViewModel;
 
     /** Current user ID */
     userId?: string;

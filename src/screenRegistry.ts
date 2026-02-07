@@ -8,9 +8,19 @@
 import type { ComponentType } from "react";
 import type { ViewModel } from "@element-hq/web-shared-components";
 
-import { ServerInputScreen } from "./screens/ServerInputScreen";
-import { OidcLoginScreen } from "./screens/OidcLoginScreen";
-import { PasswordLoginScreen } from "./screens/PasswordLoginScreen";
+// Login screens
+import { ServerInputScreen } from "./Login/ServerInputScreen";
+import { OidcLoginScreen } from "./Login/OidcLoginScreen";
+import { PasswordLoginScreen } from "./Login/PasswordLoginScreen";
+
+// Encryption screens
+import { ConfirmIdentityScreen } from "./CryptoSetup/ConfirmIdentityScreen";
+import { RecoveryKeyEntryScreen } from "./CryptoSetup/RecoveryKeyEntryScreen";
+import { SetupRecoveryScreen } from "./CryptoSetup/SetupRecoveryScreen";
+import { SaveRecoveryKeyScreen } from "./CryptoSetup/SaveRecoveryKeyScreen";
+import { EnablingRecoveryScreen } from "./CryptoSetup/EnablingRecoveryScreen";
+import { ResetIdentityWarningScreen } from "./CryptoSetup/ResetIdentityWarningScreen";
+import { ResetIdentityPasswordScreen } from "./CryptoSetup/ResetIdentityPasswordScreen";
 
 /**
  * Props that all screen components receive
@@ -35,7 +45,17 @@ export const screenRegistry: Record<
     string,
     ComponentType<ScreenProps<ViewModel<unknown>>>
 > = {
+    // Login flow screens
     "server-input": ServerInputScreen as ComponentType<ScreenProps>,
     "oidc-login": OidcLoginScreen as ComponentType<ScreenProps>,
     "password-login": PasswordLoginScreen as ComponentType<ScreenProps>,
+
+    // Encryption flow screens
+    "confirm-identity": ConfirmIdentityScreen as ComponentType<ScreenProps>,
+    "recovery-key-entry": RecoveryKeyEntryScreen as ComponentType<ScreenProps>,
+    "setup-recovery": SetupRecoveryScreen as ComponentType<ScreenProps>,
+    "save-recovery-key": SaveRecoveryKeyScreen as ComponentType<ScreenProps>,
+    "enabling-recovery": EnablingRecoveryScreen as ComponentType<ScreenProps>,
+    "reset-identity-warning": ResetIdentityWarningScreen as ComponentType<ScreenProps>,
+    "reset-identity-password": ResetIdentityPasswordScreen as ComponentType<ScreenProps>,
 };

@@ -38,9 +38,9 @@ import {
     type LoginParams,
     type Props,
 } from "./client-view.types";
-import type { Credential } from "./credentials.types";
-import { EncryptionViewModel } from "./EncryptionViewModel";
-import { LoginFlowViewModel } from "./LoginFlowViewModel";
+import type { Credential } from "../Login/credentials.types";
+import { EncryptionFlowViewModel } from "../CryptoSetup";
+import { LoginFlowViewModel } from "../Login/LoginFlowViewModel";
 import { RoomListViewViewModel } from "../RoomList/RoomListViewViewModel";
 
 export class ClientViewModel
@@ -263,7 +263,7 @@ export class ClientViewModel
             userId: undefined,
             displayName: undefined,
             avatarUrl: undefined,
-            encryptionViewModel: undefined,
+            encryptionFlowViewModel: undefined,
             // Keep loginFlowViewModel so we can log in again
             loginFlowViewModel: this.initLoginFlowViewModel(),
         });
@@ -358,10 +358,10 @@ export class ClientViewModel
         const displayName = await this.client.displayName();
         const avatarUrl = await this.getAvatarUrlSafely();
 
-        // Create encryption view model now that we have a client
-        const encryptionViewModel = new EncryptionViewModel({
+        // Create encryption flow view model now that we have a client
+        const encryptionFlowViewModel = new EncryptionFlowViewModel({
             client: this.client,
-            onRecoveryEnabled: () => {
+            onComplete: () => {
                 // When recovery is enabled, continue to sync with the recovery key
                 this.continueAfterEncryptionSetup();
             },
@@ -372,7 +372,7 @@ export class ClientViewModel
             userId,
             displayName,
             avatarUrl,
-            encryptionViewModel,
+            encryptionFlowViewModel,
         });
 
         // Notify parent that login completed

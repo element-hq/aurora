@@ -1,308 +1,95 @@
 /*
+ * Copyright 2026 New Vector Ltd.
  *
- *  * Copyright 2026 New Vector Ltd.
- *  *
- *  * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
- *  * Please see LICENSE files in the repository root for full details.
- *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
  */
 
-import {
-    InlineSpinner,
-    TooltipProvider,
-    IconButton,
-} from "@vector-im/compound-web";
-import { useViewModel, MockViewModel } from "@element-hq/web-shared-components";
 import { useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
+import { useViewModel } from "@element-hq/web-shared-components";
+import { InlineSpinner, Glass, TooltipProvider } from "@vector-im/compound-web";
+import FocusLock from "react-focus-lock";
+import LockIcon from "@vector-im/compound-design-tokens/assets/web/icons/lock";
 import type React from "react";
-import type { EncryptionViewModel } from "./viewmodel/EncryptionViewModel";
-import { EncryptionFlow } from "./viewmodel/encryption-view.types";
-import LockIcon from "@vector-im/compound-design-tokens/assets/web/icons/lock-solid";
-import KeyIconSolid from "@vector-im/compound-design-tokens/assets/web/icons/key-solid";
-import InfoSolidIcon from "@vector-im/compound-design-tokens/assets/web/icons/info-solid";
-import ChevronLeftIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-left";
-import CheckCircle from "@vector-im/compound-design-tokens/assets/web/icons/check-circle";
-import { ConfirmIdentityScreen } from "./ConfirmIdentityScreen";
-import { RecoveryKeyEntryScreen } from "./RecoveryKeyEntryScreen";
-import { SetupRecoveryScreen } from "./SetupRecoveryScreen";
-import { EnablingRecoveryScreen } from "./EnablingRecoveryScreen";
-import { SaveRecoveryKeyScreen } from "./SaveRecoveryKeyScreen";
-import { ResetIdentityWarningScreen } from "./ResetIdentityWarningScreen";
-import { ResetIdentityPasswordScreen } from "./ResetIdentityPasswordScreen";
-import { ModalManager, type DialogHandle } from "./ModalManager.tsx";
-import type {
-    DialogViewSnapshot,
-    DialogViewActions,
-} from "./viewmodel/dialog-view.types";
-import styles from "./Encryption.module.css";
+import type { EncryptionFlowViewModel } from "./CryptoSetup";
+import { ModalFlowOverlay } from "./ModalFlowOverlay";
+import { SetupScreenLayout, SetupScreenHeader } from "./SetupScreen";
 
 export interface EncryptionProps {
-    encryptionViewModel: EncryptionViewModel;
+    encryptionFlowViewModel: EncryptionFlowViewModel;
 }
 
+/**
+ * Encryption page component.
+ *
+ * Renders the bloom background and uses ModalFlowOverlay to display
+ * the encryption flow steps. The EncryptionFlowViewModel coordinates
+ * the flow using async/await.
+ */
 export const Encryption: React.FC<EncryptionProps> = ({
-    encryptionViewModel,
+    encryptionFlowViewModel,
 }) => {
-    const { flow, canGoBack } = useViewModel(encryptionViewModel);
+    const flowStartedRef = useRef(false);
+    const { isLoading, isActive } = useViewModel(encryptionFlowViewModel);
 
-    const renderFlow = () => {
-        switch (flow) {
-            case EncryptionFlow.Loading:
-                return (
-                    <div className={styles.loadingContainer}>
-                        <InlineSpinner />
-                        <p className={styles.loadingText}>
-                            Checking encryption status...
-                        </p>
-                    </div>
-                );
-            case EncryptionFlow.ConfirmIdentity:
-                return (
-                    <ConfirmIdentityScreen
-                        encryptionViewModel={encryptionViewModel}
-                    />
-                );
-            case EncryptionFlow.EnterRecoveryKey:
-                return (
-                    <RecoveryKeyEntryScreen
-                        encryptionViewModel={encryptionViewModel}
-                    />
-                );
-            case EncryptionFlow.SetupRecovery:
-                return (
-                    <SetupRecoveryScreen
-                        encryptionViewModel={encryptionViewModel}
-                    />
-                );
-            case EncryptionFlow.EnablingRecovery:
-                return (
-                    <EnablingRecoveryScreen
-                        encryptionViewModel={encryptionViewModel}
-                    />
-                );
-            case EncryptionFlow.SaveRecoveryKey:
-                return (
-                    <SaveRecoveryKeyScreen
-                        encryptionViewModel={encryptionViewModel}
-                    />
-                );
-            case EncryptionFlow.ResetIdentityWarning:
-                return (
-                    <ResetIdentityWarningScreen
-                        encryptionViewModel={encryptionViewModel}
-                    />
-                );
-            case EncryptionFlow.ResetIdentityPassword:
-                return (
-                    <ResetIdentityPasswordScreen
-                        encryptionViewModel={encryptionViewModel}
-                    />
-                );
-            case EncryptionFlow.Complete:
-                return null;
+    useEffect(() => {
+        if (!flowStartedRef.current) {
+            flowStartedRef.current = true;
+            // Start the encryption flow - runs async
+            encryptionFlowViewModel.startFlow();
         }
-    };
+    }, [encryptionFlowViewModel]);
 
-    const getTitle = () => {
-        switch (flow) {
-            case EncryptionFlow.Loading:
-                return "Loading...";
-            case EncryptionFlow.EnablingRecovery:
-                return "Enabling Recovery...";
-            case EncryptionFlow.ConfirmIdentity:
-                return "Confirm your identity";
-            case EncryptionFlow.EnterRecoveryKey:
-                return "Enter recovery key";
-            case EncryptionFlow.SetupRecovery:
-                return "Set up recovery";
-            case EncryptionFlow.SaveRecoveryKey:
-                return "Save your recovery key somewhere safe";
-            case EncryptionFlow.ResetIdentityWarning:
-                return "Can't confirm? You'll need to reset your identity.";
-            case EncryptionFlow.ResetIdentityPassword:
-                return "Enter your account password to continue";
-            case EncryptionFlow.Complete:
-                return "Recovery Enabled";
-        }
-    };
+    // Loading state shown in a dialog
+    const loadingContent = isLoading
+        ? createPortal(
+              <FocusLock returnFocus>
+                  <div
+                      className="aurora_ModalFlowOverlay"
+                      role="dialog"
+                      aria-modal="true"
+                      aria-label="Checking encryption status"
+                  >
+                      <div className="aurora_ModalFlowOverlay_container">
+                          <Glass className="aurora_ModalFlowOverlay_glass">
+                              <div className="aurora_ModalFlowOverlay_content">
+                                  <TooltipProvider>
+                                      <SetupScreenLayout>
+                                          <SetupScreenHeader
+                                              Icon={LockIcon}
+                                              title="Checking encryption status"
+                                              subtitle="Please wait while we check your encryption settings..."
+                                          />
+                                          <div
+                                              style={{
+                                                  display: "flex",
+                                                  justifyContent: "center",
+                                              }}
+                                          >
+                                              <InlineSpinner />
+                                          </div>
+                                      </SetupScreenLayout>
+                                  </TooltipProvider>
+                              </div>
+                          </Glass>
+                      </div>
+                  </div>
+              </FocusLock>,
+              document.body,
+          )
+        : null;
 
-    const getSubtitle = () => {
-        switch (flow) {
-            case EncryptionFlow.Loading:
-            case EncryptionFlow.EnablingRecovery:
-            case EncryptionFlow.ResetIdentityWarning:
-            case EncryptionFlow.ResetIdentityPassword:
-            case EncryptionFlow.Complete:
-                return null;
-            case EncryptionFlow.ConfirmIdentity:
-                return "Verify this device to setup up secure messaging.";
-            case EncryptionFlow.EnterRecoveryKey:
-                return "Make sure nobody can see this screen!";
-            case EncryptionFlow.SetupRecovery:
-                return "Your key storage is protected by a recovery key.";
-            case EncryptionFlow.SaveRecoveryKey:
-                return "Write down this recovery key somewhere safe, like a password manager, encrypted note, or physical safe.";
-        }
-    };
-
-    const getIcon = () => {
-        switch (flow) {
-            case EncryptionFlow.Complete:
-                return CheckCircle;
-            case EncryptionFlow.ConfirmIdentity:
-                return LockIcon;
-            case EncryptionFlow.Loading:
-            case EncryptionFlow.EnablingRecovery:
-            case EncryptionFlow.ResetIdentityPassword:
-            case EncryptionFlow.EnterRecoveryKey:
-            case EncryptionFlow.SetupRecovery:
-            case EncryptionFlow.SaveRecoveryKey:
-                return KeyIconSolid;
-            case EncryptionFlow.ResetIdentityWarning:
-                return InfoSolidIcon;
-        }
-    };
-
-    const getLearnMoreLink = (): string | null => {
-        switch (flow) {
-            case EncryptionFlow.ConfirmIdentity:
-                return "https://element.io/en/help#encryption-device-verification";
-            default:
-                return null;
-        }
-    };
-
-    const dialogShownRef = useRef(false);
-    const dialogHandleRef = useRef<DialogHandle | null>(null);
-
-    const handleGoBack = () => {
-        encryptionViewModel.goBack();
-    };
-
-    const Icon = getIcon();
-    const isCriticalFlow = flow === EncryptionFlow.ResetIdentityWarning;
-    const learnMoreLink = getLearnMoreLink();
-
-    const dialogContent = (
-        <div className={styles.dialog}>
-            <TooltipProvider>
-                {canGoBack && (
-                    <div className={styles.backButton}>
-                        <IconButton
-                            kind="secondary"
-                            onClick={handleGoBack}
-                            aria-label="Go back"
-                        >
-                            <ChevronLeftIcon />
-                        </IconButton>
-                    </div>
-                )}
-
-                <div className={styles.header}>
-                    <div
-                        className={`${styles.iconContainer} ${isCriticalFlow ? styles.iconContainerCritical : ""}`}
-                    >
-                        <Icon
-                            width="32px"
-                            height="32px"
-                            className={
-                                isCriticalFlow
-                                    ? styles.iconCritical
-                                    : styles.icon
-                            }
-                        />
-                    </div>
-
-                    <h2 className={styles.title}>{getTitle()}</h2>
-
-                    {getSubtitle() && (
-                        <p className={styles.subtitle}>{getSubtitle()}</p>
-                    )}
-
-                    {learnMoreLink && (
-                        <div className={styles.learnMore}>
-                            <a
-                                href={learnMoreLink}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className={styles.learnMoreLink}
-                            >
-                                Learn more
-                            </a>
-                        </div>
-                    )}
-                </div>
-
-                {renderFlow()}
-            </TooltipProvider>
+    return (
+        <div className="mx_LoginPage">
+            {loadingContent}
+            {isActive && !isLoading && (
+                <ModalFlowOverlay
+                    flow={encryptionFlowViewModel}
+                    dismissible={false}
+                    showBackdrop={false}
+                />
+            )}
         </div>
     );
-
-    useEffect(() => {
-        if (!dialogShownRef.current) {
-            dialogShownRef.current = true;
-
-            // Create a mock dialog view model (no submit/cancel for encryption flows)
-            const dialogVM = new MockViewModel<DialogViewSnapshot>({
-                canSubmit: false,
-                title: "",
-                actionLabel: "",
-                isSubmitting: false,
-            }) as unknown as MockViewModel<DialogViewSnapshot> &
-                DialogViewActions;
-
-            dialogVM.submit = async () => {};
-            dialogVM.cancel = () => {};
-            dialogVM.setCanSubmit = () => {};
-            dialogVM.setError = () => {};
-            dialogVM.clearError = () => {};
-
-            const handle = ModalManager.showDialog(
-                dialogVM,
-                dialogContent,
-                "aurora_EncryptionDialog",
-                false, // not dismissible
-                false, // no backdrop
-            );
-            dialogHandleRef.current = handle;
-        }
-    }, []);
-
-    // Close dialog when encryption flow is complete
-    useEffect(() => {
-        if (flow === EncryptionFlow.Complete && dialogHandleRef.current) {
-            dialogHandleRef.current.close();
-            dialogHandleRef.current = null;
-        }
-    }, [flow]);
-
-    // Re-render dialog content when flow changes
-    useEffect(() => {
-        if (dialogShownRef.current && flow !== EncryptionFlow.Complete) {
-            const dialogVM = new MockViewModel<DialogViewSnapshot>({
-                canSubmit: false,
-                title: "",
-                actionLabel: "",
-                isSubmitting: false,
-            }) as unknown as MockViewModel<DialogViewSnapshot> &
-                DialogViewActions;
-
-            dialogVM.submit = async () => {};
-            dialogVM.cancel = () => {};
-            dialogVM.setCanSubmit = () => {};
-            dialogVM.setError = () => {};
-            dialogVM.clearError = () => {};
-
-            const handle = ModalManager.showDialog(
-                dialogVM,
-                dialogContent,
-                "aurora_EncryptionDialog",
-                false, // not dismissible
-                false, // no backdrop
-            );
-            dialogHandleRef.current = handle;
-        }
-    }, [flow, canGoBack]);
-
-    return <div className="mx_LoginPage" />;
 };

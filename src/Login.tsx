@@ -7,7 +7,7 @@
 
 import { useEffect, useRef } from "react";
 import type React from "react";
-import type { LoginFlowViewModel } from "./viewmodel/LoginFlowViewModel";
+import type { LoginFlowViewModel } from "./Login/LoginFlowViewModel";
 import { ModalFlowOverlay } from "./ModalFlowOverlay";
 
 export interface LoginProps {
