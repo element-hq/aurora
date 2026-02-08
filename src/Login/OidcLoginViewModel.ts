@@ -93,8 +93,6 @@ export class OidcLoginViewModel
             const authData = await this.props.onGetOidcAuthUrl(server);
             const loginUrl = authData.loginUrl();
 
-            console.log("Opening OIDC login URL:", loginUrl);
-
             // Open OIDC provider in a popup window
             const width = 600;
             const height = 700;
@@ -140,7 +138,6 @@ export class OidcLoginViewModel
                 if (popup.closed) {
                     cleanup();
                     if (!loginCompleted) {
-                        console.log("OIDC popup closed - user cancelled");
                         await this.props.onAbortOidcLogin();
                         this.snapshot.merge({ loggingIn: false });
                     }
@@ -172,7 +169,6 @@ export class OidcLoginViewModel
 
             // Check if this is a user cancellation error
             if (errorMessage.includes("OidcError.Cancelled")) {
-                console.log("OIDC login cancelled by user");
                 await this.props.onAbortOidcLogin();
                 this.snapshot.merge({ loggingIn: false });
                 return;

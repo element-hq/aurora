@@ -88,7 +88,6 @@ export class ResetIdentityPasswordStepViewModel
             const authData = AuthData.Password.new({ passwordDetails });
 
             await this.props.resetHandle.reset(authData);
-            console.log("Password reset complete");
             this.complete({ outcome: "resetComplete" });
         } catch (e) {
             printRustError("Failed to reset with password", e);

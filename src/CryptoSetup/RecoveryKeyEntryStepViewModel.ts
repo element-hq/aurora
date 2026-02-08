@@ -77,7 +77,6 @@ export class RecoveryKeyEntryStepViewModel
 
         try {
             await this.props.encryption.recover(recoveryKey);
-            console.log("Recovery successful");
             this.complete({ outcome: "verified" });
         } catch (e) {
             printRustError("Failed to recover", e);

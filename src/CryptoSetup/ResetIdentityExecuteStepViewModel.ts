@@ -75,19 +75,16 @@ export class ResetIdentityExecuteStepViewModel
         this.snapshot.merge({ isResetting: true, error: null });
 
         try {
-            console.log("Executing identity reset...");
             const handle = await this.props.encryption.resetIdentity();
 
             if (!handle) {
                 // Reset completed without auth
-                console.log("Reset completed without auth");
                 this.complete({ outcome: "resetComplete" });
                 return;
             }
 
             // Check auth type
             const authType = handle.authType();
-            console.log("Reset auth type:", authType);
 
             if (authType?.tag === "Oidc") {
                 // OIDC: Return to flow to handle - will go back to warning screen

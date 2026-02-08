@@ -92,10 +92,6 @@ export class EnablingRecoveryStepViewModel
                             });
                             break;
                         case EnableRecoveryProgress_Tags.Done:
-                            console.log(
-                                "Recovery setup complete! Recovery key:",
-                                progress.inner.recoveryKey,
-                            );
                             this.complete({
                                 outcome: "complete",
                                 recoveryKey: progress.inner.recoveryKey,
