@@ -6,21 +6,21 @@
  */
 
 import { BaseViewModel } from "@element-hq/web-shared-components";
-import type { FlowStepViewModel } from "./FlowStepViewModel";
+import type { FlowStepViewModel } from "../utils/FlowStepViewModel";
 import type {
     ClientInterface,
     EncryptionInterface,
 } from "../index.web";
-import { ConfirmIdentityStepViewModel, IdentityConfirmationAction } from "./ConfirmIdentityStepViewModel";
-import { RecoveryKeyEntryStepViewModel } from "./RecoveryKeyEntryStepViewModel";
-import { SetupRecoveryStepViewModel } from "./SetupRecoveryStepViewModel";
-import { SaveRecoveryKeyStepViewModel } from "./SaveRecoveryKeyStepViewModel";
-import { ResetIdentityWarningStepViewModel } from "./ResetIdentityWarningStepViewModel";
-import { ResetIdentityConfirmStepViewModel } from "./ResetIdentityConfirmStepViewModel";
-import { ResetIdentityExecuteStepViewModel } from "./ResetIdentityExecuteStepViewModel";
-import { ResetIdentityPasswordStepViewModel } from "./ResetIdentityPasswordStepViewModel";
-import { EnablingRecoveryStepViewModel } from "./EnablingRecoveryStepViewModel";
-import { printRustError } from "../utils";
+import { ConfirmIdentityStepViewModel, IdentityConfirmationAction } from "./steps/ConfirmIdentity/ConfirmIdentityStepViewModel";
+import { RecoveryKeyEntryStepViewModel } from "./steps/RecoveryKeyEntry/RecoveryKeyEntryStepViewModel";
+import { SetupRecoveryStepViewModel } from "./steps/SetupRecovery/SetupRecoveryStepViewModel";
+import { SaveRecoveryKeyStepViewModel } from "./steps/SaveRecoveryKey/SaveRecoveryKeyStepViewModel";
+import { ResetIdentityWarningStepViewModel } from "./steps/ResetIdentityWarning/ResetIdentityWarningStepViewModel";
+import { ResetIdentityConfirmStepViewModel } from "./steps/ResetIdentityConfirm/ResetIdentityConfirmStepViewModel";
+import { ResetIdentityExecuteStepViewModel } from "./steps/ResetIdentityExecute/ResetIdentityExecuteStepViewModel";
+import { ResetIdentityPasswordStepViewModel } from "./steps/ResetIdentityPassword/ResetIdentityPasswordStepViewModel";
+import { EnablingRecoveryStepViewModel } from "./steps/EnablingRecovery/EnablingRecoveryStepViewModel";
+import { printRustError } from "../utils/printRustError";
 
 /**
  * Result of the encryption flow

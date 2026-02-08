@@ -8,7 +8,7 @@
 import "./RoomHeaderView.css";
 import { Avatar } from "@vector-im/compound-web";
 import type React from "react";
-import type { RoomSummary } from "./RoomList/RoomSummary";
+import type { RoomSummary } from "../RoomList/RoomSummary";
 
 type RoomHeaderViewProps = {
     roomHeaderViewModel?: RoomSummary;

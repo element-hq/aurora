@@ -8,7 +8,7 @@
  */
 
 import { createContext, useContext } from "react";
-import type { ClientViewModel } from "../viewmodel/ClientViewModel";
+import type { ClientViewModel } from "../ClientViewModel";
 
 /**
  * A mapping of user IDs to their respective ClientViewModel instances.

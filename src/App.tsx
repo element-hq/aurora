@@ -11,13 +11,13 @@ import { Client } from "./Client.tsx";
 import { useClientStoreContext } from "./context/ClientStoreContext";
 import { useClientStoresContext } from "./context/ClientStoresContext";
 import { useSessionStoreContext } from "./context/SessionStoreContext";
-import { Encryption } from "./Encryption.tsx";
+import { Encryption } from "./CryptoSetup/EncryptionPage";
 import { LoadingScreen } from "./LoadingScreen/LoadingScreen.tsx";
-import { Login } from "./Login.tsx";
-import { OidcCallback } from "./OidcCallback.tsx";
+import { Login } from "./Login/LoginPage";
+import { OidcCallback } from "./Login/OidcCallback";
 import { createI18nApi } from "./utils/i18nApi.ts";
-import { ClientViewModel } from "./viewmodel/ClientViewModel";
-import { ClientState } from "./viewmodel/client-view.types";
+import { ClientViewModel } from "./ClientViewModel";
+import { ClientState } from "./client-view.types";
 
 console.log("running App.tsx");
 

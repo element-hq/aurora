@@ -10,8 +10,8 @@ import { MemberListHeaderView } from "./MemberListHeaderView";
 import {
     type MemberWithSeparator,
     SEPARATOR,
-} from "../viewmodel/member-list-view.types";
-import type { MemberListViewModel } from "../viewmodel/MemberListViewModel";
+} from "./member-list-view.types";
+import type { MemberListViewModel } from "./MemberListViewModel";
 import { RoomMemberTileView } from "./tiles/RoomMemberTileView";
 import "./MemberList.css";
 

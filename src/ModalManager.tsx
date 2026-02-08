@@ -8,12 +8,12 @@
 import React, { type ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import type { ViewModel } from "@element-hq/web-shared-components";
-import { Dialog } from "./Dialog";
+import { Dialog } from "./Dialog/Dialog";
 import type {
     DialogViewSnapshot,
     DialogViewActions,
     DialogResult,
-} from "./viewmodel/dialog-view.types";
+} from "./Dialog/dialog-view.types";
 
 /**
  * Handle for a dialog that's been opened.

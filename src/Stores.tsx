@@ -23,7 +23,7 @@ import {
     ClientStoresContext,
 } from "./context/ClientStoresContext";
 import { SessionStoreContext } from "./context/SessionStoreContext";
-import { ClientViewModel } from "./viewmodel/ClientViewModel";
+import { ClientViewModel } from "./ClientViewModel";
 
 export function Stores({ children }: PropsWithChildren) {
     const [clientStores, setClientStores] = useState<ClientStores>({});

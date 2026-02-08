@@ -6,13 +6,13 @@
  */
 
 import { BaseViewModel } from "@element-hq/web-shared-components";
-import type { FlowStepViewModel } from "../CryptoSetup/FlowStepViewModel";
+import type { FlowStepViewModel } from "../utils/FlowStepViewModel";
 import {
     ServerInputViewModel,
     type ServerCapabilities,
-} from "./ServerInputViewModel";
-import { OidcLoginViewModel } from "./OidcLoginViewModel";
-import { PasswordLoginViewModel } from "./PasswordLoginViewModel";
+} from "./steps/ServerInput/ServerInputViewModel";
+import { OidcLoginViewModel } from "./steps/OidcLogin/OidcLoginViewModel";
+import { PasswordLoginViewModel } from "./steps/PasswordLogin/PasswordLoginViewModel";
 import type { LoginParams } from "./login-view.types";
 import type {
     HomeserverLoginDetailsInterface,
