@@ -328,13 +328,15 @@ export class EncryptionFlowViewModel
         }
 
         if (outcome === "needsOidc") {
-            // OIDC flow: Go back to warning screen while popup is open
+            // OIDC flow: Show a fresh warning screen while popup is open
             const { handle, approvalUrl } = executeResult.data;
 
-            // Switch back to warning screen
+            // Create a NEW warningVm instance (the old one's promise is already resolved)
+            const oidcWarningVm = new ResetIdentityWarningStepViewModel({});
+
             this.snapshot.merge({
-                currentScreen: warningVm as FlowStepViewModel<unknown, unknown, unknown>,
-                screenType: warningVm.screenType,
+                currentScreen: oidcWarningVm as FlowStepViewModel<unknown, unknown, unknown>,
+                screenType: oidcWarningVm.screenType,
             });
 
             // Open OIDC popup
@@ -351,26 +353,61 @@ export class EncryptionFlowViewModel
 
             if (!popup) {
                 console.error("Failed to open OIDC popup");
-                // Stay on warning screen, user can try again
-                return { type: "back" };
+                // Let user try again from warning screen
+                const retryResult = await oidcWarningVm.result;
+                if (retryResult.type === "success") {
+                    // User wants to try again - restart reset flow
+                    return this.runResetIdentityFlow();
+                }
+                return retryResult;
             }
 
-            // Wait for OIDC approval and complete reset
-            try {
-                await handle.reset(undefined);
+            // Race between OIDC completion and user action on warning screen
+            const oidcPromise = handle.reset(undefined).then(() => ({ type: "oidc-complete" as const })).catch((e) => {
+                printRustError("OIDC reset failed", e);
+                return { type: "oidc-failed" as const };
+            });
+
+            const userActionPromise = oidcWarningVm.result.then((result) => ({
+                type: "user-action" as const,
+                result,
+            }));
+
+            const raceResult = await Promise.race([oidcPromise, userActionPromise]);
+
+            if (raceResult.type === "oidc-complete") {
                 console.log("OIDC reset complete");
                 if (popup && !popup.closed) {
                     popup.close();
                 }
+                // oidcWarningVm is no longer needed - just return success
                 return { type: "success" };
-            } catch (e) {
+            }
+
+            if (raceResult.type === "oidc-failed") {
                 if (popup && !popup.closed) {
                     popup.close();
                 }
-                printRustError("OIDC reset failed", e);
-                // Stay on warning screen, user can try again
-                return { type: "back" };
+                // User can try again from warning screen
+                const retryResult = await oidcWarningVm.result;
+                if (retryResult.type === "success") {
+                    return this.runResetIdentityFlow();
+                }
+                return retryResult;
             }
+
+            // User interacted with warning screen
+            if (popup && !popup.closed) {
+                popup.close();
+            }
+
+            if (raceResult.result.type === "success") {
+                // User clicked "Continue Reset" again - restart the flow
+                return this.runResetIdentityFlow();
+            }
+
+            // User went back or cancelled
+            return raceResult.result;
         }
 
         if (outcome === "needsPassword") {
