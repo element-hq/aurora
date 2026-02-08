@@ -12,6 +12,8 @@ export { SetupRecoveryScreen } from "./SetupRecoveryScreen";
 export { SaveRecoveryKeyScreen } from "./SaveRecoveryKeyScreen";
 export { EnablingRecoveryScreen } from "./EnablingRecoveryScreen";
 export { ResetIdentityWarningScreen } from "./ResetIdentityWarningScreen";
+export { ResetIdentityConfirmScreen } from "./ResetIdentityConfirmScreen";
+export { ResetIdentityExecuteScreen } from "./ResetIdentityExecuteScreen";
 export { ResetIdentityPasswordScreen } from "./ResetIdentityPasswordScreen";
 
 // ViewModels
@@ -62,6 +64,22 @@ export type {
     ResetIdentityWarningResult,
     ResetIdentityWarningStepViewModelProps,
 } from "./ResetIdentityWarningStepViewModel";
+
+export { ResetIdentityConfirmStepViewModel } from "./ResetIdentityConfirmStepViewModel";
+export type {
+    ResetIdentityConfirmStepViewSnapshot,
+    ResetIdentityConfirmStepViewActions,
+    ResetIdentityConfirmResult,
+    ResetIdentityConfirmStepViewModelProps,
+} from "./ResetIdentityConfirmStepViewModel";
+
+export { ResetIdentityExecuteStepViewModel } from "./ResetIdentityExecuteStepViewModel";
+export type {
+    ResetIdentityExecuteStepViewSnapshot,
+    ResetIdentityExecuteStepViewActions,
+    ResetIdentityExecuteResult,
+    ResetIdentityExecuteStepViewModelProps,
+} from "./ResetIdentityExecuteStepViewModel";
 
 export { ResetIdentityPasswordStepViewModel } from "./ResetIdentityPasswordStepViewModel";
 export type {

@@ -31,18 +31,28 @@ export const Encryption: React.FC<EncryptionProps> = ({
     encryptionFlowViewModel,
 }) => {
     const flowStartedRef = useRef(false);
-    const { isLoading, isActive } = useViewModel(encryptionFlowViewModel);
+    const { isLoading, isActive, currentScreen, screenType } = useViewModel(encryptionFlowViewModel);
+
+    console.log("[Encryption] Render:", { isLoading, isActive, hasCurrentScreen: !!currentScreen, screenType });
 
     useEffect(() => {
         if (!flowStartedRef.current) {
             flowStartedRef.current = true;
+            console.log("[Encryption] Starting flow");
             // Start the encryption flow - runs async
             encryptionFlowViewModel.startFlow();
         }
     }, [encryptionFlowViewModel]);
 
+    // Show loading when:
+    // 1. Explicitly loading (isLoading: true), OR
+    // 2. Flow is active but no screen is set yet (race condition protection)
+    const showLoading = isLoading || (isActive && !currentScreen);
+
+    console.log("[Encryption] showLoading:", showLoading, "willShowModal:", isActive && currentScreen && !showLoading);
+
     // Loading state shown in a dialog
-    const loadingContent = isLoading
+    const loadingContent = showLoading
         ? createPortal(
               <FocusLock returnFocus>
                   <div
@@ -83,7 +93,7 @@ export const Encryption: React.FC<EncryptionProps> = ({
     return (
         <div className="mx_LoginPage">
             {loadingContent}
-            {isActive && !isLoading && (
+            {isActive && currentScreen && !showLoading && (
                 <ModalFlowOverlay
                     flow={encryptionFlowViewModel}
                     dismissible={false}

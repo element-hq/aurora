@@ -81,8 +81,11 @@ export function ModalFlowOverlay({
 }: ModalFlowOverlayProps): React.ReactNode {
     const { currentScreen, screenType, isActive } = useViewModel(flow);
 
+    console.log("[ModalFlowOverlay] Render:", { hasCurrentScreen: !!currentScreen, screenType, isActive });
+
     // No active screen - render nothing
     if (!currentScreen || !screenType || !isActive) {
+        console.log("[ModalFlowOverlay] Returning null - no screen to show");
         return null;
     }
 
@@ -93,6 +96,8 @@ export function ModalFlowOverlay({
         console.error(`No component registered for screen type: ${screenType}`);
         return null;
     }
+
+    console.log("[ModalFlowOverlay] Rendering screen:", screenType);
 
     const handleBackdropClick = (): void => {
         if (dismissible) {

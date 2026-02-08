@@ -33,7 +33,7 @@ export const SetupRecoveryScreen: React.FC<
                 style={{ width: "100%" }}
                 onClick={() => viewModel.generateRecoveryKey()}
             >
-                Generate recovery key
+                Generate your recovery key
             </Button>
         </SetupScreenLayout>
     );

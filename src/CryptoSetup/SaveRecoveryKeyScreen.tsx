@@ -10,6 +10,7 @@ import { useViewModel } from "@element-hq/web-shared-components";
 import type React from "react";
 import KeyIcon from "@vector-im/compound-design-tokens/assets/web/icons/key";
 import CopyIcon from "@vector-im/compound-design-tokens/assets/web/icons/copy";
+import CheckIcon from "@vector-im/compound-design-tokens/assets/web/icons/check";
 import type {
     SaveRecoveryKeyStepViewModel,
     SaveRecoveryKeyStepViewSnapshot,
@@ -39,47 +40,63 @@ export const SaveRecoveryKeyScreen: React.FC<
 
             <div
                 style={{
-                    position: "relative",
-                    marginBottom: "var(--cpd-space-6x)",
+                    backgroundColor: "var(--cpd-color-bg-subtle-secondary)",
+                    padding: "var(--cpd-space-4x)",
+                    borderRadius: "var(--cpd-radius-pill-effect)",
+                    marginBottom: "var(--cpd-space-4x)",
+                    fontFamily: "monospace",
+                    fontSize: "14px",
+                    wordBreak: "break-word",
+                    overflowWrap: "break-word",
                 }}
             >
-                <div
-                    style={{
-                        padding: "var(--cpd-space-4x)",
-                        backgroundColor: "var(--cpd-color-bg-subtle-secondary)",
-                        borderRadius: "var(--cpd-radius-pill-effect)",
-                        fontFamily: "var(--cpd-font-family-mono)",
-                        fontSize: "var(--cpd-font-size-body-md)",
-                        wordBreak: "break-all",
-                        textAlign: "center",
-                    }}
-                >
-                    {recoveryKey}
-                </div>
-
-                <Button
-                    kind="secondary"
-                    size="sm"
-                    onClick={() => viewModel.copyToClipboard()}
-                    style={{
-                        position: "absolute",
-                        top: "var(--cpd-space-2x)",
-                        right: "var(--cpd-space-2x)",
-                    }}
-                >
-                    <CopyIcon width="16" height="16" />
-                    {copied ? "Copied!" : "Copy"}
-                </Button>
+                {recoveryKey}
             </div>
 
-            <Button
-                kind="primary"
-                size="lg"
-                style={{ width: "100%" }}
-                onClick={() => viewModel.confirmSaved()}
+            <div
+                style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "var(--cpd-space-2x)",
+                }}
             >
-                I've saved my recovery key
-            </Button>
+                <Button
+                    kind="secondary"
+                    size="lg"
+                    onClick={() => viewModel.copyToClipboard()}
+                >
+                    {copied ? (
+                        <>
+                            <CheckIcon
+                                style={{
+                                    width: "20px",
+                                    height: "20px",
+                                    marginRight: "var(--cpd-space-1x)",
+                                }}
+                            />
+                            Copied!
+                        </>
+                    ) : (
+                        <>
+                            <CopyIcon
+                                style={{
+                                    width: "20px",
+                                    height: "20px",
+                                    marginRight: "var(--cpd-space-1x)",
+                                }}
+                            />
+                            Copy recovery key
+                        </>
+                    )}
+                </Button>
+                <Button
+                    kind="primary"
+                    size="lg"
+                    onClick={() => viewModel.confirmSaved()}
+                >
+                    I've Saved It
+                </Button>
+            </div>
         </SetupScreenLayout>
     );
 };

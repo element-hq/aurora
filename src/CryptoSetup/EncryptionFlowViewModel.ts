@@ -16,6 +16,8 @@ import { RecoveryKeyEntryStepViewModel } from "./RecoveryKeyEntryStepViewModel";
 import { SetupRecoveryStepViewModel } from "./SetupRecoveryStepViewModel";
 import { SaveRecoveryKeyStepViewModel } from "./SaveRecoveryKeyStepViewModel";
 import { ResetIdentityWarningStepViewModel } from "./ResetIdentityWarningStepViewModel";
+import { ResetIdentityConfirmStepViewModel } from "./ResetIdentityConfirmStepViewModel";
+import { ResetIdentityExecuteStepViewModel } from "./ResetIdentityExecuteStepViewModel";
 import { ResetIdentityPasswordStepViewModel } from "./ResetIdentityPasswordStepViewModel";
 import { EnablingRecoveryStepViewModel } from "./EnablingRecoveryStepViewModel";
 import { printRustError } from "../utils";
@@ -86,15 +88,27 @@ export class EncryptionFlowViewModel
         this.encryption = props.client.encryption();
     }
 
+    private cleanup(): void {
+        console.log("[EncryptionFlow] cleanup - clearing state");
+        this.snapshot.merge({
+            currentScreen: null,
+            screenType: null,
+            isActive: false,
+        });
+    }
+
     /**
      * Start the encryption flow. Runs until complete or user cancels.
      */
     public async startFlow(): Promise<EncryptionFlowResult> {
+        console.log("[EncryptionFlow] startFlow called");
         this.cancelled = false;
         this.snapshot.merge({ isActive: true, isLoading: true });
+        console.log("[EncryptionFlow] Set isActive: true, isLoading: true");
 
         try {
             // Check initial state to determine available options
+            console.log("[EncryptionFlow] Checking initial state...");
             const [backupExistsOnServer, hasDevicesToVerifyAgainst] = await Promise.all([
                 this.checkBackupExistsOnServer(),
                 this.checkHasDevicesToVerifyAgainst(),
@@ -102,6 +116,7 @@ export class EncryptionFlowViewModel
 
             const recoveryState = this.encryption.recoveryState();
             // RecoveryState: Unknown=0, Enabled=1, Disabled=2, Incomplete=3
+            console.log("[EncryptionFlow] Initial state:", { backupExistsOnServer, hasDevicesToVerifyAgainst, recoveryState });
 
             // Compute available actions
             const availableActions: IdentityConfirmationAction[] = [];
@@ -115,28 +130,22 @@ export class EncryptionFlowViewModel
                 availableActions.push(IdentityConfirmationAction.Recovery);
             }
 
-            this.snapshot.merge({ isLoading: false });
+            console.log("[EncryptionFlow] Available actions:", availableActions);
 
-            // If recovery is disabled and no backup exists and no devices to verify,
-            // go straight to setup recovery
-            if (
-                recoveryState === 2 &&
-                !backupExistsOnServer &&
-                !hasDevicesToVerifyAgainst
-            ) {
-                return this.runSetupRecoveryFlow();
-            }
-
-            // Otherwise, run the confirm identity flow
+            // Always run the confirm identity flow - even if no actions available,
+            // the user can still choose "Can't confirm" which leads to reset
+            console.log("[EncryptionFlow] Starting confirm identity flow");
             while (!this.cancelled) {
                 const confirmResult = await this.runConfirmIdentityStep(availableActions);
 
                 if (confirmResult.type === "cancel") {
+                    this.cleanup();
                     return { type: "cancelled" };
                 }
 
                 if (confirmResult.type === "back") {
                     // Can't go back from first step
+                    this.cleanup();
                     return { type: "cancelled" };
                 }
 
@@ -146,9 +155,11 @@ export class EncryptionFlowViewModel
                     const recoveryResult = await this.runRecoveryKeyEntryFlow();
                     if (recoveryResult.type === "success") {
                         this.props.onComplete?.();
+                        this.cleanup();
                         return { type: "success" };
                     }
                     if (recoveryResult.type === "cancel") {
+                        this.cleanup();
                         return { type: "cancelled" };
                     }
                     // back - continue loop to show confirm identity again
@@ -167,9 +178,11 @@ export class EncryptionFlowViewModel
                     if (resetResult.type === "success") {
                         // After reset, run setup recovery flow
                         const setupResult = await this.runSetupRecoveryFlow();
+                        this.cleanup();
                         return setupResult;
                     }
                     if (resetResult.type === "cancel") {
+                        this.cleanup();
                         return { type: "cancelled" };
                     }
                     // back - continue loop to show confirm identity again
@@ -177,16 +190,13 @@ export class EncryptionFlowViewModel
                 }
             }
 
+            this.cleanup();
             return { type: "cancelled" };
         } catch (e) {
             printRustError("Encryption flow failed", e);
+            console.log("[EncryptionFlow] Error in startFlow:", e);
+            this.cleanup();
             return { type: "cancelled" };
-        } finally {
-            this.snapshot.merge({
-                currentScreen: null,
-                screenType: null,
-                isActive: false,
-            });
         }
     }
 
@@ -215,14 +225,18 @@ export class EncryptionFlowViewModel
         | { type: "back" }
         | { type: "cancel" }
     > {
+        console.log("[EncryptionFlow] runConfirmIdentityStep - creating VM");
         const vm = new ConfirmIdentityStepViewModel({
             availableActions,
         });
 
+        console.log("[EncryptionFlow] runConfirmIdentityStep - setting currentScreen and isLoading: false");
         this.snapshot.merge({
             currentScreen: vm as FlowStepViewModel<unknown, unknown, unknown>,
             screenType: vm.screenType,
+            isLoading: false,
         });
+        console.log("[EncryptionFlow] runConfirmIdentityStep - state updated, waiting for result");
 
         return vm.result as Promise<
             | { type: "success"; data: { outcome: "useRecoveryKey" | "interactiveVerification" | "resetIdentity" } }
@@ -257,10 +271,8 @@ export class EncryptionFlowViewModel
         | { type: "back" }
         | { type: "cancel" }
     > {
-        // Show reset warning
-        const warningVm = new ResetIdentityWarningStepViewModel({
-            encryption: this.encryption,
-        });
+        // Step 1: Show reset warning (consequences)
+        const warningVm = new ResetIdentityWarningStepViewModel({});
 
         this.snapshot.merge({
             currentScreen: warningVm as FlowStepViewModel<unknown, unknown, unknown>,
@@ -273,23 +285,97 @@ export class EncryptionFlowViewModel
             return warningResult;
         }
 
-        const { outcome } = warningResult.data;
+        // User wants to proceed - now show final confirmation
+        // Step 2: Show final "Are you sure? This is irreversible" confirmation
+        const confirmVm = new ResetIdentityConfirmStepViewModel({});
+
+        this.snapshot.merge({
+            currentScreen: confirmVm as FlowStepViewModel<unknown, unknown, unknown>,
+            screenType: confirmVm.screenType,
+        });
+
+        const confirmResult = await confirmVm.result;
+
+        if (confirmResult.type !== "success") {
+            // User cancelled or went back - return to warning
+            if (confirmResult.type === "back") {
+                return this.runResetIdentityFlow();
+            }
+            return confirmResult;
+        }
+
+        // User confirmed - now actually perform the reset
+        // Step 3: Execute the reset
+        const executeVm = new ResetIdentityExecuteStepViewModel({
+            encryption: this.encryption,
+        });
+
+        this.snapshot.merge({
+            currentScreen: executeVm as FlowStepViewModel<unknown, unknown, unknown>,
+            screenType: executeVm.screenType,
+        });
+
+        const executeResult = await executeVm.result;
+
+        if (executeResult.type !== "success") {
+            return executeResult;
+        }
+
+        const { outcome } = executeResult.data;
 
         if (outcome === "resetComplete") {
-            // Reset was completed (either no auth required or OIDC approved)
             return { type: "success" };
         }
 
-        if (outcome === "oidcApprovalStarted") {
-            // OIDC approval started - popup is open, wait for user
-            // The SDK will complete the reset when approved
-            // For now, return success and let the flow continue
-            return { type: "success" };
+        if (outcome === "needsOidc") {
+            // OIDC flow: Go back to warning screen while popup is open
+            const { handle, approvalUrl } = executeResult.data;
+
+            // Switch back to warning screen
+            this.snapshot.merge({
+                currentScreen: warningVm as FlowStepViewModel<unknown, unknown, unknown>,
+                screenType: warningVm.screenType,
+            });
+
+            // Open OIDC popup
+            const width = 600;
+            const height = 900;
+            const left = window.screenX + (window.outerWidth - width) / 2;
+            const top = window.screenY + (window.outerHeight - height) / 2;
+
+            const popup = window.open(
+                approvalUrl,
+                "oidc-reset-approval",
+                `width=${width},height=${height},left=${left},top=${top},scrollbars=yes`,
+            );
+
+            if (!popup) {
+                console.error("Failed to open OIDC popup");
+                // Stay on warning screen, user can try again
+                return { type: "back" };
+            }
+
+            // Wait for OIDC approval and complete reset
+            try {
+                await handle.reset(undefined);
+                console.log("OIDC reset complete");
+                if (popup && !popup.closed) {
+                    popup.close();
+                }
+                return { type: "success" };
+            } catch (e) {
+                if (popup && !popup.closed) {
+                    popup.close();
+                }
+                printRustError("OIDC reset failed", e);
+                // Stay on warning screen, user can try again
+                return { type: "back" };
+            }
         }
 
         if (outcome === "needsPassword") {
             // Need password for UIAA
-            const { handle } = warningResult.data;
+            const { handle } = executeResult.data;
             const passwordVm = new ResetIdentityPasswordStepViewModel({
                 resetHandle: handle,
                 userId: this.props.client.userId(),
@@ -306,27 +392,29 @@ export class EncryptionFlowViewModel
                 return { type: "success" };
             }
 
-            // If back from password, go back to warning
-            if (passwordResult.type === "back") {
-                return this.runResetIdentityFlow();
-            }
-
-            return { type: "cancel" };
+            // If back from password, we can't really go back since reset is in progress
+            // Just return the result
+            return passwordResult.type === "cancel" ? { type: "cancel" } : { type: "back" };
         }
 
-        return { type: "back" };
+        return { type: "success" };
     }
 
     private async runSetupRecoveryFlow(): Promise<EncryptionFlowResult> {
+        console.log("[EncryptionFlow] runSetupRecoveryFlow - creating SetupRecoveryStepViewModel");
         // Show setup recovery step
         const setupVm = new SetupRecoveryStepViewModel({});
 
+        console.log("[EncryptionFlow] runSetupRecoveryFlow - setting currentScreen and isLoading: false");
         this.snapshot.merge({
             currentScreen: setupVm as FlowStepViewModel<unknown, unknown, unknown>,
             screenType: setupVm.screenType,
+            isLoading: false,
         });
 
+        console.log("[EncryptionFlow] runSetupRecoveryFlow - waiting for setupVm.result");
         const setupResult = await setupVm.result;
+        console.log("[EncryptionFlow] runSetupRecoveryFlow - setupResult:", setupResult);
 
         if (setupResult.type !== "success") {
             return { type: "cancelled" };
@@ -373,6 +461,7 @@ export class EncryptionFlowViewModel
 
     public cancel(): void {
         this.cancelled = true;
+        this.cleanup();
         const { currentScreen } = this.getSnapshot();
         if (currentScreen) {
             // Force cancel on current screen if needed

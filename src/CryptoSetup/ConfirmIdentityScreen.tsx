@@ -43,13 +43,9 @@ export const ConfirmIdentityScreen: React.FC<
                     gap: "var(--cpd-space-4x)",
                 }}
             >
-                {availableActions.includes(
-                    IdentityConfirmationAction.InteractiveVerification,
-                ) && (
-                    <Button kind="primary" size="lg" disabled={true}>
-                        Use another device (coming soon)
-                    </Button>
-                )}
+                <Button kind="primary" size="lg" disabled={true}>
+                    Use another device (coming soon)
+                </Button>
 
                 {availableActions.includes(
                     IdentityConfirmationAction.Recovery,

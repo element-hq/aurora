@@ -20,6 +20,8 @@ import { SetupRecoveryScreen } from "./CryptoSetup/SetupRecoveryScreen";
 import { SaveRecoveryKeyScreen } from "./CryptoSetup/SaveRecoveryKeyScreen";
 import { EnablingRecoveryScreen } from "./CryptoSetup/EnablingRecoveryScreen";
 import { ResetIdentityWarningScreen } from "./CryptoSetup/ResetIdentityWarningScreen";
+import { ResetIdentityConfirmScreen } from "./CryptoSetup/ResetIdentityConfirmScreen";
+import { ResetIdentityExecuteScreen } from "./CryptoSetup/ResetIdentityExecuteScreen";
 import { ResetIdentityPasswordScreen } from "./CryptoSetup/ResetIdentityPasswordScreen";
 
 /**
@@ -57,5 +59,7 @@ export const screenRegistry: Record<
     "save-recovery-key": SaveRecoveryKeyScreen as ComponentType<ScreenProps>,
     "enabling-recovery": EnablingRecoveryScreen as ComponentType<ScreenProps>,
     "reset-identity-warning": ResetIdentityWarningScreen as ComponentType<ScreenProps>,
+    "reset-identity-confirm": ResetIdentityConfirmScreen as ComponentType<ScreenProps>,
+    "reset-identity-execute": ResetIdentityExecuteScreen as ComponentType<ScreenProps>,
     "reset-identity-password": ResetIdentityPasswordScreen as ComponentType<ScreenProps>,
 };
