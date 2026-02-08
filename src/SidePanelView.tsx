@@ -11,7 +11,7 @@ import React, { type JSX, useEffect, useState } from "react";
 import ChatIcon from "@vector-im/compound-design-tokens/assets/web/icons/chat";
 import LeaveIcon from "@vector-im/compound-design-tokens/assets/web/icons/leave";
 import SettingsIcon from "@vector-im/compound-design-tokens/assets/web/icons/settings";
-import type { ClientViewModel } from "./viewmodel/ClientViewModel";
+import type { ClientViewModel } from "./ClientViewModel";
 import BaseAvatar from "./MemberList/BaseAvatar";
 import { UserMenu } from "./UserMenu";
 

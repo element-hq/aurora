@@ -13,7 +13,7 @@ import {
     createContext,
     useContext,
 } from "react";
-import type { ClientViewModel } from "../viewmodel/ClientViewModel";
+import type { ClientViewModel } from "../ClientViewModel";
 
 type ContextType = [
     ClientViewModel,

@@ -2,10 +2,12 @@ import type React from "react";
 import "./App.css";
 import { useViewModel } from "@element-hq/web-shared-components";
 import { useClientStoreContext } from "./context/ClientStoreContext";
-import { RoomListHeader, RoomListSearch, RoomListView } from "./RoomList";
-import { RoomView } from "./RoomView";
+import { RoomListHeader } from "./RoomList/RoomListHeader";
+import { RoomListSearch } from "./RoomList/RoomListSearch";
+import { RoomListView } from "./RoomList/RoomListView";
+import { RoomView } from "./Room/RoomView";
 import { SidePanelView } from "./SidePanelView.tsx";
-import { SplashView } from "./SplashView.tsx";
+import { SplashView } from "./LoadingScreen/SplashView";
 
 console.log("running Client.tsx");
 

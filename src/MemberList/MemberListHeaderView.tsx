@@ -18,7 +18,7 @@ import { UserAddIcon } from "@vector-im/compound-design-tokens/assets/web/icons"
 import { useViewModel } from "@element-hq/web-shared-components";
 
 import { Flex } from "../utils/Flex";
-import type { MemberListViewModel } from "../viewmodel/MemberListViewModel";
+import type { MemberListViewModel } from "./MemberListViewModel";
 
 interface TooltipProps {
     canInvite: boolean;

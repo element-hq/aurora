@@ -9,20 +9,20 @@ import type { ComponentType } from "react";
 import type { ViewModel } from "@element-hq/web-shared-components";
 
 // Login screens
-import { ServerInputScreen } from "./Login/ServerInputScreen";
-import { OidcLoginScreen } from "./Login/OidcLoginScreen";
-import { PasswordLoginScreen } from "./Login/PasswordLoginScreen";
+import { ServerInputScreen } from "./Login/steps/ServerInput/ServerInputScreen";
+import { OidcLoginScreen } from "./Login/steps/OidcLogin/OidcLoginScreen";
+import { PasswordLoginScreen } from "./Login/steps/PasswordLogin/PasswordLoginScreen";
 
 // Encryption screens
-import { ConfirmIdentityScreen } from "./CryptoSetup/ConfirmIdentityScreen";
-import { RecoveryKeyEntryScreen } from "./CryptoSetup/RecoveryKeyEntryScreen";
-import { SetupRecoveryScreen } from "./CryptoSetup/SetupRecoveryScreen";
-import { SaveRecoveryKeyScreen } from "./CryptoSetup/SaveRecoveryKeyScreen";
-import { EnablingRecoveryScreen } from "./CryptoSetup/EnablingRecoveryScreen";
-import { ResetIdentityWarningScreen } from "./CryptoSetup/ResetIdentityWarningScreen";
-import { ResetIdentityConfirmScreen } from "./CryptoSetup/ResetIdentityConfirmScreen";
-import { ResetIdentityExecuteScreen } from "./CryptoSetup/ResetIdentityExecuteScreen";
-import { ResetIdentityPasswordScreen } from "./CryptoSetup/ResetIdentityPasswordScreen";
+import { ConfirmIdentityScreen } from "./CryptoSetup/steps/ConfirmIdentity/ConfirmIdentityScreen";
+import { RecoveryKeyEntryScreen } from "./CryptoSetup/steps/RecoveryKeyEntry/RecoveryKeyEntryScreen";
+import { SetupRecoveryScreen } from "./CryptoSetup/steps/SetupRecovery/SetupRecoveryScreen";
+import { SaveRecoveryKeyScreen } from "./CryptoSetup/steps/SaveRecoveryKey/SaveRecoveryKeyScreen";
+import { EnablingRecoveryScreen } from "./CryptoSetup/steps/EnablingRecovery/EnablingRecoveryScreen";
+import { ResetIdentityWarningScreen } from "./CryptoSetup/steps/ResetIdentityWarning/ResetIdentityWarningScreen";
+import { ResetIdentityConfirmScreen } from "./CryptoSetup/steps/ResetIdentityConfirm/ResetIdentityConfirmScreen";
+import { ResetIdentityExecuteScreen } from "./CryptoSetup/steps/ResetIdentityExecute/ResetIdentityExecuteScreen";
+import { ResetIdentityPasswordScreen } from "./CryptoSetup/steps/ResetIdentityPassword/ResetIdentityPasswordScreen";
 
 /**
  * Props that all screen components receive

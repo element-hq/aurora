@@ -8,6 +8,9 @@
 import type React from "react";
 import styles from "./SetupScreenLayout.module.css";
 
+// Re-export for consumers who need direct access to the CSS module
+export { styles as setupScreenStyles };
+
 export interface SetupScreenLayoutProps {
     /** Child content to render in the layout */
     children: React.ReactNode;

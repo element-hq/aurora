@@ -22,7 +22,7 @@ import { useClientStoreContext } from "./context/ClientStoreContext";
 import { Button, Menu, Separator } from "@vector-im/compound-web";
 import styles from "./UserMenu.module.css";
 import { useClientStoresContext } from "./context/ClientStoresContext";
-import type { ClientViewModel } from "./viewmodel/ClientViewModel";
+import type { ClientViewModel } from "./ClientViewModel";
 
 function mxcToUrl(mxcUrl: string): string {
     return `${mxcUrl.replace(
