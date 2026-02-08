@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { useViewModel } from "@element-hq/web-shared-components";
 import { InlineSpinner, Glass, TooltipProvider } from "@vector-im/compound-web";
@@ -21,6 +21,21 @@ export interface EncryptionProps {
 }
 
 /**
+ * Opens a centered popup window.
+ */
+function openPopup(url: string, name: string): Window | null {
+    const width = 600;
+    const height = 900;
+    const left = window.screenX + (window.outerWidth - width) / 2;
+    const top = window.screenY + (window.outerHeight - height) / 2;
+    return window.open(
+        url,
+        name,
+        `width=${width},height=${height},left=${left},top=${top},scrollbars=yes`,
+    );
+}
+
+/**
  * Encryption page component.
  *
  * Renders the bloom background and uses ModalFlowOverlay to display
@@ -32,6 +47,12 @@ export const Encryption: React.FC<EncryptionProps> = ({
 }) => {
     const flowStartedRef = useRef(false);
     const { isLoading, isActive, currentScreen, screenType } = useViewModel(encryptionFlowViewModel);
+
+    // Provide the popup opener to the ViewModel (View -> ViewModel callback)
+    const popupOpener = useCallback(openPopup, []);
+    useEffect(() => {
+        encryptionFlowViewModel.setPopupOpener(popupOpener);
+    }, [encryptionFlowViewModel, popupOpener]);
 
     console.log("[Encryption] Render:", { isLoading, isActive, hasCurrentScreen: !!currentScreen, screenType });
 

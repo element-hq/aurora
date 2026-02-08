@@ -95,6 +95,8 @@ export type {
     EncryptionFlowViewActions,
     EncryptionFlowResult,
     EncryptionFlowViewModelProps,
+    PopupHandle,
+    PopupOpener,
 } from "./EncryptionFlowViewModel";
 
 export { FlowStepViewModel } from "./FlowStepViewModel";

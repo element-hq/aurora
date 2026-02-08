@@ -30,6 +30,25 @@ export type EncryptionFlowResult =
     | { type: "cancelled" };
 
 /**
+ * Handle to an opened popup window.
+ * Abstraction to keep UI code out of the ViewModel.
+ */
+export interface PopupHandle {
+    /** Check if the popup is closed */
+    readonly closed: boolean;
+    /** Close the popup */
+    close(): void;
+}
+
+/**
+ * Props for EncryptionFlowViewModel
+ */
+/**
+ * Type for the popup opener callback
+ */
+export type PopupOpener = (url: string, name: string) => PopupHandle | null;
+
+/**
  * Props for EncryptionFlowViewModel
  */
 export interface EncryptionFlowViewModelProps {
@@ -77,6 +96,14 @@ export class EncryptionFlowViewModel
 {
     private encryption: EncryptionInterface;
     private cancelled = false;
+    private popupOpener: PopupOpener | null = null;
+
+    /**
+     * Set the popup opener callback. Should be called by the View.
+     */
+    public setPopupOpener(opener: PopupOpener): void {
+        this.popupOpener = opener;
+    }
 
     public constructor(props: EncryptionFlowViewModelProps) {
         super(props, {
@@ -351,17 +378,8 @@ export class EncryptionFlowViewModel
                 screenType: oidcWarningVm.screenType,
             });
 
-            // Open OIDC popup
-            const width = 600;
-            const height = 900;
-            const left = window.screenX + (window.outerWidth - width) / 2;
-            const top = window.screenY + (window.outerHeight - height) / 2;
-
-            const popup = window.open(
-                approvalUrl,
-                "oidc-reset-approval",
-                `width=${width},height=${height},left=${left},top=${top},scrollbars=yes`,
-            );
+            // Open OIDC popup via callback from View
+            const popup = this.popupOpener?.(approvalUrl, "oidc-reset-approval") ?? null;
 
             if (!popup) {
                 console.error("Failed to open OIDC popup");
