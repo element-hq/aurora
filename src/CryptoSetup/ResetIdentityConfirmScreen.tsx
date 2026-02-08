@@ -5,16 +5,14 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import { Button, IconButton } from "@vector-im/compound-web";
+import { Button } from "@vector-im/compound-web";
 import type React from "react";
 import ErrorIcon from "@vector-im/compound-design-tokens/assets/web/icons/error-solid";
-import ChevronLeftIcon from "@vector-im/compound-design-tokens/assets/web/icons/chevron-left";
 import type { ResetIdentityConfirmStepViewModel } from "./ResetIdentityConfirmStepViewModel";
 import type { ScreenProps } from "./screenRegistry.types";
 import {
     SetupScreenLayout,
     SetupScreenHeader,
-    setupScreenStyles,
 } from "../SetupScreen";
 
 /**
@@ -26,15 +24,6 @@ export const ResetIdentityConfirmScreen: React.FC<
 > = ({ viewModel }) => {
     return (
         <SetupScreenLayout>
-            <div className={setupScreenStyles.backButton}>
-                <IconButton
-                    onClick={() => viewModel.back()}
-                    aria-label="Go back"
-                >
-                    <ChevronLeftIcon />
-                </IconButton>
-            </div>
-
             <SetupScreenHeader
                 Icon={ErrorIcon}
                 title="Are you sure you want to reset your identity?"
