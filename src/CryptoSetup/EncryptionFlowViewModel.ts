@@ -285,7 +285,19 @@ export class EncryptionFlowViewModel
             return warningResult;
         }
 
-        // User wants to proceed - now show final confirmation
+        // User wants to proceed - run confirm and execute steps
+        return this.runResetConfirmAndExecute();
+    }
+
+    /**
+     * Runs the confirm and execute steps of the reset flow.
+     * Called after user has already seen the warning screen.
+     */
+    private async runResetConfirmAndExecute(): Promise<
+        | { type: "success" }
+        | { type: "back" }
+        | { type: "cancel" }
+    > {
         // Step 2: Show final "Are you sure? This is irreversible" confirmation
         const confirmVm = new ResetIdentityConfirmStepViewModel({});
 
@@ -356,8 +368,8 @@ export class EncryptionFlowViewModel
                 // Let user try again from warning screen
                 const retryResult = await oidcWarningVm.result;
                 if (retryResult.type === "success") {
-                    // User wants to try again - restart reset flow
-                    return this.runResetIdentityFlow();
+                    // User wants to try again - skip warning, go to confirm
+                    return this.runResetConfirmAndExecute();
                 }
                 return retryResult;
             }
@@ -391,7 +403,8 @@ export class EncryptionFlowViewModel
                 // User can try again from warning screen
                 const retryResult = await oidcWarningVm.result;
                 if (retryResult.type === "success") {
-                    return this.runResetIdentityFlow();
+                    // Skip warning, go directly to confirm
+                    return this.runResetConfirmAndExecute();
                 }
                 return retryResult;
             }
@@ -402,8 +415,8 @@ export class EncryptionFlowViewModel
             }
 
             if (raceResult.result.type === "success") {
-                // User clicked "Continue Reset" again - restart the flow
-                return this.runResetIdentityFlow();
+                // User clicked "Continue Reset" - skip warning, go to confirm
+                return this.runResetConfirmAndExecute();
             }
 
             // User went back or cancelled
