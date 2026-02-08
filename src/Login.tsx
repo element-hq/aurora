@@ -1,41 +1,44 @@
-import { Glass, TooltipProvider } from "@vector-im/compound-web";
-import { useViewModel } from "@element-hq/web-shared-components";
+/*
+ * Copyright 2026 New Vector Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+import { useEffect, useRef } from "react";
 import type React from "react";
-import type { LoginViewModel } from "./viewmodel/LoginViewModel";
-import { LoginFlow } from "./viewmodel/login-view.types";
-import { ServerInputScreen } from "./ServerInputScreen";
-import { OidcLoginScreen } from "./OidcLoginScreen";
-import { UsernamePasswordScreen } from "./UsernamePasswordScreen";
+import type { LoginFlowViewModel } from "./Login/LoginFlowViewModel";
+import { ModalFlowOverlay } from "./ModalFlowOverlay";
 
 export interface LoginProps {
-    loginViewModel: LoginViewModel;
+    loginFlowViewModel: LoginFlowViewModel;
 }
 
-export const Login: React.FC<LoginProps> = ({ loginViewModel }) => {
-    const { flow } = useViewModel(loginViewModel);
+/**
+ * Login page component.
+ *
+ * Renders the bloom background and uses ModalFlowOverlay to display
+ * the login flow steps. The LoginFlowViewModel coordinates the flow
+ * using async/await.
+ */
+export const Login: React.FC<LoginProps> = ({ loginFlowViewModel }) => {
+    const flowStartedRef = useRef(false);
 
-    const renderFlow = () => {
-        switch (flow) {
-            case LoginFlow.ServerInput:
-                return <ServerInputScreen loginViewModel={loginViewModel} />;
-            case LoginFlow.OIDC:
-                return <OidcLoginScreen loginViewModel={loginViewModel} />;
-            case LoginFlow.UsernamePassword:
-                return (
-                    <UsernamePasswordScreen loginViewModel={loginViewModel} />
-                );
+    useEffect(() => {
+        if (!flowStartedRef.current) {
+            flowStartedRef.current = true;
+            // Start the login flow - runs async
+            loginFlowViewModel.startFlow();
         }
-    };
+    }, [loginFlowViewModel]);
 
     return (
         <div className="mx_LoginPage">
-            <div className="mx_Login">
-                <Glass>
-                    <div className="mx_Login_dialog">
-                        <TooltipProvider>{renderFlow()}</TooltipProvider>
-                    </div>
-                </Glass>
-            </div>
+            <ModalFlowOverlay
+                flow={loginFlowViewModel}
+                dismissible={false}
+                showBackdrop={false}
+            />
         </div>
     );
 };

@@ -1,0 +1,184 @@
+/*
+ * Copyright 2026 New Vector Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR GPL-3.0-only OR LicenseRef-Element-Commercial
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+/* Aurora Dialog Styles - Using Compound Glass component */
+
+.aurora_Dialog_border {
+    /* Glass component from Compound provides the glass effect */
+    /* Additional spacing/sizing if needed */
+}
+
+.aurora_Dialog {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--cpd-color-bg-canvas-default);
+    border-radius: var(--cpd-space-6x);
+    box-shadow: var(--cpd-shadow-dialog);
+    padding: 0;
+    color: var(--cpd-color-text-primary);
+    width: 544px;
+    max-width: 90vw;
+    height: auto;
+    max-height: 80vh;
+    min-height: 0;
+    position: relative;
+    outline: none;
+}
+
+.aurora_Dialog_header {
+    padding: var(--cpd-space-8x) var(--cpd-space-8x) var(--cpd-space-4x)
+        var(--cpd-space-8x);
+}
+
+.aurora_Dialog_header:empty {
+    display: none;
+}
+
+.aurora_Dialog_header h1 {
+    display: inline-block;
+    font-weight: var(--cpd-font-weight-semibold);
+    font-size: var(--cpd-font-size-heading-md);
+    line-height: var(--cpd-font-line-height-medium);
+    margin: 0;
+    color: var(--cpd-color-text-primary);
+}
+
+.aurora_Dialog_header h1:empty {
+    display: none;
+}
+
+.aurora_Dialog_cancelButton {
+    position: absolute;
+    top: var(--cpd-space-4x);
+    right: var(--cpd-space-4x);
+    background: transparent;
+    border: none;
+    border-radius: var(--cpd-radius-pill-effect);
+    width: var(--cpd-space-10x);
+    height: var(--cpd-space-10x);
+    padding: var(--cpd-space-2x);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--cpd-color-icon-tertiary);
+    transition:
+        background-color 0.1s ease-in-out,
+        color 0.1s ease-in-out;
+}
+
+.aurora_Dialog_cancelButton:hover {
+    background: var(--cpd-color-bg-subtle-secondary);
+    color: var(--cpd-color-icon-primary);
+}
+
+.aurora_Dialog_cancelButton:active {
+    background: var(--cpd-color-bg-subtle-primary);
+}
+
+.aurora_Dialog_cancelButton:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.aurora_Dialog_form {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    flex: 1;
+}
+
+.aurora_Dialog_content {
+    overflow: auto;
+    padding: var(--cpd-space-2x) var(--cpd-space-8x);
+    flex: 1;
+    min-height: 0;
+}
+
+.aurora_Dialog_error {
+    background: var(--cpd-color-bg-critical-subtle);
+    border: 1px solid var(--cpd-color-border-critical-subtle);
+    border-radius: var(--cpd-radius-pill-effect);
+    padding: var(--cpd-space-4x);
+    margin-bottom: var(--cpd-space-4x);
+    color: var(--cpd-color-text-critical-primary);
+    font-size: var(--cpd-font-size-body-sm);
+}
+
+.aurora_Dialog_footer {
+    padding: var(--cpd-space-5x) var(--cpd-space-8x);
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--cpd-space-6x);
+    box-shadow: 0px -4px 4px rgba(0, 0, 0, 0.05);
+    z-index: 1;
+}
+
+.aurora_Dialog_button {
+    border-radius: var(--cpd-radius-pill-effect);
+    padding: var(--cpd-space-3x) var(--cpd-space-7x);
+    font-size: var(--cpd-font-size-body-md);
+    font-weight: var(--cpd-font-weight-semibold);
+    line-height: var(--cpd-font-line-height-regular);
+    border: none;
+    cursor: pointer;
+    transition:
+        background-color 0.1s ease-in-out,
+        color 0.1s ease-in-out;
+    min-width: 80px;
+}
+
+.aurora_Dialog_button:disabled {
+    cursor: not-allowed;
+    opacity: 0.4;
+}
+
+.aurora_Dialog_button--primary {
+    background: var(--cpd-color-bg-action-primary-rest);
+    color: var(--cpd-color-text-on-solid-primary);
+}
+
+.aurora_Dialog_button--primary:hover:not(:disabled) {
+    background: var(--cpd-color-bg-action-primary-hovered);
+}
+
+.aurora_Dialog_button--primary:active:not(:disabled) {
+    background: var(--cpd-color-bg-action-primary-pressed);
+}
+
+.aurora_Dialog_button--secondary {
+    background: transparent;
+    color: var(--cpd-color-text-primary);
+    border: 1px solid var(--cpd-color-border-interactive-secondary);
+}
+
+.aurora_Dialog_button--secondary:hover:not(:disabled) {
+    background: var(--cpd-color-bg-subtle-secondary);
+}
+
+.aurora_Dialog_button--secondary:active:not(:disabled) {
+    background: var(--cpd-color-bg-subtle-primary);
+}
+
+/* Dialog backdrop/wrapper */
+.aurora_DialogBackdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 4000;
+    padding: var(--cpd-space-4x);
+}
+
+.aurora_DialogBackdrop--with-backdrop {
+    background: rgba(0, 0, 0, 0.5);
+}

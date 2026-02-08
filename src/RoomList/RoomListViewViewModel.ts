@@ -49,60 +49,61 @@ interface RoomListViewViewModelProps {
 /**
  * Map FilterId from shared-components to Rust SDK filter methods
  */
-const filterIdToRustFilter: Map<FilterId, RoomListEntriesDynamicFilterKind> = new Map([
-    [
-        "unread",
-        new RoomListEntriesDynamicFilterKind.All({
-            filters: [
-                new RoomListEntriesDynamicFilterKind.Unread(),
-                new RoomListEntriesDynamicFilterKind.DeduplicateVersions(),
-            ],
-        }),
-    ],
-    [
-        "favourite",
-        new RoomListEntriesDynamicFilterKind.All({
-            filters: [
-                new RoomListEntriesDynamicFilterKind.Favourite(),
-                new RoomListEntriesDynamicFilterKind.DeduplicateVersions(),
-            ],
-        }),
-    ],
-    [
-        "people",
-        new RoomListEntriesDynamicFilterKind.All({
-            filters: [
-                new RoomListEntriesDynamicFilterKind.Category({
-                    expect: RoomListFilterCategory.People,
-                }),
-                new RoomListEntriesDynamicFilterKind.Joined(),
-                new RoomListEntriesDynamicFilterKind.DeduplicateVersions(),
-            ],
-        }),
-    ],
-    [
-        "rooms",
-        new RoomListEntriesDynamicFilterKind.All({
-            filters: [
-                new RoomListEntriesDynamicFilterKind.Category({
-                    expect: RoomListFilterCategory.Group,
-                }),
-                new RoomListEntriesDynamicFilterKind.Joined(),
-                new RoomListEntriesDynamicFilterKind.DeduplicateVersions(),
-            ],
-        }),
-    ],
-    [
-        "low_priority",
-        new RoomListEntriesDynamicFilterKind.All({
-            filters: [
-                new RoomListEntriesDynamicFilterKind.LowPriority(),
-                new RoomListEntriesDynamicFilterKind.Joined(),
-                new RoomListEntriesDynamicFilterKind.DeduplicateVersions(),
-            ],
-        }),
-    ],
-]);
+const filterIdToRustFilter: Map<FilterId, RoomListEntriesDynamicFilterKind> =
+    new Map([
+        [
+            "unread",
+            new RoomListEntriesDynamicFilterKind.All({
+                filters: [
+                    new RoomListEntriesDynamicFilterKind.Unread(),
+                    new RoomListEntriesDynamicFilterKind.DeduplicateVersions(),
+                ],
+            }),
+        ],
+        [
+            "favourite",
+            new RoomListEntriesDynamicFilterKind.All({
+                filters: [
+                    new RoomListEntriesDynamicFilterKind.Favourite(),
+                    new RoomListEntriesDynamicFilterKind.DeduplicateVersions(),
+                ],
+            }),
+        ],
+        [
+            "people",
+            new RoomListEntriesDynamicFilterKind.All({
+                filters: [
+                    new RoomListEntriesDynamicFilterKind.Category({
+                        expect: RoomListFilterCategory.People,
+                    }),
+                    new RoomListEntriesDynamicFilterKind.Joined(),
+                    new RoomListEntriesDynamicFilterKind.DeduplicateVersions(),
+                ],
+            }),
+        ],
+        [
+            "rooms",
+            new RoomListEntriesDynamicFilterKind.All({
+                filters: [
+                    new RoomListEntriesDynamicFilterKind.Category({
+                        expect: RoomListFilterCategory.Group,
+                    }),
+                    new RoomListEntriesDynamicFilterKind.Joined(),
+                    new RoomListEntriesDynamicFilterKind.DeduplicateVersions(),
+                ],
+            }),
+        ],
+        [
+            "low_priority",
+            new RoomListEntriesDynamicFilterKind.All({
+                filters: [
+                    new RoomListEntriesDynamicFilterKind.LowPriority(),
+                    new RoomListEntriesDynamicFilterKind.Joined(),
+                    new RoomListEntriesDynamicFilterKind.DeduplicateVersions(),
+                ],
+            }),
+        ],
+    ]);
 
 /**
  * RoomListViewViewModel for Aurora that implements the shared-components interface
@@ -116,7 +117,9 @@ export class RoomListViewViewModel
     private controller?: RoomListDynamicEntriesControllerInterface;
     private stateStream?: TaskHandleInterface;
     private roomListEntriesWithDynamicAdapters?: RoomListEntriesWithDynamicAdaptersResultInterface;
-    private roomList?: Awaited<ReturnType<typeof this.props.roomListService.allRooms>>;
+    private roomList?: Awaited<
+        ReturnType<typeof this.props.roomListService.allRooms>
+    >;
     private diffQueue: Promise<void> = Promise.resolve();
     private hasSetupEntries = false;
 
@@ -124,13 +127,19 @@ export class RoomListViewViewModel
     private activeFilter?: FilterId;
     private rooms: RoomSummary[] = [];
     private roomsMap = new Map<string, RoomInterface>();
-    
+
     // Child view models
     private roomItemViewModels = new Map<string, RoomListItemViewModel>();
 
     public constructor(props: RoomListViewViewModelProps) {
         // Determine available filters based on what the Rust SDK supports
-        const filterIds: FilterId[] = ["unread", "people", "rooms", "favourite", "low_priority"];
+        const filterIds: FilterId[] = [
+            "unread",
+            "people",
+            "rooms",
+            "favourite",
+            "low_priority",
+        ];
 
         super(props, {
             isLoadingRooms: true,
@@ -187,7 +196,8 @@ export class RoomListViewViewModel
         this.hasSetupEntries = true;
 
         // Get the entries with dynamic adapters
-        this.roomListEntriesWithDynamicAdapters = this.roomList.entriesWithDynamicAdapters(200, this);
+        this.roomListEntriesWithDynamicAdapters =
+            this.roomList.entriesWithDynamicAdapters(200, this);
         this.controller = this.roomListEntriesWithDynamicAdapters.controller();
 
         // Add filter if one is active
@@ -236,7 +246,10 @@ export class RoomListViewViewModel
      * Parse a room from the Rust SDK into a RoomSummary
      */
     private async parseRoom(room: RoomInterface): Promise<RoomSummary> {
-        const [roomInfo, latestEvent] = await Promise.all([room.roomInfo(), room.latestEvent()]);
+        const [roomInfo, latestEvent] = await Promise.all([
+            room.roomInfo(),
+            room.latestEvent(),
+        ]);
         return buildRoomSummary(room, roomInfo, latestEvent);
     }
 
@@ -254,7 +267,9 @@ export class RoomListViewViewModel
     /**
      * Called by the Rust SDK when room list updates occur
      */
-    public onUpdate = async (updates: RoomListEntriesUpdate[]): Promise<void> => {
+    public onUpdate = async (
+        updates: RoomListEntriesUpdate[],
+    ): Promise<void> => {
         this.diffQueue = this.diffQueue.then(() => this.applyDiff(updates));
     };
 
@@ -268,7 +283,9 @@ export class RoomListViewViewModel
         for (const update of updates) {
             switch (update.tag) {
                 case RoomListEntriesUpdate_Tags.Set:
-                    newRooms[update.inner.index] = await this.parseRoom(update.inner.value);
+                    newRooms[update.inner.index] = await this.parseRoom(
+                        update.inner.value,
+                    );
                     allRooms.push(update.inner.value);
                     break;
                 case RoomListEntriesUpdate_Tags.PushBack:
@@ -289,7 +306,11 @@ export class RoomListViewViewModel
                     newRooms.pop();
                     break;
                 case RoomListEntriesUpdate_Tags.Insert:
-                    newRooms.splice(update.inner.index, 0, await this.parseRoom(update.inner.value));
+                    newRooms.splice(
+                        update.inner.index,
+                        0,
+                        await this.parseRoom(update.inner.value),
+                    );
                     allRooms.push(update.inner.value);
                     break;
                 case RoomListEntriesUpdate_Tags.Remove:
@@ -299,7 +320,9 @@ export class RoomListViewViewModel
                     newRooms = newRooms.slice(0, update.inner.length);
                     break;
                 case RoomListEntriesUpdate_Tags.Reset:
-                    newRooms = await Promise.all(update.inner.values.map((room) => this.parseRoom(room)));
+                    newRooms = await Promise.all(
+                        update.inner.values.map((room) => this.parseRoom(room)),
+                    );
                     allRooms.push(...update.inner.values);
                     break;
             }
@@ -402,7 +425,11 @@ export class RoomListViewViewModel
         }
 
         // Create a new view model and cache it
-        viewModel = new RoomListItemViewModel(room, this.props.client, this.props.openRoom);
+        viewModel = new RoomListItemViewModel(
+            room,
+            this.props.client,
+            this.props.openRoom,
+        );
         this.roomItemViewModels.set(roomId, viewModel);
         return viewModel;
     }
@@ -423,7 +450,7 @@ export class RoomListViewViewModel
     public setActiveRoom(roomId: string): void {
         // Find the index of the selected room
         const roomIndex = this.rooms.findIndex((r) => r.id === roomId);
-        
+
         this.snapshot.merge({
             roomListState: {
                 ...this.getSnapshot().roomListState,

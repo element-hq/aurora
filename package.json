@@ -29,6 +29,7 @@
         "lodash-es": "^4.17.21",
         "react": "^19.0.0",
         "react-dom": "^19.0.0",
+        "react-focus-lock": "^2.13.7",
         "react-virtuoso": "^4.12.8",
         "sanitize-html": "^2.12.1",
         "uniffi-bindgen-react-native": "git+https://github.com/jhugman/uniffi-bindgen-react-native#5c01f3f7025d069aac1dd1fd51ca72bb76fdb243"

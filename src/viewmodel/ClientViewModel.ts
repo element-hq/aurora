@@ -38,9 +38,9 @@ import {
     type LoginParams,
     type Props,
 } from "./client-view.types";
-import type { Credential } from "./credentials.types";
-import { EncryptionViewModel } from "./EncryptionViewModel";
-import { LoginViewModel } from "./LoginViewModel";
+import type { Credential } from "../Login/credentials.types";
+import { EncryptionFlowViewModel } from "../CryptoSetup";
+import { LoginFlowViewModel } from "../Login/LoginFlowViewModel";
 import { RoomListViewViewModel } from "../RoomList/RoomListViewViewModel";
 
 export class ClientViewModel
@@ -61,18 +61,20 @@ export class ClientViewModel
             clientState: ClientState.Unknown,
             roomViewModel: undefined,
             roomListViewModel: undefined,
-            loginViewModel: undefined,
+            loginFlowViewModel: undefined,
             userId: undefined,
             displayName: undefined,
             avatarUrl: undefined,
         });
 
-        // Create loginViewModel after super() call
-        this.snapshot.merge({ loginViewModel: this.initLoginViewModel() });
+        // Create loginFlowViewModel after super() call
+        this.snapshot.merge({
+            loginFlowViewModel: this.initLoginFlowViewModel(),
+        });
     }
 
-    private initLoginViewModel(): LoginViewModel {
-        return new LoginViewModel({
+    private initLoginFlowViewModel(): LoginFlowViewModel {
+        return new LoginFlowViewModel({
             onLogin: this.login.bind(this),
             onCheckHomeserver: this.checkHomeserverCapabilities.bind(this),
             onGetOidcAuthUrl: this.getOidcAuthUrl.bind(this),
@@ -261,9 +263,9 @@ export class ClientViewModel
             userId: undefined,
             displayName: undefined,
             avatarUrl: undefined,
-            encryptionViewModel: undefined,
-            // Keep loginViewModel so we can log in again
-            loginViewModel: this.initLoginViewModel(),
+            encryptionFlowViewModel: undefined,
+            // Keep loginFlowViewModel so we can log in again
+            loginFlowViewModel: this.initLoginFlowViewModel(),
         });
     }
 
@@ -273,7 +275,6 @@ export class ClientViewModel
     private handleLoginFailure(error: unknown, errorMessage: string): void {
         printRustError(errorMessage, error);
         this.snapshot.merge({ clientState: ClientState.Unknown });
-        this.getSnapshot().loginViewModel?.setLoggingIn(false);
     }
 
     /**
@@ -282,7 +283,6 @@ export class ClientViewModel
      */
     private async performLogin(credentials: Credential): Promise<void> {
         this.snapshot.merge({ clientState: ClientState.LoggingIn });
-        this.getSnapshot().loginViewModel?.setLoggingIn(true);
 
         if (!this.client) {
             throw new Error(
@@ -358,10 +358,10 @@ export class ClientViewModel
         const displayName = await this.client.displayName();
         const avatarUrl = await this.getAvatarUrlSafely();
 
-        // Create encryption view model now that we have a client
-        const encryptionViewModel = new EncryptionViewModel({
+        // Create encryption flow view model now that we have a client
+        const encryptionFlowViewModel = new EncryptionFlowViewModel({
             client: this.client,
-            onRecoveryEnabled: () => {
+            onComplete: () => {
                 // When recovery is enabled, continue to sync with the recovery key
                 this.continueAfterEncryptionSetup();
             },
@@ -372,9 +372,8 @@ export class ClientViewModel
             userId,
             displayName,
             avatarUrl,
-            encryptionViewModel,
+            encryptionFlowViewModel,
         });
-        this.getSnapshot().loginViewModel?.setLoggingIn(false);
 
         // Notify parent that login completed
         if (this.props.onLogin && userId) {
@@ -505,7 +504,6 @@ export class ClientViewModel
             this.storagePassphrase = undefined;
             this.storageStoreId = undefined;
             this.snapshot.merge({ clientState: ClientState.LoggedOut });
-            this.getSnapshot().loginViewModel?.setLoggingIn(false);
         }
     }
 
