@@ -1,10 +1,10 @@
 #!/bin/bash
 
 echo "==> Step 1: Cleaning..."
-yarn ubrn:clean
+pnpm ubrn:clean
 
 echo "==> Step 2: Checking out..."
-yarn ubrn:checkout
+pnpm ubrn:checkout
 
 echo "==> Step 3: Resetting any modifications after checkout..."
 git -C rust_modules/matrix-rust-sdk reset --hard HEAD
