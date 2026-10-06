@@ -17,7 +17,7 @@
         "ubrn:web:build": "ubrn build web --config ubrn.config.yaml",
         "ubrn:checkout": "ubrn checkout --config ubrn.config.yaml",
         "ubrn:clean": "rm -Rf cpp/ src/generated/ src/index.web.ts*",
-        "biome:format": "yarn biome format --write ."
+        "biome:format": "pnpm biome format --write ."
     },
     "dependencies": {
         "@element-hq/web-shared-components": "0.0.2",
@@ -45,5 +45,12 @@
         "typescript": "^5.7.2",
         "vite": "^5.0.0",
         "vite-plugin-top-level-await": "^1.5.0"
+    },
+    "devEngines": {
+        "packageManager": {
+            "name": "pnpm",
+            "version": "11.23.0",
+            "onFail": "download"
+        }
     }
 }

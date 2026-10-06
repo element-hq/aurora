@@ -1,10 +1,10 @@
 #!/bin/bash
 
 echo "==> Step 1: Cleaning..."
-yarn ubrn:clean
+pnpm ubrn:clean
 
 echo "==> Step 2: Checking out..."
-yarn ubrn:checkout
+pnpm ubrn:checkout
 
 echo "==> Step 3: Resetting any modifications after checkout..."
 git -C rust_modules/matrix-rust-sdk reset --hard HEAD
@@ -27,7 +27,7 @@ sed -i.bak '/bindings\/wasm/d' rust_modules/matrix-rust-sdk/Cargo.toml
 echo "    ✓ Removed from workspace"
 
 echo "==> Step 7: Building web (first pass to generate wasm bindings)..."
-yarn ubrn:web:build:release || echo "    (First pass may have warnings)"
+pnpm ubrn:web:build:release || echo "    (First pass may have warnings)"
 
 echo "==> Step 8: Adding bindings/wasm back to workspace..."
 # Add bindings/wasm back to workspace members now that it exists
@@ -38,7 +38,7 @@ echo "    ✓ Added back to workspace"
 
 echo "==> Step 9: Building web (second pass with complete workspace)..."
 set -e
-yarn ubrn:web:build:release
+pnpm ubrn:web:build:release
 
 echo "==> Step 10: Fixing index.web.ts import..."
 INDEX_FILE="src/index.web.ts"
