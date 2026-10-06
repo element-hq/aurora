@@ -19,7 +19,7 @@ jobs:
         with:
           cache: "pnpm"
           node-version: "lts/*"
-      - run: pnpom install --frozen-lockfile
+      - run: pnpm install --frozen-lockfile
       - run: pnpm build
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@4cbaf4c08f1a7bfa537d6113472ef4424e4eb654 # v3.0.0
