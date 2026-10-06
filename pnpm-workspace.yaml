@@ -1,3 +1,4 @@
 allowBuilds:
   '@swc/core': true
   esbuild: true
+  uniffi-bindgen-react-native@https://codeload.github.com/jhugman/uniffi-bindgen-react-native/tar.gz/3dd1cd1353750dc3bfbbf4bb4d4ccde26b0fbd2e: true

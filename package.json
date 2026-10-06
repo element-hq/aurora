@@ -32,7 +32,7 @@
         "react-focus-lock": "^2.13.7",
         "react-virtuoso": "^4.18.16",
         "sanitize-html": "^2.18.0",
-        "uniffi-bindgen-react-native": "github:jhugman/uniffi-bindgen-react-native#5c01f3f7025d069aac1dd1fd51ca72bb76fdb243"
+        "uniffi-bindgen-react-native": "github:jhugman/uniffi-bindgen-react-native#3dd1cd1353750dc3bfbbf4bb4d4ccde26b0fbd2e"
     },
     "devDependencies": {
         "@biomejs/biome": "2.0.6",

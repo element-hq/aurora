@@ -244,8 +244,8 @@ importers:
         specifier: ^2.18.0
         version: 2.18.0
       uniffi-bindgen-react-native:
-        specifier: github:jhugman/uniffi-bindgen-react-native#5c01f3f7025d069aac1dd1fd51ca72bb76fdb243
-        version: https://codeload.github.com/jhugman/uniffi-bindgen-react-native/tar.gz/5c01f3f7025d069aac1dd1fd51ca72bb76fdb243
+        specifier: github:jhugman/uniffi-bindgen-react-native#3dd1cd1353750dc3bfbbf4bb4d4ccde26b0fbd2e
+        version: https://codeload.github.com/jhugman/uniffi-bindgen-react-native/tar.gz/3dd1cd1353750dc3bfbbf4bb4d4ccde26b0fbd2e
     devDependencies:
       '@biomejs/biome':
         specifier: 2.0.6
@@ -1677,9 +1677,9 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  uniffi-bindgen-react-native@https://codeload.github.com/jhugman/uniffi-bindgen-react-native/tar.gz/5c01f3f7025d069aac1dd1fd51ca72bb76fdb243:
-    resolution: {gitHosted: true, integrity: sha512-kLamrpm5hlfI1m8oct/HUUOxURpUT2jRXZ6KQAgLL7BcY21uUfFheihw1kVB5zPuoyQWp849+kSa3G7hS994zg==, tarball: https://codeload.github.com/jhugman/uniffi-bindgen-react-native/tar.gz/5c01f3f7025d069aac1dd1fd51ca72bb76fdb243}
-    version: 0.29.3-1
+  uniffi-bindgen-react-native@https://codeload.github.com/jhugman/uniffi-bindgen-react-native/tar.gz/3dd1cd1353750dc3bfbbf4bb4d4ccde26b0fbd2e:
+    resolution: {gitHosted: true, integrity: sha512-1hZtxFTge4eyzHm98tS3Ul6n0wXWMe1t5eyDXt6wUZXiDxu/A2Jjf/zBOrxI+cWIP12xYBJ2N/ZMVRqnDHHMJQ==, tarball: https://codeload.github.com/jhugman/uniffi-bindgen-react-native/tar.gz/3dd1cd1353750dc3bfbbf4bb4d4ccde26b0fbd2e}
+    version: 0.31.0-6
     hasBin: true
 
   update-browserslist-db@1.3.3:
@@ -2968,7 +2968,7 @@ snapshots:
 
   typescript@5.9.3: {}
 
-  uniffi-bindgen-react-native@https://codeload.github.com/jhugman/uniffi-bindgen-react-native/tar.gz/5c01f3f7025d069aac1dd1fd51ca72bb76fdb243: {}
+  uniffi-bindgen-react-native@https://codeload.github.com/jhugman/uniffi-bindgen-react-native/tar.gz/3dd1cd1353750dc3bfbbf4bb4d4ccde26b0fbd2e: {}
 
   update-browserslist-db@1.3.3(browserslist@4.29.3):
     dependencies:
