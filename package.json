@@ -17,7 +17,7 @@
         "ubrn:web:build": "ubrn build web --config ubrn.config.yaml",
         "ubrn:checkout": "ubrn checkout --config ubrn.config.yaml",
         "ubrn:clean": "rm -Rf cpp/ src/generated/ src/index.web.ts*",
-        "biome:format": "yarn biome format --write ."
+        "biome:format": "pnpm biome format --write ."
     },
     "dependencies": {
         "@element-hq/web-shared-components": "0.0.2",
