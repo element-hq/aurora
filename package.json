@@ -20,7 +20,7 @@
         "biome:format": "pnpm biome format --write ."
     },
     "dependencies": {
-        "@element-hq/web-shared-components": "0.2.0",
+        "@element-hq/web-shared-components": "0.2.1",
         "@tauri-apps/api": "^1.6.0",
         "@vector-im/compound-design-tokens": "^6.10.2",
         "@vector-im/compound-web": "^10.3.0",
