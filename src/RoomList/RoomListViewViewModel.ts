@@ -253,7 +253,7 @@ export class RoomListViewViewModel
             room.roomInfo(),
             room.latestEvent(),
         ]);
-        return buildRoomSummary(room, roomInfo, latestEvent);
+        return buildRoomSummary(this.props.client, room, roomInfo, latestEvent);
     }
 
     /**

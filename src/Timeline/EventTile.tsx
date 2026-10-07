@@ -15,20 +15,14 @@ import {
     TimelineItemContent,
     VirtualTimelineItem,
     MembershipChange,
+    type ClientInterface,
 } from "../index.web";
+import { mxcToUrl } from "../utils/mxcToUrl";
 
 interface EventTileProp {
     item: TimelineItem<any>;
+    client: ClientInterface;
 }
-function mxcToUrl(mxcUrl: string, size = 48): string {
-    return (
-        mxcUrl.replace(
-            /^mxc:\/\//,
-            "https://matrix.org/_matrix/media/v3/thumbnail/",
-        ) + `?width=${size}&height=${size}`
-    );
-}
-
 export function getChangeDescription(
     membershipChange: MembershipChange,
 ): string {
@@ -70,7 +64,7 @@ export function getChangeDescription(
     }
 }
 
-export const EventTile: React.FC<EventTileProp> = ({ item }) => {
+export const EventTile: React.FC<EventTileProp> = ({ item, client }) => {
     let showAvatar = !item.continuation;
 
     if (item.kind === "spinner") {
@@ -129,7 +123,7 @@ export const EventTile: React.FC<EventTileProp> = ({ item }) => {
             ) {
                 const mxc =
                     message.kind.inner.content.msgType.inner.content.source.url();
-                body = <img src={mxcToUrl(mxc, 500)} height={250} />;
+                body = <img src={mxcToUrl(client, mxc, 500)} height={250} />;
             } else if (
                 MessageType.Text.instanceOf(message.kind.inner.content.msgType)
             ) {
@@ -175,7 +169,10 @@ export const EventTile: React.FC<EventTileProp> = ({ item }) => {
                     id={event.item.sender}
                     src={
                         event.item.content.inner.prevAvatarUrl
-                            ? mxcToUrl(event.item.content.inner.prevAvatarUrl)
+                            ? mxcToUrl(
+                                  client,
+                                  event.item.content.inner.prevAvatarUrl,
+                              )
                             : ""
                     }
                     size="16px"
@@ -187,7 +184,10 @@ export const EventTile: React.FC<EventTileProp> = ({ item }) => {
                     id={event.item.sender}
                     src={
                         event.item.content.inner.avatarUrl
-                            ? mxcToUrl(event.item.content.inner.avatarUrl)
+                            ? mxcToUrl(
+                                  client,
+                                  event.item.content.inner.avatarUrl,
+                              )
                             : ""
                     }
                     size="16px"
@@ -231,7 +231,7 @@ export const EventTile: React.FC<EventTileProp> = ({ item }) => {
                     id={event.item.sender}
                     src={
                         senderProfile.avatarUrl
-                            ? mxcToUrl(senderProfile.avatarUrl)
+                            ? mxcToUrl(client, senderProfile.avatarUrl)
                             : ""
                     }
                     size="16px"
@@ -258,7 +258,7 @@ export const EventTile: React.FC<EventTileProp> = ({ item }) => {
                             id={event.item.sender}
                             src={
                                 senderProfile.avatarUrl
-                                    ? mxcToUrl(senderProfile.avatarUrl)
+                                    ? mxcToUrl(client, senderProfile.avatarUrl)
                                     : ""
                             }
                             size="32px"

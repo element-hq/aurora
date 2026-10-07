@@ -26,6 +26,7 @@ export class RoomViewModel extends BaseViewModel<RoomViewSnapshot, Props> {
             memberListViewModel,
             roomHeaderViewModel: undefined, // Will be set asynchronously
             roomId,
+            client: props.client,
         });
 
         this.disposables.track(timelineViewModel);
@@ -43,6 +44,7 @@ export class RoomViewModel extends BaseViewModel<RoomViewSnapshot, Props> {
         ]);
 
         const roomHeaderViewModel = buildRoomSummary(
+            this.props.client,
             this.props.room,
             roomInfo,
             latestEvent,
@@ -59,6 +61,7 @@ export class RoomViewModel extends BaseViewModel<RoomViewSnapshot, Props> {
                     // When room info changes, rebuild the summary
                     const latestEvent = await this.props.room.latestEvent();
                     const roomHeaderViewModel = buildRoomSummary(
+                        this.props.client,
                         this.props.room,
                         roomInfo,
                         latestEvent,

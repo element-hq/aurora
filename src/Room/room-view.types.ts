@@ -7,7 +7,7 @@
  *
  */
 
-import type { RoomInterface } from "../index.web";
+import type { ClientInterface, RoomInterface } from "../index.web";
 import type { MemberListViewModel } from "../MemberList/MemberListViewModel";
 import type { TimelineViewModel } from "../Timeline/TimelineViewModel";
 import type { RoomSummary } from "../RoomList/RoomSummary";
@@ -17,8 +17,10 @@ export interface RoomViewSnapshot {
     memberListViewModel: MemberListViewModel;
     roomHeaderViewModel?: RoomSummary;
     roomId: string;
+    client: ClientInterface;
 }
 
 export interface Props {
     room: RoomInterface;
+    client: ClientInterface;
 }

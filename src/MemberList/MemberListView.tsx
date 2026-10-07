@@ -7,20 +7,19 @@ import { Virtuoso } from "react-virtuoso";
 import { Flex } from "../utils/Flex";
 import BaseCard from "./BaseCard";
 import { MemberListHeaderView } from "./MemberListHeaderView";
-import {
-    type MemberWithSeparator,
-    SEPARATOR,
-} from "./member-list-view.types";
+import { type MemberWithSeparator, SEPARATOR } from "./member-list-view.types";
 import type { MemberListViewModel } from "./MemberListViewModel";
 import { RoomMemberTileView } from "./tiles/RoomMemberTileView";
+import type { ClientInterface } from "../generated/matrix_sdk_ffi";
 import "./MemberList.css";
 
 interface IProps {
     vm: MemberListViewModel;
+    client: ClientInterface;
 }
 
 const MemberListView: React.FC<IProps> = (props: IProps) => {
-    const { vm } = props;
+    const { vm, client } = props;
 
     const { members, memberCount } = useViewModel(vm);
 
@@ -29,7 +28,13 @@ const MemberListView: React.FC<IProps> = (props: IProps) => {
             return <hr className="mx_MemberListView_separator" />;
             // } else if (item.member) {
         }
-        return <RoomMemberTileView member={item} showPresence={false} />;
+        return (
+            <RoomMemberTileView
+                member={item}
+                client={client}
+                showPresence={false}
+            />
+        );
         // }
         // } else {
         // 	return <ThreePidInviteTileView threePidInvite={item.threePidInvite} />;
