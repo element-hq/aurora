@@ -7,12 +7,9 @@
  *
  */
 
-import type {
-    EventTimelineItem,
-    RoomInfo,
-    RoomInterface,
-} from "../generated/matrix_sdk_ffi.ts";
+import type { RoomInfo, RoomInterface } from "../generated/matrix_sdk_ffi.ts";
 import {
+    LatestEventValue,
     Membership,
     MsgLikeKind,
     RoomNotificationMode,
@@ -94,7 +91,7 @@ export interface RoomSummary {
 export function buildRoomSummary(
     room: RoomInterface,
     roomInfo: RoomInfo,
-    latestEvent?: EventTimelineItem,
+    latestEvent?: LatestEventValue,
 ): RoomSummary {
     // numUnreadNotifications = messages that will notify based on user's notification settings
     // numUnreadMentions = messages with mentions/highlights for the user
@@ -120,11 +117,16 @@ export function buildRoomSummary(
     const displayName = roomInfo.displayName?.trim() || roomInfo.id;
     const avatarUrl = roomInfo.avatarUrl;
 
+    const latestContent =
+        LatestEventValue.Remote.instanceOf(latestEvent) ||
+        LatestEventValue.Local.instanceOf(latestEvent)
+            ? latestEvent.inner.content
+            : undefined;
     const messagePreview =
-        latestEvent &&
-        TimelineItemContent.MsgLike.instanceOf(latestEvent.content) &&
-        MsgLikeKind.Message.instanceOf(latestEvent.content.inner.content.kind)
-            ? latestEvent.content.inner.content.kind.inner.content.body
+        latestContent &&
+        TimelineItemContent.MsgLike.instanceOf(latestContent) &&
+        MsgLikeKind.Message.instanceOf(latestContent.inner.content.kind)
+            ? latestContent.inner.content.kind.inner.content.body
             : undefined;
 
     return {

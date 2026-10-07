@@ -33,8 +33,13 @@ export class SessionStore {
         const sessionsV3: Record<string, SessionData> = {};
         for (const key in sessions) {
             const data = sessions[key];
+            // Sessions saved before the SDK renamed OIDC to OAuth store `oidcData`
+            const { oidcData, ...session } = data.session;
             sessionsV3[key] = {
-                session: Session.new(data.session),
+                session: Session.new({
+                    ...session,
+                    oauthData: session.oauthData ?? oidcData,
+                }),
                 passphrase: data.passphrase,
                 storeId: data.storeId,
             };

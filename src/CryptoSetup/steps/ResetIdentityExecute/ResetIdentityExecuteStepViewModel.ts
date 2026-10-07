@@ -86,7 +86,7 @@ export class ResetIdentityExecuteStepViewModel
             // Check auth type
             const authType = handle.authType();
 
-            if (authType?.tag === "Oidc") {
+            if (authType?.tag === "OAuth") {
                 // OIDC: Return to flow to handle - will go back to warning screen
                 const approvalUrl = authType.inner.info.approvalUrl;
                 this.snapshot.merge({ isResetting: false });

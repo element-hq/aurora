@@ -21,30 +21,30 @@
     },
     "dependencies": {
         "@element-hq/web-shared-components": "0.0.2",
-        "@tauri-apps/api": "^1.5.2",
-        "@vector-im/compound-design-tokens": "^6.0.0",
-        "@vector-im/compound-web": "^8.3.6",
+        "@tauri-apps/api": "^1.6.0",
+        "@vector-im/compound-design-tokens": "^6.10.2",
+        "@vector-im/compound-web": "^8.4.0",
         "async-mutex": "^0.4.1",
         "classnames": "^2.5.1",
-        "lodash-es": "^4.17.21",
-        "react": "^19.0.0",
-        "react-dom": "^19.0.0",
+        "lodash-es": "^4.18.1",
+        "react": "^19.3.0",
+        "react-dom": "^19.3.0",
         "react-focus-lock": "^2.13.7",
-        "react-virtuoso": "^4.12.8",
-        "sanitize-html": "^2.12.1",
-        "uniffi-bindgen-react-native": "git+https://github.com/jhugman/uniffi-bindgen-react-native#5c01f3f7025d069aac1dd1fd51ca72bb76fdb243"
+        "react-virtuoso": "^4.18.16",
+        "sanitize-html": "^2.18.0",
+        "uniffi-bindgen-react-native": "github:jhugman/uniffi-bindgen-react-native#3dd1cd1353750dc3bfbbf4bb4d4ccde26b0fbd2e"
     },
     "devDependencies": {
         "@biomejs/biome": "2.0.6",
-        "@tauri-apps/cli": "^1.5.8",
+        "@tauri-apps/cli": "^1.6.3",
         "@types/lodash-es": "^4.17.12",
-        "@types/react": "^19.0.0",
-        "@types/react-dom": "^19.0.0",
-        "@types/sanitize-html": "^2.11.0",
-        "@vitejs/plugin-react": "^4.3.4",
-        "typescript": "^5.7.2",
-        "vite": "^5.0.0",
-        "vite-plugin-top-level-await": "^1.5.0"
+        "@types/react": "^19.3.0",
+        "@types/react-dom": "^19.3.0",
+        "@types/sanitize-html": "^2.16.2",
+        "@vitejs/plugin-react": "^4.7.0",
+        "typescript": "^5.9.3",
+        "vite": "^5.4.21",
+        "vite-plugin-top-level-await": "^1.6.0"
     },
     "devEngines": {
         "packageManager": {

@@ -22,7 +22,7 @@ import {
     type HomeserverLoginDetailsInterface,
     LogLevel,
     type OAuthAuthorizationDataInterface,
-    OidcPrompt,
+    OAuthPrompt,
     type RoomListServiceInterface,
     type Session,
     type SyncServiceInterface,
@@ -151,7 +151,7 @@ export class ClientViewModel
             }
             const sessionData = sessions[userId];
             console.log(
-                `[SessionDelegate] Returning session with oidcData: ${!!sessionData.session.oidcData}`,
+                `[SessionDelegate] Returning session with oauthData: ${!!sessionData.session.oauthData}`,
             );
             return sessionData.session;
         },
@@ -160,7 +160,7 @@ export class ClientViewModel
                 `[SessionDelegate] SDK triggered session save for ${session.userId}`,
             );
             console.log(
-                `[SessionDelegate] Session details: hasOidcData=${!!session.oidcData}, ` +
+                `[SessionDelegate] Session details: hasOauthData=${!!session.oauthData}, ` +
                     `hasAccessToken=${!!session.accessToken}, ` +
                     `hasRefreshToken=${!!session.refreshToken}`,
             );
@@ -312,7 +312,7 @@ export class ClientViewModel
                 );
                 console.log("Password login successful");
             } else {
-                await this.client.loginWithOidcCallback(
+                await this.client.loginWithOauthCallback(
                     credentials.callbackUrl,
                 );
                 console.log("OIDC login successful");
@@ -466,9 +466,9 @@ export class ClientViewModel
             const oidcConfig = getOidcConfiguration();
 
             // Use "Consent" prompt for login
-            const authData = await this.client.urlForOidc(
+            const authData = await this.client.urlForOauth(
                 oidcConfig,
-                OidcPrompt.Consent.new(),
+                OAuthPrompt.Consent.new(),
                 loginHint,
                 undefined, // deviceId - let SDK generate
                 undefined, // additionalScopes
@@ -495,7 +495,7 @@ export class ClientViewModel
         }
 
         try {
-            await this.client.abortOidcAuth(this.oidcAuthData);
+            await this.client.abortOauthAuth(this.oidcAuthData);
             console.log("OIDC login aborted");
         } catch (e) {
             printRustError("Failed to abort OIDC login", e);
@@ -525,6 +525,12 @@ export class ClientViewModel
                     // For now, treat all auth errors as hard logout
                     // We can add soft logout support later
                     this.logout();
+                },
+                onBackgroundTaskErrorReport: (taskName, error) => {
+                    console.error(
+                        `Background task ${taskName} failed:`,
+                        error,
+                    );
                 },
             });
 
