@@ -17,7 +17,11 @@ import { printRustError } from "../../../utils/printRustError";
  */
 export type ResetIdentityExecuteResult =
     | { outcome: "needsPassword"; handle: IdentityResetHandleInterface }
-    | { outcome: "needsOidc"; handle: IdentityResetHandleInterface; approvalUrl: string }
+    | {
+          outcome: "needsOidc";
+          handle: IdentityResetHandleInterface;
+          approvalUrl: string;
+      }
     | { outcome: "resetComplete" };
 
 /**

@@ -47,7 +47,9 @@ export const Encryption: React.FC<EncryptionProps> = ({
     encryptionFlowViewModel,
 }) => {
     const flowStartedRef = useRef(false);
-    const { isLoading, isActive, currentScreen, screenType } = useViewModel(encryptionFlowViewModel);
+    const { isLoading, isActive, currentScreen, screenType } = useViewModel(
+        encryptionFlowViewModel,
+    );
 
     // Provide the popup opener to the ViewModel (View -> ViewModel callback)
     const popupOpener = useCallback(openPopup, []);

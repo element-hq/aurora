@@ -15,7 +15,10 @@ import type {
     RecoveryKeyEntryStepViewSnapshot,
 } from "./RecoveryKeyEntryStepViewModel";
 import type { ScreenProps } from "../../../utils/ScreenProps";
-import { SetupScreenLayout, setupScreenStyles } from "../../../SetupScreen/SetupScreenLayout";
+import {
+    SetupScreenLayout,
+    setupScreenStyles,
+} from "../../../SetupScreen/SetupScreenLayout";
 import { SetupScreenHeader } from "../../../SetupScreen/SetupScreenHeader";
 
 /**
@@ -50,8 +53,7 @@ export const RecoveryKeyEntryScreen: React.FC<
                     style={{
                         padding: "var(--cpd-space-3x)",
                         marginBottom: "var(--cpd-space-4x)",
-                        backgroundColor:
-                            "var(--cpd-color-bg-critical-subtle)",
+                        backgroundColor: "var(--cpd-color-bg-critical-subtle)",
                         borderRadius: "var(--cpd-radius-pill-effect)",
                         color: "var(--cpd-color-text-critical-primary)",
                     }}
