@@ -18,7 +18,6 @@ export class RoomListHeaderViewModel
     constructor() {
         super(null, {
             title: "Chats",
-            displayComposeMenu: true,
             displaySpaceMenu: false,
             canCreateRoom: true,
             canCreateVideoRoom: true,
@@ -26,6 +25,8 @@ export class RoomListHeaderViewModel
             canAccessSpaceSettings: false,
             activeSortOption: "recent",
             isMessagePreviewEnabled: false,
+            areSectionsEnabled: false,
+            displaySectionReleaseAnnouncement: false,
         });
     }
 
@@ -63,5 +64,17 @@ export class RoomListHeaderViewModel
 
     toggleMessagePreview(): void {
         // TODO: Implement toggle message preview logic here
+    }
+
+    createSection(): void {
+        // Sections are disabled (areSectionsEnabled: false)
+    }
+
+    collapseOrExpandSections(): void {
+        // Sections are disabled (areSectionsEnabled: false)
+    }
+
+    closeSectionReleaseAnnouncement(): void {
+        // Announcement is never displayed
     }
 }

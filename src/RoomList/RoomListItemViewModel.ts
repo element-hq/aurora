@@ -7,7 +7,7 @@
 
 import {
     BaseViewModel,
-    type RoomListItemSnapshot,
+    type RoomListItemViewSnapshot,
     RoomNotifState,
 } from "@element-hq/web-shared-components";
 import type { RoomSummary } from "./RoomSummary.ts";
@@ -24,7 +24,7 @@ import {
  * Wraps a RoomSummary and uses the client to perform actions on the room.
  */
 export class RoomListItemViewModel extends BaseViewModel<
-    RoomListItemSnapshot,
+    RoomListItemViewSnapshot,
     {
         summary: RoomSummary;
         client: ClientInterface;
@@ -88,6 +88,7 @@ export class RoomListItemViewModel extends BaseViewModel<
                 showNotificationMenu: true,
                 isFavourite: summary.isFavourite,
                 isLowPriority: false,
+                isDm: summary.isDirect,
                 canInvite: true,
                 canCopyRoomLink: true,
                 canMarkAsRead:
@@ -96,6 +97,9 @@ export class RoomListItemViewModel extends BaseViewModel<
                     summary.unreadMessagesCount === 0 &&
                     !summary.isMarkedUnread,
                 roomNotifState: RoomNotifState.AllMessages, // Will be fetched asynchronously
+                sections: [],
+                areSectionsEnabled: false,
+                canChangeSection: false,
             },
         );
 
@@ -209,6 +213,7 @@ export class RoomListItemViewModel extends BaseViewModel<
                 muted: false,
             },
             isFavourite: summary.isFavourite,
+            isDm: summary.isDirect,
             canMarkAsRead:
                 summary.unreadMessagesCount > 0 || summary.isMarkedUnread,
             canMarkAsUnread:
@@ -360,4 +365,11 @@ export class RoomListItemViewModel extends BaseViewModel<
             );
         }
     };
+
+    // Sections are disabled (areSectionsEnabled: false), so these are never invoked
+    public onCreateSection = (): void => {};
+
+    public onToggleSection = (): void => {};
+
+    public onRemoveFromSection = (): void => {};
 }

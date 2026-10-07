@@ -1,10 +1,9 @@
 import { Form, TooltipProvider } from "@vector-im/compound-web";
 import type React from "react";
-import { useViewModel } from "@element-hq/web-shared-components";
+import { Flex, useViewModel } from "@element-hq/web-shared-components";
 import type { JSX } from "react";
 import { Virtuoso } from "react-virtuoso";
 
-import { Flex } from "../utils/Flex";
 import BaseCard from "./BaseCard";
 import { MemberListHeaderView } from "./MemberListHeaderView";
 import { type MemberWithSeparator, SEPARATOR } from "./member-list-view.types";
