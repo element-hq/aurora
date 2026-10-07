@@ -23,16 +23,20 @@ export const RoomView: React.FC<RoomViewProps> = ({ roomViewModel }) => {
         memberListViewModel,
         roomHeaderViewModel,
         roomId,
+        client,
     } = useViewModel(roomViewModel);
 
     return (
         <>
             <main className="mx_MainPanel">
                 <RoomHeaderView roomHeaderViewModel={roomHeaderViewModel} />
-                <Timeline timelineViewModel={timelineViewModel} />
+                <Timeline
+                    timelineViewModel={timelineViewModel}
+                    client={client}
+                />
                 <Composer timelineViewModel={timelineViewModel} />
             </main>
-            <MemberListView vm={memberListViewModel} />
+            <MemberListView vm={memberListViewModel} client={client} />
         </>
     );
 };

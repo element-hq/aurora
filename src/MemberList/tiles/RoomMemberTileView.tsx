@@ -9,18 +9,21 @@ import React, { useEffect, useState, type JSX } from "react";
 
 // import DisambiguatedProfile from "../../../messages/DisambiguatedProfile";
 import {
+    type ClientInterface,
     MembershipState_Tags,
     type RoomMember,
 } from "../../generated/matrix_sdk_ffi";
 // import { useMemberTileViewModel } from "../../../../viewmodels/memberlist/tiles/MemberTileViewModel";
 // import { E2EIconView } from "./common/E2EIconView";
 // import AvatarPresenceIconView from "./common/PresenceIconView";
+import { mxcToUrl } from "../../utils/mxcToUrl";
 import BaseAvatar from "../BaseAvatar";
 import { InvitedIconView } from "./common/InvitedIconView";
 import { MemberTileView } from "./common/MemberTileView";
 
 interface IProps {
     member: RoomMember;
+    client: ClientInterface;
     showPresence?: boolean;
 }
 
@@ -39,7 +42,11 @@ export function RoomMemberTileView(props: IProps): JSX.Element {
             name={member.displayName}
             idName={member.userId}
             title={member.userId}
-            url={member.avatarUrl}
+            url={
+                member.avatarUrl
+                    ? mxcToUrl(vm.client, member.avatarUrl)
+                    : undefined
+            }
             altText={"User avatar"}
         />
     );

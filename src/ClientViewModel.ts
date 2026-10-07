@@ -87,6 +87,13 @@ export class ClientViewModel
      * Safely fetch avatar URL, handling cases where the server returns null
      * instead of omitting the field (which causes deserialization errors)
      */
+    /**
+     * The underlying SDK client, if one has been created
+     */
+    public getClient(): ClientInterface | undefined {
+        return this.client;
+    }
+
     private async getAvatarUrlSafely(): Promise<string | undefined> {
         if (!this.client) return undefined;
 
@@ -527,10 +534,7 @@ export class ClientViewModel
                     this.logout();
                 },
                 onBackgroundTaskErrorReport: (taskName, error) => {
-                    console.error(
-                        `Background task ${taskName} failed:`,
-                        error,
-                    );
+                    console.error(`Background task ${taskName} failed:`, error);
                 },
             });
 
@@ -592,7 +596,10 @@ export class ClientViewModel
         const room = this.client.getRoom(roomId);
         if (!room) return;
 
-        const roomViewModel = new RoomViewModel({ room });
+        const roomViewModel = new RoomViewModel({
+            room,
+            client: this.client,
+        });
 
         this.currentRoomId = roomId;
 

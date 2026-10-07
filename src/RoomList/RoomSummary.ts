@@ -7,7 +7,11 @@
  *
  */
 
-import type { RoomInfo, RoomInterface } from "../generated/matrix_sdk_ffi.ts";
+import type {
+    ClientInterface,
+    RoomInfo,
+    RoomInterface,
+} from "../generated/matrix_sdk_ffi.ts";
 import {
     LatestEventValue,
     Membership,
@@ -15,13 +19,7 @@ import {
     RoomNotificationMode,
     TimelineItemContent,
 } from "../generated/matrix_sdk_ffi.ts";
-
-function mxcToUrl(mxcUrl: string): string {
-    return `${mxcUrl.replace(
-        /^mxc:\/\//,
-        "https://matrix.org/_matrix/media/v3/thumbnail/",
-    )}?width=48&height=48`;
-}
+import { mxcToUrl } from "../utils/mxcToUrl";
 
 export interface NotificationState {
     isMention: boolean;
@@ -89,6 +87,7 @@ export interface RoomSummary {
  * Build a RoomSummary from room info and latest event.
  */
 export function buildRoomSummary(
+    client: ClientInterface,
     room: RoomInterface,
     roomInfo: RoomInfo,
     latestEvent?: LatestEventValue,
@@ -133,7 +132,7 @@ export function buildRoomSummary(
         room,
         id: roomInfo.id,
         name: displayName,
-        avatar: avatarUrl ? mxcToUrl(avatarUrl) : undefined,
+        avatar: avatarUrl ? mxcToUrl(client, avatarUrl) : undefined,
         messagePreview,
         showNotificationDecoration:
             notificationState.hasAnyNotificationOrActivity,

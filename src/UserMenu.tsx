@@ -23,13 +23,7 @@ import { Button, Menu, Separator } from "@vector-im/compound-web";
 import styles from "./UserMenu.module.css";
 import { useClientStoresContext } from "./context/ClientStoresContext";
 import type { ClientViewModel } from "./ClientViewModel";
-
-function mxcToUrl(mxcUrl: string): string {
-    return `${mxcUrl.replace(
-        /^mxc:\/\//,
-        "https://matrix.org/_matrix/media/v3/thumbnail/",
-    )}?width=48&height=48`;
-}
+import { mxcToUrl } from "./utils/mxcToUrl";
 
 interface UserMenuProps {
     onAddAccount: () => void;
@@ -39,6 +33,7 @@ export function UserMenu({ onAddAccount }: UserMenuProps): JSX.Element {
     const [clientStores, , removeClientStore] = useClientStoresContext();
     const [clientViewModel, setClientViewModel] = useClientStoreContext();
     const { userId, displayName, avatarUrl } = useViewModel(clientViewModel);
+    const client = clientViewModel.getClient();
     const [open, setOpen] = useState(false);
 
     const hasMultipleAccounts = Object.keys(clientStores).length > 1;
@@ -63,7 +58,11 @@ export function UserMenu({ onAddAccount }: UserMenuProps): JSX.Element {
                         name={userId}
                         idName={userId}
                         title={userId}
-                        url={avatarUrl ? mxcToUrl(avatarUrl) : undefined}
+                        url={
+                            avatarUrl && client
+                                ? mxcToUrl(client, avatarUrl)
+                                : undefined
+                        }
                         altText={"User"}
                     />
                 </button>
@@ -76,7 +75,11 @@ export function UserMenu({ onAddAccount }: UserMenuProps): JSX.Element {
                         name={userId}
                         idName={userId}
                         title={userId}
-                        url={avatarUrl ? mxcToUrl(avatarUrl) : undefined}
+                        url={
+                            avatarUrl && client
+                                ? mxcToUrl(client, avatarUrl)
+                                : undefined
+                        }
                         altText={"User"}
                     />
                     <div className={styles.names}>
@@ -158,6 +161,7 @@ type AccountProps = {
 
 function Account({ clientViewModel, onClick }: AccountProps): JSX.Element {
     const { userId, displayName, avatarUrl } = useViewModel(clientViewModel);
+    const client = clientViewModel.getClient();
 
     return (
         <button className={styles.account} type="button" onClick={onClick}>
@@ -167,7 +171,11 @@ function Account({ clientViewModel, onClick }: AccountProps): JSX.Element {
                 name={userId}
                 idName={userId}
                 title={userId}
-                url={avatarUrl ? mxcToUrl(avatarUrl) : undefined}
+                url={
+                    avatarUrl && client
+                        ? mxcToUrl(client, avatarUrl)
+                        : undefined
+                }
                 altText={"User"}
             />
             <span className={styles.account_userName}>{displayName}</span>

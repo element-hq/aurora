@@ -156,6 +156,7 @@ export class RoomListItemViewModel extends BaseViewModel<
                     const latestEvent =
                         await this.props.summary.room.latestEvent();
                     const updatedSummary = buildRoomSummary(
+                        this.props.client,
                         this.props.summary.room,
                         roomInfo,
                         latestEvent,
