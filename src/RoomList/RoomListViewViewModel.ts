@@ -23,6 +23,7 @@ import {
     type RoomListServiceInterface,
     type SyncServiceInterface,
     RoomListFilterCategory,
+    RoomListFilterReadReceipts,
 } from "../index.web";
 import { buildRoomSummary, type RoomSummary } from "./RoomSummary.ts";
 import { RoomListItemViewModel } from "./RoomListItemViewModel";
@@ -55,7 +56,9 @@ const filterIdToRustFilter: Map<FilterId, RoomListEntriesDynamicFilterKind> =
             "unread",
             new RoomListEntriesDynamicFilterKind.All({
                 filters: [
-                    new RoomListEntriesDynamicFilterKind.Unread(),
+                    new RoomListEntriesDynamicFilterKind.ReadReceipts({
+                        expect: RoomListFilterReadReceipts.Notifications,
+                    }),
                     new RoomListEntriesDynamicFilterKind.DeduplicateVersions(),
                 ],
             }),

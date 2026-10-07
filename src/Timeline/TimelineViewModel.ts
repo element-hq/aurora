@@ -20,7 +20,7 @@ import {
     type TimelineItemInterface,
     VirtualTimelineItem,
 } from "../generated/matrix_sdk_ffi.ts";
-import type { RoomPaginationStatus } from "../index.web.ts";
+import type { PaginationStatus } from "../index.web.ts";
 import { printRustError } from "../utils/printRustError";
 import type {
     Props,
@@ -133,7 +133,7 @@ export class TimelineViewModel
     implements TimelineViewActions
 {
     private running = false;
-    private paginationStatus?: RoomPaginationStatus;
+    private paginationStatus?: PaginationStatus;
     private firstItemId?: string;
     private hasMoreItems = true;
     private timelinePromise: Promise<TimelineInterface>;
@@ -232,7 +232,7 @@ export class TimelineViewModel
     };
 
     private onPaginationStatusUpdate = async (
-        status: RoomPaginationStatus,
+        status: PaginationStatus,
     ): Promise<void> => {
         this.paginationStatus = status;
     };
