@@ -94,11 +94,11 @@ export function UserMenu({ onAddAccount }: UserMenuProps): JSX.Element {
                     </div>
                 </div>
                 <div className={styles.actions}>
-                    <Button size="sm" Icon={PopOutIcon} kind="tertiary">
+                    <Button size="md" Icon={PopOutIcon} kind="tertiary">
                         Manage
                     </Button>
                     <Button
-                        size="sm"
+                        size="md"
                         destructive={true}
                         Icon={SignOutIcon}
                         kind="tertiary"
@@ -143,7 +143,7 @@ export function UserMenu({ onAddAccount }: UserMenuProps): JSX.Element {
                 )}
                 <Button
                     Icon={PlusIcon}
-                    size="sm"
+                    size="md"
                     kind="secondary"
                     onClick={onAddAccount}
                 >

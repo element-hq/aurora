@@ -1,23 +1,35 @@
+import {
+    DateSeparatorView,
+    DecryptionFailureBodyView,
+    DecryptionFailureReason,
+    MessageTimestampView,
+    RedactedBodyView,
+    TextualEventView,
+    TimelineSeparator,
+} from "@element-hq/web-shared-components";
 import { Avatar, InlineSpinner } from "@vector-im/compound-web";
 import type React from "react";
 import type { ReactElement, ReactNode } from "react";
 import sanitizeHtml from "sanitize-html";
+import { UtdCause } from "../generated/matrix_sdk_crypto";
 import {
-    type TimelineItem,
-    type TimelineItemKind,
-    isVirtualEvent,
-} from "./TimelineViewModel";
-import {
+    type ClientInterface,
+    EncryptedMessage,
+    MembershipChange,
     MessageFormat_Tags,
     MessageType,
     MsgLikeKind,
     ProfileDetails,
     TimelineItemContent,
     VirtualTimelineItem,
-    MembershipChange,
-    type ClientInterface,
 } from "../index.web";
 import { mxcToUrl } from "../utils/mxcToUrl";
+import { StaticViewModel } from "../utils/StaticViewModel";
+import {
+    isVirtualEvent,
+    type TimelineItem,
+    type TimelineItemKind,
+} from "./TimelineViewModel";
 
 interface EventTileProp {
     item: TimelineItem<any>;
@@ -64,6 +76,31 @@ export function getChangeDescription(
     }
 }
 
+function getDecryptionFailureReason(
+    message: EncryptedMessage,
+): DecryptionFailureReason {
+    if (!EncryptedMessage.MegolmV1AesSha2.instanceOf(message)) {
+        return DecryptionFailureReason.UNABLE_TO_DECRYPT;
+    }
+    switch (message.inner.cause) {
+        case UtdCause.WithheldForUnverifiedOrInsecureDevice:
+            return DecryptionFailureReason.MEGOLM_KEY_WITHHELD_FOR_UNVERIFIED_DEVICE;
+        case UtdCause.HistoricalMessageAndBackupIsDisabled:
+            return DecryptionFailureReason.HISTORICAL_MESSAGE_NO_KEY_BACKUP;
+        case UtdCause.HistoricalMessageAndDeviceIsUnverified:
+            return DecryptionFailureReason.HISTORICAL_MESSAGE_BACKUP_UNCONFIGURED;
+        case UtdCause.SentBeforeWeJoined:
+            return DecryptionFailureReason.HISTORICAL_MESSAGE_USER_NOT_JOINED;
+        case UtdCause.VerificationViolation:
+            return DecryptionFailureReason.SENDER_IDENTITY_PREVIOUSLY_VERIFIED;
+        case UtdCause.UnsignedDevice:
+        case UtdCause.UnknownDevice:
+            return DecryptionFailureReason.UNSIGNED_SENDER_DEVICE;
+        default:
+            return DecryptionFailureReason.UNABLE_TO_DECRYPT;
+    }
+}
+
 export const EventTile: React.FC<EventTileProp> = ({ item, client }) => {
     let showAvatar = !item.continuation;
 
@@ -79,20 +116,25 @@ export const EventTile: React.FC<EventTileProp> = ({ item, client }) => {
         showAvatar = false;
         if (VirtualTimelineItem.DateDivider.instanceOf(item.item)) {
             return (
-                <div className="mx_Separator">
-                    <span>
-                        &nbsp;&nbsp;
-                        {new Date(Number(item.item.inner.ts)).toDateString()}
-                        &nbsp;&nbsp;
-                    </span>
-                </div>
+                <DateSeparatorView
+                    vm={
+                        new StaticViewModel({
+                            label: new Date(
+                                Number(item.item.inner.ts),
+                            ).toDateString(),
+                        })
+                    }
+                />
             );
         }
         if (VirtualTimelineItem.ReadMarker.instanceOf(item.item)) {
             return (
-                <div className="mx_Separator mx_ReadMarker">
-                    <span>&nbsp;&nbsp;New Messages&nbsp;&nbsp;</span>
-                </div>
+                <TimelineSeparator
+                    className="mx_ReadMarker"
+                    label="New Messages"
+                >
+                    New Messages
+                </TimelineSeparator>
             );
         }
         return `Unknown virtual event ${item.item.tag}`;
@@ -114,9 +156,23 @@ export const EventTile: React.FC<EventTileProp> = ({ item, client }) => {
         const message = event.item.content.inner.content;
 
         if (MsgLikeKind.Redacted.instanceOf(message.kind)) {
-            body = "Redacted";
+            body = (
+                <RedactedBodyView
+                    vm={new StaticViewModel({ text: "Message deleted" })}
+                />
+            );
         } else if (MsgLikeKind.UnableToDecrypt.instanceOf(message.kind)) {
-            body = "UTD";
+            body = (
+                <DecryptionFailureBodyView
+                    vm={
+                        new StaticViewModel({
+                            decryptionFailureReason: getDecryptionFailureReason(
+                                message.kind.inner.msg,
+                            ),
+                        })
+                    }
+                />
+            );
         } else if (MsgLikeKind.Message.instanceOf(message.kind)) {
             if (
                 MessageType.Image.instanceOf(message.kind.inner.content.msgType)
@@ -224,30 +280,53 @@ export const EventTile: React.FC<EventTileProp> = ({ item, client }) => {
     // TODO redactions
     if (stateChange) {
         return (
-            <div className="mx_StateEventTile">
-                <Avatar
-                    className="mx_StateAvatar"
-                    name={senderProfile.displayName || event.item.sender}
-                    id={event.item.sender}
-                    src={
-                        senderProfile.avatarUrl
-                            ? mxcToUrl(client, senderProfile.avatarUrl)
-                            : ""
-                    }
-                    size="16px"
-                />{" "}
-                {event.item.sender} {stateChange}
-            </div>
+            <TextualEventView
+                className="mx_StateEventTile"
+                vm={
+                    new StaticViewModel({
+                        content: (
+                            <>
+                                <Avatar
+                                    className="mx_StateAvatar"
+                                    name={
+                                        senderProfile.displayName ||
+                                        event.item.sender
+                                    }
+                                    id={event.item.sender}
+                                    src={
+                                        senderProfile.avatarUrl
+                                            ? mxcToUrl(
+                                                  client,
+                                                  senderProfile.avatarUrl,
+                                              )
+                                            : ""
+                                    }
+                                    size="16px"
+                                />{" "}
+                                {event.item.sender} {stateChange}
+                            </>
+                        ),
+                    })
+                }
+            />
         );
     }
+
+    const sentAt = new Date(Number(event.item.timestamp));
 
     return (
         <div
             className={`mx_EventTile${item.continuation ? " mx_EventTile_continuation" : ""}`}
         >
-            <span className="mx_Timestamp">
-                {new Date(Number(event.item.timestamp)).toLocaleTimeString()}
-            </span>
+            <MessageTimestampView
+                className="mx_Timestamp"
+                vm={
+                    new StaticViewModel({
+                        ts: sentAt.toLocaleTimeString(),
+                        tsSentAt: sentAt.toLocaleString(),
+                    })
+                }
+            />
             {showAvatar ? (
                 <>
                     <span className="mx_Avatar">

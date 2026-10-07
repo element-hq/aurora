@@ -15,9 +15,8 @@ import {
 import type React from "react";
 import InviteIcon from "@vector-im/compound-design-tokens/assets/web/icons/user-add-solid";
 import { UserAddIcon } from "@vector-im/compound-design-tokens/assets/web/icons";
-import { useViewModel } from "@element-hq/web-shared-components";
+import { Flex, useViewModel } from "@element-hq/web-shared-components";
 
-import { Flex } from "../utils/Flex";
 import type { MemberListViewModel } from "./MemberListViewModel";
 
 interface TooltipProps {
@@ -59,7 +58,7 @@ const InviteButton: React.FC<Props> = ({ vm }) => {
                     onClick={(e) => {
                         // onInviteButtonClick would be on the vm if implemented
                     }}
-                    size="sm"
+                    size="md"
                     iconOnly={true}
                     Icon={InviteIcon}
                     disabled={!canInvite}
@@ -75,7 +74,7 @@ const InviteButton: React.FC<Props> = ({ vm }) => {
         <OptionalTooltip canInvite={canInvite}>
             <Button
                 kind="secondary"
-                size="sm"
+                size="md"
                 Icon={UserAddIcon}
                 className="mx_MemberListHeaderView_invite_large"
                 disabled={!canInvite}

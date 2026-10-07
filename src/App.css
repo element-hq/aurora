@@ -154,9 +154,6 @@ body {
 
 .mx_StateEventTile {
     display: block;
-    font-weight: var(--cpd-font-weight-semibold);
-    color: var(--cpd-color-text-secondary);
-    font-size: var(--cpd-font-size-body-xs);
     position: relative;
 }
 
@@ -181,35 +178,12 @@ body {
     top: var(--cpd-space-1x);
 }
 
-.mx_Separator {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    font-size: var(--cpd-font-size-body-sm);
-    color: var(--cpd-color-text-secondary);
-    text-align: center;
-    padding-top: var(--cpd-space-4x);
-}
-
-.mx_Separator::before,
-.mx_Separator::after {
-    content: "";
-    flex: 1;
-    border-top: 1px solid var(--cpd-color-border-interactive-primary);
-    height: 0;
-}
-
-.mx_Separator span {
-    padding: 0 em;
-    /* background-color: var(--cpd-color-bg-canvas-default); */
-}
-
 .mx_ReadMarker {
-    border-color: var(--cpd-color-icon-accent-tertiary);
+    color: var(--cpd-color-icon-accent-tertiary);
 }
 
-.mx_ReadMarker span {
-    color: var(--cpd-color-icon-accent-tertiary);
+.mx_ReadMarker > hr {
+    border-color: var(--cpd-color-icon-accent-tertiary);
 }
 
 /* hack for iamb content */

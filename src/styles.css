@@ -1,5 +1,10 @@
-@import "@vector-im/compound-design-tokens/assets/web/css/compound-design-tokens.css";
-@import "@vector-im/compound-web/dist/style.css";
+/*
+ * Layer compound so shared-components (which uses @layer shared-components) can override it, matching element-web.
+ * aurora-base comes first so our element-level defaults (e.g. links) never override component styles.
+ */
+@layer aurora-base, compound-tokens, compound-web, shared-components, app-web;
+@import "@vector-im/compound-design-tokens/assets/web/css/compound-design-tokens.css" layer(compound-tokens);
+@import "@vector-im/compound-web/dist/style.css" layer(compound-web);
 @import url("@element-hq/web-shared-components");
 
 :root {
@@ -8,18 +13,20 @@
 }
 
 /* cargo-culted from element call */
-a {
-    color: var(--cpd-color-text-link-external);
-    text-decoration: none;
-}
+@layer aurora-base {
+    a {
+        color: var(--cpd-color-text-link-external);
+        text-decoration: none;
+    }
 
-a:hover,
-a:active {
-    opacity: 0.8;
-}
+    a:hover,
+    a:active {
+        opacity: 0.8;
+    }
 
-a:hover {
-    text-decoration: underline;
+    a:hover {
+        text-decoration: underline;
+    }
 }
 
 .mx_Tauri_Titlebar {

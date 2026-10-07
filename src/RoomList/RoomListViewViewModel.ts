@@ -7,9 +7,10 @@
 
 import {
     BaseViewModel,
-    type RoomListSnapshot,
+    type RoomListViewSnapshot,
     type FilterId,
     type RoomListViewActions,
+    type RoomListSectionHeaderViewModel,
 } from "@element-hq/web-shared-components";
 import {
     type RoomInterface,
@@ -29,8 +30,13 @@ import { buildRoomSummary, type RoomSummary } from "./RoomSummary.ts";
 import { RoomListItemViewModel } from "./RoomListItemViewModel";
 
 /**
+ * Aurora shows a flat list, which shared-components models as a single section.
+ */
+const FLAT_LIST_SECTION_ID = "all";
+
+/**
  * Simple room display information for rendering avatars.
- * This is what gets passed as the opaque "room" in the RoomListItemSnapshot.
+ * This is what gets passed as the opaque "room" in the RoomListItemViewSnapshot.
  */
 export interface RoomDisplayInfo {
     id: string;
@@ -113,7 +119,7 @@ const filterIdToRustFilter: Map<FilterId, RoomListEntriesDynamicFilterKind> =
  * but is backed by the Rust SDK room list service.
  */
 export class RoomListViewViewModel
-    extends BaseViewModel<RoomListSnapshot, RoomListViewViewModelProps>
+    extends BaseViewModel<RoomListViewSnapshot, RoomListViewViewModelProps>
     implements RoomListViewActions
 {
     // Rust SDK state
@@ -154,7 +160,8 @@ export class RoomListViewViewModel
                 spaceId: undefined,
                 filterKeys: undefined,
             },
-            roomIds: [],
+            sections: [{ id: FLAT_LIST_SECTION_ID, roomIds: [] }],
+            isFlatList: true,
             canCreateRoom: true, // Aurora generally allows room creation
         });
 
@@ -354,7 +361,12 @@ export class RoomListViewViewModel
         }
 
         this.snapshot.merge({
-            roomIds: this.rooms.map((r) => r.id),
+            sections: [
+                {
+                    id: FLAT_LIST_SECTION_ID,
+                    roomIds: this.rooms.map((r) => r.id),
+                },
+            ],
             isRoomListEmpty: this.rooms.length === 0,
         });
     }
@@ -414,7 +426,9 @@ export class RoomListViewViewModel
      * Get or create a view model for a specific room item.
      * Required by shared-components interface.
      */
-    public getRoomItemViewModel(roomId: string): RoomListItemViewModel {
+    public getRoomItemViewModel(
+        roomId: string,
+    ): RoomListItemViewModel | undefined {
         // Check if we already have a view model for this room
         let viewModel = this.roomItemViewModels.get(roomId);
         if (viewModel) {
@@ -424,7 +438,7 @@ export class RoomListViewViewModel
         // Find the room summary
         const room = this.rooms.find((r) => r.id === roomId);
         if (!room) {
-            throw new Error(`Room ${roomId} not found in rooms list`);
+            return undefined;
         }
 
         // Create a new view model and cache it
@@ -444,6 +458,45 @@ export class RoomListViewViewModel
      */
     public updateVisibleRooms(startIndex: number, endIndex: number): void {
         // No-op for now - the Rust SDK handles room subscriptions
+    }
+
+    public updateVisibleFold(): void {
+        // No-op: the unread activity toast isn't supported yet
+    }
+
+    public getSectionHeaderViewModel(
+        sectionId: string,
+    ): RoomListSectionHeaderViewModel {
+        // Section headers are never rendered while isFlatList is true
+        throw new Error(`No section header for flat list section ${sectionId}`);
+    }
+
+    public closeToast(): void {
+        // No-op: toasts are never shown
+    }
+
+    public scrollToUnreadActivity(): void {
+        // No-op: the unread activity toast isn't supported yet
+    }
+
+    public setScrollToIndex(): void {
+        // No-op: we don't programmatically scroll the room list yet
+    }
+
+    public changeRoomSection(): void {
+        // No-op: sections are disabled
+    }
+
+    public changeSectionOrder(): void {
+        // No-op: sections are disabled
+    }
+
+    public onSectionOrRoomDragStart(): void {
+        // No-op: sections are disabled
+    }
+
+    public onSectionOrRoomDragEnd(): void {
+        // No-op: sections are disabled
     }
 
     /**

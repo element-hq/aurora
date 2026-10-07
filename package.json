@@ -20,10 +20,10 @@
         "biome:format": "pnpm biome format --write ."
     },
     "dependencies": {
-        "@element-hq/web-shared-components": "0.0.2",
+        "@element-hq/web-shared-components": "0.2.1",
         "@tauri-apps/api": "^1.6.0",
         "@vector-im/compound-design-tokens": "^6.10.2",
-        "@vector-im/compound-web": "^8.4.0",
+        "@vector-im/compound-web": "^10.3.0",
         "async-mutex": "^0.4.1",
         "classnames": "^2.5.1",
         "lodash-es": "^4.18.1",
