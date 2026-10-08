@@ -84,23 +84,24 @@ body {
 .mx_Timeline {
     /* important to stop the header pushing the composer off the bottom */
     flex: 1 1 0;
+    /* TimelineView fills its parent, so this needs a definite height */
+    min-height: 0;
+}
+
+/* The rows are absolutely positioned, so padding on the list wouldn't inset them:
+   it goes on each row instead. Horizontal only, so row measurements are unaffected. */
+.mx_Timeline .mx_TimelineView_tile {
+    box-sizing: border-box;
+    padding-inline: var(--cpd-space-2x);
+}
+
+/* The spinner row shown while history loads. A fixed height so it always measures the same. */
+.mx_Timeline_loading {
     display: flex;
-}
-
-.mx_Timeline ol {
-    padding-left: var(--cpd-space-2x);
-    padding-right: var(--cpd-space-2x);
-    width: 100%;
-    margin: 0px;
-    list-style: none;
-}
-
-.mx_Timeline ol li::marker {
-    color: var(--cpd-color-text-placeholder);
-}
-
-.mx_TimelineSpinner {
-    text-align: center;
+    align-items: center;
+    justify-content: center;
+    height: 32px;
+    overflow: hidden;
 }
 
 .mx_Timestamp {
@@ -178,12 +179,13 @@ body {
     top: var(--cpd-space-1x);
 }
 
-.mx_ReadMarker {
-    color: var(--cpd-color-icon-accent-tertiary);
+/* Our own messages that the server doesn't have yet */
+.mx_EventTile_sending {
+    opacity: 0.5;
 }
 
-.mx_ReadMarker > hr {
-    border-color: var(--cpd-color-icon-accent-tertiary);
+.mx_EventTile_failed .mx_Content {
+    color: var(--cpd-color-text-critical-primary);
 }
 
 /* hack for iamb content */
