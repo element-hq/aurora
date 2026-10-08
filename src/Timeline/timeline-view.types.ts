@@ -8,20 +8,17 @@
  */
 
 import type { RoomInterface } from "../generated/matrix_sdk_ffi";
-import type { TimelineItem } from "./TimelineViewModel";
+
+export type {
+    TimelineViewActions,
+    TimelineViewSnapshot,
+} from "@element-hq/web-shared-components";
 
 export interface Props {
     room: RoomInterface;
 }
 
-export interface TimelineViewSnapshot {
-    items: TimelineItem<any>[];
-    showTopSpinner: boolean;
-    firstItemIndex: number;
-    roomId: string;
-}
-
-export interface TimelineViewActions {
+/** Actions Aurora needs on top of the shared timeline contract. */
+export interface AuroraTimelineActions {
     sendMessage(msg: string): Promise<void>;
-    backPaginate(): Promise<void>;
 }

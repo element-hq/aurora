@@ -1,13 +1,13 @@
 import {
-    DateSeparatorView,
     DecryptionFailureBodyView,
     DecryptionFailureReason,
+    type EventSendState,
     MessageTimestampView,
     RedactedBodyView,
     TextualEventView,
-    TimelineSeparator,
 } from "@element-hq/web-shared-components";
-import { Avatar, InlineSpinner } from "@vector-im/compound-web";
+import { Avatar } from "@vector-im/compound-web";
+import classNames from "classnames";
 import type React from "react";
 import type { ReactElement, ReactNode } from "react";
 import sanitizeHtml from "sanitize-html";
@@ -15,24 +15,24 @@ import { UtdCause } from "../generated/matrix_sdk_crypto";
 import {
     type ClientInterface,
     EncryptedMessage,
+    type EventTimelineItem,
     MembershipChange,
     MessageFormat_Tags,
     MessageType,
     MsgLikeKind,
     ProfileDetails,
     TimelineItemContent,
-    VirtualTimelineItem,
 } from "../index.web";
 import { mxcToUrl } from "../utils/mxcToUrl";
 import { StaticViewModel } from "../utils/StaticViewModel";
-import {
-    isVirtualEvent,
-    type TimelineItem,
-    type TimelineItemKind,
-} from "./TimelineViewModel";
 
 interface EventTileProp {
-    item: TimelineItem<any>;
+    event: EventTimelineItem;
+    /** Whether this continues the previous sender's messages (no avatar or name). */
+    continuation: boolean;
+    /** Whether this closes its group of messages from the same sender. */
+    lastInSection: boolean;
+    sendState?: EventSendState;
     client: ClientInterface;
 }
 export function getChangeDescription(
@@ -101,59 +101,25 @@ function getDecryptionFailureReason(
     }
 }
 
-export const EventTile: React.FC<EventTileProp> = ({ item, client }) => {
-    let showAvatar = !item.continuation;
-
-    if (item.kind === "spinner") {
-        return (
-            <div className="mx_TimelineSpinner" key="_topSpinner">
-                <InlineSpinner size={40} />
-            </div>
-        );
-    }
-
-    if (isVirtualEvent(item)) {
-        showAvatar = false;
-        if (VirtualTimelineItem.DateDivider.instanceOf(item.item)) {
-            return (
-                <DateSeparatorView
-                    vm={
-                        new StaticViewModel({
-                            label: new Date(
-                                Number(item.item.inner.ts),
-                            ).toDateString(),
-                        })
-                    }
-                />
-            );
-        }
-        if (VirtualTimelineItem.ReadMarker.instanceOf(item.item)) {
-            return (
-                <TimelineSeparator
-                    className="mx_ReadMarker"
-                    label="New Messages"
-                >
-                    New Messages
-                </TimelineSeparator>
-            );
-        }
-        return `Unknown virtual event ${item.item.tag}`;
-    }
-
-    const event = item as TimelineItem<TimelineItemKind.Event>;
-
+export const EventTile: React.FC<EventTileProp> = ({
+    event,
+    continuation,
+    lastInSection,
+    sendState,
+    client,
+}) => {
     const senderProfile: Partial<{
         displayName?: string;
         displayNameAmbiguous?: boolean;
         avatarUrl?: string;
-    }> = ProfileDetails.Ready.instanceOf(event.item.senderProfile)
-        ? event.item.senderProfile.inner
+    }> = ProfileDetails.Ready.instanceOf(event.senderProfile)
+        ? event.senderProfile.inner
         : {};
 
     let body: string | ReactElement | undefined;
     let stateChange: ReactNode[] | ReactNode | undefined = undefined;
-    if (TimelineItemContent.MsgLike.instanceOf(event.item.content)) {
-        const message = event.item.content.inner.content;
+    if (TimelineItemContent.MsgLike.instanceOf(event.content)) {
+        const message = event.content.inner.content;
 
         if (MsgLikeKind.Redacted.instanceOf(message.kind)) {
             body = (
@@ -208,26 +174,23 @@ export const EventTile: React.FC<EventTileProp> = ({ item, client }) => {
                 }
             }
         }
-    } else if (
-        TimelineItemContent.ProfileChange.instanceOf(event.item.content)
-    ) {
+    } else if (TimelineItemContent.ProfileChange.instanceOf(event.content)) {
         const changes: ReactNode[] = [];
         changes.push("changed their ");
         if (
-            event.item.content.inner.avatarUrl !==
-            event.item.content.inner.prevAvatarUrl
+            event.content.inner.avatarUrl !== event.content.inner.prevAvatarUrl
         ) {
             changes.push([
                 "avatar from ",
                 <Avatar
                     className="mx_StateAvatar"
-                    name={senderProfile.displayName || event.item.sender}
-                    id={event.item.sender}
+                    name={senderProfile.displayName || event.sender}
+                    id={event.sender}
                     src={
-                        event.item.content.inner.prevAvatarUrl
+                        event.content.inner.prevAvatarUrl
                             ? mxcToUrl(
                                   client,
-                                  event.item.content.inner.prevAvatarUrl,
+                                  event.content.inner.prevAvatarUrl,
                               )
                             : ""
                     }
@@ -236,46 +199,41 @@ export const EventTile: React.FC<EventTileProp> = ({ item, client }) => {
                 " to ",
                 <Avatar
                     className="mx_StateAvatar"
-                    name={senderProfile.displayName || event.item.sender}
-                    id={event.item.sender}
+                    name={senderProfile.displayName || event.sender}
+                    id={event.sender}
                     src={
-                        event.item.content.inner.avatarUrl
-                            ? mxcToUrl(
-                                  client,
-                                  event.item.content.inner.avatarUrl,
-                              )
+                        event.content.inner.avatarUrl
+                            ? mxcToUrl(client, event.content.inner.avatarUrl)
                             : ""
                     }
                     size="16px"
                 />,
             ]);
             if (
-                event.item.content.inner.displayName !==
-                event.item.content.inner.prevDisplayName
+                event.content.inner.displayName !==
+                event.content.inner.prevDisplayName
             )
                 changes.push(" and changed their ");
         }
         if (
-            event.item.content.inner.displayName !==
-            event.item.content.inner.prevDisplayName
+            event.content.inner.displayName !==
+            event.content.inner.prevDisplayName
         ) {
             changes.push(
-                `displayname from ${event.item.content.inner.prevDisplayName} to ${event.item.content.inner.displayName}`,
+                `displayname from ${event.content.inner.prevDisplayName} to ${event.content.inner.displayName}`,
             );
         }
         stateChange = changes;
-    } else if (
-        TimelineItemContent.RoomMembership.instanceOf(event.item.content)
-    ) {
-        if (event.item.content.inner.change) {
-            stateChange = getChangeDescription(event.item.content.inner.change);
-            // } else if (event.item.content.tag) {
+    } else if (TimelineItemContent.RoomMembership.instanceOf(event.content)) {
+        if (event.content.inner.change) {
+            stateChange = getChangeDescription(event.content.inner.change);
+            // } else if (event.content.tag) {
             // 	stateChange = `redacted ${membershipChange.content.Redacted?.membership}`;
             // } else {
             // 	stateChange = `unknown membership change ${membershipChange.content}`;
         }
     } else {
-        body = `Unknown event type ${event.item.content.tag}`;
+        body = `Unknown event type ${event.content.tag}`;
     }
     // TODO redactions
     if (stateChange) {
@@ -290,9 +248,9 @@ export const EventTile: React.FC<EventTileProp> = ({ item, client }) => {
                                     className="mx_StateAvatar"
                                     name={
                                         senderProfile.displayName ||
-                                        event.item.sender
+                                        event.sender
                                     }
-                                    id={event.item.sender}
+                                    id={event.sender}
                                     src={
                                         senderProfile.avatarUrl
                                             ? mxcToUrl(
@@ -303,7 +261,7 @@ export const EventTile: React.FC<EventTileProp> = ({ item, client }) => {
                                     }
                                     size="16px"
                                 />{" "}
-                                {event.item.sender} {stateChange}
+                                {event.sender} {stateChange}
                             </>
                         ),
                     })
@@ -312,12 +270,17 @@ export const EventTile: React.FC<EventTileProp> = ({ item, client }) => {
         );
     }
 
-    const sentAt = new Date(Number(event.item.timestamp));
+    const sentAt = new Date(Number(event.timestamp));
+
+    const className = classNames("mx_EventTile", {
+        mx_EventTile_continuation: continuation,
+        mx_EventTile_lastInSection: lastInSection,
+        mx_EventTile_sending: sendState === "sending",
+        mx_EventTile_failed: sendState === "failed",
+    });
 
     return (
-        <div
-            className={`mx_EventTile${item.continuation ? " mx_EventTile_continuation" : ""}`}
-        >
+        <div className={className}>
             <MessageTimestampView
                 className="mx_Timestamp"
                 vm={
@@ -327,14 +290,12 @@ export const EventTile: React.FC<EventTileProp> = ({ item, client }) => {
                     })
                 }
             />
-            {showAvatar ? (
+            {!continuation ? (
                 <>
                     <span className="mx_Avatar">
                         <Avatar
-                            name={
-                                senderProfile.displayName || event.item.sender
-                            }
-                            id={event.item.sender}
+                            name={senderProfile.displayName || event.sender}
+                            id={event.sender}
                             src={
                                 senderProfile.avatarUrl
                                     ? mxcToUrl(client, senderProfile.avatarUrl)

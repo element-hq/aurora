@@ -31,6 +31,7 @@ export const RoomView: React.FC<RoomViewProps> = ({ roomViewModel }) => {
             <main className="mx_MainPanel">
                 <RoomHeaderView roomHeaderViewModel={roomHeaderViewModel} />
                 <Timeline
+                    key={roomId}
                     timelineViewModel={timelineViewModel}
                     client={client}
                 />
