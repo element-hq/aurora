@@ -10,10 +10,15 @@ import {
     useCreateAutoDisposedViewModel,
 } from "@element-hq/web-shared-components";
 import { RoomListHeaderViewModel } from "./RoomListHeaderViewModel";
+import type { RoomListViewViewModel } from "./RoomListViewViewModel";
 
-export function RoomListHeader() {
+interface RoomListHeaderProps {
+    roomList: RoomListViewViewModel;
+}
+
+export function RoomListHeader({ roomList }: RoomListHeaderProps) {
     const vm = useCreateAutoDisposedViewModel(
-        () => new RoomListHeaderViewModel(),
+        () => new RoomListHeaderViewModel({ roomList }),
     );
 
     return <RoomListHeaderView vm={vm} />;
