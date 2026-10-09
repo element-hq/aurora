@@ -71,6 +71,9 @@ body {
     flex: 0 0 320px;
     width: 320px;
     border-right: 1px solid #262628;
+    /* Keep the sticky section headers' z-index inside the room list, so they don't
+       draw over Compound menus and tooltips, which are portalled with z-index: auto */
+    isolation: isolate;
 }
 
 .mx_MainPanel {

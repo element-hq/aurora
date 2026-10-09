@@ -29,6 +29,8 @@ export class RoomListItemViewModel extends BaseViewModel<
         summary: RoomSummary;
         client: ClientInterface;
         openRoom: (roomId: string) => void;
+        /** Called when the room info changes, with the rebuilt summary */
+        onSummaryChanged: (summary: RoomSummary) => void;
     }
 > {
     /**
@@ -56,6 +58,7 @@ export class RoomListItemViewModel extends BaseViewModel<
         summary: RoomSummary,
         client: ClientInterface,
         openRoom: (roomId: string) => void,
+        onSummaryChanged: (summary: RoomSummary) => void,
     ) {
         const roomDisplayInfo: RoomDisplayInfo = {
             id: summary.id,
@@ -64,7 +67,7 @@ export class RoomListItemViewModel extends BaseViewModel<
         };
 
         super(
-            { summary, client, openRoom },
+            { summary, client, openRoom, onSummaryChanged },
             {
                 id: summary.id,
                 room: roomDisplayInfo,
@@ -87,8 +90,8 @@ export class RoomListItemViewModel extends BaseViewModel<
                 showMoreOptionsMenu: true,
                 showNotificationMenu: true,
                 isFavourite: summary.isFavourite,
-                isLowPriority: false,
-                isDm: summary.isDirect,
+                isLowPriority: summary.isLowPriority,
+                isDm: summary.isDm,
                 canInvite: true,
                 canCopyRoomLink: true,
                 canMarkAsRead:
@@ -97,9 +100,11 @@ export class RoomListItemViewModel extends BaseViewModel<
                     summary.unreadMessagesCount === 0 &&
                     !summary.isMarkedUnread,
                 roomNotifState: RoomNotifState.AllMessages, // Will be fetched asynchronously
+                // Custom sections aren't supported, so there are none to move the room to
                 sections: [],
                 areSectionsEnabled: false,
-                canChangeSection: false,
+                // Shows the Favourite and Low priority toggles, and lets the room be dragged between sections
+                canChangeSection: !summary.notificationState.invited,
             },
         );
 
@@ -168,6 +173,8 @@ export class RoomListItemViewModel extends BaseViewModel<
 
                     // Update the snapshot with the new notification state
                     this.updateSummary(updatedSummary);
+                    // The room may have moved section, e.g. if it was favourited
+                    this.props.onSummaryChanged(updatedSummary);
                 },
             });
 
@@ -213,7 +220,9 @@ export class RoomListItemViewModel extends BaseViewModel<
                 muted: false,
             },
             isFavourite: summary.isFavourite,
-            isDm: summary.isDirect,
+            isLowPriority: summary.isLowPriority,
+            isDm: summary.isDm,
+            canChangeSection: !summary.notificationState.invited,
             canMarkAsRead:
                 summary.unreadMessagesCount > 0 || summary.isMarkedUnread,
             canMarkAsUnread:
@@ -268,12 +277,11 @@ export class RoomListItemViewModel extends BaseViewModel<
     };
 
     public onToggleLowPriority = async (): Promise<void> => {
-        // Low priority isn't tracked in RoomSummary yet, so we'll need to track current state
-        // For now, just call the method - the UI will update when the room list refreshes
         try {
-            // We don't have isLowPriority in RoomSummary, so just toggle it
-            // The exact state will be determined by the room list update
-            await this.props.summary.room.setIsLowPriority(true, undefined);
+            await this.props.summary.room.setIsLowPriority(
+                !this.props.summary.isLowPriority,
+                undefined,
+            );
         } catch (error) {
             console.error(
                 `Failed to toggle low priority for room ${this.props.summary.id}:`,
@@ -366,7 +374,7 @@ export class RoomListItemViewModel extends BaseViewModel<
         }
     };
 
-    // Sections are disabled (areSectionsEnabled: false), so these are never invoked
+    // Custom sections aren't supported (areSectionsEnabled: false), so these are never invoked
     public onCreateSection = (): void => {};
 
     public onToggleSection = (): void => {};

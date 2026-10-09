@@ -10,13 +10,21 @@ import {
     type RoomListHeaderViewModel as RoomListHeaderViewModelInterface,
     type RoomListHeaderViewSnapshot,
 } from "@element-hq/web-shared-components";
+import type { RoomListViewViewModel } from "./RoomListViewViewModel";
+
+interface RoomListHeaderViewModelProps {
+    roomList: RoomListViewViewModel;
+}
 
 export class RoomListHeaderViewModel
-    extends BaseViewModel<RoomListHeaderViewSnapshot, null>
+    extends BaseViewModel<
+        RoomListHeaderViewSnapshot,
+        RoomListHeaderViewModelProps
+    >
     implements RoomListHeaderViewModelInterface
 {
-    constructor() {
-        super(null, {
+    constructor(props: RoomListHeaderViewModelProps) {
+        super(props, {
             title: "Chats",
             displaySpaceMenu: false,
             canCreateRoom: true,
@@ -25,9 +33,20 @@ export class RoomListHeaderViewModel
             canAccessSpaceSettings: false,
             activeSortOption: "recent",
             isMessagePreviewEnabled: false,
-            areSectionsEnabled: false,
+            areSectionsEnabled: true,
+            collapseSections: props.roomList.getCollapseSectionsOption(),
             displaySectionReleaseAnnouncement: false,
         });
+
+        // Keep the collapse/expand all button in step with the sections
+        this.disposables.track(
+            props.roomList.subscribe(() => {
+                this.snapshot.merge({
+                    collapseSections:
+                        props.roomList.getCollapseSectionsOption(),
+                });
+            }),
+        );
     }
 
     createChatRoom(): void {
@@ -67,11 +86,11 @@ export class RoomListHeaderViewModel
     }
 
     createSection(): void {
-        // Sections are disabled (areSectionsEnabled: false)
+        // TODO: Implement custom sections
     }
 
     collapseOrExpandSections(): void {
-        // Sections are disabled (areSectionsEnabled: false)
+        this.props.roomList.collapseOrExpandAllSections();
     }
 
     closeSectionReleaseAnnouncement(): void {
