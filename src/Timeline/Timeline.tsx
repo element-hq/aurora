@@ -77,6 +77,7 @@ export const Timeline: React.FC<TimelineProps> = ({
                 case "event":
                     return (
                         <EventTile
+                            id={item.key}
                             event={item.event as EventTimelineItem}
                             continuation={item.continuation}
                             lastInSection={item.lastInSection}

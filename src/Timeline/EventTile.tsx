@@ -2,6 +2,7 @@ import {
     DecryptionFailureBodyView,
     DecryptionFailureReason,
     type EventSendState,
+    EventTileView,
     MessageTimestampView,
     RedactedBodyView,
     TextualEventView,
@@ -15,6 +16,7 @@ import { UtdCause } from "../generated/matrix_sdk_crypto";
 import {
     type ClientInterface,
     EncryptedMessage,
+    EventOrTransactionId,
     type EventTimelineItem,
     MembershipChange,
     MessageFormat_Tags,
@@ -27,6 +29,8 @@ import { mxcToUrl } from "../utils/mxcToUrl";
 import { StaticViewModel } from "../utils/StaticViewModel";
 
 interface EventTileProp {
+    /** The timeline item's unique key. */
+    id: string;
     event: EventTimelineItem;
     /** Whether this continues the previous sender's messages (no avatar or name). */
     continuation: boolean;
@@ -102,6 +106,7 @@ function getDecryptionFailureReason(
 }
 
 export const EventTile: React.FC<EventTileProp> = ({
+    id,
     event,
     continuation,
     lastInSection,
@@ -118,8 +123,10 @@ export const EventTile: React.FC<EventTileProp> = ({
 
     let body: string | ReactElement | undefined;
     let stateChange: ReactNode[] | ReactNode | undefined = undefined;
+    let msgLikeKind: MsgLikeKind | undefined;
     if (TimelineItemContent.MsgLike.instanceOf(event.content)) {
         const message = event.content.inner.content;
+        msgLikeKind = message.kind;
 
         if (MsgLikeKind.Redacted.instanceOf(message.kind)) {
             body = (
@@ -271,45 +278,66 @@ export const EventTile: React.FC<EventTileProp> = ({
     }
 
     const sentAt = new Date(Number(event.timestamp));
-
-    const className = classNames("mx_EventTile", {
-        mx_EventTile_continuation: continuation,
-        mx_EventTile_lastInSection: lastInSection,
-        mx_EventTile_sending: sendState === "sending",
-        mx_EventTile_failed: sendState === "failed",
-    });
+    const eventOrTxnId = event.eventOrTransactionId;
 
     return (
-        <div className={className}>
-            <MessageTimestampView
-                className="mx_Timestamp"
-                vm={
-                    new StaticViewModel({
-                        ts: sentAt.toLocaleTimeString(),
-                        tsSentAt: sentAt.toLocaleString(),
-                    })
-                }
-            />
-            {!continuation ? (
-                <>
-                    <span className="mx_Avatar">
-                        <Avatar
-                            name={senderProfile.displayName || event.sender}
-                            id={event.sender}
-                            src={
-                                senderProfile.avatarUrl
-                                    ? mxcToUrl(client, senderProfile.avatarUrl)
-                                    : ""
-                            }
-                            size="32px"
-                        />
-                    </span>
+        <EventTileView
+            root={{
+                id,
+                // The timeline already puts each row in its own list item.
+                as: "div",
+                eventId: EventOrTransactionId.EventId.instanceOf(eventOrTxnId)
+                    ? eventOrTxnId.inner.eventId
+                    : undefined,
+                shape: "Room",
+                state: {
+                    isOwnEvent: event.isOwn,
+                    hasReply: false,
+                    encryptionFailure:
+                        msgLikeKind !== undefined &&
+                        MsgLikeKind.UnableToDecrypt.instanceOf(msgLikeKind),
+                    continuation,
+                    lastInSection,
+                },
+            }}
+            classNames={{
+                root: classNames("mx_EventTile", {
+                    mx_EventTile_continuation: continuation,
+                    mx_EventTile_sending: sendState === "sending",
+                    mx_EventTile_failed: sendState === "failed",
+                }),
+                slotTimestamp: "mx_EventTile_timestamp",
+            }}
+            slots={{
+                avatar: continuation ? undefined : (
+                    <Avatar
+                        name={senderProfile.displayName || event.sender}
+                        id={event.sender}
+                        src={
+                            senderProfile.avatarUrl
+                                ? mxcToUrl(client, senderProfile.avatarUrl)
+                                : ""
+                        }
+                        size="32px"
+                    />
+                ),
+                sender: continuation ? undefined : (
                     <span className="mx_Sender">
-                        {senderProfile.displayName}
+                        {senderProfile.displayName || event.sender}
                     </span>
-                </>
-            ) : null}
-            <span className="mx_Content">{body || "No content"}</span>
-        </div>
+                ),
+                timestamp: (
+                    <MessageTimestampView
+                        vm={
+                            new StaticViewModel({
+                                ts: sentAt.toLocaleTimeString(),
+                                tsSentAt: sentAt.toLocaleString(),
+                            })
+                        }
+                    />
+                ),
+                body: <div className="mx_Content">{body || "No content"}</div>,
+            }}
+        />
     );
 };
