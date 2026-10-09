@@ -180,7 +180,7 @@ body {
 }
 
 /* hack for iamb content */
-.mx_EventTile .mx_Content > span > p {
+.mx_EventTile .mx_Content p {
     margin: 0px;
 }
 
