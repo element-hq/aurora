@@ -18,3 +18,14 @@ export class StaticViewModel<T> implements ViewModel<T> {
 
     public subscribe = (): (() => void) => () => {};
 }
+
+/**
+ * A view model whose snapshot never changes, for shared views that also need
+ * some actions (e.g. an action bar's click handlers).
+ */
+export function staticViewModel<T, A extends object>(
+    snapshot: T,
+    actions: A,
+): StaticViewModel<T> & A {
+    return Object.assign(new StaticViewModel(snapshot), actions);
+}
