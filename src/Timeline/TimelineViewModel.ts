@@ -19,6 +19,7 @@ import {
     EventSendState_Tags,
     type EventTimelineItem,
     MessageType,
+    ProfileDetails,
     ReceiptType,
     type RoomInfo,
     type TimelineDiff,
@@ -28,9 +29,11 @@ import {
     type TimelineItemInterface,
     VirtualTimelineItem,
 } from "../generated/matrix_sdk_ffi.ts";
+import { MessageLikeEventType } from "../generated/ruma_events";
 import { printRustError } from "../utils/printRustError";
 import type {
     AuroraTimelineActions,
+    AuroraTimelineSnapshot,
     Props,
     TimelineViewActions,
     TimelineViewSnapshot,
@@ -91,7 +94,7 @@ function sendStateOf(event: EventTimelineItem): EventSendState | undefined {
 }
 
 export class TimelineViewModel
-    extends BaseViewModel<TimelineViewSnapshot, Props>
+    extends BaseViewModel<AuroraTimelineSnapshot, Props>
     implements TimelineViewActions, AuroraTimelineActions
 {
     private started = false;
@@ -121,6 +124,11 @@ export class TimelineViewModel
     private readMarkerSeen = false;
     private roomInfo?: RoomInfo;
 
+    /** Display names we know, published as `memberNames` whenever this changes. */
+    private memberNames = new Map<string, string>();
+    /** Users whose display name we've already asked the server for. */
+    private requestedNames = new Set<string>();
+
     public constructor(props: Props) {
         super(props, {
             items: [],
@@ -131,6 +139,9 @@ export class TimelineViewModel
             canJumpToReadMarker: false,
             numUnreadMessages: 0,
             hasHighlights: false,
+            canReact: true,
+            canRedactOwn: true,
+            memberNames: new Map(),
         });
         this.disposables.track(() => clearTimeout(this.readReceiptTimer));
     }
@@ -146,10 +157,12 @@ export class TimelineViewModel
         const timelinePromise = this.props.room.timeline();
         this.timelinePromise = timelinePromise;
 
+        this.snapshot.merge({ ownUserId: this.props.room.ownUserId() });
         const roomInfoHandle = this.props.room.subscribeToRoomInfoUpdates({
             call: (roomInfo) => {
                 this.roomInfo = roomInfo;
                 this.updateUnreadCounts();
+                this.updatePermissions();
             },
         });
         this.disposables.track(() => roomInfoHandle.cancel());
@@ -251,7 +264,7 @@ export class TimelineViewModel
         if (!this.initialFillDone || this.isDisposed) return;
         const items = this.buildItems();
         const wasEmpty = this.snapshot.current.items.length === 0;
-        const extra: Partial<TimelineViewSnapshot> = {};
+        const extra: Partial<AuroraTimelineSnapshot> = {};
         const last = lastOf(items);
         if (wasEmpty && last) {
             extra.pendingAnchor = {
@@ -262,7 +275,63 @@ export class TimelineViewModel
         if (!items.some((i) => i.kind === "read-marker")) {
             extra.canJumpToReadMarker = false;
         }
+        if (this.learnMemberNames()) {
+            extra.memberNames = new Map(this.memberNames);
+        }
         this.snapshot.merge({ items, ...extra });
+    }
+
+    /**
+     * Note the display names of the senders we have, and look up anyone else who
+     * reacted to something. Returns whether we learnt any names.
+     */
+    private learnMemberNames(): boolean {
+        let changed = false;
+        const unknown = new Set<string>();
+        for (const sdkItem of this.sdkItems) {
+            if (!("event" in sdkItem)) continue;
+            const { event } = sdkItem;
+            if (ProfileDetails.Ready.instanceOf(event.senderProfile)) {
+                const name = event.senderProfile.inner.displayName;
+                if (name && this.memberNames.get(event.sender) !== name) {
+                    this.memberNames.set(event.sender, name);
+                    changed = true;
+                }
+            }
+            if (TimelineItemContent.MsgLike.instanceOf(event.content)) {
+                for (const reaction of event.content.inner.content.reactions) {
+                    for (const { senderId } of reaction.senders) {
+                        unknown.add(senderId);
+                    }
+                }
+            }
+        }
+        const toFetch = [...unknown].filter(
+            (id) => !this.memberNames.has(id) && !this.requestedNames.has(id),
+        );
+        if (toFetch.length) void this.fetchMemberNames(toFetch);
+        return changed;
+    }
+
+    private async fetchMemberNames(userIds: string[]): Promise<void> {
+        for (const id of userIds) this.requestedNames.add(id);
+        const members = await Promise.allSettled(
+            userIds.map((id) => this.props.room.member(id)),
+        );
+        if (this.isDisposed) return;
+        let changed = false;
+        for (const result of members) {
+            // Someone who has left may not be a member any more: we'll show their user ID.
+            if (result.status !== "fulfilled") continue;
+            const { userId, displayName } = result.value;
+            if (displayName && !this.memberNames.has(userId)) {
+                this.memberNames.set(userId, displayName);
+                changed = true;
+            }
+        }
+        if (changed) {
+            this.snapshot.merge({ memberNames: new Map(this.memberNames) });
+        }
     }
 
     private buildItems(): TimelineItem[] {
@@ -419,6 +488,18 @@ export class TimelineViewModel
         }
     };
 
+    public toggleReaction = async (
+        itemId: EventOrTransactionId,
+        key: string,
+    ): Promise<void> => {
+        try {
+            const timeline = await this.timelinePromise;
+            await timeline?.toggleReaction(itemId, key);
+        } catch (e) {
+            printRustError("Failed to toggle reaction", e);
+        }
+    };
+
     // ── Helpers ──────────────────────────────────────────────────────
 
     /**
@@ -509,6 +590,18 @@ export class TimelineViewModel
         } catch (e) {
             printRustError("Failed to send read receipt", e);
         }
+    }
+
+    private updatePermissions(): void {
+        // Without a power levels event, everyone can do both.
+        const powerLevels = this.roomInfo?.powerLevels;
+        this.snapshot.merge({
+            canReact:
+                powerLevels?.canOwnUserSendMessage(
+                    MessageLikeEventType.Reaction.new(),
+                ) ?? true,
+            canRedactOwn: powerLevels?.canOwnUserRedactOwn() ?? true,
+        });
     }
 
     private updateUnreadCounts(): void {

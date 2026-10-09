@@ -229,3 +229,14 @@ body {
     font-size: 16px;
     margin: 4px;
 }
+
+/* The emoji picker for reacting to a message, positioned next to the button that opened it */
+.mx_ReactionPicker {
+    position: fixed;
+    z-index: 100;
+    background: var(--cpd-color-bg-canvas-default);
+    border: 1px solid var(--cpd-color-border-interactive-secondary);
+    border-radius: var(--cpd-space-2x);
+    box-shadow: 0 4px 24px rgb(0 0 0 / 0.15);
+    overflow: hidden;
+}
