@@ -78,6 +78,8 @@ body {
 
 .mx_MainPanel {
     flex: 1 1 auto;
+    /* stop long content (eg. user status in the header) widening the panel */
+    min-width: 0;
     display: flex;
     height: 100%;
     flex-direction: column;
