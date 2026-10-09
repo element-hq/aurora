@@ -6,6 +6,7 @@
  */
 
 import "./RoomHeaderView.css";
+import { StatusTextView } from "@element-hq/web-shared-components";
 import { Avatar } from "@vector-im/compound-web";
 import type React from "react";
 import type { RoomSummary } from "../RoomList/RoomSummary";
@@ -31,7 +32,14 @@ export const RoomHeaderView: React.FC<RoomHeaderViewProps> = ({
                     size="40px"
                 />
             </div>
-            <div className="mx_RoomHeader_name">{roomHeaderViewModel.name}</div>
+            <div className="mx_RoomHeader_info">
+                <div className="mx_RoomHeader_name">
+                    {roomHeaderViewModel.name}
+                </div>
+                {roomHeaderViewModel.userStatus && (
+                    <StatusTextView status={roomHeaderViewModel.userStatus} />
+                )}
+            </div>
         </div>
     );
 };

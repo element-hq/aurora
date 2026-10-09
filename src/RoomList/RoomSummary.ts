@@ -7,6 +7,7 @@
  *
  */
 
+import type { UserStatus } from "@element-hq/web-shared-components";
 import type {
     ClientInterface,
     RoomInfo,
@@ -20,6 +21,7 @@ import {
     TimelineItemContent,
 } from "../generated/matrix_sdk_ffi.ts";
 import { mxcToUrl } from "../utils/mxcToUrl";
+import { userStatusFromProfile } from "../utils/userStatus";
 
 export interface NotificationState {
     isMention: boolean;
@@ -87,6 +89,9 @@ export interface RoomSummary {
 
     /** Whether room is explicitly marked as unread */
     isMarkedUnread: boolean;
+
+    /** The MSC4426 status of the other user, if this is a DM */
+    userStatus?: UserStatus;
 }
 
 /**
@@ -134,6 +139,16 @@ export function buildRoomSummary(
             ? latestContent.inner.content.kind.inner.content.body
             : undefined;
 
+    // In a DM the only hero is the other user, and the SDK updates heroes'
+    // profiles (including status) as they change.
+    const dmUser =
+        roomInfo.isDm && roomInfo.heroes.length === 1
+            ? roomInfo.heroes[0]
+            : undefined;
+    const userStatus = dmUser
+        ? userStatusFromProfile(dmUser.status, dmUser.call)
+        : undefined;
+
     return {
         room,
         id: roomInfo.id,
@@ -154,5 +169,6 @@ export function buildRoomSummary(
         isFavourite: roomInfo.isFavourite,
         isLowPriority: roomInfo.isLowPriority,
         isMarkedUnread,
+        userStatus,
     };
 }

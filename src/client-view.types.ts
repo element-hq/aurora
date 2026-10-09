@@ -13,6 +13,8 @@ import type { EncryptionFlowViewModel } from "./CryptoSetup/EncryptionFlowViewMo
 import type { LoginFlowViewModel } from "./Login/LoginFlowViewModel";
 import type { RoomListViewViewModel } from "./RoomList/RoomListViewViewModel";
 import type { RoomViewModel } from "./Room/RoomViewModel";
+import type { SetStatusViewModel } from "./UserStatus/SetStatusViewModel";
+import type { UserStatus } from "@element-hq/web-shared-components";
 
 export enum ClientState {
     Unknown = 0,
@@ -65,6 +67,12 @@ export interface ClientViewSnapshot {
 
     /** Current user's avatar URL */
     avatarUrl?: string;
+
+    /** Current user's MSC4426 status */
+    userStatus?: UserStatus;
+
+    /** ViewModel for setting the user's status, if the server supports it */
+    setStatusViewModel?: SetStatusViewModel;
 }
 
 /**

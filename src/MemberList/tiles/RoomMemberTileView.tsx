@@ -16,7 +16,10 @@ import {
 // import { useMemberTileViewModel } from "../../../../viewmodels/memberlist/tiles/MemberTileViewModel";
 // import { E2EIconView } from "./common/E2EIconView";
 // import AvatarPresenceIconView from "./common/PresenceIconView";
+import { UserStatusIconView } from "@element-hq/web-shared-components";
 import { mxcToUrl } from "../../utils/mxcToUrl";
+import { StaticViewModel } from "../../utils/StaticViewModel";
+import { userStatusFromProfile } from "../../utils/userStatus";
 import BaseAvatar from "../BaseAvatar";
 import { InvitedIconView } from "./common/InvitedIconView";
 import { MemberTileView } from "./common/MemberTileView";
@@ -53,7 +56,21 @@ export function RoomMemberTileView(props: IProps): JSX.Element {
     // const nameJSX = (
     // 	<DisambiguatedProfile member={member} fallbackName={name || ""} />
     // );
-    const nameJSX = member.displayName || member.userId;
+    const nameJSX = (
+        <>
+            {member.displayName || member.userId}{" "}
+            <UserStatusIconView
+                vm={
+                    new StaticViewModel({
+                        status: userStatusFromProfile(
+                            member.status,
+                            member.call,
+                        ),
+                    })
+                }
+            />
+        </>
+    );
 
     // const presenceState = member.presenceState;
     // let presenceJSX: JSX.Element | undefined;

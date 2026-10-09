@@ -129,7 +129,9 @@ body {
 }
 
 .mx_Sender {
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: var(--cpd-space-1x);
     font-size: var(--cpd-font-size-body-sm);
     font-weight: var(--cpd-font-weight-semibold);
     color: var(--cpd-color-text-secondary);

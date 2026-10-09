@@ -20,6 +20,12 @@
     margin-left: var(--cpd-space-4x);
 }
 
+.mx_RoomHeader_info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
 .mx_RoomHeader_name {
     font: var(--cpd-font-body-lg-semibold);
 }
