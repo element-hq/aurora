@@ -76,8 +76,14 @@ export interface RoomSummary {
     /** Whether room is a direct message */
     isDirect: boolean;
 
+    /** Whether the SDK considers the room a DM (matches the People room list filter) */
+    isDm: boolean;
+
     /** Whether room is marked as favourite */
     isFavourite: boolean;
+
+    /** Whether room is marked as low priority */
+    isLowPriority: boolean;
 
     /** Whether room is explicitly marked as unread */
     isMarkedUnread: boolean;
@@ -144,7 +150,9 @@ export function buildRoomSummary(
         unreadNotificationsCount: Number(roomInfo.numUnreadNotifications),
         membership: roomInfo.membership,
         isDirect: roomInfo.isDirect,
+        isDm: roomInfo.isDm,
         isFavourite: roomInfo.isFavourite,
+        isLowPriority: roomInfo.isLowPriority,
         isMarkedUnread,
     };
 }

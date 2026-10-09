@@ -34,7 +34,7 @@ export const Client: React.FC<ClientProps> = ({ onAddAccount }) => {
                 </nav>
                 <nav className="mx_RoomList">
                     <RoomListSearch />
-                    <RoomListHeader />
+                    <RoomListHeader roomList={roomListViewModel} />
                     <RoomListView vm={roomListViewModel} />
                 </nav>
                 {roomViewModel ? (
