@@ -12,15 +12,15 @@ import { Avatar } from "@vector-im/compound-web";
 import classNames from "classnames";
 import type React from "react";
 import type { ReactElement, ReactNode } from "react";
-import sanitizeHtml from "sanitize-html";
 import { UtdCause } from "../generated/matrix_sdk_crypto";
 import {
     type ClientInterface,
     EncryptedMessage,
     EventOrTransactionId,
     type EventTimelineItem,
+    type FormattedBody,
     MembershipChange,
-    MessageFormat_Tags,
+    type MessageContent,
     MessageType,
     MsgLikeKind,
     ProfileDetails,
@@ -29,8 +29,11 @@ import {
     type UserCall,
 } from "../index.web";
 import { mxcToUrl } from "../utils/mxcToUrl";
+import { TextualBodyKind } from "../utils/sharedEnums";
 import { StaticViewModel } from "../utils/StaticViewModel";
 import { userStatusFromProfile } from "../utils/userStatus";
+import { AudioBody, FileBody, ImageBody, VideoBody } from "./body/MediaBodies";
+import { TextualBody } from "./body/TextualBody";
 
 interface EventTileProp {
     /** The timeline item's unique key. */
@@ -109,6 +112,89 @@ function getDecryptionFailureReason(
     }
 }
 
+/** Show a media message's caption under it, if it has one. */
+function withCaption(
+    media: ReactElement,
+    content: { caption?: string; formattedCaption?: FormattedBody },
+): ReactElement {
+    if (!content.caption) return media;
+    return (
+        <>
+            {media}
+            <TextualBody
+                kind={TextualBodyKind.CAPTION}
+                body={content.caption}
+                formatted={content.formattedCaption}
+            />
+        </>
+    );
+}
+
+function renderMessageBody(
+    content: MessageContent,
+    senderName: string,
+    client: ClientInterface,
+): ReactElement | undefined {
+    const { msgType, isEdited } = content;
+    if (MessageType.Text.instanceOf(msgType)) {
+        return (
+            <TextualBody
+                kind={TextualBodyKind.TEXT}
+                body={msgType.inner.content.body}
+                formatted={msgType.inner.content.formatted}
+                isEdited={isEdited}
+            />
+        );
+    }
+    if (MessageType.Notice.instanceOf(msgType)) {
+        return (
+            <TextualBody
+                kind={TextualBodyKind.NOTICE}
+                body={msgType.inner.content.body}
+                formatted={msgType.inner.content.formatted}
+                isEdited={isEdited}
+            />
+        );
+    }
+    if (MessageType.Emote.instanceOf(msgType)) {
+        return (
+            <TextualBody
+                kind={TextualBodyKind.EMOTE}
+                body={msgType.inner.content.body}
+                formatted={msgType.inner.content.formatted}
+                isEdited={isEdited}
+                emoteSenderName={senderName}
+            />
+        );
+    }
+    if (MessageType.Image.instanceOf(msgType)) {
+        const media = msgType.inner.content;
+        return withCaption(
+            <ImageBody client={client} content={media} />,
+            media,
+        );
+    }
+    if (MessageType.Video.instanceOf(msgType)) {
+        const media = msgType.inner.content;
+        return withCaption(
+            <VideoBody client={client} content={media} />,
+            media,
+        );
+    }
+    if (MessageType.File.instanceOf(msgType)) {
+        const media = msgType.inner.content;
+        return withCaption(<FileBody client={client} content={media} />, media);
+    }
+    if (MessageType.Audio.instanceOf(msgType)) {
+        const media = msgType.inner.content;
+        return withCaption(
+            <AudioBody client={client} content={media} />,
+            media,
+        );
+    }
+    return undefined;
+}
+
 export const EventTile: React.FC<EventTileProp> = ({
     id,
     event,
@@ -153,39 +239,11 @@ export const EventTile: React.FC<EventTileProp> = ({
                 />
             );
         } else if (MsgLikeKind.Message.instanceOf(message.kind)) {
-            if (
-                MessageType.Image.instanceOf(message.kind.inner.content.msgType)
-            ) {
-                const mxc =
-                    message.kind.inner.content.msgType.inner.content.source.url();
-                body = <img src={mxcToUrl(client, mxc, 500)} height={250} />;
-            } else if (
-                MessageType.Text.instanceOf(message.kind.inner.content.msgType)
-            ) {
-                if (
-                    message.kind.inner.content.msgType.inner.content.formatted
-                        ?.body &&
-                    message.kind.inner.content.msgType.inner.content.formatted
-                        ?.format?.tag === MessageFormat_Tags.Html
-                ) {
-                    const html = sanitizeHtml(
-                        message.kind.inner.content.msgType.inner.content
-                            .formatted.body,
-                        {
-                            // FIXME: actually implement full sanitization as per react-sdk
-                            transformTags: {
-                                a: sanitizeHtml.simpleTransform("a", {
-                                    target: "_blank",
-                                }),
-                            },
-                        },
-                    );
-                    body = <span dangerouslySetInnerHTML={{ __html: html }} />;
-                } else {
-                    body =
-                        message.kind.inner.content.msgType.inner.content.body;
-                }
-            }
+            body = renderMessageBody(
+                message.kind.inner.content,
+                senderProfile.displayName || event.sender,
+                client,
+            );
         }
     } else if (TimelineItemContent.ProfileChange.instanceOf(event.content)) {
         const changes: ReactNode[] = [];
