@@ -6,6 +6,7 @@ import {
     MessageTimestampView,
     RedactedBodyView,
     TextualEventView,
+    UserStatusIconView,
 } from "@element-hq/web-shared-components";
 import { Avatar } from "@vector-im/compound-web";
 import classNames from "classnames";
@@ -23,10 +24,13 @@ import {
     MessageType,
     MsgLikeKind,
     ProfileDetails,
+    type UserStatus as SdkUserStatus,
     TimelineItemContent,
+    type UserCall,
 } from "../index.web";
 import { mxcToUrl } from "../utils/mxcToUrl";
 import { StaticViewModel } from "../utils/StaticViewModel";
+import { userStatusFromProfile } from "../utils/userStatus";
 
 interface EventTileProp {
     /** The timeline item's unique key. */
@@ -117,6 +121,8 @@ export const EventTile: React.FC<EventTileProp> = ({
         displayName?: string;
         displayNameAmbiguous?: boolean;
         avatarUrl?: string;
+        status?: SdkUserStatus;
+        call?: UserCall;
     }> = ProfileDetails.Ready.instanceOf(event.senderProfile)
         ? event.senderProfile.inner
         : {};
@@ -324,6 +330,16 @@ export const EventTile: React.FC<EventTileProp> = ({
                 sender: continuation ? undefined : (
                     <span className="mx_Sender">
                         {senderProfile.displayName || event.sender}
+                        <UserStatusIconView
+                            vm={
+                                new StaticViewModel({
+                                    status: userStatusFromProfile(
+                                        senderProfile.status,
+                                        senderProfile.call,
+                                    ),
+                                })
+                            }
+                        />
                     </span>
                 ),
                 timestamp: (

@@ -15,7 +15,7 @@ import React, {
     useEffect,
     useState,
 } from "react";
-import { useViewModel } from "@element-hq/web-shared-components";
+import { SetStatusView, useViewModel } from "@element-hq/web-shared-components";
 import BaseAvatar from "./MemberList/BaseAvatar";
 import { useClientStoreContext } from "./context/ClientStoreContext";
 
@@ -32,7 +32,8 @@ interface UserMenuProps {
 export function UserMenu({ onAddAccount }: UserMenuProps): JSX.Element {
     const [clientStores, , removeClientStore] = useClientStoresContext();
     const [clientViewModel, setClientViewModel] = useClientStoreContext();
-    const { userId, displayName, avatarUrl } = useViewModel(clientViewModel);
+    const { userId, displayName, avatarUrl, setStatusViewModel } =
+        useViewModel(clientViewModel);
     const client = clientViewModel.getClient();
     const [open, setOpen] = useState(false);
 
@@ -93,6 +94,11 @@ export function UserMenu({ onAddAccount }: UserMenuProps): JSX.Element {
                         </div>
                     </div>
                 </div>
+                {setStatusViewModel && (
+                    <div className={styles.status}>
+                        <SetStatusView vm={setStatusViewModel} />
+                    </div>
+                )}
                 <div className={styles.actions}>
                     <Button size="md" Icon={PopOutIcon} kind="tertiary">
                         Manage
