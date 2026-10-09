@@ -42,6 +42,8 @@ import type { Credential } from "./Login/credentials.types";
 import { EncryptionFlowViewModel } from "./CryptoSetup/EncryptionFlowViewModel";
 import { LoginFlowViewModel } from "./Login/LoginFlowViewModel";
 import { RoomListViewViewModel } from "./RoomList/RoomListViewViewModel";
+import { SetStatusViewModel } from "./UserStatus/SetStatusViewModel";
+import { userStatusFromProfile } from "./utils/userStatus";
 
 export class ClientViewModel
     extends BaseViewModel<ClientViewSnapshot, Props>
@@ -51,6 +53,7 @@ export class ClientViewModel
     private roomListService?: RoomListServiceInterface;
     private oidcAuthData?: OAuthAuthorizationDataInterface;
     private clientDelegateHandle?: TaskHandleInterface;
+    private ownProfileHandle?: TaskHandleInterface;
     private client?: ClientInterface;
     private storagePassphrase?: string;
     private storageStoreId?: string;
@@ -263,6 +266,10 @@ export class ClientViewModel
 
         this.client = undefined;
 
+        this.ownProfileHandle?.cancel();
+        this.ownProfileHandle = undefined;
+        this.getSnapshot().setStatusViewModel?.dispose();
+
         this.snapshot.set({
             clientState: ClientState.LoggedOut,
             roomViewModel: undefined,
@@ -270,6 +277,8 @@ export class ClientViewModel
             userId: undefined,
             displayName: undefined,
             avatarUrl: undefined,
+            userStatus: undefined,
+            setStatusViewModel: undefined,
             encryptionFlowViewModel: undefined,
             // Keep loginFlowViewModel so we can log in again
             loginFlowViewModel: this.initLoginFlowViewModel(),
@@ -569,12 +578,59 @@ export class ClientViewModel
                 clientState: ClientState.Syncing,
                 roomListViewModel,
             });
+            this.subscribeToOwnProfile();
             await this.syncService.start();
             console.log("syncing...");
         } catch (e) {
             printRustError("syncing failed", e);
             this.snapshot.merge({ clientState: ClientState.Unknown });
             return;
+        }
+    }
+
+    /**
+     * Keep the user's own profile up to date, including their MSC4426 status.
+     * This relies on the sliding sync profiles extension, which user status
+     * support also requires, so we only do this when status is supported.
+     */
+    private async subscribeToOwnProfile(): Promise<void> {
+        const client = this.client;
+        if (!client) return;
+
+        try {
+            if (!(await client.isUserStatusSupported())) {
+                console.log("User status not supported by homeserver");
+                return;
+            }
+        } catch (e) {
+            printRustError("Failed to check user status support", e);
+            return;
+        }
+        // We may have logged out while waiting
+        if (this.client !== client) return;
+
+        const setStatusViewModel = new SetStatusViewModel({ client });
+        this.disposables.track(setStatusViewModel);
+        this.snapshot.merge({ setStatusViewModel });
+
+        try {
+            this.ownProfileHandle = client.subscribeToOwnProfile({
+                onUpdate: (profile) => {
+                    const userStatus = userStatusFromProfile(
+                        profile.status,
+                        profile.call,
+                    );
+                    setStatusViewModel.setUserStatus(userStatus);
+                    this.snapshot.merge({
+                        displayName: profile.displayName,
+                        avatarUrl: profile.avatarUrl,
+                        userStatus,
+                    });
+                },
+            });
+            this.disposables.track(() => this.ownProfileHandle?.cancel());
+        } catch (e) {
+            printRustError("Failed to subscribe to own profile", e);
         }
     }
 

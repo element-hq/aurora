@@ -12,6 +12,7 @@
     gap: var(--cpd-space-6x);
     align-items: center;
     box-sizing: border-box;
+    padding-right: var(--cpd-space-4x);
 }
 
 .mx_RoomHeader_avatar {
@@ -20,6 +21,15 @@
     margin-left: var(--cpd-space-4x);
 }
 
+.mx_RoomHeader_info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
 .mx_RoomHeader_name {
     font: var(--cpd-font-body-lg-semibold);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

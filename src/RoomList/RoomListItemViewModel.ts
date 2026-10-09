@@ -74,6 +74,7 @@ export class RoomListItemViewModel extends BaseViewModel<
                 name: summary.name,
                 isBold: summary.isBold,
                 messagePreview: summary.messagePreview,
+                userStatus: summary.userStatus,
                 notification: {
                     hasAnyNotificationOrActivity:
                         summary.notificationState.hasAnyNotificationOrActivity,
@@ -206,6 +207,7 @@ export class RoomListItemViewModel extends BaseViewModel<
             name: summary.name,
             isBold: summary.isBold,
             messagePreview: summary.messagePreview,
+            userStatus: summary.userStatus,
             notification: {
                 hasAnyNotificationOrActivity:
                     summary.notificationState.hasAnyNotificationOrActivity,
