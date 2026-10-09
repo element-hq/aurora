@@ -104,53 +104,37 @@ body {
     overflow: hidden;
 }
 
-.mx_Timestamp {
-    display: none;
-    position: absolute;
-    left: 1em;
+/* EventTileView positions the avatar, sender, timestamp and body: these only style their contents. */
+.mx_EventTile {
+    overflow-wrap: anywhere;
 }
 
-.mx_EventTile .mx_Avatar {
-    position: absolute;
-    padding-left: var(--cpd-space-2x);
+/* Only show the timestamp while the reader is looking at the event */
+.mx_EventTile_timestamp {
+    visibility: hidden;
+}
+
+.mx_EventTile:hover .mx_EventTile_timestamp,
+.mx_EventTile:focus-within .mx_EventTile_timestamp {
+    visibility: visible;
+}
+
+/* The first tile in a group has an avatar, which the timestamp would overlap.
+   translate, because the shell owns the slot's inset and margin. */
+.mx_EventTile:not(.mx_EventTile_continuation) .mx_EventTile_timestamp {
+    translate: 0 var(--cpd-space-2x);
 }
 
 .mx_Sender {
     display: block;
-    padding-left: var(--cpd-space-14x);
     font-size: var(--cpd-font-size-body-sm);
     font-weight: var(--cpd-font-weight-semibold);
     color: var(--cpd-color-text-secondary);
-    position: relative;
-}
-
-.mx_Sender::after {
-    content: "";
-    display: block;
-    height: var(--cpd-space-1x);
-    width: 100%;
 }
 
 .mx_Content {
-    display: block;
-    padding-left: var(--cpd-space-14x);
     font-size: var(--cpd-font-size-body-md);
     color: var(--cpd-color-text-primary);
-}
-
-.mx_EventTile:not(.mx_EventTile_continuation)::before {
-    content: "";
-    display: block;
-    height: var(--cpd-space-2x);
-}
-
-.mx_EventTile {
-    display: block;
-    overflow-wrap: anywhere;
-}
-
-.mx_EventTile_continuation {
-    margin: 0px;
 }
 
 .mx_StateEventTile {
@@ -189,7 +173,7 @@ body {
 }
 
 /* hack for iamb content */
-.mx_EventTile > .mx_Content > span > p {
+.mx_EventTile .mx_Content > span > p {
     margin: 0px;
 }
 
