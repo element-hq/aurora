@@ -1,4 +1,6 @@
 import {
+    ActionBarAction,
+    ActionBarView,
     DecryptionFailureBodyView,
     DecryptionFailureReason,
     type EventSendState,
@@ -11,7 +13,7 @@ import {
 import { Avatar } from "@vector-im/compound-web";
 import classNames from "classnames";
 import type React from "react";
-import type { ReactElement, ReactNode } from "react";
+import { type ReactElement, type ReactNode, useState } from "react";
 import { UtdCause } from "../generated/matrix_sdk_crypto";
 import {
     type ClientInterface,
@@ -30,9 +32,14 @@ import {
 } from "../index.web";
 import { mxcToUrl } from "../utils/mxcToUrl";
 import { TextualBodyKind } from "../utils/sharedEnums";
-import { StaticViewModel } from "../utils/StaticViewModel";
+import { StaticViewModel, staticViewModel } from "../utils/StaticViewModel";
 import { userStatusFromProfile } from "../utils/userStatus";
 import { AudioBody, FileBody, ImageBody, VideoBody } from "./body/MediaBodies";
+import {
+    ownReactionKeys,
+    type ReactionsContext,
+    ReactionsRow,
+} from "./reactions/ReactionsRow";
 import { TextualBody } from "./body/TextualBody";
 
 interface EventTileProp {
@@ -45,6 +52,7 @@ interface EventTileProp {
     lastInSection: boolean;
     sendState?: EventSendState;
     client: ClientInterface;
+    reactions: ReactionsContext;
 }
 export function getChangeDescription(
     membershipChange: MembershipChange,
@@ -202,7 +210,12 @@ export const EventTile: React.FC<EventTileProp> = ({
     lastInSection,
     sendState,
     client,
+    reactions,
 }) => {
+    // The action bar shows while the tile is hovered or has focus
+    const [isHovered, setHovered] = useState(false);
+    const [hasFocus, setHasFocus] = useState(false);
+
     const senderProfile: Partial<{
         displayName?: string;
         displayNameAmbiguous?: boolean;
@@ -216,9 +229,61 @@ export const EventTile: React.FC<EventTileProp> = ({
     let body: string | ReactElement | undefined;
     let stateChange: ReactNode[] | ReactNode | undefined = undefined;
     let msgLikeKind: MsgLikeKind | undefined;
+    let footer: ReactNode;
+    let actionBar: ReactNode;
     if (TimelineItemContent.MsgLike.instanceOf(event.content)) {
         const message = event.content.inner.content;
         msgLikeKind = message.kind;
+        // Undecryptable and deleted messages can't be reacted to
+        const canHaveReactions =
+            !MsgLikeKind.Redacted.instanceOf(message.kind) &&
+            !MsgLikeKind.UnableToDecrypt.instanceOf(message.kind);
+        if (canHaveReactions && message.reactions.length > 0) {
+            footer = (
+                <ReactionsRow
+                    tileId={id}
+                    itemId={event.eventOrTransactionId}
+                    reactions={message.reactions}
+                    context={reactions}
+                />
+            );
+        }
+        // Keep the action bar while its picker is open, so focus has somewhere to go back to
+        const isPickerOpen = reactions.reactionPickerTileId === id;
+        if (
+            canHaveReactions &&
+            reactions.canReact &&
+            (isHovered || hasFocus || isPickerOpen)
+        ) {
+            actionBar = (
+                <ActionBarView
+                    vm={staticViewModel(
+                        {
+                            actions: [ActionBarAction.React],
+                            isDownloadEncrypted: false,
+                            isDownloadLoading: false,
+                            isPinned: false,
+                            isQuoteExpanded: false,
+                            isThreadReplyAllowed: false,
+                        },
+                        {
+                            onReactionsClick: (anchor: HTMLElement | null) => {
+                                if (!anchor) return;
+                                reactions.toggleReactionPicker({
+                                    tileId: id,
+                                    itemId: event.eventOrTransactionId,
+                                    anchor,
+                                    selected: ownReactionKeys(
+                                        message.reactions,
+                                        reactions.ownUserId,
+                                    ),
+                                });
+                            },
+                        },
+                    )}
+                />
+            );
+        }
 
         if (MsgLikeKind.Redacted.instanceOf(message.kind)) {
             body = (
@@ -346,6 +411,15 @@ export const EventTile: React.FC<EventTileProp> = ({
 
     return (
         <EventTileView
+            onMouseEnter={() => setHovered(true)}
+            onMouseLeave={() => setHovered(false)}
+            onFocus={() => setHasFocus(true)}
+            onBlur={(e) => {
+                // Focus moving between things inside the tile doesn't count
+                if (!e.currentTarget.contains(e.relatedTarget)) {
+                    setHasFocus(false);
+                }
+            }}
             root={{
                 id,
                 // The timeline already puts each row in its own list item.
@@ -411,6 +485,8 @@ export const EventTile: React.FC<EventTileProp> = ({
                     />
                 ),
                 body: <div className="mx_Content">{body || "No content"}</div>,
+                footer,
+                actionBar,
             }}
         />
     );

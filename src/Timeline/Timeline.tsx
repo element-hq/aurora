@@ -3,16 +3,29 @@ import {
     ReadMarker,
     type TimelineItem,
     TimelineView,
+    useViewModel,
 } from "@element-hq/web-shared-components";
 import { InlineSpinner } from "@vector-im/compound-web";
 import type React from "react";
-import { type ReactNode, useCallback, useEffect, useRef } from "react";
+import {
+    type ReactNode,
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from "react";
 import type {
     ClientInterface,
     EventTimelineItem,
 } from "../generated/matrix_sdk_ffi";
 import { StaticViewModel } from "../utils/StaticViewModel";
 import { EventTile } from "./EventTile";
+import {
+    ReactionPicker,
+    type ReactionPickerTarget,
+} from "./reactions/ReactionPicker";
+import type { ReactionsContext } from "./reactions/ReactionsRow";
 import type { TimelineViewModel } from "./TimelineViewModel";
 
 export interface TimelineProps {
@@ -45,6 +58,41 @@ export const Timeline: React.FC<TimelineProps> = ({
             return dsVm;
         },
         [],
+    );
+
+    const { ownUserId, canReact, canRedactOwn, memberNames } = useViewModel(vm);
+
+    // One picker for the whole timeline, so it isn't lost when its tile scrolls out of view
+    const [reactionPicker, setReactionPicker] =
+        useState<ReactionPickerTarget | null>(null);
+    const toggleReactionPicker = useCallback(
+        (target: ReactionPickerTarget) =>
+            setReactionPicker((current) =>
+                current?.tileId === target.tileId ? null : target,
+            ),
+        [],
+    );
+    const closeReactionPicker = useCallback(() => setReactionPicker(null), []);
+
+    const reactions = useMemo(
+        (): ReactionsContext => ({
+            ownUserId,
+            canReact,
+            canRedactOwn,
+            memberNames,
+            toggleReaction: vm.toggleReaction,
+            toggleReactionPicker,
+            reactionPickerTileId: reactionPicker?.tileId,
+        }),
+        [
+            vm,
+            ownUserId,
+            canReact,
+            canRedactOwn,
+            memberNames,
+            toggleReactionPicker,
+            reactionPicker?.tileId,
+        ],
     );
 
     const renderItem = useCallback(
@@ -83,18 +131,29 @@ export const Timeline: React.FC<TimelineProps> = ({
                             lastInSection={item.lastInSection}
                             sendState={item.sendState}
                             client={client}
+                            reactions={reactions}
                         />
                     );
                 default:
                     return null;
             }
         },
-        [client, dateSeparatorVm],
+        [client, dateSeparatorVm, reactions],
     );
 
     return (
         <div className="mx_Timeline">
             <TimelineView vm={vm} renderItem={renderItem} />
+            {reactionPicker && canReact && (
+                <ReactionPicker
+                    target={reactionPicker}
+                    canRedactOwn={canRedactOwn}
+                    onChoose={(key) =>
+                        vm.toggleReaction(reactionPicker.itemId, key)
+                    }
+                    onFinished={closeReactionPicker}
+                />
+            )}
         </div>
     );
 };
