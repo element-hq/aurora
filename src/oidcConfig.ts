@@ -1,6 +1,6 @@
-import type { OidcConfiguration } from "./generated/matrix_sdk_ffi";
+import type { OAuthConfiguration } from "./generated/matrix_sdk_ffi";
 
-export const getOidcConfiguration = (): OidcConfiguration => {
+export const getOidcConfiguration = (): OAuthConfiguration => {
     const currentOrigin = window.location.origin;
     const redirectUri = `${currentOrigin}/oidc/callback`;
     const clientUri = currentOrigin.includes("localhost")

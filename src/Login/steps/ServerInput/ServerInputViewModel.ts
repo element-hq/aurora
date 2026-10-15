@@ -86,7 +86,7 @@ export class ServerInputViewModel
         try {
             const loginDetails = await this.props.onCheckHomeserver(server);
 
-            const supportsOidc = loginDetails.supportsOidcLogin();
+            const supportsOidc = loginDetails.supportsOauthLogin();
             const supportsPassword = loginDetails.supportsPasswordLogin();
 
             if (!supportsOidc && !supportsPassword) {

@@ -17,7 +17,10 @@ import { printRustError } from "../../../utils/printRustError";
 /**
  * Result from enabling recovery step
  */
-export type EnablingRecoveryResult = { outcome: "complete"; recoveryKey: string };
+export type EnablingRecoveryResult = {
+    outcome: "complete";
+    recoveryKey: string;
+};
 
 /**
  * Props for EnablingRecoveryStepViewModel
@@ -41,13 +44,11 @@ export interface EnablingRecoveryStepViewSnapshot {
  * ViewModel for the enabling recovery step.
  * Shows progress while enabling recovery and generating the key.
  */
-export class EnablingRecoveryStepViewModel
-    extends FlowStepViewModel<
-        EnablingRecoveryStepViewSnapshot,
-        EnablingRecoveryStepViewModelProps,
-        EnablingRecoveryResult
-    >
-{
+export class EnablingRecoveryStepViewModel extends FlowStepViewModel<
+    EnablingRecoveryStepViewSnapshot,
+    EnablingRecoveryStepViewModelProps,
+    EnablingRecoveryResult
+> {
     public readonly screenType = "enabling-recovery";
 
     public constructor(props: EnablingRecoveryStepViewModelProps) {

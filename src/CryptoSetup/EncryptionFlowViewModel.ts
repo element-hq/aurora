@@ -7,11 +7,11 @@
 
 import { BaseViewModel } from "@element-hq/web-shared-components";
 import type { FlowStepViewModel } from "../utils/FlowStepViewModel";
-import type {
-    ClientInterface,
-    EncryptionInterface,
-} from "../index.web";
-import { ConfirmIdentityStepViewModel, IdentityConfirmationAction } from "./steps/ConfirmIdentity/ConfirmIdentityStepViewModel";
+import type { ClientInterface, EncryptionInterface } from "../index.web";
+import {
+    ConfirmIdentityStepViewModel,
+    IdentityConfirmationAction,
+} from "./steps/ConfirmIdentity/ConfirmIdentityStepViewModel";
 import { RecoveryKeyEntryStepViewModel } from "./steps/RecoveryKeyEntry/RecoveryKeyEntryStepViewModel";
 import { SetupRecoveryStepViewModel } from "./steps/SetupRecovery/SetupRecoveryStepViewModel";
 import { SaveRecoveryKeyStepViewModel } from "./steps/SaveRecoveryKey/SaveRecoveryKeyStepViewModel";
@@ -25,9 +25,7 @@ import { printRustError } from "../utils/printRustError";
 /**
  * Result of the encryption flow
  */
-export type EncryptionFlowResult =
-    | { type: "success" }
-    | { type: "cancelled" };
+export type EncryptionFlowResult = { type: "success" } | { type: "cancelled" };
 
 /**
  * Handle to an opened popup window.
@@ -91,7 +89,10 @@ export interface EncryptionFlowViewActions {
  * 3. Cannot confirm: Confirm Identity → Reset Warning → (OIDC popup | Password) → Setup Recovery → Enable → Save Key → Complete
  */
 export class EncryptionFlowViewModel
-    extends BaseViewModel<EncryptionFlowViewSnapshot, EncryptionFlowViewModelProps>
+    extends BaseViewModel<
+        EncryptionFlowViewSnapshot,
+        EncryptionFlowViewModelProps
+    >
     implements EncryptionFlowViewActions
 {
     private encryption: EncryptionInterface;
@@ -132,10 +133,11 @@ export class EncryptionFlowViewModel
 
         try {
             // Check initial state to determine available options
-            const [backupExistsOnServer, hasDevicesToVerifyAgainst] = await Promise.all([
-                this.checkBackupExistsOnServer(),
-                this.checkHasDevicesToVerifyAgainst(),
-            ]);
+            const [backupExistsOnServer, hasDevicesToVerifyAgainst] =
+                await Promise.all([
+                    this.checkBackupExistsOnServer(),
+                    this.checkHasDevicesToVerifyAgainst(),
+                ]);
 
             const recoveryState = this.encryption.recoveryState();
             // RecoveryState: Unknown=0, Enabled=1, Disabled=2, Incomplete=3
@@ -144,7 +146,9 @@ export class EncryptionFlowViewModel
             const availableActions: IdentityConfirmationAction[] = [];
 
             if (hasDevicesToVerifyAgainst) {
-                availableActions.push(IdentityConfirmationAction.InteractiveVerification);
+                availableActions.push(
+                    IdentityConfirmationAction.InteractiveVerification,
+                );
             }
 
             // Show "Use recovery key" if recovery is enabled or incomplete
@@ -155,7 +159,8 @@ export class EncryptionFlowViewModel
             // Always run the confirm identity flow - even if no actions available,
             // the user can still choose "Can't confirm" which leads to reset
             while (!this.cancelled) {
-                const confirmResult = await this.runConfirmIdentityStep(availableActions);
+                const confirmResult =
+                    await this.runConfirmIdentityStep(availableActions);
 
                 if (confirmResult.type === "cancel") {
                     this.cleanup();
@@ -238,7 +243,15 @@ export class EncryptionFlowViewModel
     private async runConfirmIdentityStep(
         availableActions: IdentityConfirmationAction[],
     ): Promise<
-        | { type: "success"; data: { outcome: "useRecoveryKey" | "interactiveVerification" | "resetIdentity" } }
+        | {
+              type: "success";
+              data: {
+                  outcome:
+                      | "useRecoveryKey"
+                      | "interactiveVerification"
+                      | "resetIdentity";
+              };
+          }
         | { type: "back" }
         | { type: "cancel" }
     > {
@@ -253,16 +266,22 @@ export class EncryptionFlowViewModel
         });
 
         return vm.result as Promise<
-            | { type: "success"; data: { outcome: "useRecoveryKey" | "interactiveVerification" | "resetIdentity" } }
+            | {
+                  type: "success";
+                  data: {
+                      outcome:
+                          | "useRecoveryKey"
+                          | "interactiveVerification"
+                          | "resetIdentity";
+                  };
+              }
             | { type: "back" }
             | { type: "cancel" }
         >;
     }
 
     private async runRecoveryKeyEntryFlow(): Promise<
-        | { type: "success" }
-        | { type: "back" }
-        | { type: "cancel" }
+        { type: "success" } | { type: "back" } | { type: "cancel" }
     > {
         const vm = new RecoveryKeyEntryStepViewModel({
             encryption: this.encryption,
@@ -281,15 +300,17 @@ export class EncryptionFlowViewModel
     }
 
     private async runResetIdentityFlow(): Promise<
-        | { type: "success" }
-        | { type: "back" }
-        | { type: "cancel" }
+        { type: "success" } | { type: "back" } | { type: "cancel" }
     > {
         // Step 1: Show reset warning (consequences)
         const warningVm = new ResetIdentityWarningStepViewModel({});
 
         this.snapshot.merge({
-            currentScreen: warningVm as FlowStepViewModel<unknown, unknown, unknown>,
+            currentScreen: warningVm as FlowStepViewModel<
+                unknown,
+                unknown,
+                unknown
+            >,
             screenType: warningVm.screenType,
         });
 
@@ -308,15 +329,17 @@ export class EncryptionFlowViewModel
      * Called after user has already seen the warning screen.
      */
     private async runResetConfirmAndExecute(): Promise<
-        | { type: "success" }
-        | { type: "back" }
-        | { type: "cancel" }
+        { type: "success" } | { type: "back" } | { type: "cancel" }
     > {
         // Step 2: Show final "Are you sure? This is irreversible" confirmation
         const confirmVm = new ResetIdentityConfirmStepViewModel({});
 
         this.snapshot.merge({
-            currentScreen: confirmVm as FlowStepViewModel<unknown, unknown, unknown>,
+            currentScreen: confirmVm as FlowStepViewModel<
+                unknown,
+                unknown,
+                unknown
+            >,
             screenType: confirmVm.screenType,
         });
 
@@ -337,7 +360,11 @@ export class EncryptionFlowViewModel
         });
 
         this.snapshot.merge({
-            currentScreen: executeVm as FlowStepViewModel<unknown, unknown, unknown>,
+            currentScreen: executeVm as FlowStepViewModel<
+                unknown,
+                unknown,
+                unknown
+            >,
             screenType: executeVm.screenType,
         });
 
@@ -361,12 +388,17 @@ export class EncryptionFlowViewModel
             const oidcWarningVm = new ResetIdentityWarningStepViewModel({});
 
             this.snapshot.merge({
-                currentScreen: oidcWarningVm as FlowStepViewModel<unknown, unknown, unknown>,
+                currentScreen: oidcWarningVm as FlowStepViewModel<
+                    unknown,
+                    unknown,
+                    unknown
+                >,
                 screenType: oidcWarningVm.screenType,
             });
 
             // Open OIDC popup via callback from View
-            const popup = this.popupOpener?.(approvalUrl, "oidc-reset-approval") ?? null;
+            const popup =
+                this.popupOpener?.(approvalUrl, "oidc-reset-approval") ?? null;
 
             if (!popup) {
                 console.error("Failed to open OIDC popup");
@@ -380,17 +412,23 @@ export class EncryptionFlowViewModel
             }
 
             // Race between OIDC completion and user action on warning screen
-            const oidcPromise = handle.reset(undefined).then(() => ({ type: "oidc-complete" as const })).catch((e) => {
-                printRustError("OIDC reset failed", e);
-                return { type: "oidc-failed" as const };
-            });
+            const oidcPromise = handle
+                .reset(undefined)
+                .then(() => ({ type: "oidc-complete" as const }))
+                .catch((e) => {
+                    printRustError("OIDC reset failed", e);
+                    return { type: "oidc-failed" as const };
+                });
 
             const userActionPromise = oidcWarningVm.result.then((result) => ({
                 type: "user-action" as const,
                 result,
             }));
 
-            const raceResult = await Promise.race([oidcPromise, userActionPromise]);
+            const raceResult = await Promise.race([
+                oidcPromise,
+                userActionPromise,
+            ]);
 
             if (raceResult.type === "oidc-complete") {
                 if (popup && !popup.closed) {
@@ -436,7 +474,11 @@ export class EncryptionFlowViewModel
             });
 
             this.snapshot.merge({
-                currentScreen: passwordVm as FlowStepViewModel<unknown, unknown, unknown>,
+                currentScreen: passwordVm as FlowStepViewModel<
+                    unknown,
+                    unknown,
+                    unknown
+                >,
                 screenType: passwordVm.screenType,
             });
 
@@ -448,7 +490,9 @@ export class EncryptionFlowViewModel
 
             // If back from password, we can't really go back since reset is in progress
             // Just return the result
-            return passwordResult.type === "cancel" ? { type: "cancel" } : { type: "back" };
+            return passwordResult.type === "cancel"
+                ? { type: "cancel" }
+                : { type: "back" };
         }
 
         return { type: "success" };
@@ -459,7 +503,11 @@ export class EncryptionFlowViewModel
         const setupVm = new SetupRecoveryStepViewModel({});
 
         this.snapshot.merge({
-            currentScreen: setupVm as FlowStepViewModel<unknown, unknown, unknown>,
+            currentScreen: setupVm as FlowStepViewModel<
+                unknown,
+                unknown,
+                unknown
+            >,
             screenType: setupVm.screenType,
             isLoading: false,
         });
@@ -476,7 +524,11 @@ export class EncryptionFlowViewModel
         });
 
         this.snapshot.merge({
-            currentScreen: enablingVm as FlowStepViewModel<unknown, unknown, unknown>,
+            currentScreen: enablingVm as FlowStepViewModel<
+                unknown,
+                unknown,
+                unknown
+            >,
             screenType: enablingVm.screenType,
         });
 
@@ -495,7 +547,11 @@ export class EncryptionFlowViewModel
         });
 
         this.snapshot.merge({
-            currentScreen: saveVm as FlowStepViewModel<unknown, unknown, unknown>,
+            currentScreen: saveVm as FlowStepViewModel<
+                unknown,
+                unknown,
+                unknown
+            >,
             screenType: saveVm.screenType,
         });
 

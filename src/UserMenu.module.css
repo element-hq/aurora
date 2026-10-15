@@ -50,6 +50,12 @@
     font: var(--cpd-font-body-sm-regular);
 }
 
+.status {
+    align-self: stretch;
+    display: flex;
+    justify-content: center;
+}
+
 .actions {
     display: flex;
     gap: var(--cpd-space-1x);

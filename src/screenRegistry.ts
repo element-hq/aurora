@@ -58,8 +58,12 @@ export const screenRegistry: Record<
     "setup-recovery": SetupRecoveryScreen as ComponentType<ScreenProps>,
     "save-recovery-key": SaveRecoveryKeyScreen as ComponentType<ScreenProps>,
     "enabling-recovery": EnablingRecoveryScreen as ComponentType<ScreenProps>,
-    "reset-identity-warning": ResetIdentityWarningScreen as ComponentType<ScreenProps>,
-    "reset-identity-confirm": ResetIdentityConfirmScreen as ComponentType<ScreenProps>,
-    "reset-identity-execute": ResetIdentityExecuteScreen as ComponentType<ScreenProps>,
-    "reset-identity-password": ResetIdentityPasswordScreen as ComponentType<ScreenProps>,
+    "reset-identity-warning":
+        ResetIdentityWarningScreen as ComponentType<ScreenProps>,
+    "reset-identity-confirm":
+        ResetIdentityConfirmScreen as ComponentType<ScreenProps>,
+    "reset-identity-execute":
+        ResetIdentityExecuteScreen as ComponentType<ScreenProps>,
+    "reset-identity-password":
+        ResetIdentityPasswordScreen as ComponentType<ScreenProps>,
 };

@@ -7,24 +7,21 @@
  *
  */
 
+import type { UserStatus } from "@element-hq/web-shared-components";
 import type {
-    EventTimelineItem,
+    ClientInterface,
     RoomInfo,
     RoomInterface,
 } from "../generated/matrix_sdk_ffi.ts";
 import {
+    LatestEventValue,
     Membership,
     MsgLikeKind,
     RoomNotificationMode,
     TimelineItemContent,
 } from "../generated/matrix_sdk_ffi.ts";
-
-function mxcToUrl(mxcUrl: string): string {
-    return `${mxcUrl.replace(
-        /^mxc:\/\//,
-        "https://matrix.org/_matrix/media/v3/thumbnail/",
-    )}?width=48&height=48`;
-}
+import { mxcToUrl } from "../utils/mxcToUrl";
+import { userStatusFromProfile } from "../utils/userStatus";
 
 export interface NotificationState {
     isMention: boolean;
@@ -81,20 +78,30 @@ export interface RoomSummary {
     /** Whether room is a direct message */
     isDirect: boolean;
 
+    /** Whether the SDK considers the room a DM (matches the People room list filter) */
+    isDm: boolean;
+
     /** Whether room is marked as favourite */
     isFavourite: boolean;
 
+    /** Whether room is marked as low priority */
+    isLowPriority: boolean;
+
     /** Whether room is explicitly marked as unread */
     isMarkedUnread: boolean;
+
+    /** The MSC4426 status of the other user, if this is a DM */
+    userStatus?: UserStatus;
 }
 
 /**
  * Build a RoomSummary from room info and latest event.
  */
 export function buildRoomSummary(
+    client: ClientInterface,
     room: RoomInterface,
     roomInfo: RoomInfo,
-    latestEvent?: EventTimelineItem,
+    latestEvent?: LatestEventValue,
 ): RoomSummary {
     // numUnreadNotifications = messages that will notify based on user's notification settings
     // numUnreadMentions = messages with mentions/highlights for the user
@@ -120,18 +127,33 @@ export function buildRoomSummary(
     const displayName = roomInfo.displayName?.trim() || roomInfo.id;
     const avatarUrl = roomInfo.avatarUrl;
 
-    const messagePreview =
-        latestEvent &&
-        TimelineItemContent.MsgLike.instanceOf(latestEvent.content) &&
-        MsgLikeKind.Message.instanceOf(latestEvent.content.inner.content.kind)
-            ? latestEvent.content.inner.content.kind.inner.content.body
+    const latestContent =
+        LatestEventValue.Remote.instanceOf(latestEvent) ||
+        LatestEventValue.Local.instanceOf(latestEvent)
+            ? latestEvent.inner.content
             : undefined;
+    const messagePreview =
+        latestContent &&
+        TimelineItemContent.MsgLike.instanceOf(latestContent) &&
+        MsgLikeKind.Message.instanceOf(latestContent.inner.content.kind)
+            ? latestContent.inner.content.kind.inner.content.body
+            : undefined;
+
+    // In a DM the only hero is the other user, and the SDK updates heroes'
+    // profiles (including status) as they change.
+    const dmUser =
+        roomInfo.isDm && roomInfo.heroes.length === 1
+            ? roomInfo.heroes[0]
+            : undefined;
+    const userStatus = dmUser
+        ? userStatusFromProfile(dmUser.status, dmUser.call)
+        : undefined;
 
     return {
         room,
         id: roomInfo.id,
         name: displayName,
-        avatar: avatarUrl ? mxcToUrl(avatarUrl) : undefined,
+        avatar: avatarUrl ? mxcToUrl(client, avatarUrl) : undefined,
         messagePreview,
         showNotificationDecoration:
             notificationState.hasAnyNotificationOrActivity,
@@ -143,7 +165,10 @@ export function buildRoomSummary(
         unreadNotificationsCount: Number(roomInfo.numUnreadNotifications),
         membership: roomInfo.membership,
         isDirect: roomInfo.isDirect,
+        isDm: roomInfo.isDm,
         isFavourite: roomInfo.isFavourite,
+        isLowPriority: roomInfo.isLowPriority,
         isMarkedUnread,
+        userStatus,
     };
 }

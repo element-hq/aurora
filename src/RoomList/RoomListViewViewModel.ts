@@ -7,9 +7,11 @@
 
 import {
     BaseViewModel,
-    type RoomListSnapshot,
+    type CollapseSectionsOption,
+    type RoomListViewSnapshot,
     type FilterId,
     type RoomListViewActions,
+    type RoomListSection,
 } from "@element-hq/web-shared-components";
 import {
     type RoomInterface,
@@ -23,13 +25,31 @@ import {
     type RoomListServiceInterface,
     type SyncServiceInterface,
     RoomListFilterCategory,
+    RoomListFilterReadReceipts,
 } from "../index.web";
 import { buildRoomSummary, type RoomSummary } from "./RoomSummary.ts";
 import { RoomListItemViewModel } from "./RoomListItemViewModel";
+import { RoomListSectionHeaderViewModel } from "./RoomListSectionHeaderViewModel";
+import {
+    getSectionForRoom,
+    isSectionTag,
+    partitionRooms,
+    type SectionTag,
+} from "./sections.ts";
+
+/**
+ * While a filter is active the list is flat, which shared-components models as a single section.
+ */
+const FLAT_LIST_SECTION_ID = "all";
+
+/**
+ * Number of rooms the Rust SDK loads per page.
+ */
+const PAGE_SIZE = 200;
 
 /**
  * Simple room display information for rendering avatars.
- * This is what gets passed as the opaque "room" in the RoomListItemSnapshot.
+ * This is what gets passed as the opaque "room" in the RoomListItemViewSnapshot.
  */
 export interface RoomDisplayInfo {
     id: string;
@@ -55,16 +75,9 @@ const filterIdToRustFilter: Map<FilterId, RoomListEntriesDynamicFilterKind> =
             "unread",
             new RoomListEntriesDynamicFilterKind.All({
                 filters: [
-                    new RoomListEntriesDynamicFilterKind.Unread(),
-                    new RoomListEntriesDynamicFilterKind.DeduplicateVersions(),
-                ],
-            }),
-        ],
-        [
-            "favourite",
-            new RoomListEntriesDynamicFilterKind.All({
-                filters: [
-                    new RoomListEntriesDynamicFilterKind.Favourite(),
+                    new RoomListEntriesDynamicFilterKind.ReadReceipts({
+                        expect: RoomListFilterReadReceipts.Notifications,
+                    }),
                     new RoomListEntriesDynamicFilterKind.DeduplicateVersions(),
                 ],
             }),
@@ -93,24 +106,26 @@ const filterIdToRustFilter: Map<FilterId, RoomListEntriesDynamicFilterKind> =
                 ],
             }),
         ],
-        [
-            "low_priority",
-            new RoomListEntriesDynamicFilterKind.All({
-                filters: [
-                    new RoomListEntriesDynamicFilterKind.LowPriority(),
-                    new RoomListEntriesDynamicFilterKind.Joined(),
-                    new RoomListEntriesDynamicFilterKind.DeduplicateVersions(),
-                ],
-            }),
-        ],
     ]);
+
+function sectionsEqual(a: RoomListSection[], b: RoomListSection[]): boolean {
+    return (
+        a.length === b.length &&
+        a.every(
+            (section, i) =>
+                section.id === b[i].id &&
+                section.roomIds.length === b[i].roomIds.length &&
+                section.roomIds.every((id, j) => id === b[i].roomIds[j]),
+        )
+    );
+}
 
 /**
  * RoomListViewViewModel for Aurora that implements the shared-components interface
  * but is backed by the Rust SDK room list service.
  */
 export class RoomListViewViewModel
-    extends BaseViewModel<RoomListSnapshot, RoomListViewViewModelProps>
+    extends BaseViewModel<RoomListViewSnapshot, RoomListViewViewModelProps>
     implements RoomListViewActions
 {
     // Rust SDK state
@@ -123,23 +138,30 @@ export class RoomListViewViewModel
     private diffQueue: Promise<void> = Promise.resolve();
     private hasSetupEntries = false;
 
+    /** Number of rooms requested from the Rust SDK so far */
+    private requestedLimit = 0;
+    /** Total number of rooms the server knows about, once known */
+    private maximumNumberOfRooms?: number;
+
     // State tracking
     private activeFilter?: FilterId;
+    private activeRoomId?: string;
     private rooms: RoomSummary[] = [];
-    private roomsMap = new Map<string, RoomInterface>();
+    /** Room IDs in the order they are displayed, excluding collapsed sections */
+    private visibleRoomIds: string[] = [];
+    /** Expansion state of each section saved while a drag is in progress */
+    private savedExpansionStates = new Map<SectionTag, boolean>();
 
     // Child view models
     private roomItemViewModels = new Map<string, RoomListItemViewModel>();
+    private sectionHeaderViewModels = new Map<
+        SectionTag,
+        RoomListSectionHeaderViewModel
+    >();
 
     public constructor(props: RoomListViewViewModelProps) {
-        // Determine available filters based on what the Rust SDK supports
-        const filterIds: FilterId[] = [
-            "unread",
-            "people",
-            "rooms",
-            "favourite",
-            "low_priority",
-        ];
+        // Favourites and Low priority aren't offered as filters because they are sections
+        const filterIds: FilterId[] = ["unread", "people", "rooms"];
 
         super(props, {
             isLoadingRooms: true,
@@ -151,8 +173,15 @@ export class RoomListViewViewModel
                 spaceId: undefined,
                 filterKeys: undefined,
             },
-            roomIds: [],
+            sections: [{ id: FLAT_LIST_SECTION_ID, roomIds: [] }],
+            isFlatList: true,
             canCreateRoom: true, // Aurora generally allows room creation
+        });
+
+        this.disposables.track(() => {
+            for (const vm of this.roomItemViewModels.values()) vm.dispose();
+            for (const vm of this.sectionHeaderViewModels.values())
+                vm.dispose();
         });
 
         this.run();
@@ -197,8 +226,9 @@ export class RoomListViewViewModel
 
         // Get the entries with dynamic adapters
         this.roomListEntriesWithDynamicAdapters =
-            this.roomList.entriesWithDynamicAdapters(200, this);
+            this.roomList.entriesWithDynamicAdapters(PAGE_SIZE, this);
         this.controller = this.roomListEntriesWithDynamicAdapters.controller();
+        this.requestedLimit = PAGE_SIZE;
 
         // Add filter if one is active
         if (this.activeFilter) {
@@ -219,7 +249,23 @@ export class RoomListViewViewModel
         }
 
         // Load initial page
+        this.loadNextPage();
+    }
+
+    /**
+     * Ask the Rust SDK for another page of rooms. Like the SDK, stop growing
+     * the list once it covers every room the server knows about.
+     */
+    private loadNextPage(): void {
+        if (
+            !this.controller ||
+            this.maximumNumberOfRooms === undefined ||
+            this.requestedLimit >= this.maximumNumberOfRooms
+        ) {
+            return;
+        }
         this.controller.addOnePage();
+        this.requestedLimit += PAGE_SIZE;
     }
 
     /**
@@ -234,10 +280,14 @@ export class RoomListViewViewModel
             this.snapshot.merge({
                 isLoadingRooms: false,
             });
+            this.maximumNumberOfRooms = state.inner.maximumNumberOfRooms;
 
             // Only setup entries once, even if Loaded fires multiple times
             if (!this.hasSetupEntries) {
                 this.setupEntries();
+            } else {
+                // The server may know about more rooms now
+                this.maybeLoadNextPage();
             }
         }
     };
@@ -250,18 +300,7 @@ export class RoomListViewViewModel
             room.roomInfo(),
             room.latestEvent(),
         ]);
-        return buildRoomSummary(room, roomInfo, latestEvent);
-    }
-
-    /**
-     * Update the roomsMap when rooms change
-     */
-    private updateRoomsMap(rooms: RoomInterface[]): void {
-        this.roomsMap.clear();
-        for (const room of rooms) {
-            const roomId = room.id();
-            this.roomsMap.set(roomId, room);
-        }
+        return buildRoomSummary(this.props.client, room, roomInfo, latestEvent);
     }
 
     /**
@@ -278,23 +317,28 @@ export class RoomListViewViewModel
      */
     private async applyDiff(updates: RoomListEntriesUpdate[]): Promise<void> {
         let newRooms = [...this.rooms];
-        const allRooms: RoomInterface[] = [];
 
         for (const update of updates) {
             switch (update.tag) {
+                case RoomListEntriesUpdate_Tags.Append:
+                    newRooms.push(
+                        ...(await Promise.all(
+                            update.inner.values.map((room) =>
+                                this.parseRoom(room),
+                            ),
+                        )),
+                    );
+                    break;
                 case RoomListEntriesUpdate_Tags.Set:
                     newRooms[update.inner.index] = await this.parseRoom(
                         update.inner.value,
                     );
-                    allRooms.push(update.inner.value);
                     break;
                 case RoomListEntriesUpdate_Tags.PushBack:
                     newRooms.push(await this.parseRoom(update.inner.value));
-                    allRooms.push(update.inner.value);
                     break;
                 case RoomListEntriesUpdate_Tags.PushFront:
                     newRooms.unshift(await this.parseRoom(update.inner.value));
-                    allRooms.push(update.inner.value);
                     break;
                 case RoomListEntriesUpdate_Tags.Clear:
                     newRooms = [];
@@ -311,7 +355,6 @@ export class RoomListViewViewModel
                         0,
                         await this.parseRoom(update.inner.value),
                     );
-                    allRooms.push(update.inner.value);
                     break;
                 case RoomListEntriesUpdate_Tags.Remove:
                     newRooms.splice(update.inner.index, 1);
@@ -323,15 +366,11 @@ export class RoomListViewViewModel
                     newRooms = await Promise.all(
                         update.inner.values.map((room) => this.parseRoom(room)),
                     );
-                    allRooms.push(...update.inner.values);
                     break;
             }
         }
 
         this.rooms = newRooms;
-        if (allRooms.length > 0) {
-            this.updateRoomsMap(allRooms);
-        }
 
         // Update existing view models with new room data
         for (const room of this.rooms) {
@@ -350,11 +389,96 @@ export class RoomListViewViewModel
             }
         }
 
+        this.updateSections();
+        this.maybeLoadNextPage();
+    }
+
+    /**
+     * Split the rooms into sections and update the snapshot.
+     * Collapsed sections keep their header but have no rooms.
+     */
+    private updateSections(): void {
+        let sections: RoomListSection[];
+        let isFlatList = true;
+
+        if (this.activeFilter) {
+            sections = [
+                {
+                    id: FLAT_LIST_SECTION_ID,
+                    roomIds: this.rooms.map((r) => r.id),
+                },
+            ];
+        } else {
+            const partitioned = [...partitionRooms(this.rooms)];
+            const nonEmpty = partitioned.filter(
+                ([, rooms]) => rooms.length > 0,
+            );
+            // Create headers for the sections being shown before updating every header
+            const headers = nonEmpty.map(([tag]) =>
+                this.getSectionHeaderViewModel(tag),
+            );
+            for (const [tag, rooms] of partitioned) {
+                this.sectionHeaderViewModels.get(tag)?.setRooms(rooms);
+            }
+
+            // A list with only the Rooms section doesn't need a header
+            isFlatList =
+                nonEmpty.length === 0 ||
+                (nonEmpty.length === 1 && nonEmpty[0][0] === "chats");
+            sections = isFlatList
+                ? [
+                      {
+                          id: FLAT_LIST_SECTION_ID,
+                          roomIds: this.rooms.map((r) => r.id),
+                      },
+                  ]
+                : nonEmpty.map(([tag, rooms], i) => ({
+                      id: tag,
+                      roomIds: headers[i].isExpanded
+                          ? rooms.map((r) => r.id)
+                          : [],
+                  }));
+        }
+
+        this.visibleRoomIds = sections.flatMap((s) => s.roomIds);
+
+        const current = this.getSnapshot();
+        if (!sectionsEqual(current.sections, sections)) {
+            this.snapshot.merge({ sections });
+        }
         this.snapshot.merge({
-            roomIds: this.rooms.map((r) => r.id),
+            isFlatList,
             isRoomListEmpty: this.rooms.length === 0,
         });
+        this.updateActiveRoomIndex();
     }
+
+    /**
+     * Request more rooms while the list is full, so every room ends up in a section.
+     */
+    private maybeLoadNextPage(): void {
+        if (this.rooms.length >= this.requestedLimit) {
+            this.loadNextPage();
+        }
+    }
+
+    /**
+     * Called when a room list item sees its room info change. Tag changes
+     * may arrive this way, so re-split the rooms in case the room has moved section.
+     */
+    private onRoomSummaryChanged = (summary: RoomSummary): void => {
+        // Queue behind any diffs so they don't overwrite each other
+        this.diffQueue = this.diffQueue.then(() => {
+            const index = this.rooms.findIndex((r) => r.id === summary.id);
+            if (index < 0) return;
+            this.rooms = [
+                ...this.rooms.slice(0, index),
+                summary,
+                ...this.rooms.slice(index + 1),
+            ];
+            this.updateSections();
+        });
+    };
 
     /**
      * Toggle a filter on/off
@@ -411,7 +535,9 @@ export class RoomListViewViewModel
      * Get or create a view model for a specific room item.
      * Required by shared-components interface.
      */
-    public getRoomItemViewModel(roomId: string): RoomListItemViewModel {
+    public getRoomItemViewModel(
+        roomId: string,
+    ): RoomListItemViewModel | undefined {
         // Check if we already have a view model for this room
         let viewModel = this.roomItemViewModels.get(roomId);
         if (viewModel) {
@@ -421,7 +547,7 @@ export class RoomListViewViewModel
         // Find the room summary
         const room = this.rooms.find((r) => r.id === roomId);
         if (!room) {
-            throw new Error(`Room ${roomId} not found in rooms list`);
+            return undefined;
         }
 
         // Create a new view model and cache it
@@ -429,6 +555,7 @@ export class RoomListViewViewModel
             room,
             this.props.client,
             this.props.openRoom,
+            this.onRoomSummaryChanged,
         );
         this.roomItemViewModels.set(roomId, viewModel);
         return viewModel;
@@ -443,19 +570,170 @@ export class RoomListViewViewModel
         // No-op for now - the Rust SDK handles room subscriptions
     }
 
+    public updateVisibleFold(): void {
+        // No-op: the unread activity toast isn't supported yet
+    }
+
+    public getSectionHeaderViewModel(
+        sectionId: string,
+    ): RoomListSectionHeaderViewModel {
+        if (!isSectionTag(sectionId)) {
+            // The flat list section has no header
+            throw new Error(`No section header for section ${sectionId}`);
+        }
+
+        let viewModel = this.sectionHeaderViewModels.get(sectionId);
+        if (!viewModel) {
+            viewModel = new RoomListSectionHeaderViewModel({
+                tag: sectionId,
+                onToggleExpanded: () => this.updateSections(),
+            });
+            this.sectionHeaderViewModels.set(sectionId, viewModel);
+        }
+        return viewModel;
+    }
+
+    /**
+     * Headers of the sections currently shown, which is none for a flat list.
+     */
+    private get shownSectionHeaders(): RoomListSectionHeaderViewModel[] {
+        const { sections, isFlatList } = this.getSnapshot();
+        if (isFlatList) return [];
+        return sections.map((s) => this.getSectionHeaderViewModel(s.id));
+    }
+
+    /**
+     * Whether the header's collapse-all button should collapse or expand
+     * the sections, or undefined when there are no sections to collapse.
+     */
+    public getCollapseSectionsOption(): CollapseSectionsOption | undefined {
+        const headers = this.shownSectionHeaders;
+        if (headers.length === 0) return undefined;
+        return headers.some((h) => h.isExpanded) ? "collapse" : "expand";
+    }
+
+    /**
+     * Collapse every section if any is expanded, otherwise expand them all.
+     */
+    public collapseOrExpandAllSections(): void {
+        const headers = this.shownSectionHeaders;
+        const isExpanded = !headers.some((h) => h.isExpanded);
+        for (const header of headers) header.isExpanded = isExpanded;
+        this.updateSections();
+    }
+
+    public closeToast(): void {
+        // No-op: toasts are never shown
+    }
+
+    public scrollToUnreadActivity(): void {
+        // No-op: the unread activity toast isn't supported yet
+    }
+
+    public setScrollToIndex(): void {
+        // No-op: we don't programmatically scroll the room list yet
+    }
+
+    /**
+     * Move a room dropped onto a section header into that section by changing its tags.
+     * The room moves once the tag change syncs back.
+     */
+    public changeRoomSection = async (
+        roomId: string,
+        tag: string,
+    ): Promise<void> => {
+        const summary = this.rooms.find((r) => r.id === roomId);
+        if (
+            !summary ||
+            !isSectionTag(tag) ||
+            getSectionForRoom(summary) === tag
+        ) {
+            return;
+        }
+
+        try {
+            switch (tag) {
+                case "m.favourite":
+                    // This also removes the low priority tag
+                    await summary.room.setIsFavourite(true, undefined);
+                    break;
+                case "m.lowpriority":
+                    // This also removes the favourite tag
+                    await summary.room.setIsLowPriority(true, undefined);
+                    break;
+                case "people":
+                case "chats":
+                    // Whether a room is a DM decides between these, so just remove the tags
+                    if (summary.isFavourite) {
+                        await summary.room.setIsFavourite(false, undefined);
+                    }
+                    if (summary.isLowPriority) {
+                        await summary.room.setIsLowPriority(false, undefined);
+                    }
+                    break;
+                case "invites":
+                    // Membership decides what is in the Invites section
+                    break;
+            }
+        } catch (error) {
+            console.error(
+                `Failed to move room ${roomId} to section ${tag}:`,
+                error,
+            );
+        }
+    };
+
+    public changeSectionOrder(): void {
+        // No-op: the default sections can't be reordered
+    }
+
+    /**
+     * Collapse every section while something is dragged, so the drop targets are all in view.
+     */
+    public onSectionOrRoomDragStart = (): void => {
+        this.savedExpansionStates.clear();
+        for (const [tag, header] of this.sectionHeaderViewModels) {
+            this.savedExpansionStates.set(tag, header.isExpanded);
+            header.isExpanded = false;
+        }
+        this.updateSections();
+    };
+
+    /**
+     * Restore the sections collapsed by onSectionOrRoomDragStart.
+     */
+    public onSectionOrRoomDragEnd = (): void => {
+        for (const [tag, isExpanded] of this.savedExpansionStates) {
+            const header = this.sectionHeaderViewModels.get(tag);
+            if (header) header.isExpanded = isExpanded;
+        }
+        this.savedExpansionStates.clear();
+        this.updateSections();
+    };
+
     /**
      * Set the active room.
      * Called by ClientViewModel when a room is selected.
      */
     public setActiveRoom(roomId: string): void {
-        // Find the index of the selected room
-        const roomIndex = this.rooms.findIndex((r) => r.id === roomId);
+        this.activeRoomId = roomId;
+        this.updateActiveRoomIndex();
+    }
+
+    /**
+     * Point activeRoomIndex at the active room's position among the displayed
+     * rooms (excluding section headers), or clear it if the room isn't shown.
+     */
+    private updateActiveRoomIndex(): void {
+        const roomIndex = this.activeRoomId
+            ? this.visibleRoomIds.indexOf(this.activeRoomId)
+            : -1;
+        const activeRoomIndex = roomIndex >= 0 ? roomIndex : undefined;
+        const { roomListState } = this.getSnapshot();
+        if (roomListState.activeRoomIndex === activeRoomIndex) return;
 
         this.snapshot.merge({
-            roomListState: {
-                ...this.getSnapshot().roomListState,
-                activeRoomIndex: roomIndex >= 0 ? roomIndex : undefined,
-            },
+            roomListState: { ...roomListState, activeRoomIndex },
         });
     }
 }

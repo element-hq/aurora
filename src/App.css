@@ -9,6 +9,13 @@ body {
     width: 100%;
     height: 100%;
     margin: 0px;
+    /* The text rendering element-web sets on body, which shared-components are designed against */
+    font-feature-settings:
+        "kern" 1,
+        "liga" 1,
+        "calt" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 #root {
@@ -71,10 +78,15 @@ body {
     flex: 0 0 320px;
     width: 320px;
     border-right: 1px solid #262628;
+    /* Keep the sticky section headers' z-index inside the room list, so they don't
+       draw over Compound menus and tooltips, which are portalled with z-index: auto */
+    isolation: isolate;
 }
 
 .mx_MainPanel {
     flex: 1 1 auto;
+    /* stop long content (eg. user status in the header) widening the panel */
+    min-width: 0;
     display: flex;
     height: 100%;
     flex-direction: column;
@@ -84,136 +96,141 @@ body {
 .mx_Timeline {
     /* important to stop the header pushing the composer off the bottom */
     flex: 1 1 0;
+    /* TimelineView fills its parent, so this needs a definite height */
+    min-height: 0;
+    /* element-web's body text. Set here rather than on body, which is a different size in
+       aurora, so the em-based letter spacing works out the same. */
+    font: var(--cpd-font-body-md-regular);
+    letter-spacing: var(--cpd-font-letter-spacing-body-md);
+}
+
+/* The rows are absolutely positioned, so padding on the list wouldn't inset them:
+   it goes on each row instead. Horizontal only, so row measurements are unaffected. */
+.mx_Timeline .mx_TimelineView_tile {
+    box-sizing: border-box;
+    /* Matches element-web's --RoomView_MessageList-padding */
+    padding-inline: 18px;
+}
+
+/* The spinner row shown while history loads. A fixed height so it always measures the same. */
+.mx_Timeline_loading {
     display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 32px;
+    overflow: hidden;
 }
 
-.mx_Timeline ol {
-    padding-left: var(--cpd-space-2x);
-    padding-right: var(--cpd-space-2x);
-    width: 100%;
-    margin: 0px;
-    list-style: none;
-}
-
-.mx_Timeline ol li::marker {
-    color: var(--cpd-color-text-placeholder);
-}
-
-.mx_TimelineSpinner {
-    text-align: center;
-}
-
-.mx_Timestamp {
-    display: none;
-    position: absolute;
-    left: 1em;
-}
-
-.mx_EventTile .mx_Avatar {
-    position: absolute;
-    padding-left: var(--cpd-space-2x);
-}
-
-.mx_Sender {
-    display: block;
-    padding-left: var(--cpd-space-14x);
-    font-size: var(--cpd-font-size-body-sm);
-    font-weight: var(--cpd-font-weight-semibold);
-    color: var(--cpd-color-text-secondary);
-    position: relative;
-}
-
-.mx_Sender::after {
-    content: "";
-    display: block;
-    height: var(--cpd-space-1x);
-    width: 100%;
-}
-
-.mx_Content {
-    display: block;
-    padding-left: var(--cpd-space-14x);
-    font-size: var(--cpd-font-size-body-md);
-    color: var(--cpd-color-text-primary);
-}
-
-.mx_EventTile:not(.mx_EventTile_continuation)::before {
-    content: "";
-    display: block;
-    height: var(--cpd-space-2x);
-}
-
+/* EventTileView positions the avatar, sender, timestamp and body: these only style their contents. */
 .mx_EventTile {
-    display: block;
     overflow-wrap: anywhere;
 }
 
-.mx_EventTile_continuation {
-    margin: 0px;
+/* Only show the timestamp while the reader is looking at the event */
+.mx_EventTile_timestamp {
+    visibility: hidden;
 }
 
-.mx_StateEventTile {
-    display: block;
-    font-weight: var(--cpd-font-weight-semibold);
+.mx_EventTile:hover .mx_EventTile_timestamp,
+.mx_EventTile:focus-within .mx_EventTile_timestamp {
+    visibility: visible;
+}
+
+/* Sender name colours, picked per user by DisambiguatedProfileView's colorClass.
+   The same as element-web's (_common.pcss), which shared-components leave to the app. */
+.mx_Username_color1 {
+    color: var(--cpd-color-text-decorative-1);
+}
+.mx_Username_color2 {
+    color: var(--cpd-color-text-decorative-2);
+}
+.mx_Username_color3 {
+    color: var(--cpd-color-text-decorative-3);
+}
+.mx_Username_color4 {
+    color: var(--cpd-color-text-decorative-4);
+}
+.mx_Username_color5 {
+    color: var(--cpd-color-text-decorative-5);
+}
+.mx_Username_color6 {
+    color: var(--cpd-color-text-decorative-6);
+}
+
+.mx_Content {
+    font-size: var(--cpd-font-size-body-md);
+    color: var(--cpd-color-text-primary);
+    /* Keep a run of combining characters (zalgo) from spilling out of the message */
+    overflow: hidden;
+}
+
+/* Message bodies. A stopgap until shared-components styles these itself: the rules
+   follow element-web's (_EventTile.pcss), which element-web layers over github-markdown-css. */
+.mx_EventTile_bigEmoji {
+    font-size: 48px;
+    line-height: 57px;
+}
+
+.mx_EventTile_body code {
+    font-family: "Fira Code", ui-monospace, Menlo, Consolas, monospace;
+    font-size: 85%;
+    white-space: pre-wrap;
+}
+
+.mx_EventTile_body code:not(pre *) {
+    background-color: var(--cpd-color-bg-subtle-secondary);
+    border: 1px solid var(--cpd-color-gray-400);
+    border-radius: 4px;
+    padding: var(--cpd-space-0-5x) var(--cpd-space-1x);
+    margin-right: var(--cpd-space-0-5x);
+}
+
+.mx_EventTile_body pre {
+    margin: var(--cpd-space-1x) 0;
+    padding: var(--cpd-space-2x) var(--cpd-space-3x);
+    overflow-x: auto;
+    background-color: var(--cpd-color-bg-subtle-secondary);
+    border: 1px solid var(--cpd-color-gray-400);
+    border-radius: 8px;
+}
+
+.mx_EventTile_body pre code {
+    white-space: pre;
+}
+
+.mx_EventTile_body blockquote {
+    margin: var(--cpd-space-1x) 0;
+    padding: 0 10px;
+    border-left: 2px solid var(--cpd-color-border-interactive-primary);
+    border-radius: 2px;
     color: var(--cpd-color-text-secondary);
-    font-size: var(--cpd-font-size-body-xs);
-    position: relative;
 }
 
-.mx_StateEventTile::before {
-    content: "";
-    display: block;
-    height: var(--cpd-space-0-5x);
+.mx_EventTile_body ul,
+.mx_EventTile_body ol {
+    margin: var(--cpd-space-1x) 0;
+    padding-inline-start: 2em;
 }
 
-.mx_StateEventTile::after {
-    content: "";
-    display: block;
-    height: var(--cpd-space-0-5x);
+.mx_EventTile_body h1,
+.mx_EventTile_body h2,
+.mx_EventTile_body h3 {
+    margin: var(--cpd-space-2x) 0 var(--cpd-space-1x);
+    font-size: 1.5em;
+    line-height: 1.25;
 }
 
-.mx_StateEventTile {
-    padding-left: var(--cpd-space-14x);
+/* Our own messages that the server doesn't have yet */
+.mx_EventTile_sending {
+    opacity: 0.5;
 }
 
-.mx_StateAvatar {
-    position: relative;
-    top: var(--cpd-space-1x);
-}
-
-.mx_Separator {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    font-size: var(--cpd-font-size-body-sm);
-    color: var(--cpd-color-text-secondary);
-    text-align: center;
-    padding-top: var(--cpd-space-4x);
-}
-
-.mx_Separator::before,
-.mx_Separator::after {
-    content: "";
-    flex: 1;
-    border-top: 1px solid var(--cpd-color-border-interactive-primary);
-    height: 0;
-}
-
-.mx_Separator span {
-    padding: 0 em;
-    /* background-color: var(--cpd-color-bg-canvas-default); */
-}
-
-.mx_ReadMarker {
-    border-color: var(--cpd-color-icon-accent-tertiary);
-}
-
-.mx_ReadMarker span {
-    color: var(--cpd-color-icon-accent-tertiary);
+.mx_EventTile_failed .mx_Content {
+    color: var(--cpd-color-text-critical-primary);
 }
 
 /* hack for iamb content */
-.mx_EventTile > .mx_Content > span > p {
+.mx_EventTile .mx_Content p {
     margin: 0px;
 }
 
@@ -261,4 +278,15 @@ body {
     flex: 0 0 auto;
     font-size: 16px;
     margin: 4px;
+}
+
+/* The emoji picker for reacting to a message, positioned next to the button that opened it */
+.mx_ReactionPicker {
+    position: fixed;
+    z-index: 100;
+    background: var(--cpd-color-bg-canvas-default);
+    border: 1px solid var(--cpd-color-border-interactive-secondary);
+    border-radius: var(--cpd-space-2x);
+    box-shadow: 0 4px 24px rgb(0 0 0 / 0.15);
+    overflow: hidden;
 }

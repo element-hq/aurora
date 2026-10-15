@@ -1,0 +1,21 @@
+diff --git a/crates/matrix-sdk/src/automatic_call_status.rs b/crates/matrix-sdk/src/automatic_call_status.rs
+index c2e89ca6d..81bd79d83 100644
+--- a/crates/matrix-sdk/src/automatic_call_status.rs
++++ b/crates/matrix-sdk/src/automatic_call_status.rs
+@@ -20,7 +20,6 @@
+ use std::{
+     collections::HashSet,
+     sync::{Arc, Mutex},
+-    time::SystemTime,
+ };
+ 
+ use matrix_sdk_common::executor::spawn;
+@@ -135,7 +134,7 @@ fn on_event(
+     spawn(async move {
+         let in_call = !active_call_rooms.lock().unwrap().is_empty();
+         let result = if in_call {
+-            let joined_ts = SecondsSinceUnixEpoch::from_system_time(SystemTime::now());
++            let joined_ts = Some(SecondsSinceUnixEpoch::now());
+             client.account().set_call(joined_ts).await
+         } else {
+             client.account().clear_call().await

@@ -17,7 +17,8 @@
     flex-direction: column;
     background-color: var(--cpd-color-bg-canvas-default);
     border-radius: var(--cpd-space-6x);
-    box-shadow: var(--cpd-shadow-dialog);
+    /* Compound has no shadow tokens: this is the one compound-web gives its floating surfaces */
+    box-shadow: 0 4px 24px 0 rgb(0 0 0 / 10%);
     padding: 0;
     color: var(--cpd-color-text-primary);
     width: 544px;
@@ -42,7 +43,7 @@
     display: inline-block;
     font-weight: var(--cpd-font-weight-semibold);
     font-size: var(--cpd-font-size-heading-md);
-    line-height: var(--cpd-font-line-height-medium);
+    line-height: var(--cpd-font-line-height-tight);
     margin: 0;
     color: var(--cpd-color-text-primary);
 }

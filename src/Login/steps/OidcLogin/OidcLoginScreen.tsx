@@ -66,7 +66,7 @@ export const OidcLoginScreen: React.FC<
             {supportsPassword && (
                 <Button
                     kind="tertiary"
-                    size="sm"
+                    size="md"
                     style={{
                         width: "100%",
                         marginTop: "var(--cpd-space-2x)",
@@ -80,7 +80,7 @@ export const OidcLoginScreen: React.FC<
 
             <Button
                 kind="tertiary"
-                size="sm"
+                size="md"
                 style={{
                     width: "100%",
                     marginTop: "var(--cpd-space-2x)",

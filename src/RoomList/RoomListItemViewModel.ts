@@ -7,7 +7,7 @@
 
 import {
     BaseViewModel,
-    type RoomListItemSnapshot,
+    type RoomListItemViewSnapshot,
     RoomNotifState,
 } from "@element-hq/web-shared-components";
 import type { RoomSummary } from "./RoomSummary.ts";
@@ -24,11 +24,13 @@ import {
  * Wraps a RoomSummary and uses the client to perform actions on the room.
  */
 export class RoomListItemViewModel extends BaseViewModel<
-    RoomListItemSnapshot,
+    RoomListItemViewSnapshot,
     {
         summary: RoomSummary;
         client: ClientInterface;
         openRoom: (roomId: string) => void;
+        /** Called when the room info changes, with the rebuilt summary */
+        onSummaryChanged: (summary: RoomSummary) => void;
     }
 > {
     /**
@@ -56,6 +58,7 @@ export class RoomListItemViewModel extends BaseViewModel<
         summary: RoomSummary,
         client: ClientInterface,
         openRoom: (roomId: string) => void,
+        onSummaryChanged: (summary: RoomSummary) => void,
     ) {
         const roomDisplayInfo: RoomDisplayInfo = {
             id: summary.id,
@@ -64,13 +67,14 @@ export class RoomListItemViewModel extends BaseViewModel<
         };
 
         super(
-            { summary, client, openRoom },
+            { summary, client, openRoom, onSummaryChanged },
             {
                 id: summary.id,
                 room: roomDisplayInfo,
                 name: summary.name,
                 isBold: summary.isBold,
                 messagePreview: summary.messagePreview,
+                userStatus: summary.userStatus,
                 notification: {
                     hasAnyNotificationOrActivity:
                         summary.notificationState.hasAnyNotificationOrActivity,
@@ -87,7 +91,8 @@ export class RoomListItemViewModel extends BaseViewModel<
                 showMoreOptionsMenu: true,
                 showNotificationMenu: true,
                 isFavourite: summary.isFavourite,
-                isLowPriority: false,
+                isLowPriority: summary.isLowPriority,
+                isDm: summary.isDm,
                 canInvite: true,
                 canCopyRoomLink: true,
                 canMarkAsRead:
@@ -96,6 +101,11 @@ export class RoomListItemViewModel extends BaseViewModel<
                     summary.unreadMessagesCount === 0 &&
                     !summary.isMarkedUnread,
                 roomNotifState: RoomNotifState.AllMessages, // Will be fetched asynchronously
+                // Custom sections aren't supported, so there are none to move the room to
+                sections: [],
+                areSectionsEnabled: false,
+                // Shows the Favourite and Low priority toggles, and lets the room be dragged between sections
+                canChangeSection: !summary.notificationState.invited,
             },
         );
 
@@ -156,6 +166,7 @@ export class RoomListItemViewModel extends BaseViewModel<
                     const latestEvent =
                         await this.props.summary.room.latestEvent();
                     const updatedSummary = buildRoomSummary(
+                        this.props.client,
                         this.props.summary.room,
                         roomInfo,
                         latestEvent,
@@ -163,6 +174,8 @@ export class RoomListItemViewModel extends BaseViewModel<
 
                     // Update the snapshot with the new notification state
                     this.updateSummary(updatedSummary);
+                    // The room may have moved section, e.g. if it was favourited
+                    this.props.onSummaryChanged(updatedSummary);
                 },
             });
 
@@ -194,6 +207,7 @@ export class RoomListItemViewModel extends BaseViewModel<
             name: summary.name,
             isBold: summary.isBold,
             messagePreview: summary.messagePreview,
+            userStatus: summary.userStatus,
             notification: {
                 hasAnyNotificationOrActivity:
                     summary.notificationState.hasAnyNotificationOrActivity,
@@ -208,6 +222,9 @@ export class RoomListItemViewModel extends BaseViewModel<
                 muted: false,
             },
             isFavourite: summary.isFavourite,
+            isLowPriority: summary.isLowPriority,
+            isDm: summary.isDm,
+            canChangeSection: !summary.notificationState.invited,
             canMarkAsRead:
                 summary.unreadMessagesCount > 0 || summary.isMarkedUnread,
             canMarkAsUnread:
@@ -262,12 +279,11 @@ export class RoomListItemViewModel extends BaseViewModel<
     };
 
     public onToggleLowPriority = async (): Promise<void> => {
-        // Low priority isn't tracked in RoomSummary yet, so we'll need to track current state
-        // For now, just call the method - the UI will update when the room list refreshes
         try {
-            // We don't have isLowPriority in RoomSummary, so just toggle it
-            // The exact state will be determined by the room list update
-            await this.props.summary.room.setIsLowPriority(true, undefined);
+            await this.props.summary.room.setIsLowPriority(
+                !this.props.summary.isLowPriority,
+                undefined,
+            );
         } catch (error) {
             console.error(
                 `Failed to toggle low priority for room ${this.props.summary.id}:`,
@@ -359,4 +375,11 @@ export class RoomListItemViewModel extends BaseViewModel<
             );
         }
     };
+
+    // Custom sections aren't supported (areSectionsEnabled: false), so these are never invoked
+    public onCreateSection = (): void => {};
+
+    public onToggleSection = (): void => {};
+
+    public onRemoveFromSection = (): void => {};
 }

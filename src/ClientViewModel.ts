@@ -22,7 +22,7 @@ import {
     type HomeserverLoginDetailsInterface,
     LogLevel,
     type OAuthAuthorizationDataInterface,
-    OidcPrompt,
+    OAuthPrompt,
     type RoomListServiceInterface,
     type Session,
     type SyncServiceInterface,
@@ -42,6 +42,8 @@ import type { Credential } from "./Login/credentials.types";
 import { EncryptionFlowViewModel } from "./CryptoSetup/EncryptionFlowViewModel";
 import { LoginFlowViewModel } from "./Login/LoginFlowViewModel";
 import { RoomListViewViewModel } from "./RoomList/RoomListViewViewModel";
+import { SetStatusViewModel } from "./UserStatus/SetStatusViewModel";
+import { userStatusFromProfile } from "./utils/userStatus";
 
 export class ClientViewModel
     extends BaseViewModel<ClientViewSnapshot, Props>
@@ -51,6 +53,7 @@ export class ClientViewModel
     private roomListService?: RoomListServiceInterface;
     private oidcAuthData?: OAuthAuthorizationDataInterface;
     private clientDelegateHandle?: TaskHandleInterface;
+    private ownProfileHandle?: TaskHandleInterface;
     private client?: ClientInterface;
     private storagePassphrase?: string;
     private storageStoreId?: string;
@@ -87,6 +90,13 @@ export class ClientViewModel
      * Safely fetch avatar URL, handling cases where the server returns null
      * instead of omitting the field (which causes deserialization errors)
      */
+    /**
+     * The underlying SDK client, if one has been created
+     */
+    public getClient(): ClientInterface | undefined {
+        return this.client;
+    }
+
     private async getAvatarUrlSafely(): Promise<string | undefined> {
         if (!this.client) return undefined;
 
@@ -151,7 +161,7 @@ export class ClientViewModel
             }
             const sessionData = sessions[userId];
             console.log(
-                `[SessionDelegate] Returning session with oidcData: ${!!sessionData.session.oidcData}`,
+                `[SessionDelegate] Returning session with oauthData: ${!!sessionData.session.oauthData}`,
             );
             return sessionData.session;
         },
@@ -160,7 +170,7 @@ export class ClientViewModel
                 `[SessionDelegate] SDK triggered session save for ${session.userId}`,
             );
             console.log(
-                `[SessionDelegate] Session details: hasOidcData=${!!session.oidcData}, ` +
+                `[SessionDelegate] Session details: hasOauthData=${!!session.oauthData}, ` +
                     `hasAccessToken=${!!session.accessToken}, ` +
                     `hasRefreshToken=${!!session.refreshToken}`,
             );
@@ -256,6 +266,10 @@ export class ClientViewModel
 
         this.client = undefined;
 
+        this.ownProfileHandle?.cancel();
+        this.ownProfileHandle = undefined;
+        this.getSnapshot().setStatusViewModel?.dispose();
+
         this.snapshot.set({
             clientState: ClientState.LoggedOut,
             roomViewModel: undefined,
@@ -263,6 +277,8 @@ export class ClientViewModel
             userId: undefined,
             displayName: undefined,
             avatarUrl: undefined,
+            userStatus: undefined,
+            setStatusViewModel: undefined,
             encryptionFlowViewModel: undefined,
             // Keep loginFlowViewModel so we can log in again
             loginFlowViewModel: this.initLoginFlowViewModel(),
@@ -312,7 +328,7 @@ export class ClientViewModel
                 );
                 console.log("Password login successful");
             } else {
-                await this.client.loginWithOidcCallback(
+                await this.client.loginWithOauthCallback(
                     credentials.callbackUrl,
                 );
                 console.log("OIDC login successful");
@@ -466,9 +482,9 @@ export class ClientViewModel
             const oidcConfig = getOidcConfiguration();
 
             // Use "Consent" prompt for login
-            const authData = await this.client.urlForOidc(
+            const authData = await this.client.urlForOauth(
                 oidcConfig,
-                OidcPrompt.Consent.new(),
+                OAuthPrompt.Consent.new(),
                 loginHint,
                 undefined, // deviceId - let SDK generate
                 undefined, // additionalScopes
@@ -495,7 +511,7 @@ export class ClientViewModel
         }
 
         try {
-            await this.client.abortOidcAuth(this.oidcAuthData);
+            await this.client.abortOauthAuth(this.oidcAuthData);
             console.log("OIDC login aborted");
         } catch (e) {
             printRustError("Failed to abort OIDC login", e);
@@ -526,6 +542,9 @@ export class ClientViewModel
                     // We can add soft logout support later
                     this.logout();
                 },
+                onBackgroundTaskErrorReport: (taskName, error) => {
+                    console.error(`Background task ${taskName} failed:`, error);
+                },
             });
 
             // Track the delegate handle so it gets cleaned up properly
@@ -554,17 +573,87 @@ export class ClientViewModel
                 openRoom: this.openRoom.bind(this),
             });
 
+            if (import.meta.env.DEV) this.exposeClearCaches();
+
             console.log("Sync services created, transitioning to Syncing");
             this.snapshot.merge({
                 clientState: ClientState.Syncing,
                 roomListViewModel,
             });
+            this.subscribeToOwnProfile();
             await this.syncService.start();
             console.log("syncing...");
         } catch (e) {
             printRustError("syncing failed", e);
             this.snapshot.merge({ clientState: ClientState.Unknown });
             return;
+        }
+    }
+
+    /**
+     * Dev only: `auroraClearCaches()` in the console empties the SDK's caches (every room's
+     * event cache included) and reloads, so rooms load from the server again. The session
+     * is kept, so there's no need to log in again.
+     */
+    private exposeClearCaches(): void {
+        window.auroraClearCaches = async () => {
+            try {
+                await this.client?.clearCaches(this.syncService);
+            } catch (e) {
+                printRustError("Failed to clear caches", e);
+                return;
+            }
+            // The client can't be used after clearing its caches.
+            window.location.reload();
+        };
+        this.disposables.track(() => {
+            delete window.auroraClearCaches;
+        });
+    }
+
+    /**
+     * Keep the user's own profile up to date, including their MSC4426 status.
+     * This relies on the sliding sync profiles extension, which user status
+     * support also requires, so we only do this when status is supported.
+     */
+    private async subscribeToOwnProfile(): Promise<void> {
+        const client = this.client;
+        if (!client) return;
+
+        try {
+            if (!(await client.isUserStatusSupported())) {
+                console.log("User status not supported by homeserver");
+                return;
+            }
+        } catch (e) {
+            printRustError("Failed to check user status support", e);
+            return;
+        }
+        // We may have logged out while waiting
+        if (this.client !== client) return;
+
+        const setStatusViewModel = new SetStatusViewModel({ client });
+        this.disposables.track(setStatusViewModel);
+        this.snapshot.merge({ setStatusViewModel });
+
+        try {
+            this.ownProfileHandle = client.subscribeToOwnProfile({
+                onUpdate: (profile) => {
+                    const userStatus = userStatusFromProfile(
+                        profile.status,
+                        profile.call,
+                    );
+                    setStatusViewModel.setUserStatus(userStatus);
+                    this.snapshot.merge({
+                        displayName: profile.displayName,
+                        avatarUrl: profile.avatarUrl,
+                        userStatus,
+                    });
+                },
+            });
+            this.disposables.track(() => this.ownProfileHandle?.cancel());
+        } catch (e) {
+            printRustError("Failed to subscribe to own profile", e);
         }
     }
 
@@ -586,7 +675,10 @@ export class ClientViewModel
         const room = this.client.getRoom(roomId);
         if (!room) return;
 
-        const roomViewModel = new RoomViewModel({ room });
+        const roomViewModel = new RoomViewModel({
+            room,
+            client: this.client,
+        });
 
         this.currentRoomId = roomId;
 

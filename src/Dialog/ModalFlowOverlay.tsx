@@ -81,7 +81,11 @@ export function ModalFlowOverlay({
 }: ModalFlowOverlayProps): React.ReactNode {
     const { currentScreen, screenType, isActive } = useViewModel(flow);
 
-    console.log("[ModalFlowOverlay] Render:", { hasCurrentScreen: !!currentScreen, screenType, isActive });
+    console.log("[ModalFlowOverlay] Render:", {
+        hasCurrentScreen: !!currentScreen,
+        screenType,
+        isActive,
+    });
 
     // No active screen - render nothing
     if (!currentScreen || !screenType || !isActive) {

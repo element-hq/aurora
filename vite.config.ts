@@ -20,6 +20,9 @@ export default defineConfig(async () => ({
                 __dirname,
                 "node_modules/@element-hq/web-shared-components/src",
             ),
+            // The generated bindings import the runtime as @ubjs/core, which is
+            // the main export of the uniffi-bindgen-react-native package.
+            "@ubjs/core": "uniffi-bindgen-react-native",
         },
     },
 

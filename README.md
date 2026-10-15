@@ -12,7 +12,7 @@ Try it out at https://element-aurora.netlify.app/
 
 ```bash
 cargo install wasm-bindgen-cli
-yarn install
+pnpm install
 ```
 
 ## To create the bindings
@@ -26,18 +26,18 @@ Bindings are currently vendored into the repo, run this to update them,
 ## To run
 
 ```bash
-yarn && yarn dev
+pnpm && pnpm dev
 ```
 
 ## To build:
 
 ```bash
-yarn build
+pnpm build
 ```
 
 ## For tauri
 
 ```bash
-yarn tauri dev
-yarn tauri build
+pnpm tauri dev
+pnpm tauri build
 ```
