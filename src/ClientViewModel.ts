@@ -564,6 +564,8 @@ export class ClientViewModel
                 openRoom: this.openRoom.bind(this),
             });
 
+            if (import.meta.env.DEV) this.exposeClearCaches();
+
             console.log("Sync services created, transitioning to Syncing");
             this.snapshot.merge({
                 clientState: ClientState.Syncing,
@@ -576,6 +578,27 @@ export class ClientViewModel
             this.snapshot.merge({ clientState: ClientState.Unknown });
             return;
         }
+    }
+
+    /**
+     * Dev only: `auroraClearCaches()` in the console empties the SDK's caches (every room's
+     * event cache included) and reloads, so rooms load from the server again. The session
+     * is kept, so there's no need to log in again.
+     */
+    private exposeClearCaches(): void {
+        window.auroraClearCaches = async () => {
+            try {
+                await this.client?.clearCaches(this.syncService);
+            } catch (e) {
+                printRustError("Failed to clear caches", e);
+                return;
+            }
+            // The client can't be used after clearing its caches.
+            window.location.reload();
+        };
+        this.disposables.track(() => {
+            delete window.auroraClearCaches;
+        });
     }
 
     public setCurrentRoom(roomId: string): void {
