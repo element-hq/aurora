@@ -35,6 +35,38 @@ export interface TimelineProps {
 
 type DateSeparatorVm = StaticViewModel<{ label: string }>;
 
+const relativeDayFormat = new Intl.RelativeTimeFormat(undefined, {
+    numeric: "auto",
+});
+const weekdayFormat = new Intl.DateTimeFormat(undefined, { weekday: "long" });
+const fullDateFormat = new Intl.DateTimeFormat(undefined, {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+});
+
+/**
+ * A date separator's label: "today", "yesterday", the weekday within the last
+ * week, otherwise the full date. The same as element-web's DateSeparatorViewModel.
+ */
+function dateSeparatorLabel(ts: number): string {
+    const date = new Date(ts);
+    const today = new Date();
+    const yesterday = new Date();
+    yesterday.setDate(today.getDate() - 1);
+    if (date.toDateString() === today.toDateString()) {
+        return relativeDayFormat.format(0, "day");
+    }
+    if (date.toDateString() === yesterday.toDateString()) {
+        return relativeDayFormat.format(-1, "day");
+    }
+    if (today.getTime() - date.getTime() < 6 * 24 * 60 * 60 * 1000) {
+        return weekdayFormat.format(date);
+    }
+    return fullDateFormat.format(date);
+}
+
 export const Timeline: React.FC<TimelineProps> = ({
     timelineViewModel: vm,
     client,
@@ -50,9 +82,7 @@ export const Timeline: React.FC<TimelineProps> = ({
         (key: string, ts: number): DateSeparatorVm => {
             let dsVm = dateSeparatorVms.current.get(key);
             if (!dsVm) {
-                dsVm = new StaticViewModel({
-                    label: new Date(ts).toDateString(),
-                });
+                dsVm = new StaticViewModel({ label: dateSeparatorLabel(ts) });
                 dateSeparatorVms.current.set(key, dsVm);
             }
             return dsVm;
