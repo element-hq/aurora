@@ -114,7 +114,7 @@ function ElementLogo(): JSX.Element {
                 className={styles.logoImage}
             />
             <span className={styles.wordmark}>element</span>
-            <span className={styles.proPill}>PRO</span>
+            <span className={styles.proPill}>Aurora</span>
         </div>
     );
 }
