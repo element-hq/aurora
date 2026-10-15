@@ -311,6 +311,143 @@ const FfiConverterTypeRoomPinnedEventsChange = (() => {
 })();
 
 
+// Enum: SearchServicePaginationState
+export enum SearchServicePaginationState_Tags {
+    Idle = "Idle",
+    Loading = "Loading"
+}
+/**
+ * Whether the search service is currently loading a page of results.
+ */
+export const SearchServicePaginationState = (() => {
+
+    type Idle__interface = {
+        tag: SearchServicePaginationState_Tags.Idle;
+        inner: 
+Readonly<{endReached: boolean}>
+    };
+    /**
+     * Not currently paginating. `end_reached` is `true` once every source has
+     * been exhausted for the current query.
+     */
+    class Idle_ extends UniffiEnum implements Idle__interface {
+        /**
+         * @private
+         * This field is private and should not be used, use `tag` instead.
+         */
+        readonly [uniffiTypeNameSymbol] = "SearchServicePaginationState";
+        readonly tag = SearchServicePaginationState_Tags.Idle;
+        readonly inner: 
+Readonly<{endReached: boolean}>;
+        constructor(
+inner: {endReached: boolean }) {
+            super("SearchServicePaginationState", "Idle");
+
+            this.inner = Object.freeze(inner);
+        }
+        static new(
+inner: {endReached: boolean }): Idle_ {
+            return new Idle_(inner);
+        }
+
+        static instanceOf(obj: any): obj is Idle_ {
+            return obj.tag === SearchServicePaginationState_Tags.Idle;
+        }
+
+    }
+
+    type Loading__interface = {
+        tag: SearchServicePaginationState_Tags.Loading
+    };
+    /**
+     * A page of results is currently being loaded.
+     */
+    class Loading_ extends UniffiEnum implements Loading__interface {
+        /**
+         * @private
+         * This field is private and should not be used, use `tag` instead.
+         */
+        readonly [uniffiTypeNameSymbol] = "SearchServicePaginationState";
+        readonly tag = SearchServicePaginationState_Tags.Loading;
+        constructor() {
+            super("SearchServicePaginationState", "Loading");
+        }
+
+        static new(): Loading_ {
+            return new Loading_();
+        }
+
+        static instanceOf(obj: any): obj is Loading_ {
+            return obj.tag === SearchServicePaginationState_Tags.Loading;
+        }
+
+    }
+
+    function instanceOf(obj: any): obj is SearchServicePaginationState {
+        return obj[uniffiTypeNameSymbol] === "SearchServicePaginationState";
+    }
+
+    return Object.freeze({
+        instanceOf,
+  Idle: Idle_, 
+  Loading: Loading_
+    });
+
+})();
+/**
+ * Whether the search service is currently loading a page of results.
+ */
+export type SearchServicePaginationState = InstanceType<
+    typeof SearchServicePaginationState['Idle' | 'Loading']
+>;
+
+// FfiConverter for enum SearchServicePaginationState
+const FfiConverterTypeSearchServicePaginationState = (() => {
+    type TypeName = SearchServicePaginationState;
+    class FFIConverter extends AbstractFfiConverterByteArray<TypeName> {
+        readFromCursor(c: Cursor): TypeName {
+            switch (c.readI32()) {
+                case 1: return new SearchServicePaginationState.Idle({endReached: FfiConverterBool.readFromCursor(c) });
+                case 2: return new SearchServicePaginationState.Loading();
+                default: throw new UniffiInternalError.UnexpectedEnumCase();
+            }
+        }
+        writeIntoCursor(value: TypeName, c: Cursor): void {
+            switch (value.tag) {
+                case SearchServicePaginationState_Tags.Idle: {
+                    c.writeI32(1);
+                    const inner = value.inner;
+                    FfiConverterBool.writeIntoCursor(inner.endReached, c);
+                    return;
+                }
+                case SearchServicePaginationState_Tags.Loading: {
+                    c.writeI32(2);
+                    return;
+                }
+                default:
+                    // Throwing from here means that SearchServicePaginationState_Tags hasn't matched an ordinal.
+                    throw new UniffiInternalError.UnexpectedEnumCase();
+            }
+        }
+        allocationSize(value: TypeName): number {
+            switch (value.tag) {
+                case SearchServicePaginationState_Tags.Idle: {
+                    const inner = value.inner;
+                    let size = 4;
+                    size += FfiConverterBool.allocationSize(inner.endReached);
+                    return size;
+                }
+                case SearchServicePaginationState_Tags.Loading: {
+                    return 4;
+                }
+                default: throw new UniffiInternalError.UnexpectedEnumCase();
+            }
+        }
+    }
+    return new FFIConverter();
+})();
+
+
 // Enum: SpaceRoomListPaginationState
 export enum SpaceRoomListPaginationState_Tags {
     Idle = "Idle",
@@ -1307,6 +1444,7 @@ export default Object.freeze({
     FfiConverterTypeRoomListFilterCategory,
     FfiConverterTypeRoomListFilterReadReceipts,
     FfiConverterTypeRoomPinnedEventsChange,
+    FfiConverterTypeSearchServicePaginationState,
     FfiConverterTypeSpaceRoomListPaginationState,
     FfiConverterTypeThreadListPaginationState,
     FfiConverterTypeTimelineEventCondition,

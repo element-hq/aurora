@@ -1,0 +1,203 @@
+From 4949612154416d0b1c89b95d21254637d441d831 Mon Sep 17 00:00:00 2001
+From: David Langley <davidl@element.io>
+Date: Thu, 15 Oct 2026 17:55:20 +0100
+Subject: [PATCH 2/6] Use a single uniffi_core for the JavaScript bindings
+ runtime
+
+uniffi-bindgen-react-native's runtime crate depends on uniffi_core from
+crates.io (=0.31), while this workspace and ruma use a git revision of
+uniffi. Point crates.io's uniffi_core at that same revision so that only
+one copy ends up in the wasm build. Also re-lock tantivy to the patched
+checkout.
+---
+ Cargo.lock | 40 +++++++++++++---------------------------
+ Cargo.toml |  4 ++++
+ 2 files changed, 17 insertions(+), 27 deletions(-)
+
+diff --git a/Cargo.lock b/Cargo.lock
+index 8b82310ea..455c866e3 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -1018,7 +1018,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "117725a109d387c937a1533ce01b450cbde6b88abceea8473c4d7a85853cda3c"
+ dependencies = [
+  "lazy_static",
+- "windows-sys 0.59.0",
++ "windows-sys 0.48.0",
+ ]
+ 
+ [[package]]
+@@ -1685,7 +1685,7 @@ dependencies = [
+  "libc",
+  "option-ext",
+  "redox_users",
+- "windows-sys 0.59.0",
++ "windows-sys 0.60.2",
+ ]
+ 
+ [[package]]
+@@ -1792,7 +1792,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "778e2ac28f6c47af28e4907f13ffd1e1ddbd400980a9abd7c8df189bf578a5ad"
+ dependencies = [
+  "libc",
+- "windows-sys 0.52.0",
++ "windows-sys 0.60.2",
+ ]
+ 
+ [[package]]
+@@ -3895,6 +3895,8 @@ dependencies = [
+  "ctr",
+  "hkdf",
+  "hmac",
++ "js-sys",
++ "matrix-sdk-common",
+  "matrix-sdk-test",
+  "once_cell",
+  "pbkdf2",
+@@ -3905,6 +3907,8 @@ dependencies = [
+  "tempfile",
+  "thiserror 2.0.19",
+  "tracing",
++ "uuid",
++ "wasm-bindgen-test",
+  "zeroize",
+ ]
+ 
+@@ -4458,8 +4462,6 @@ dependencies = [
+ [[package]]
+ name = "ownedbytes"
+ version = "0.9.0"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "2fbd56f7631767e61784dc43f8580f403f4475bd4aaa4da003e6295e1bab4a7e"
+ dependencies = [
+  "stable_deref_trait",
+ ]
+@@ -4849,7 +4851,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "b570b25f7617e43d59005d0990ccb79e950a423952cea19671b7a876da390adf"
+ dependencies = [
+  "anyhow",
+- "itertools 0.14.0",
++ "itertools 0.10.5",
+  "proc-macro2",
+  "quote",
+  "syn 2.0.117",
+@@ -5587,7 +5589,7 @@ dependencies = [
+  "errno",
+  "libc",
+  "linux-raw-sys",
+- "windows-sys 0.52.0",
++ "windows-sys 0.60.2",
+ ]
+ 
+ [[package]]
+@@ -5645,7 +5647,7 @@ dependencies = [
+  "security-framework",
+  "security-framework-sys",
+  "webpki-root-certs",
+- "windows-sys 0.52.0",
++ "windows-sys 0.60.2",
+ ]
+ 
+ [[package]]
+@@ -6353,9 +6355,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "tantivy"
+-version = "0.26.1"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "edde6a10743fff00a4e1a8c9ef020bf5f3cbad301b7d2d39f2b07f123c4eac07"
++version = "0.26.2"
+ dependencies = [
+  "aho-corasick",
+  "arc-swap",
+@@ -6407,8 +6407,6 @@ dependencies = [
+ [[package]]
+ name = "tantivy-bitpacker"
+ version = "0.10.0"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "4fed3d674429bcd2de5d0a6d1aa5495fed8afd9c5ecce993019caf7615f53fa4"
+ dependencies = [
+  "bitpacking",
+ ]
+@@ -6416,8 +6414,6 @@ dependencies = [
+ [[package]]
+ name = "tantivy-columnar"
+ version = "0.7.0"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "c57166f5bcfd478f370ab8445afb4678dce44801fa5ce5c451aaf8595583c5dc"
+ dependencies = [
+  "downcast-rs",
+  "fastdivide",
+@@ -6432,8 +6428,6 @@ dependencies = [
+ [[package]]
+ name = "tantivy-common"
+ version = "0.11.0"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "bbf10915aa75da3c3b0d58b58853d2e889efbaf32d4982a4c3715dde6bba23e5"
+ dependencies = [
+  "async-trait",
+  "byteorder",
+@@ -6456,8 +6450,6 @@ dependencies = [
+ [[package]]
+ name = "tantivy-query-grammar"
+ version = "0.26.0"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "dfadb8526b6da90704feb293b0701a6aae62ea14983143344be2dc5ce30f1d82"
+ dependencies = [
+  "fnv",
+  "nom",
+@@ -6469,8 +6461,6 @@ dependencies = [
+ [[package]]
+ name = "tantivy-sstable"
+ version = "0.7.0"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "8a2cfc3ac5164cbadc28965ffb145a8f47582a60ae5897859ad8d4316596c606"
+ dependencies = [
+  "futures-util",
+  "itertools 0.14.0",
+@@ -6483,8 +6473,6 @@ dependencies = [
+ [[package]]
+ name = "tantivy-stacker"
+ version = "0.7.0"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "6cbb051742da9d53ca9e8fff43a9b10e319338b24e2c0e15d0372df19ffeb951"
+ dependencies = [
+  "murmurhash32",
+  "tantivy-common",
+@@ -6493,8 +6481,6 @@ dependencies = [
+ [[package]]
+ name = "tantivy-tokenizer-api"
+ version = "0.7.0"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "eac258c2c6390673f2685813afeeafcb8c4e0ee7de8dd3fc46838dcc37263f98"
+ dependencies = [
+  "serde",
+ ]
+@@ -6506,10 +6492,10 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "32497e9a4c7b38532efcdebeef879707aa9f794296a4f0244f6f69e9bc8574bd"
+ dependencies = [
+  "fastrand",
+- "getrandom 0.3.4",
++ "getrandom 0.4.3",
+  "once_cell",
+  "rustix",
+- "windows-sys 0.52.0",
++ "windows-sys 0.60.2",
+ ]
+ 
+ [[package]]
+diff --git a/Cargo.toml b/Cargo.toml
+index b240ec2b8..b8360cec1 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -254,6 +254,10 @@ async-compat = { git = "https://github.com/element-hq/async-compat", rev = "5a27
+ const_panic = { git = "https://github.com/jplatte/const_panic", rev = "e0b317a9a7bde2d48a7d15b6a60d70e4a41d3b5f" }
+ # tantivy with a `single-threaded` feature, so the search index works on wasm.
+ tantivy = { path = "../tantivy-wasm" }
++# The JavaScript bindings runtime (uniffi-bindgen-react-native) gets uniffi_core
++# from crates.io; this and ruma use a git revision, so point crates.io at it too
++# to end up with a single copy.
++uniffi_core = { git = "https://github.com/mozilla/uniffi-rs.git", rev = "e5f4821410bea19e71984ea5e06a7bc8b11ed9e5" }
+ 
+ [patch."https://github.com/ruma/ruma"]
+ # Needed to disable checksums since they're incorrect in 32bit devices.

@@ -264,6 +264,22 @@ export type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomListServiceSyncIndicato
   uniffi_clone: UniffiCallbackInterfaceCloneMatrixSdkFfiRoomListServiceSyncIndicatorListener;
   on_update: UniffiCallbackInterfaceMatrixSdkFfiRoomListServiceSyncIndicatorListenerMethod0;
 };
+type UniffiCallbackInterfaceMatrixSdkFfiSearchServicePaginationStateListenerMethod0 = (uniffiHandle: bigint, paginationState: Uint8Array) => UniffiResult<void>;
+type UniffiCallbackInterfaceCloneMatrixSdkFfiSearchServicePaginationStateListener = (handle: bigint) => UniffiResult<void>;
+type UniffiCallbackInterfaceFreeMatrixSdkFfiSearchServicePaginationStateListener = (handle: bigint) => void;
+export type UniffiVTableCallbackInterfaceMatrixSdkFfiSearchServicePaginationStateListener = {
+  uniffi_free: UniffiCallbackInterfaceFreeMatrixSdkFfiSearchServicePaginationStateListener;
+  uniffi_clone: UniffiCallbackInterfaceCloneMatrixSdkFfiSearchServicePaginationStateListener;
+  on_update: UniffiCallbackInterfaceMatrixSdkFfiSearchServicePaginationStateListenerMethod0;
+};
+type UniffiCallbackInterfaceMatrixSdkFfiSearchServiceResultsListenerMethod0 = (uniffiHandle: bigint, updates: Uint8Array) => UniffiResult<void>;
+type UniffiCallbackInterfaceCloneMatrixSdkFfiSearchServiceResultsListener = (handle: bigint) => UniffiResult<void>;
+type UniffiCallbackInterfaceFreeMatrixSdkFfiSearchServiceResultsListener = (handle: bigint) => void;
+export type UniffiVTableCallbackInterfaceMatrixSdkFfiSearchServiceResultsListener = {
+  uniffi_free: UniffiCallbackInterfaceFreeMatrixSdkFfiSearchServiceResultsListener;
+  uniffi_clone: UniffiCallbackInterfaceCloneMatrixSdkFfiSearchServiceResultsListener;
+  on_update: UniffiCallbackInterfaceMatrixSdkFfiSearchServiceResultsListenerMethod0;
+};
 type UniffiCallbackInterfaceMatrixSdkFfiSendQueueListenerMethod0 = (uniffiHandle: bigint, update: Uint8Array) => UniffiResult<void>;
 type UniffiCallbackInterfaceCloneMatrixSdkFfiSendQueueListener = (handle: bigint) => UniffiResult<void>;
 type UniffiCallbackInterfaceFreeMatrixSdkFfiSendQueueListener = (handle: bigint) => void;

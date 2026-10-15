@@ -271,6 +271,9 @@ importers:
       '@vitejs/plugin-react':
         specifier: ^4.7.0
         version: 4.7.0(vite@5.4.21)
+      binaryen:
+        specifier: ^132.0.0
+        version: 132.0.0
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
@@ -1417,6 +1420,10 @@ packages:
   baseline-browser-mapping@2.11.27:
     resolution: {integrity: sha512-ElY12DaROGuan+lMmZ8Cvo/ZUbXPe7Enc/9VU/b1T3Kp4dwytRcNdR8DoSJN5SNJT/CuvcCA0DHDVmMOCePdRQ==}
     engines: {node: '>=6.0.0'}
+    hasBin: true
+
+  binaryen@132.0.0:
+    resolution: {integrity: sha512-4Usg7yEvwO3FMso3Oov6qkOOHSod1IEv+boKkh77kTljM+eNBouqCTbqWswGzbG+vDNO/b/v2C4gfEh1WgB9Lg==}
     hasBin: true
 
   blurhash@2.0.5:
@@ -2849,6 +2856,8 @@ snapshots:
       tslib: 2.8.1
 
   baseline-browser-mapping@2.11.27: {}
+
+  binaryen@132.0.0: {}
 
   blurhash@2.0.5: {}
 

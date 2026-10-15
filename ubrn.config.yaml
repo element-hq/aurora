@@ -1,9 +1,11 @@
 rust:
   repo: https://github.com/matrix-org/matrix-rust-sdk
+  # main as of 2026-09-15, the last commit before the bump to uniffi 0.32
+  # (uniffi-bindgen-react-native supports 0.31). Includes the search service.
   ref: b994f47f1cb5d52b37a15728cbc5ff40286ad5aa
   manifestPath: bindings/matrix-sdk-ffi/Cargo.toml
 web:
   workspace: true
   manifestPath: rust_modules/matrix-rust-sdk/bindings/wasm/Cargo.toml
-  features: ["js", "indexeddb"]
+  features: ["js", "indexeddb", "experimental-search"]
   defaultFeatures: false

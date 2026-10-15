@@ -1,0 +1,157 @@
+From 75971e7f6913af3791b5e8e31cc71de3a2e1d648 Mon Sep 17 00:00:00 2001
+From: David Langley <davidl@element.io>
+Date: Thu, 15 Oct 2026 17:55:20 +0100
+Subject: [PATCH 3/6] Don't build log file support on wasm
+
+tracing-appender 0.2.5 depends on the symlink crate, which doesn't build
+for wasm32, and log files cannot be written in the browser anyway. The
+file layer and the rolling writer are now only built outside wasm; the
+tracing file configuration is accepted but ignored there.
+---
+ bindings/matrix-sdk-ffi/Cargo.toml          |  3 +-
+ bindings/matrix-sdk-ffi/src/platform/mod.rs | 48 +++++++++++++++++----
+ 2 files changed, 42 insertions(+), 9 deletions(-)
+
+diff --git a/bindings/matrix-sdk-ffi/Cargo.toml b/bindings/matrix-sdk-ffi/Cargo.toml
+index 81b041c0c..e3dab0d59 100644
+--- a/bindings/matrix-sdk-ffi/Cargo.toml
++++ b/bindings/matrix-sdk-ffi/Cargo.toml
+@@ -110,7 +110,6 @@ sentry = { workspace = true, optional = true, features = [
+ sentry-tracing = { workspace = true, optional = true }
+ thiserror.workspace = true
+ tracing.workspace = true
+-tracing-appender.workspace = true
+ tracing-core.workspace = true
+ tracing-subscriber = { workspace = true, features = ["env-filter"] }
+ url.workspace = true
+@@ -126,6 +125,8 @@ uniffi = { workspace = true, features = ["wasm-unstable-single-threaded"] }
+ futures-executor.workspace = true
+ 
+ [target.'cfg(not(target_family = "wasm"))'.dependencies]
++# Rolling log files only exist outside the browser.
++tracing-appender.workspace = true
+ async-compat.workspace = true
+ tokio = { workspace = true, features = ["rt-multi-thread", "macros"] }
+ uniffi = { workspace = true, features = ["tokio"] }
+diff --git a/bindings/matrix-sdk-ffi/src/platform/mod.rs b/bindings/matrix-sdk-ffi/src/platform/mod.rs
+index 13d3ae6a4..4080f2c6a 100644
+--- a/bindings/matrix-sdk-ffi/src/platform/mod.rs
++++ b/bindings/matrix-sdk-ffi/src/platform/mod.rs
+@@ -17,8 +17,9 @@ use std::sync::OnceLock;
+ use std::sync::{Arc, atomic::AtomicBool};
+ 
+ use ::tracing::info;
+-#[cfg(feature = "sentry")]
++#[cfg(any(feature = "sentry", target_family = "wasm"))]
+ use ::tracing::warn;
++#[cfg(not(target_family = "wasm"))]
+ use tracing_appender::rolling::Rotation;
+ #[cfg(feature = "sentry")]
+ use tracing_core::Level;
+@@ -33,24 +34,29 @@ use tracing_subscriber::{
+     },
+     layer::{Layered, SubscriberExt as _},
+     registry::LookupSpan,
+-    reload::{self, Handle},
++    reload,
+     util::SubscriberInitExt as _,
+ };
+ 
+ use crate::error::ClientError;
+ 
+ /// Default maximum total size of all log files combined (10MB).
++#[cfg(not(target_family = "wasm"))]
+ const DEFAULT_MAX_TOTAL_SIZE_BYTES: u64 = 10 * 1024 * 1024;
+ 
+ /// Default maximum age of log files in seconds (1 week).
++#[cfg(not(target_family = "wasm"))]
+ const DEFAULT_MAX_AGE_SECONDS: u64 = 7 * 24 * 60 * 60;
+ 
++// Log files cannot be written in the browser.
++#[cfg(not(target_family = "wasm"))]
+ mod rolling_writer;
+ pub mod tracing;
+ 
+ #[cfg(target_os = "android")]
+ mod android_platform;
+ 
++#[cfg(not(target_family = "wasm"))]
+ use rolling_writer::SizeAndDateRollingWriter;
+ 
+ #[cfg(feature = "sentry")]
+@@ -178,7 +184,8 @@ impl<'writer> FormatFields<'writer> for FieldsFormatterForFiles {
+     }
+ }
+ 
+-type ReloadHandle = Handle<
++#[cfg(not(target_family = "wasm"))]
++type ReloadHandle = reload::Handle<
+     tracing_subscriber::fmt::Layer<
+         Layered<EnvFilter, Registry>,
+         FieldsFormatterForFiles,
+@@ -188,9 +195,15 @@ type ReloadHandle = Handle<
+     Layered<EnvFilter, Registry>,
+ >;
+ 
++// No log files on wasm, so there is never anything to reload.
++#[cfg(target_family = "wasm")]
++type ReloadHandle =
++    reload::Handle<tracing_subscriber::layer::Identity, Layered<EnvFilter, Registry>>;
++
+ fn text_layers(
+     config: TracingConfiguration,
+ ) -> (impl Layer<Layered<EnvFilter, Registry>>, Option<ReloadHandle>) {
++    #[cfg(not(target_family = "wasm"))]
+     let (file_layer, reload_handle) = config
+         .write_to_files
+         .map(|c| {
+@@ -198,6 +211,13 @@ fn text_layers(
+             reload::Layer::new(layer)
+         })
+         .unzip();
++    #[cfg(target_family = "wasm")]
++    let (file_layer, reload_handle) = {
++        if config.write_to_files.is_some() {
++            warn!("Ignoring the log file configuration: log files are not supported on wasm");
++        }
++        (None::<tracing_subscriber::layer::Identity>, None::<ReloadHandle>)
++    };
+ 
+     let layers = Layer::and_then(
+         file_layer,
+@@ -242,6 +262,7 @@ fn text_layers(
+     (layers, reload_handle)
+ }
+ 
++#[cfg(not(target_family = "wasm"))]
+ fn make_file_layer(
+     file_configuration: TracingFileConfiguration,
+ ) -> tracing_subscriber::fmt::Layer<
+@@ -740,11 +761,22 @@ pub fn reload_tracing_file_writer(
+         });
+     };
+ 
+-    let layer = make_file_layer(configuration);
+-    reload_handle.reload(layer).map_err(|error| ClientError::Generic {
+-        msg: format!("Failed to reload file config: {error}"),
+-        details: None,
+-    })
++    #[cfg(not(target_family = "wasm"))]
++    {
++        let layer = make_file_layer(configuration);
++        reload_handle.reload(layer).map_err(|error| ClientError::Generic {
++            msg: format!("Failed to reload file config: {error}"),
++            details: None,
++        })
++    }
++    #[cfg(target_family = "wasm")]
++    {
++        let _ = (reload_handle, configuration);
++        Err(ClientError::Generic {
++            msg: "Log files are not supported on wasm".to_owned(),
++            details: None,
++        })
++    }
+ }
+ 
+ #[cfg(not(target_family = "wasm"))]
