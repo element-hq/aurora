@@ -444,7 +444,6 @@ export class TimelineViewModel
             return this.paginating;
         }
         this.paginating = (async () => {
-            this.publish();
             try {
                 const timeline = await this.timelinePromise;
                 do {
@@ -461,6 +460,9 @@ export class TimelineViewModel
             this.paginating = undefined;
             this.publish();
         })();
+        // Show the spinner. Not from inside the function above: that runs up to its first
+        // await before `this.paginating` is set, so the spinner would be left out.
+        this.publish();
         return this.paginating;
     }
 
