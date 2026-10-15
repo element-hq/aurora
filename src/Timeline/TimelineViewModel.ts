@@ -272,6 +272,7 @@ export class TimelineViewModel
         }
 
         let prevEvent: EventTimelineItem | null = null;
+        let seenEvent = false;
         let lastEventItem: Extract<TimelineItem, { kind: "event" }> | null =
             null;
         for (const sdkItem of this.sdkItems) {
@@ -296,10 +297,22 @@ export class TimelineViewModel
                 items.push(item);
                 lastEventItem = item;
                 prevEvent = event;
+                seenEvent = true;
                 continue;
             }
 
             const { virtual } = sdkItem;
+            // Leave out the date separator above the oldest message until we reach the start
+            // of the room. When older messages from the same day load, the SDK replaces it with
+            // a new one above them, so the view can't keep the reader's place by it: the
+            // timeline jumps to the top, which loads more history, and so on forever.
+            if (
+                !seenEvent &&
+                !this.startReached &&
+                VirtualTimelineItem.DateDivider.instanceOf(virtual)
+            ) {
+                continue;
+            }
             // Anything that isn't a message ends the group above it.
             if (lastEventItem) lastEventItem.lastInSection = true;
             lastEventItem = null;
