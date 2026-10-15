@@ -1,7 +1,7 @@
 From 75971e7f6913af3791b5e8e31cc71de3a2e1d648 Mon Sep 17 00:00:00 2001
 From: David Langley <davidl@element.io>
 Date: Thu, 15 Oct 2026 17:55:20 +0100
-Subject: [PATCH 3/6] Don't build log file support on wasm
+Subject: [PATCH 03/11] Don't build log file support on wasm
 
 tracing-appender 0.2.5 depends on the symlink crate, which doesn't build
 for wasm32, and log files cannot be written in the browser anyway. The
@@ -155,3 +155,6 @@ index 13d3ae6a4..4080f2c6a 100644
  }
  
  #[cfg(not(target_family = "wasm"))]
+-- 
+2.55.0
+

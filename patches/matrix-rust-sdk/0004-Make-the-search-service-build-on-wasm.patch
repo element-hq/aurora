@@ -1,7 +1,7 @@
 From e998b5a65c498907ce2ae5a0f7029316c87349ed Mon Sep 17 00:00:00 2001
 From: David Langley <davidl@element.io>
 Date: Thu, 15 Oct 2026 17:55:20 +0100
-Subject: [PATCH 4/6] Make the search service build on wasm
+Subject: [PATCH 04/11] Make the search service build on wasm
 
 - The boxed result streams don't require Send on wasm, where futures
   aren't Send and everything runs on one thread.
@@ -98,3 +98,6 @@ index 7627d5490..6ca65f068 100644
  /// A cursor over one room's score-descending search results, used while merging
  /// results across rooms.
  struct RoomStreamCursor {
+-- 
+2.55.0
+

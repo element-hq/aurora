@@ -1,7 +1,7 @@
 From 74757e75d0a02cc4a15f5f1899b216373ed65224 Mon Sep 17 00:00:00 2001
 From: David Langley <davidl@element.io>
 Date: Thu, 15 Oct 2026 17:26:34 +0100
-Subject: [PATCH 1/6] Build the search index on wasm (spike)
+Subject: [PATCH 01/11] Build the search index on wasm (spike)
 
 - matrix-sdk-search: on wasm, tantivy without mmap or zstd and with its
   `single-threaded` feature; the on-disk/encrypted index builders are
@@ -330,3 +330,6 @@ index e22a3f4b8..e6b21937e 100644
              SearchIndexStoreKind::InMemory => RoomIndexBuilder::new_in_memory(room_id).build(),
          };
          Ok(index)
+-- 
+2.55.0
+

@@ -1,0 +1,550 @@
+From 9cefc074ea06b30844162dfdc2f88a3e6e791423 Mon Sep 17 00:00:00 2001
+From: David Langley <davidl@element.io>
+Date: Thu, 15 Oct 2026 21:02:39 +0100
+Subject: [PATCH 11/11] Add an IndexedDB search index store for the web
+
+`IndexeddbSearchStore` implements `SearchIndexFileStore`: the files of
+each room's index, and values such as the reindex marker, in a
+`<prefix>::search` database. The files are opaque, already encrypted
+by the index when it is.
+
+On the web, `ClientBuilder::search_index_store` and the FFI's
+`with_search_index_store` take the path as the database prefix: the
+client opens the store and the indexes are kept in memory and saved
+through it, so the API is the same on every platform.
+---
+ Cargo.lock                                    |   3 +
+ bindings/matrix-sdk-ffi/src/client_builder.rs |  11 +-
+ crates/matrix-sdk-indexeddb/Cargo.toml        |   2 +
+ crates/matrix-sdk-indexeddb/src/lib.rs        |  11 +
+ .../src/search_store/mod.rs                   | 324 ++++++++++++++++++
+ crates/matrix-sdk/Cargo.toml                  |   2 +-
+ crates/matrix-sdk/src/client/builder/mod.rs   |  33 +-
+ 7 files changed, 380 insertions(+), 6 deletions(-)
+ create mode 100644 crates/matrix-sdk-indexeddb/src/search_store/mod.rs
+
+diff --git a/Cargo.lock b/Cargo.lock
+index f312a8515..7466138c2 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -3785,6 +3785,7 @@ dependencies = [
+  "url",
+  "uuid",
+  "vergen-gitcl",
++ "web-sys",
+  "zeroize",
+  "zxcvbn",
+ ]
+@@ -3816,6 +3817,7 @@ dependencies = [
+  "matrix-sdk-base",
+  "matrix-sdk-common",
+  "matrix-sdk-crypto",
++ "matrix-sdk-search",
+  "matrix-sdk-store-encryption",
+  "matrix-sdk-test",
+  "matrix_indexed_db_futures",
+@@ -3891,6 +3893,7 @@ name = "matrix-sdk-search"
+ version = "0.18.0"
+ dependencies = [
+  "aes",
++ "async-trait",
+  "ctr",
+  "hkdf",
+  "hmac",
+diff --git a/bindings/matrix-sdk-ffi/src/client_builder.rs b/bindings/matrix-sdk-ffi/src/client_builder.rs
+index f6a4948f8..0128ac3a8 100644
+--- a/bindings/matrix-sdk-ffi/src/client_builder.rs
++++ b/bindings/matrix-sdk-ffi/src/client_builder.rs
+@@ -15,8 +15,10 @@
+ // Allow UniFFI to use methods marked as `#[deprecated]`.
+ #![allow(deprecated)]
+ 
++#[cfg(all(feature = "experimental-search", not(target_family = "wasm")))]
++use std::fs;
+ #[cfg(feature = "experimental-search")]
+-use std::{fs, path::PathBuf};
++use std::path::PathBuf;
+ use std::{num::NonZeroUsize, sync::Arc, time::Duration};
+ 
+ #[cfg(feature = "experimental-x509-identity-verification")]
+@@ -532,7 +534,9 @@ impl ClientBuilder {
+ 
+         #[cfg(feature = "experimental-search")]
+         if let Some(search_index_store) = builder.search_index_store {
+-            // Create the search index directory.
++            // Create the search index directory. On the web, the path names
++            // an IndexedDB database instead, which the client opens.
++            #[cfg(not(target_family = "wasm"))]
+             match search_index_store {
+                 SearchIndexStoreKind::UnencryptedDirectory(ref path)
+                 | SearchIndexStoreKind::EncryptedDirectory(ref path, _) => {
+@@ -903,7 +907,8 @@ impl ClientBuilder {
+     /// be later queried for search.
+     ///
+     /// `path` is the directory where the search index will be stored. It must
+-    /// be unique per session.
++    /// be unique per session. On the web, where there is no filesystem, it
++    /// names the IndexedDB database the index is saved in instead.
+     ///
+     /// `key` is an optional high-entropy key to encrypt the search index at
+     /// rest. If `None`, the search index will be stored unencrypted.
+diff --git a/crates/matrix-sdk-indexeddb/Cargo.toml b/crates/matrix-sdk-indexeddb/Cargo.toml
+index 334a4ceca..f37b92367 100644
+--- a/crates/matrix-sdk-indexeddb/Cargo.toml
++++ b/crates/matrix-sdk-indexeddb/Cargo.toml
+@@ -20,6 +20,7 @@ default = ["e2e-encryption", "state-store", "event-cache-store", "media-store"]
+ event-cache-store = ["dep:matrix-sdk-base", "media-store", "indexed-type-serializer"]
+ media-store = ["dep:matrix-sdk-base", "indexed-type-serializer"]
+ state-store = ["dep:matrix-sdk-base", "growable-bloom-filter", "safe-encode-traits"]
++search-store = ["dep:matrix-sdk-search"]
+ e2e-encryption = ["dep:matrix-sdk-base", "dep:matrix-sdk-crypto", "safe-encode-serializer"]
+ safe-encode-traits = []
+ safe-encode-serializer = ["dep:matrix-sdk-crypto", "safe-encode-traits"]
+@@ -48,6 +49,7 @@ indexed_db_futures = { workspace = true, features = [
+ js-sys.workspace = true
+ matrix-sdk-base = { workspace = true, features = ["js"], optional = true }
+ matrix-sdk-crypto = { workspace = true, features = ["js"], optional = true }
++matrix-sdk-search = { workspace = true, optional = true }
+ matrix-sdk-store-encryption.workspace = true
+ rmp-serde.workspace = true
+ ruma.workspace = true
+diff --git a/crates/matrix-sdk-indexeddb/src/lib.rs b/crates/matrix-sdk-indexeddb/src/lib.rs
+index 755f25dc6..661cda72f 100644
+--- a/crates/matrix-sdk-indexeddb/src/lib.rs
++++ b/crates/matrix-sdk-indexeddb/src/lib.rs
+@@ -11,6 +11,8 @@ mod error;
+ mod event_cache_store;
+ #[cfg(feature = "media-store")]
+ mod media_store;
++#[cfg(feature = "search-store")]
++mod search_store;
+ mod serializer;
+ #[cfg(feature = "state-store")]
+ mod state_store;
+@@ -33,6 +35,10 @@ pub use crate::event_cache_store::{
+ pub use crate::media_store::{
+     IndexeddbMediaStore, IndexeddbMediaStoreBuilder, IndexeddbMediaStoreError,
+ };
++#[cfg(feature = "search-store")]
++pub use crate::search_store::{
++    IndexeddbSearchStore, IndexeddbSearchStoreBuilder, IndexeddbSearchStoreError,
++};
+ 
+ /// Structure containing implementations of every type
+ /// of store using IndexedDB for persistent storage.
+@@ -241,4 +247,9 @@ pub enum OpenStoreError {
+     #[cfg(feature = "media-store")]
+     #[error(transparent)]
+     Media(#[from] IndexeddbMediaStoreError),
++
++    /// An error occurred with the search store implementation.
++    #[cfg(feature = "search-store")]
++    #[error(transparent)]
++    Search(#[from] IndexeddbSearchStoreError),
+ }
+diff --git a/crates/matrix-sdk-indexeddb/src/search_store/mod.rs b/crates/matrix-sdk-indexeddb/src/search_store/mod.rs
+new file mode 100644
+index 000000000..6adf8b5cb
+--- /dev/null
++++ b/crates/matrix-sdk-indexeddb/src/search_store/mod.rs
+@@ -0,0 +1,324 @@
++// Copyright 2026 The Matrix.org Foundation C.I.C.
++//
++// Licensed under the Apache License, Version 2.0 (the "License");
++// you may not use this file except in compliance with the License.
++// You may obtain a copy of the License at
++//
++//     http://www.apache.org/licenses/LICENSE-2.0
++//
++// Unless required by applicable law or agreed to in writing, software
++// distributed under the License is distributed on an "AS IS" BASIS,
++// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++// See the License for the specific language governing permissions and
++// limitations under the License
++
++//! An IndexedDB implementation of [`SearchIndexFileStore`]: where the search
++//! indexes, kept in memory in the browser, save their files.
++//!
++//! Files are opaque blobs, already encrypted by the index when it is.
++
++use std::rc::Rc;
++
++use indexed_db_futures::{
++    Build, BuildSerde, KeyRange, database::Database, prelude::QuerySource,
++    transaction::TransactionMode,
++};
++use matrix_sdk_search::store::{
++    IndexFile, IndexFileChanges, SearchIndexFileStore, SearchIndexStoreError,
++};
++use ruma::RoomId;
++use serde::{Deserialize, Serialize};
++use thiserror::Error;
++
++/// The version of the database schema.
++const VERSION: u32 = 1;
++
++mod keys {
++    /// The files of the room indexes, keyed by room id and file name.
++    pub const FILES: &str = "files";
++    /// Values kept alongside the indexes, e.g. markers, keyed by name.
++    pub const VALUES: &str = "values";
++    /// The key path of both object stores.
++    pub const KEY_PATH: &str = "id";
++    /// Separates the room id from the file name in a file's key: a control
++    /// character, which neither contains.
++    pub const SEPARATOR: char = '\u{1f}';
++}
++
++/// A file of a room's index, as stored.
++#[derive(Debug, Serialize, Deserialize)]
++struct FileRecord {
++    /// `<room id><SEPARATOR><file name>`
++    id: String,
++    #[serde(with = "serde_bytes")]
++    data: Vec<u8>,
++}
++
++/// A value kept alongside the indexes, as stored.
++#[derive(Debug, Serialize, Deserialize)]
++struct ValueRecord {
++    id: String,
++    #[serde(with = "serde_bytes")]
++    value: Vec<u8>,
++}
++
++fn file_id(room_id: &RoomId, name: &str) -> String {
++    format!("{room_id}{}{name}", keys::SEPARATOR)
++}
++
++/// The keys of every file of a room's index.
++fn room_files(room_id: &RoomId) -> KeyRange<String> {
++    let prefix = format!("{room_id}{}", keys::SEPARATOR);
++    KeyRange::Bound(prefix.clone(), false, format!("{prefix}\u{ffff}"), false)
++}
++
++/// An error from the [`IndexeddbSearchStore`].
++///
++/// Carries no JavaScript values, so it can be sent across threads like the
++/// other stores' errors.
++#[derive(Debug, Error)]
++pub enum IndexeddbSearchStoreError {
++    /// The database couldn't be opened.
++    #[error("unable to open database: {0}")]
++    UnableToOpenDatabase(String),
++    /// A DOM exception from IndexedDB.
++    #[error("DomException {name} ({code}): {message}")]
++    DomException {
++        /// The exception's name.
++        name: String,
++        /// The exception's message.
++        message: String,
++        /// The exception's code.
++        code: u16,
++    },
++    /// A record couldn't be serialized or deserialized.
++    #[error("serialization: {0}")]
++    Serialization(String),
++    /// Any other error from IndexedDB.
++    #[error("backend: {0}")]
++    Backend(String),
++}
++
++impl From<web_sys::DomException> for IndexeddbSearchStoreError {
++    fn from(value: web_sys::DomException) -> Self {
++        Self::DomException { name: value.name(), message: value.message(), code: value.code() }
++    }
++}
++
++impl From<indexed_db_futures::error::Error> for IndexeddbSearchStoreError {
++    fn from(value: indexed_db_futures::error::Error) -> Self {
++        use indexed_db_futures::error::Error;
++        match value {
++            Error::DomException(e) => web_sys::DomException::from(e).into(),
++            Error::Serialisation(e) => Self::Serialization(e.to_string()),
++            Error::MissingData(e) => Self::Backend(e.to_string()),
++            Error::Unknown(e) => Self::Backend(e.to_string()),
++        }
++    }
++}
++
++impl From<indexed_db_futures::error::SerialisationError> for IndexeddbSearchStoreError {
++    fn from(value: indexed_db_futures::error::SerialisationError) -> Self {
++        Self::Serialization(value.to_string())
++    }
++}
++
++impl From<indexed_db_futures::error::OpenDbError> for IndexeddbSearchStoreError {
++    fn from(value: indexed_db_futures::error::OpenDbError) -> Self {
++        use indexed_db_futures::error::OpenDbError::*;
++        match value {
++            VersionZero | UnsupportedEnvironment | NullFactory => {
++                Self::UnableToOpenDatabase(value.to_string())
++            }
++            Base(e) => e.into(),
++        }
++    }
++}
++
++impl From<IndexeddbSearchStoreError> for SearchIndexStoreError {
++    fn from(value: IndexeddbSearchStoreError) -> Self {
++        SearchIndexStoreError::backend(value)
++    }
++}
++
++/// A type for conveniently building an [`IndexeddbSearchStore`].
++pub struct IndexeddbSearchStoreBuilder {
++    /// The name of the IndexedDB database which will be opened.
++    database_name: String,
++}
++
++impl Default for IndexeddbSearchStoreBuilder {
++    fn default() -> Self {
++        Self { database_name: Self::DEFAULT_DATABASE_NAME.to_owned() }
++    }
++}
++
++impl IndexeddbSearchStoreBuilder {
++    /// The default name of the IndexedDB database used to back the
++    /// [`IndexeddbSearchStore`].
++    pub const DEFAULT_DATABASE_NAME: &'static str = "search";
++
++    /// Create a new [`IndexeddbSearchStoreBuilder`] where the database name is
++    /// constructed by joining the given prefix with
++    /// [`Self::DEFAULT_DATABASE_NAME`] and separated by `::`.
++    pub fn with_prefix(prefix: &str) -> Self {
++        Self { database_name: format!("{}::{}", prefix, Self::DEFAULT_DATABASE_NAME) }
++    }
++
++    /// Sets the name of the IndexedDB database which will be opened. This
++    /// defaults to [`Self::DEFAULT_DATABASE_NAME`].
++    pub fn database_name(mut self, name: String) -> Self {
++        self.database_name = name;
++        self
++    }
++
++    /// Opens the IndexedDB database with the provided name, creating it if
++    /// needed, and builds the [`IndexeddbSearchStore`] with it.
++    pub async fn build(self) -> Result<IndexeddbSearchStore, IndexeddbSearchStoreError> {
++        let database = Database::open(&self.database_name)
++            .with_version(VERSION)
++            .with_on_upgrade_needed(|event, transaction| {
++                if event.old_version() < 1.0 {
++                    let db = transaction.db();
++                    db.create_object_store(keys::FILES)
++                        .with_key_path(keys::KEY_PATH.into())
++                        .build()?;
++                    db.create_object_store(keys::VALUES)
++                        .with_key_path(keys::KEY_PATH.into())
++                        .build()?;
++                }
++                Ok(())
++            })
++            .await?;
++        Ok(IndexeddbSearchStore { inner: Rc::new(database) })
++    }
++}
++
++/// An IndexedDB implementation of [`SearchIndexFileStore`], for the search
++/// indexes in the browser.
++#[derive(Debug, Clone)]
++pub struct IndexeddbSearchStore {
++    /// A handle to the IndexedDB database.
++    inner: Rc<Database>,
++}
++
++impl IndexeddbSearchStore {
++    /// Provides a type with which to conveniently build an
++    /// [`IndexeddbSearchStore`].
++    pub fn builder() -> IndexeddbSearchStoreBuilder {
++        IndexeddbSearchStoreBuilder::default()
++    }
++
++    async fn load_room_files(
++        &self,
++        room_id: &RoomId,
++    ) -> Result<Vec<IndexFile>, IndexeddbSearchStoreError> {
++        let transaction =
++            self.inner.transaction(keys::FILES).with_mode(TransactionMode::Readonly).build()?;
++        let records = transaction
++            .object_store(keys::FILES)?
++            .get_all()
++            .with_query::<String, _>(room_files(room_id))
++            .serde()?
++            .await?
++            .collect::<Result<Vec<FileRecord>, _>>()?;
++
++        let prefix_len = file_id(room_id, "").len();
++        Ok(records
++            .into_iter()
++            .map(|record| IndexFile { name: record.id[prefix_len..].to_owned(), data: record.data })
++            .collect())
++    }
++
++    async fn save_room_files(
++        &self,
++        room_id: &RoomId,
++        changes: IndexFileChanges,
++    ) -> Result<(), IndexeddbSearchStoreError> {
++        let transaction =
++            self.inner.transaction(keys::FILES).with_mode(TransactionMode::Readwrite).build()?;
++        let store = transaction.object_store(keys::FILES)?;
++
++        for name in changes.delete {
++            store.delete::<String, _>(KeyRange::Only(file_id(room_id, &name))).serde()?.await?;
++        }
++        for file in changes.put {
++            store.put(&FileRecord { id: file_id(room_id, &file.name), data: file.data }).serde()?.await?;
++        }
++
++        transaction.commit().await?;
++        Ok(())
++    }
++
++    async fn delete_room_files(&self, room_id: &RoomId) -> Result<(), IndexeddbSearchStoreError> {
++        let transaction =
++            self.inner.transaction(keys::FILES).with_mode(TransactionMode::Readwrite).build()?;
++        transaction
++            .object_store(keys::FILES)?
++            .delete::<String, _>(room_files(room_id))
++            .serde()?
++            .await?;
++        transaction.commit().await?;
++        Ok(())
++    }
++
++    async fn get_stored_value(
++        &self,
++        key: &str,
++    ) -> Result<Option<Vec<u8>>, IndexeddbSearchStoreError> {
++        let transaction =
++            self.inner.transaction(keys::VALUES).with_mode(TransactionMode::Readonly).build()?;
++        let mut records = transaction
++            .object_store(keys::VALUES)?
++            .get_all()
++            .with_query::<String, _>(KeyRange::Only(key.to_owned()))
++            .serde()?
++            .await?
++            .collect::<Result<Vec<ValueRecord>, _>>()?;
++        Ok(records.pop().map(|record| record.value))
++    }
++
++    async fn set_stored_value(
++        &self,
++        key: &str,
++        value: Vec<u8>,
++    ) -> Result<(), IndexeddbSearchStoreError> {
++        let transaction =
++            self.inner.transaction(keys::VALUES).with_mode(TransactionMode::Readwrite).build()?;
++        transaction
++            .object_store(keys::VALUES)?
++            .put(&ValueRecord { id: key.to_owned(), value })
++            .serde()?
++            .await?;
++        transaction.commit().await?;
++        Ok(())
++    }
++}
++
++#[cfg(target_family = "wasm")]
++#[async_trait::async_trait(?Send)]
++impl SearchIndexFileStore for IndexeddbSearchStore {
++    async fn load_room(&self, room_id: &RoomId) -> Result<Vec<IndexFile>, SearchIndexStoreError> {
++        Ok(self.load_room_files(room_id).await?)
++    }
++
++    async fn save_room(
++        &self,
++        room_id: &RoomId,
++        changes: IndexFileChanges,
++    ) -> Result<(), SearchIndexStoreError> {
++        Ok(self.save_room_files(room_id, changes).await?)
++    }
++
++    async fn delete_room(&self, room_id: &RoomId) -> Result<(), SearchIndexStoreError> {
++        Ok(self.delete_room_files(room_id).await?)
++    }
++
++    async fn get_value(&self, key: &str) -> Result<Option<Vec<u8>>, SearchIndexStoreError> {
++        Ok(self.get_stored_value(key).await?)
++    }
++
++    async fn set_value(&self, key: &str, value: Vec<u8>) -> Result<(), SearchIndexStoreError> {
++        Ok(self.set_stored_value(key, value).await?)
++    }
++}
+diff --git a/crates/matrix-sdk/Cargo.toml b/crates/matrix-sdk/Cargo.toml
+index e7522d756..8cc57539d 100644
+--- a/crates/matrix-sdk/Cargo.toml
++++ b/crates/matrix-sdk/Cargo.toml
+@@ -92,7 +92,7 @@ unstable-msc4274 = ["ruma/unstable-msc4274", "matrix-sdk-base/unstable-msc4274"]
+ # Add support for user status profile fields (m.status, m.call).
+ unstable-msc4426 = ["matrix-sdk-base/unstable-msc4426"]
+ 
+-experimental-search = ["matrix-sdk-search"]
++experimental-search = ["matrix-sdk-search", "matrix-sdk-indexeddb?/search-store"]
+ 
+ experimental-element-recent-emojis = ["matrix-sdk-base/experimental-element-recent-emojis"]
+ 
+diff --git a/crates/matrix-sdk/src/client/builder/mod.rs b/crates/matrix-sdk/src/client/builder/mod.rs
+index c01dbc1d7..67a5dd9d0 100644
+--- a/crates/matrix-sdk/src/client/builder/mod.rs
++++ b/crates/matrix-sdk/src/client/builder/mod.rs
+@@ -617,7 +617,10 @@ impl ClientBuilder {
+         self
+     }
+ 
+-    /// The base directory in which each room's index directory will be stored.
++    /// Where the message search index is stored: the base directory in which
++    /// each room's index directory will be stored, or, on the web, the
++    /// IndexedDB database in which the indexes, kept in memory, save their
++    /// files.
+     #[cfg(feature = "experimental-search")]
+     pub fn search_index_store(mut self, kind: SearchIndexStoreKind) -> Self {
+         self.search_index_store_kind = kind;
+@@ -739,9 +742,14 @@ impl ClientBuilder {
+         let latest_events = OnceCell::new();
+         let thread_subscriptions_catchup = OnceCell::new();
+ 
++        #[cfg(feature = "experimental-search")]
++        let search_index_store_kind = self.search_index_store_kind;
++        #[cfg(all(feature = "experimental-search", feature = "indexeddb", target_family = "wasm"))]
++        let search_index_store_kind =
++            open_indexeddb_search_index_store(search_index_store_kind).await?;
+         #[cfg(feature = "experimental-search")]
+         let search_index =
+-            SearchIndex::new(Arc::new(Mutex::new(HashMap::new())), self.search_index_store_kind);
++            SearchIndex::new(Arc::new(Mutex::new(HashMap::new())), search_index_store_kind);
+ 
+         let inner = ClientInner::new(
+             auth_ctx,
+@@ -840,6 +848,27 @@ async fn build_store_config(
+     Ok(store_config)
+ }
+ 
++/// On the web there is no filesystem: a search index "directory" names an
++/// IndexedDB database instead, in which the indexes, kept in memory, save
++/// their files.
++#[cfg(all(feature = "experimental-search", feature = "indexeddb", target_family = "wasm"))]
++async fn open_indexeddb_search_index_store(
++    kind: SearchIndexStoreKind,
++) -> Result<SearchIndexStoreKind, ClientBuildError> {
++    let (path, key) = match kind {
++        SearchIndexStoreKind::UnencryptedDirectory(path) => (path, None),
++        SearchIndexStoreKind::EncryptedDirectory(path, key) => (path, Some(key)),
++        other => return Ok(other),
++    };
++    let store = matrix_sdk_indexeddb::IndexeddbSearchStoreBuilder::with_prefix(
++        &path.to_string_lossy(),
++    )
++    .build()
++    .await
++    .map_err(matrix_sdk_indexeddb::OpenStoreError::from)?;
++    Ok(SearchIndexStoreKind::Store { store: Arc::new(store), key })
++}
++
+ // The indexeddb stores only implement `IntoStateStore` and `IntoCryptoStore` on
+ // wasm32, so this only compiles there.
+ #[cfg(all(target_family = "wasm", feature = "indexeddb"))]
+-- 
+2.55.0
+

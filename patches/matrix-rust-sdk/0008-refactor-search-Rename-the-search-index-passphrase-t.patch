@@ -1,0 +1,285 @@
+From 2dda0d6edd43d9d173df11004b4fe92a40bb55f2 Mon Sep 17 00:00:00 2001
+From: Stefan Ceriu <stefanc@matrix.org>
+Date: Tue, 13 Oct 2026 16:46:04 +0300
+Subject: [PATCH 08/11] refactor(search): Rename the search index passphrase to
+ key
+
+It must be a high-entropy key now that it's no longer stretched, so name it after what it is, including in the FFI's ClientBuilder::with_search_index_store.
+
+(cherry picked from commit f3729df055d95dad35ce20864e40433d04c4cafc)
+---
+ .../changelog.d/7268.changed.md               |  2 +
+ bindings/matrix-sdk-ffi/src/client_builder.rs | 10 ++---
+ .../changelog.d/7268.changed.md               |  6 +--
+ .../src/encrypted/encrypted_dir.rs            | 39 +++++++++----------
+ crates/matrix-sdk-search/src/index/builder.rs | 12 +++---
+ crates/matrix-sdk-search/src/index/mod.rs     |  8 ++--
+ crates/matrix-sdk/src/search_index/mod.rs     | 12 +++---
+ 7 files changed, 43 insertions(+), 46 deletions(-)
+ create mode 100644 bindings/matrix-sdk-ffi/changelog.d/7268.changed.md
+
+diff --git a/bindings/matrix-sdk-ffi/changelog.d/7268.changed.md b/bindings/matrix-sdk-ffi/changelog.d/7268.changed.md
+new file mode 100644
+index 000000000..12b7aeed5
+--- /dev/null
++++ b/bindings/matrix-sdk-ffi/changelog.d/7268.changed.md
+@@ -0,0 +1,2 @@
++[**breaking**] `ClientBuilder::with_search_index_store`'s `password` parameter is renamed to `key`: it must be a
++high-entropy key, as it is no longer stretched.
+diff --git a/bindings/matrix-sdk-ffi/src/client_builder.rs b/bindings/matrix-sdk-ffi/src/client_builder.rs
+index 31fadbb6a..f6a4948f8 100644
+--- a/bindings/matrix-sdk-ffi/src/client_builder.rs
++++ b/bindings/matrix-sdk-ffi/src/client_builder.rs
+@@ -905,20 +905,20 @@ impl ClientBuilder {
+     /// `path` is the directory where the search index will be stored. It must
+     /// be unique per session.
+     ///
+-    /// `password` is an optional password to encrypt the search index at rest.
+-    /// If `None`, the search index will be stored unencrypted.
++    /// `key` is an optional high-entropy key to encrypt the search index at
++    /// rest. If `None`, the search index will be stored unencrypted.
+     pub fn with_search_index_store(
+         self: Arc<Self>,
+         path: String,
+-        password: Option<String>,
++        key: Option<String>,
+     ) -> Arc<Self> {
+         let mut builder = unwrap_or_clone_arc(self);
+ 
+         // Note: creation of the path is deferred to later.
+         let path = PathBuf::from(path);
+ 
+-        let kind = if let Some(password) = password {
+-            SearchIndexStoreKind::EncryptedDirectory(path, password)
++        let kind = if let Some(key) = key {
++            SearchIndexStoreKind::EncryptedDirectory(path, key)
+         } else {
+             SearchIndexStoreKind::UnencryptedDirectory(path)
+         };
+diff --git a/crates/matrix-sdk-search/changelog.d/7268.changed.md b/crates/matrix-sdk-search/changelog.d/7268.changed.md
+index 97417315f..83fffd555 100644
+--- a/crates/matrix-sdk-search/changelog.d/7268.changed.md
++++ b/crates/matrix-sdk-search/changelog.d/7268.changed.md
+@@ -1,3 +1,3 @@
+-Encrypted room indexes no longer stretch the passphrase with PBKDF2, which made opening each index slow: the
+-passphrase must now be a high-entropy key. Existing encrypted indexes, and any index that can't be opened (e.g. after
+-a passphrase change), are deleted and recreated.
++Encrypted room indexes no longer stretch their key with PBKDF2, which made opening each index slow: the key, formerly
++called a passphrase, must now be a high-entropy key. Existing encrypted indexes, and any index that can't be opened
++(e.g. after a key change), are deleted and recreated.
+diff --git a/crates/matrix-sdk-search/src/encrypted/encrypted_dir.rs b/crates/matrix-sdk-search/src/encrypted/encrypted_dir.rs
+index 033d9b7b7..5a947f01c 100644
+--- a/crates/matrix-sdk-search/src/encrypted/encrypted_dir.rs
++++ b/crates/matrix-sdk-search/src/encrypted/encrypted_dir.rs
+@@ -77,12 +77,12 @@ impl IntoTvError<OpenWriteError> for IoError {
+ /// A Directory implementation that wraps a MmapDirectory and adds [AES][aes]
+ /// based encryption to the file read/write operations.
+ ///
+-/// The passphrase must be a high-entropy key: it is expanded, without any key
++/// The key must be a high-entropy key: it is expanded, without any key
+ /// stretching, into a 256 bit encryption key and a 256 bit MAC key using
+ /// [HKDF][hkdf]:
+ ///
+ /// ```text
+-///     encryption_key, mac_key = HKDF(SHA512, passphrase, "", 512)
++///     encryption_key, mac_key = HKDF(SHA512, key, "", 512)
+ /// ```
+ ///
+ /// Those two keys are used to encrypt and authenticate the Tantivy files, using
+@@ -117,27 +117,24 @@ impl EncryptedMmapDirectory {
+     /// # Arguments
+     ///
+     /// - `path` - The path where the directory should reside in.
+-    /// - `passphrase` - The high-entropy key used to encrypt the directory.
++    /// - `key` - The high-entropy key used to encrypt the directory.
+     ///
+-    /// Opening a directory with a different passphrase than the one it was
+-    /// created with succeeds, but reading its files will then fail.
+-    pub fn open_or_create<P: AsRef<Path>>(
+-        path: P,
+-        passphrase: &str,
+-    ) -> Result<Self, OpenDirectoryError> {
++    /// Opening a directory with a different key than the one it was created
++    /// with succeeds, but reading its files will then fail.
++    pub fn open_or_create<P: AsRef<Path>>(path: P, key: &str) -> Result<Self, OpenDirectoryError> {
+         let path = path.as_ref();
+ 
+-        if passphrase.is_empty() {
+-            return Err(IoError::other("empty passphrase").into_tv_err(path));
++        if key.is_empty() {
++            return Err(IoError::other("empty key").into_tv_err(path));
+         }
+ 
+         create_dir_all(path).map_err(|err| err.into_tv_err(path))?;
+ 
+-        // Expand the passphrase into an encryption and MAC key.
++        // Expand the key into an encryption and MAC key.
+         let mut hkdf_result = Zeroizing::new([0u8; KEY_SIZE * 2]);
+-        Hkdf::<Sha512>::new(None, passphrase.as_bytes())
++        Hkdf::<Sha512>::new(None, key.as_bytes())
+             .expand(&[], &mut *hkdf_result)
+-            .map_err(|e| IoError::other(format!("unable to expand the passphrase: {e:?}")))
++            .map_err(|e| IoError::other(format!("unable to expand the key: {e:?}")))
+             .map_err(|err| err.into_tv_err(path))?;
+         let (encryption_key, mac_key) = hkdf_result.split_at(KEY_SIZE);
+ 
+@@ -283,32 +280,32 @@ mod tests {
+         let tmpdir = tempdir().unwrap();
+         let file = Path::new("file");
+ 
+-        let dir = EncryptedMmapDirectory::open_or_create(tmpdir.path(), "wordpass")
++        let dir = EncryptedMmapDirectory::open_or_create(tmpdir.path(), "key")
+             .expect("Can't create a new store");
+         dir.atomic_write(file, b"data").unwrap();
+         drop(dir);
+ 
+-        let dir = EncryptedMmapDirectory::open_or_create(tmpdir.path(), "wordpass")
++        let dir = EncryptedMmapDirectory::open_or_create(tmpdir.path(), "key")
+             .expect("Can't open the existing store");
+         assert_eq!(dir.atomic_read(file).unwrap(), b"data");
+         drop(dir);
+ 
+-        let dir = EncryptedMmapDirectory::open_or_create(tmpdir.path(), "password").unwrap();
+-        assert!(dir.atomic_read(file).is_err(), "Read a file with the wrong passphrase");
++        let dir = EncryptedMmapDirectory::open_or_create(tmpdir.path(), "another key").unwrap();
++        assert!(dir.atomic_read(file).is_err(), "Read a file with the wrong key");
+     }
+ 
+     #[test]
+-    fn create_store_with_empty_passphrase() {
++    fn create_store_with_empty_key() {
+         let tmpdir = tempdir().unwrap();
+         let dir = EncryptedMmapDirectory::open_or_create(tmpdir.path(), "");
+-        assert!(dir.is_err(), "Created a store with an empty passphrase");
++        assert!(dir.is_err(), "Created a store with an empty key");
+     }
+ 
+     #[test]
+     fn create_store_in_nonexistent_directory() {
+         let tmpdir = tempdir().unwrap();
+         let nested_path = tmpdir.path().join("nested").join("directory");
+-        let dir = EncryptedMmapDirectory::open_or_create(&nested_path, "password")
++        let dir = EncryptedMmapDirectory::open_or_create(&nested_path, "key")
+             .expect("Should create store in non-existent nested directory");
+         drop(dir);
+     }
+diff --git a/crates/matrix-sdk-search/src/index/builder.rs b/crates/matrix-sdk-search/src/index/builder.rs
+index 7983cba87..fc7668818 100644
+--- a/crates/matrix-sdk-search/src/index/builder.rs
++++ b/crates/matrix-sdk-search/src/index/builder.rs
+@@ -63,12 +63,12 @@ impl PhysicalRoomIndexBuilder {
+         }
+     }
+ 
+-    /// Make an encrypted index
+-    pub fn encrypted<P: Into<String>>(&self, password: P) -> EncryptedPhysicalRoomIndexBuilder {
++    /// Make an index encrypted with the given high-entropy key
++    pub fn encrypted<K: Into<String>>(&self, key: K) -> EncryptedPhysicalRoomIndexBuilder {
+         EncryptedPhysicalRoomIndexBuilder {
+             path: self.path.clone(),
+             room_id: self.room_id.clone(),
+-            password: Zeroizing::new(password.into()),
++            key: Zeroizing::new(key.into()),
+         }
+     }
+ }
+@@ -111,7 +111,7 @@ impl UnencryptedPhysicalRoomIndexBuilder {
+ pub struct EncryptedPhysicalRoomIndexBuilder {
+     path: PathBuf,
+     room_id: OwnedRoomId,
+-    password: Zeroizing<String>,
++    key: Zeroizing<String>,
+ }
+ 
+ #[cfg(not(target_family = "wasm"))]
+@@ -119,7 +119,7 @@ impl EncryptedPhysicalRoomIndexBuilder {
+     /// Build the [`RoomIndex`].
+     ///
+     /// An existing index that can't be opened, e.g. because it was encrypted
+-    /// with another passphrase or in an older format, is deleted and recreated.
++    /// with another key or in an older format, is deleted and recreated.
+     pub fn build(&self) -> Result<RoomIndex, IndexError> {
+         let path = self.path.join(self.room_id.as_str());
+ 
+@@ -133,7 +133,7 @@ impl EncryptedPhysicalRoomIndexBuilder {
+     }
+ 
+     fn open(&self, path: &Path) -> Result<RoomIndex, IndexError> {
+-        let mmap_dir = EncryptedMmapDirectory::open_or_create(path, &self.password)?;
++        let mmap_dir = EncryptedMmapDirectory::open_or_create(path, &self.key)?;
+         let schema = RoomMessageSchema::new();
+         let index = Index::open_or_create(mmap_dir, schema.as_tantivy_schema())?;
+         Ok(RoomIndex::new_with(index, schema, &self.room_id))
+diff --git a/crates/matrix-sdk-search/src/index/mod.rs b/crates/matrix-sdk-search/src/index/mod.rs
+index 85686d990..a47d2aca3 100644
+--- a/crates/matrix-sdk-search/src/index/mod.rs
++++ b/crates/matrix-sdk-search/src/index/mod.rs
+@@ -531,7 +531,7 @@ mod tests {
+     }
+ 
+     #[test]
+-    fn test_encrypted_index_is_recreated_with_another_passphrase() {
++    fn test_encrypted_index_is_recreated_with_another_key() {
+         let tmpdir = tempfile::tempdir().unwrap();
+         let room_id = room_id!("!r");
+         let add = RoomIndexOperation::Add(IndexableEvent::new(
+@@ -543,17 +543,17 @@ mod tests {
+         ));
+ 
+         let mut index = RoomIndexBuilder::new_on_disk(tmpdir.path().to_path_buf(), room_id)
+-            .encrypted("passphrase")
++            .encrypted("key")
+             .build()
+             .unwrap();
+         index.execute(add).unwrap();
+         assert_eq!(index.search("body", 10, None).unwrap().events.len(), 1);
+         drop(index);
+ 
+-        // The index can't be decrypted with another passphrase, so it's
++        // The index can't be decrypted with another key, so it's
+         // recreated, empty.
+         let index = RoomIndexBuilder::new_on_disk(tmpdir.path().to_path_buf(), room_id)
+-            .encrypted("another passphrase")
++            .encrypted("another key")
+             .build()
+             .unwrap();
+         assert!(index.search("body", 10, None).unwrap().events.is_empty());
+diff --git a/crates/matrix-sdk/src/search_index/mod.rs b/crates/matrix-sdk/src/search_index/mod.rs
+index ddf2bcdc3..eaa8214c9 100644
+--- a/crates/matrix-sdk/src/search_index/mod.rs
++++ b/crates/matrix-sdk/src/search_index/mod.rs
+@@ -47,15 +47,15 @@ use tracing::{debug, warn};
+ 
+ use crate::event_cache::RoomEventCache;
+ 
+-type Password = String;
++type Key = String;
+ 
+ /// Type of location to store [`RoomIndex`]
+ #[derive(Clone, Debug)]
+ pub enum SearchIndexStoreKind {
+     /// Store unencrypted in file system folder
+     UnencryptedDirectory(PathBuf),
+-    /// Store encrypted in file system folder
+-    EncryptedDirectory(PathBuf, Password),
++    /// Store encrypted, with the given high-entropy key, in file system folder
++    EncryptedDirectory(PathBuf, Key),
+     /// Store in memory
+     InMemory,
+ }
+@@ -106,10 +106,8 @@ impl SearchIndexGuard<'_> {
+                 RoomIndexBuilder::new_on_disk(path.to_path_buf(), room_id).unencrypted().build()?
+             }
+             #[cfg(not(target_family = "wasm"))]
+-            SearchIndexStoreKind::EncryptedDirectory(path, password) => {
+-                RoomIndexBuilder::new_on_disk(path.to_path_buf(), room_id)
+-                    .encrypted(password)
+-                    .build()?
++            SearchIndexStoreKind::EncryptedDirectory(path, key) => {
++                RoomIndexBuilder::new_on_disk(path.to_path_buf(), room_id).encrypted(key).build()?
+             }
+             #[cfg(target_family = "wasm")]
+             SearchIndexStoreKind::UnencryptedDirectory(_)
+-- 
+2.55.0
+

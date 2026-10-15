@@ -1,7 +1,7 @@
 From 4949612154416d0b1c89b95d21254637d441d831 Mon Sep 17 00:00:00 2001
 From: David Langley <davidl@element.io>
 Date: Thu, 15 Oct 2026 17:55:20 +0100
-Subject: [PATCH 2/6] Use a single uniffi_core for the JavaScript bindings
+Subject: [PATCH 02/11] Use a single uniffi_core for the JavaScript bindings
  runtime
 
 uniffi-bindgen-react-native's runtime crate depends on uniffi_core from
@@ -201,3 +201,6 @@ index b240ec2b8..b8360cec1 100644
  
  [patch."https://github.com/ruma/ruma"]
  # Needed to disable checksums since they're incorrect in 32bit devices.
+-- 
+2.55.0
+

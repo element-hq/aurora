@@ -58,6 +58,11 @@ function createBaseClientBuilder(
         builder = builder.indexeddbStore(storeBuilder);
     }
 
+    // The message search index: kept in memory and saved to IndexedDB
+    // (`${storeName}::search`), encrypted with the same passphrase as the
+    // other stores.
+    builder = builder.withSearchIndexStore(storeName, options.passphrase);
+
     // Add encryption configuration if requested
     if (options.setupEncryption) {
         builder = builder.autoEnableCrossSigning(true);

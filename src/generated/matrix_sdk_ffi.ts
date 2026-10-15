@@ -61923,12 +61923,13 @@ export interface ClientBuilderLike {
  * be later queried for search.
  *
  * `path` is the directory where the search index will be stored. It must
- * be unique per session.
+ * be unique per session. On the web, where there is no filesystem, it
+ * names the IndexedDB database the index is saved in instead.
  *
- * `password` is an optional password to encrypt the search index at rest.
- * If `None`, the search index will be stored unencrypted.
+ * `key` is an optional high-entropy key to encrypt the search index at
+ * rest. If `None`, the search index will be stored unencrypted.
  */
-    withSearchIndexStore(path: string, password: string | undefined): ClientBuilderLike;
+    withSearchIndexStore(path: string, key: string | undefined): ClientBuilderLike;
 }
 /**
  * @deprecated Use `ClientBuilderLike` instead.
@@ -62443,18 +62444,19 @@ export class ClientBuilder extends UniffiAbstractObject implements ClientBuilder
  * be later queried for search.
  *
  * `path` is the directory where the search index will be stored. It must
- * be unique per session.
+ * be unique per session. On the web, where there is no filesystem, it
+ * names the IndexedDB database the index is saved in instead.
  *
- * `password` is an optional password to encrypt the search index at rest.
- * If `None`, the search index will be stored unencrypted.
+ * `key` is an optional high-entropy key to encrypt the search index at
+ * rest. If `None`, the search index will be stored unencrypted.
  */
-    withSearchIndexStore(path: string, password: string | undefined): ClientBuilderLike {
+    withSearchIndexStore(path: string, key: string | undefined): ClientBuilderLike {
     return FfiConverterTypeClientBuilder.lift(uniffiCaller.rustCall(
             /*caller:*/ (callStatus) => {
                 return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_clientbuilder_with_search_index_store(
                 uniffiTypeClientBuilderObjectFactory.clonePointer(this),
         FfiConverterString.lower(path, nativeModule().rustbuffer_alloc),
-        FfiConverterOptionalString.lower(password, nativeModule().rustbuffer_alloc),
+        FfiConverterOptionalString.lower(key, nativeModule().rustbuffer_alloc),
                 callStatus);
             },
             /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
@@ -63890,7 +63892,7 @@ function uniffiEnsureInitialized() {
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_user_agent() !== 31638) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_user_agent");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_with_search_index_store() !== 6477) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_with_search_index_store() !== 50733) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_with_search_index_store");
     }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_constructor_contentscanner_new() !== 43408) {

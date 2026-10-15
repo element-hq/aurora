@@ -1,7 +1,8 @@
 From 40edb547d86d1d88ef28c630c099e1e93cf591dd Mon Sep 17 00:00:00 2001
 From: David Langley <davidl@element.io>
 Date: Thu, 15 Oct 2026 19:40:14 +0100
-Subject: [PATCH 6/6] Add Client::index_cached_events to seed the search index
+Subject: [PATCH 06/11] Add Client::index_cached_events to seed the search
+ index
 
 The search index is only fed by event cache updates, i.e. events that
 arrive from sync or from paginating the server. Chunks reloaded from
@@ -112,3 +113,6 @@ index e6b21937e..ddf2bcdc3 100644
  #[cfg(test)]
  mod tests {
      use matrix_sdk_test::{JoinedRoomBuilder, async_test, event_factory::EventFactory};
+-- 
+2.55.0
+

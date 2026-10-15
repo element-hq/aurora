@@ -1,7 +1,7 @@
 From bea6837be0d7bb43d82cbda8ae2decac108816a3 Mon Sep 17 00:00:00 2001
 From: David Langley <davidl@element.io>
 Date: Thu, 15 Oct 2026 19:40:14 +0100
-Subject: [PATCH 5/6] Log to the browser console on wasm
+Subject: [PATCH 05/11] Log to the browser console on wasm
 
 The FFI never installed a tracing subscriber on wasm, so nothing the
 SDK logged was visible in the browser. `init_platform` now builds the
@@ -166,3 +166,6 @@ index 4080f2c6a..a42f85b6d 100644
      #[cfg(not(target_family = "wasm"))]
      {
          LOGGING.set(config.build()).map_err(|_| ClientError::Generic {
+-- 
+2.55.0
+

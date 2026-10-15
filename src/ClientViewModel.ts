@@ -624,8 +624,9 @@ export class ClientViewModel
             await this.syncService.start();
             console.log("syncing...");
 
-            // The search index lives in memory, so seed it with the history
-            // already in the event cache; new events are indexed as they arrive.
+            // Seed the search index with the history already in the event
+            // cache (the SDK does it once per index); new events are indexed
+            // as they arrive.
             this.client
                 .indexCachedEvents()
                 .then(() =>
