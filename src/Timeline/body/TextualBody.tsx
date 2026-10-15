@@ -10,6 +10,7 @@ import {
     TextualBodyView,
     type TextualBodyViewKind,
 } from "@element-hq/web-shared-components";
+import classNames from "classnames";
 import { useMemo } from "react";
 import sanitizeHtml from "sanitize-html";
 import {
@@ -26,6 +27,32 @@ interface TextualBodyProps {
     isEdited?: boolean;
     /** The sender's name, shown before an emote. */
     emoteSenderName?: string;
+}
+
+// One emoji: an RGI emoji sequence (optionally with the emoji presentation
+// selector, but not the text one), or a lone regional indicator. Built with the
+// constructor so platforms without regex v mode don't fail to parse this file;
+// they just never get big emoji. The same as element-web's (HtmlUtils.tsx).
+const BIG_EMOJI_REGEX = (() => {
+    try {
+        // biome-ignore lint/complexity/useRegexLiterals: a v-mode literal is a syntax error on platforms without it
+        return new RegExp(
+            "^(?:\\p{RGI_Emoji}(?!\\uFE0E)(?:(?<!\\uFE0F)\\uFE0F)?|[\\u{1f1e6}-\\u{1f1ff}])+$",
+            "v",
+        );
+    } catch {
+        return /(?!)/;
+    }
+})();
+
+/** Whether a message is only emoji (ignoring spaces), so is shown large. */
+function isEmojiOnly(body: string, formatted?: string): boolean {
+    // A link whose text is emoji (e.g. a pill for an emoji-only name) isn't an emoji message
+    if (formatted?.includes("http:") || formatted?.includes("https:")) {
+        return false;
+    }
+    const stripped = body.replace(/[​\s]/g, "");
+    return stripped.length > 0 && BIG_EMOJI_REGEX.test(stripped);
 }
 
 function sanitize(formatted?: FormattedBody): string | undefined {
@@ -50,15 +77,20 @@ export function TextualBody({
     isEdited,
     emoteSenderName,
 }: TextualBodyProps) {
-    const contentVm = useMemo(
-        () =>
-            new StaticViewModel({
-                body,
-                formattedBody: sanitize(formatted),
-                dir: "auto" as const,
+    const contentVm = useMemo(() => {
+        const formattedBody = sanitize(formatted);
+        const bigEmoji = isEmojiOnly(body, formattedBody);
+        return new StaticViewModel({
+            body,
+            formattedBody,
+            dir: "auto" as const,
+            // The classes element-web gives a message body, which App.css styles
+            className: classNames("mx_EventTile_body", {
+                mx_EventTile_bigEmoji: bigEmoji,
+                "markdown-body": formattedBody !== undefined && !bigEmoji,
             }),
-        [body, formatted],
-    );
+        });
+    }, [body, formatted]);
     const vm = useMemo(
         () =>
             new StaticViewModel({
