@@ -162,13 +162,14 @@ export const Timeline: React.FC<TimelineProps> = ({
                             sendState={item.sendState}
                             client={client}
                             reactions={reactions}
+                            ownUserId={ownUserId}
                         />
                     );
                 default:
                     return null;
             }
         },
-        [client, dateSeparatorVm, reactions],
+        [client, dateSeparatorVm, reactions, ownUserId],
     );
 
     return (

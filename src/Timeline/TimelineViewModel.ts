@@ -15,6 +15,7 @@ import {
     type TimelineItem,
 } from "@element-hq/web-shared-components";
 import {
+    DateDividerMode,
     EventOrTransactionId,
     EventSendState_Tags,
     type EventTimelineItem,
@@ -22,15 +23,27 @@ import {
     ProfileDetails,
     ReceiptType,
     type RoomInfo,
+    type TimelineConfiguration,
     type TimelineDiff,
     TimelineDiff_Tags,
+    TimelineFilter,
+    TimelineFocus,
     type TimelineInterface,
     TimelineItemContent,
     type TimelineItemInterface,
     VirtualTimelineItem,
 } from "../generated/matrix_sdk_ffi.ts";
-import { MessageLikeEventType } from "../generated/ruma_events";
+import {
+    TimelineEventCondition,
+    TimelineEventFilter,
+    TimelineReadReceiptTracking,
+} from "../generated/matrix_sdk_ui";
+import {
+    MessageLikeEventType,
+    TimelineEventType,
+} from "../generated/ruma_events";
 import { printRustError } from "../utils/printRustError";
+import { isStateEvent, stateEventText } from "./stateEventText";
 import type {
     AuroraTimelineActions,
     AuroraTimelineSnapshot,
@@ -57,6 +70,60 @@ const READ_RECEIPT_DEBOUNCE_MS = 500;
 const CONTINUATION_MAX_INTERVAL = 5 * 60 * 1000;
 
 const READ_MARKER_KEY = "read-marker";
+
+/**
+ * State events we never show, left out by the SDK so it doesn't put date separators around
+ * days that only had these. The same list as element-x (JoinedRoomProxy.swift): for most the
+ * SDK doesn't say what changed, so there's nothing useful to show.
+ */
+const HIDDEN_STATE_EVENTS = [
+    TimelineEventType.RoomCanonicalAlias,
+    TimelineEventType.RoomGuestAccess,
+    TimelineEventType.RoomHistoryVisibility,
+    TimelineEventType.RoomJoinRules,
+    TimelineEventType.RoomPinnedEvents,
+    TimelineEventType.RoomPowerLevels,
+    TimelineEventType.RoomServerAcl,
+    TimelineEventType.RoomTombstone,
+    TimelineEventType.SpaceChild,
+    TimelineEventType.SpaceParent,
+    TimelineEventType.PolicyRuleRoom,
+    TimelineEventType.PolicyRuleServer,
+    TimelineEventType.PolicyRuleUser,
+];
+
+/** What room.timeline() gives us, plus leaving out the state events above. */
+const TIMELINE_CONFIGURATION: TimelineConfiguration = {
+    focus: TimelineFocus.Live.new({ hideThreadedEvents: false }),
+    filter: TimelineFilter.EventFilter.new({
+        filter: TimelineEventFilter.Exclude.new(
+            HIDDEN_STATE_EVENTS.map((type) =>
+                TimelineEventCondition.EventType.new(type.new()),
+            ),
+        ),
+    }),
+    internalIdPrefix: undefined,
+    dateDividerMode: DateDividerMode.Daily,
+    trackReadReceipts: TimelineReadReceiptTracking.AllEvents,
+    reportUtds: false,
+};
+
+/** Whether an event gets a row: messages, and state events with something to say. */
+function isShown(event: EventTimelineItem, ownUserId?: string): boolean {
+    if (TimelineItemContent.MsgLike.instanceOf(event.content)) return true;
+    return (
+        isStateEvent(event) && stateEventText(event, ownUserId) !== undefined
+    );
+}
+
+/** Drop date separators left with nothing under them by the events we don't show. */
+function withoutEmptyDays(items: TimelineItem[]): TimelineItem[] {
+    return items.filter((item, i) => {
+        if (item.kind !== "date-separator") return true;
+        const next = items.slice(i + 1).find((n) => n.kind !== "read-marker");
+        return next !== undefined && next.kind !== "date-separator";
+    });
+}
 
 function lastOf<T>(list: T[]): T | undefined {
     return list[list.length - 1];
@@ -154,7 +221,9 @@ export class TimelineViewModel
         if (this.started) return;
         this.started = true;
 
-        const timelinePromise = this.props.room.timeline();
+        const timelinePromise = this.props.room.timelineWithConfiguration(
+            TIMELINE_CONFIGURATION,
+        );
         this.timelinePromise = timelinePromise;
 
         this.snapshot.merge({ ownUserId: this.props.room.ownUserId() });
@@ -347,6 +416,7 @@ export class TimelineViewModel
         for (const sdkItem of this.sdkItems) {
             if ("event" in sdkItem) {
                 const { key, event } = sdkItem;
+                if (!isShown(event, this.snapshot.current.ownUserId)) continue;
                 const item: Extract<TimelineItem, { kind: "event" }> = {
                     key,
                     kind: "event",
@@ -395,7 +465,7 @@ export class TimelineViewModel
             // TimelineStart draws nothing.
         }
         if (lastEventItem) lastEventItem.lastInSection = true;
-        return items;
+        return withoutEmptyDays(items);
     }
 
     private getCachedContinuation(

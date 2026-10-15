@@ -220,32 +220,6 @@ body {
     line-height: 1.25;
 }
 
-.mx_StateEventTile {
-    display: block;
-    position: relative;
-}
-
-.mx_StateEventTile::before {
-    content: "";
-    display: block;
-    height: var(--cpd-space-0-5x);
-}
-
-.mx_StateEventTile::after {
-    content: "";
-    display: block;
-    height: var(--cpd-space-0-5x);
-}
-
-.mx_StateEventTile {
-    padding-left: var(--cpd-space-14x);
-}
-
-.mx_StateAvatar {
-    position: relative;
-    top: var(--cpd-space-1x);
-}
-
 /* Our own messages that the server doesn't have yet */
 .mx_EventTile_sending {
     opacity: 0.5;

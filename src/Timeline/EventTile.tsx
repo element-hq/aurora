@@ -21,7 +21,6 @@ import {
     EventOrTransactionId,
     type EventTimelineItem,
     type FormattedBody,
-    MembershipChange,
     type MessageContent,
     MessageType,
     MsgLikeKind,
@@ -41,6 +40,7 @@ import {
     ReactionsRow,
 } from "./reactions/ReactionsRow";
 import { TextualBody } from "./body/TextualBody";
+import { isStateEvent, stateEventText } from "./stateEventText";
 
 interface EventTileProp {
     /** The timeline item's unique key. */
@@ -53,48 +53,9 @@ interface EventTileProp {
     sendState?: EventSendState;
     client: ClientInterface;
     reactions: ReactionsContext;
+    /** Our own user ID, so state events can say "you". */
+    ownUserId?: string;
 }
-export function getChangeDescription(
-    membershipChange: MembershipChange,
-): string {
-    switch (membershipChange) {
-        case MembershipChange.None:
-            return "did nothing";
-        case MembershipChange.Error:
-            return "<error>";
-        case MembershipChange.Joined:
-            return "joined";
-        case MembershipChange.Left:
-            return "left";
-        case MembershipChange.Banned:
-            return "was banned";
-        case MembershipChange.Unbanned:
-            return "was unbanned";
-        case MembershipChange.Kicked:
-            return "was kicked";
-        case MembershipChange.Invited:
-            return "was invited";
-        case MembershipChange.InvitationAccepted:
-            return "accepted an invite";
-        case MembershipChange.InvitationRejected:
-            return "rejected an invite";
-        case MembershipChange.InvitationRevoked:
-            return "was uninvited";
-        case MembershipChange.Knocked:
-            return "knocked";
-        case MembershipChange.KnockAccepted:
-            return "was accepted";
-        case MembershipChange.KnockRetracted:
-            return "stoped knocking";
-        case MembershipChange.KnockDenied:
-            return "was rejected";
-        case MembershipChange.NotImplemented:
-            return "<unimplemented>";
-        default:
-            return "<unknown>";
-    }
-}
-
 function getDecryptionFailureReason(
     message: EncryptedMessage,
 ): DecryptionFailureReason {
@@ -228,6 +189,7 @@ export const EventTile: React.FC<EventTileProp> = ({
     sendState,
     client,
     reactions,
+    ownUserId,
 }) => {
     // The action bar shows while the tile is hovered or has focus
     const [isHovered, setHovered] = useState(false);
@@ -244,8 +206,72 @@ export const EventTile: React.FC<EventTileProp> = ({
         : {};
     const senderColorClass = `mx_Username_color${useIdColorHash(event.sender)}`;
 
+    const sentAt = new Date(Number(event.timestamp));
+    const eventOrTxnId = event.eventOrTransactionId;
+    const eventId = EventOrTransactionId.EventId.instanceOf(eventOrTxnId)
+        ? eventOrTxnId.inner.eventId
+        : undefined;
+    const timestamp = (
+        <MessageTimestampView
+            vm={
+                new StaticViewModel({
+                    ts: timeFormat.format(sentAt),
+                    tsSentAt: fullDateFormat.format(sentAt),
+                })
+            }
+        />
+    );
+    const senderAvatar = (size: string): ReactElement => (
+        <Avatar
+            name={senderProfile.displayName || event.sender}
+            id={event.sender}
+            src={
+                senderProfile.avatarUrl
+                    ? mxcToUrl(client, senderProfile.avatarUrl)
+                    : ""
+            }
+            size={size}
+        />
+    );
+
+    // State events are a line of text with a small avatar, as in element-web
+    if (isStateEvent(event)) {
+        const text = stateEventText(event, ownUserId);
+        // The timeline view model leaves out the ones that have nothing to say
+        if (!text) return null;
+        return (
+            <EventTileView
+                root={{
+                    id,
+                    as: "div",
+                    eventId,
+                    shape: "Room",
+                    state: {
+                        isOwnEvent: event.isOwn,
+                        hasReply: false,
+                        info: true,
+                    },
+                }}
+                classNames={{
+                    root: "mx_EventTile",
+                    slotTimestamp: "mx_EventTile_timestamp",
+                }}
+                slots={{
+                    avatar: senderAvatar("14px"),
+                    timestamp,
+                    body: (
+                        <TextualEventView
+                            vm={new StaticViewModel({ content: text })}
+                        />
+                    ),
+                }}
+            />
+        );
+    }
+    // Calls and events the SDK couldn't parse: the view model leaves these out too
+    if (!TimelineItemContent.MsgLike.instanceOf(event.content)) return null;
+
     let body: string | ReactElement | undefined;
-    let stateChange: ReactNode[] | ReactNode | undefined = undefined;
     let msgLikeKind: MsgLikeKind | undefined;
     let footer: ReactNode;
     let actionBar: ReactNode;
@@ -328,104 +354,7 @@ export const EventTile: React.FC<EventTileProp> = ({
                 client,
             );
         }
-    } else if (TimelineItemContent.ProfileChange.instanceOf(event.content)) {
-        const changes: ReactNode[] = [];
-        changes.push("changed their ");
-        if (
-            event.content.inner.avatarUrl !== event.content.inner.prevAvatarUrl
-        ) {
-            changes.push([
-                "avatar from ",
-                <Avatar
-                    className="mx_StateAvatar"
-                    name={senderProfile.displayName || event.sender}
-                    id={event.sender}
-                    src={
-                        event.content.inner.prevAvatarUrl
-                            ? mxcToUrl(
-                                  client,
-                                  event.content.inner.prevAvatarUrl,
-                              )
-                            : ""
-                    }
-                    size="16px"
-                />,
-                " to ",
-                <Avatar
-                    className="mx_StateAvatar"
-                    name={senderProfile.displayName || event.sender}
-                    id={event.sender}
-                    src={
-                        event.content.inner.avatarUrl
-                            ? mxcToUrl(client, event.content.inner.avatarUrl)
-                            : ""
-                    }
-                    size="16px"
-                />,
-            ]);
-            if (
-                event.content.inner.displayName !==
-                event.content.inner.prevDisplayName
-            )
-                changes.push(" and changed their ");
-        }
-        if (
-            event.content.inner.displayName !==
-            event.content.inner.prevDisplayName
-        ) {
-            changes.push(
-                `displayname from ${event.content.inner.prevDisplayName} to ${event.content.inner.displayName}`,
-            );
-        }
-        stateChange = changes;
-    } else if (TimelineItemContent.RoomMembership.instanceOf(event.content)) {
-        if (event.content.inner.change) {
-            stateChange = getChangeDescription(event.content.inner.change);
-            // } else if (event.content.tag) {
-            // 	stateChange = `redacted ${membershipChange.content.Redacted?.membership}`;
-            // } else {
-            // 	stateChange = `unknown membership change ${membershipChange.content}`;
-        }
-    } else {
-        body = `Unknown event type ${event.content.tag}`;
     }
-    // TODO redactions
-    if (stateChange) {
-        return (
-            <TextualEventView
-                className="mx_StateEventTile"
-                vm={
-                    new StaticViewModel({
-                        content: (
-                            <>
-                                <Avatar
-                                    className="mx_StateAvatar"
-                                    name={
-                                        senderProfile.displayName ||
-                                        event.sender
-                                    }
-                                    id={event.sender}
-                                    src={
-                                        senderProfile.avatarUrl
-                                            ? mxcToUrl(
-                                                  client,
-                                                  senderProfile.avatarUrl,
-                                              )
-                                            : ""
-                                    }
-                                    size="16px"
-                                />{" "}
-                                {event.sender} {stateChange}
-                            </>
-                        ),
-                    })
-                }
-            />
-        );
-    }
-
-    const sentAt = new Date(Number(event.timestamp));
-    const eventOrTxnId = event.eventOrTransactionId;
 
     return (
         <EventTileView
@@ -442,9 +371,7 @@ export const EventTile: React.FC<EventTileProp> = ({
                 id,
                 // The timeline already puts each row in its own list item.
                 as: "div",
-                eventId: EventOrTransactionId.EventId.instanceOf(eventOrTxnId)
-                    ? eventOrTxnId.inner.eventId
-                    : undefined,
+                eventId,
                 shape: "Room",
                 state: {
                     isOwnEvent: event.isOwn,
@@ -465,18 +392,7 @@ export const EventTile: React.FC<EventTileProp> = ({
                 slotTimestamp: "mx_EventTile_timestamp",
             }}
             slots={{
-                avatar: continuation ? undefined : (
-                    <Avatar
-                        name={senderProfile.displayName || event.sender}
-                        id={event.sender}
-                        src={
-                            senderProfile.avatarUrl
-                                ? mxcToUrl(client, senderProfile.avatarUrl)
-                                : ""
-                        }
-                        size="30px"
-                    />
-                ),
+                avatar: continuation ? undefined : senderAvatar("30px"),
                 sender: continuation ? undefined : (
                     <DisambiguatedProfileView
                         vm={
@@ -498,16 +414,7 @@ export const EventTile: React.FC<EventTileProp> = ({
                         }
                     />
                 ),
-                timestamp: (
-                    <MessageTimestampView
-                        vm={
-                            new StaticViewModel({
-                                ts: timeFormat.format(sentAt),
-                                tsSentAt: fullDateFormat.format(sentAt),
-                            })
-                        }
-                    />
-                ),
+                timestamp,
                 body: <div className="mx_Content">{body || "No content"}</div>,
                 footer,
                 actionBar,
