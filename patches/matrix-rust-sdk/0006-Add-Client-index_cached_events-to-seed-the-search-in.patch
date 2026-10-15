@@ -1,0 +1,118 @@
+From 40edb547d86d1d88ef28c630c099e1e93cf591dd Mon Sep 17 00:00:00 2001
+From: David Langley <davidl@element.io>
+Date: Thu, 15 Oct 2026 19:40:14 +0100
+Subject: [PATCH 06/11] Add Client::index_cached_events to seed the search
+ index
+
+The search index is only fed by event cache updates, i.e. events that
+arrive from sync or from paginating the server. Chunks reloaded from
+the event cache store never pass through it, so an in-memory index
+(the only kind on wasm) starts empty on every launch and can't find
+any history from previous sessions.
+
+`index_cached_events` walks every joined room's chunks in the event
+cache store and runs them through the indexer, and is exposed on the
+FFI client so apps can call it once the sync service is up.
+---
+ bindings/matrix-sdk-ffi/src/client.rs     |  8 +++
+ crates/matrix-sdk/src/search_index/mod.rs | 65 +++++++++++++++++++++++
+ 2 files changed, 73 insertions(+)
+
+diff --git a/bindings/matrix-sdk-ffi/src/client.rs b/bindings/matrix-sdk-ffi/src/client.rs
+index 67d875724..be7466d38 100644
+--- a/bindings/matrix-sdk-ffi/src/client.rs
++++ b/bindings/matrix-sdk-ffi/src/client.rs
+@@ -1764,6 +1764,14 @@ impl Client {
+         Ok(SearchUsersResults::from(response))
+     }
+ 
++    /// Index the events already in the event cache, so message search can
++    /// find history from previous sessions.
++    #[cfg(feature = "experimental-search")]
++    pub async fn index_cached_events(&self) -> Result<(), ClientError> {
++        self.inner.index_cached_events().await?;
++        Ok(())
++    }
++
+     pub async fn get_profile(&self, user_id: String) -> Result<UserProfile, ClientError> {
+         let user_id = <&UserId>::try_from(user_id.as_str())?;
+         UserProfile::fetch(&self.inner.account(), user_id).await
+diff --git a/crates/matrix-sdk/src/search_index/mod.rs b/crates/matrix-sdk/src/search_index/mod.rs
+index e6b21937e..ddf2bcdc3 100644
+--- a/crates/matrix-sdk/src/search_index/mod.rs
++++ b/crates/matrix-sdk/src/search_index/mod.rs
+@@ -507,6 +507,71 @@ async fn parse_timeline_event(
+     }
+ }
+ 
++impl crate::Client {
++    /// Feed every event already in the event cache store into the search
++    /// index, for all joined rooms.
++    ///
++    /// The index only receives events as they reach the event cache (from
++    /// sync or from paginating the server), so an in-memory index, the only
++    /// kind on wasm, starts empty on every launch. This fills it with the
++    /// history the client has already cached locally.
++    pub async fn index_cached_events(&self) -> Result<(), crate::Error> {
++        use matrix_sdk_common::{
++            cross_process_lock::MappedCrossProcessLockState,
++            linked_chunk::{ChunkContent, LinkedChunkId},
++        };
++
++        use crate::event_cache::EventCacheError;
++
++        let store = self.event_cache_store().lock().await.map_err(EventCacheError::from)?;
++        let store = match &store {
++            MappedCrossProcessLockState::Clean(guard)
++            | MappedCrossProcessLockState::Dirty(guard) => guard,
++        };
++
++        for room in self.joined_rooms() {
++            let room_id = room.room_id();
++
++            let chunks = store
++                .load_all_chunks(LinkedChunkId::Room(room_id))
++                .await
++                .map_err(EventCacheError::from)?;
++            let events: Vec<TimelineEvent> = chunks
++                .into_iter()
++                .filter_map(|chunk| match chunk.content {
++                    ChunkContent::Items(items) => Some(items),
++                    ChunkContent::Gap(_) => None,
++                })
++                .flatten()
++                .collect();
++
++            if events.is_empty() {
++                continue;
++            }
++
++            debug!(%room_id, count = events.len(), "indexing cached events");
++
++            let (room_cache, _drop_handles) = self.event_cache().room(room_id).await?;
++            let redaction_rules = room.clone_info().room_version_rules_or_default().redaction;
++
++            let mut search_index = self.search_index().lock().await;
++            if let Err(err) = search_index
++                .bulk_handle_timeline_event(
++                    events.into_iter(),
++                    &room_cache,
++                    room_id,
++                    &redaction_rules,
++                )
++                .await
++            {
++                warn!(%room_id, "Failed to index cached events: {err}");
++            }
++        }
++
++        Ok(())
++    }
++}
++
+ #[cfg(test)]
+ mod tests {
+     use matrix_sdk_test::{JoinedRoomBuilder, async_test, event_factory::EventFactory};
+-- 
+2.55.0
+

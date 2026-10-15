@@ -2,43 +2,52 @@
 
 set -e
 
+# matrix-rust-sdk needs a recent stable; override with RUSTUP_TOOLCHAIN=...
+export RUSTUP_TOOLCHAIN="${RUSTUP_TOOLCHAIN:-1.96}"
+SDK_DIR=rust_modules/matrix-rust-sdk
+# tantivy (the search engine behind the SDK's message search) with a patch that
+# lets it run without threads, as in the browser. The SDK patches point its
+# `[patch.crates-io]` at this checkout.
+TANTIVY_DIR=rust_modules/tantivy-wasm
+TANTIVY_TAG=0.26.2
+
 echo "==> Step 1: Cleaning..."
 pnpm ubrn:clean
+rm -rf "$TANTIVY_DIR"
 
 echo "==> Step 2: Checking out..."
 pnpm ubrn:checkout
 
 echo "==> Step 3: Resetting any modifications after checkout..."
-git -C rust_modules/matrix-rust-sdk reset --hard HEAD
+git -C "$SDK_DIR" reset --hard HEAD
+# Also drop files added by previously applied patches (build output is ignored, so it stays).
+git -C "$SDK_DIR" clean -fd --quiet
 echo "    ✓ Repository clean"
 
-echo "==> Step 4: Fetching full git history for patch application..."
-git -C rust_modules/matrix-rust-sdk fetch --unshallow
+echo "==> Step 4: Checking out tantivy $TANTIVY_TAG..."
+git clone --quiet --depth 1 --branch "$TANTIVY_TAG" https://github.com/quickwit-oss/tantivy "$TANTIVY_DIR"
+for patch in patches/tantivy/*.patch; do
+    if git -C "$TANTIVY_DIR" apply "../../$patch"; then
+        echo "    ✓ Applied $patch"
+    else
+        echo "    ✗ Patch $patch failed!"
+        exit 1
+    fi
+done
 
-echo "==> Step 5: Applying wasm SystemTime fix patch..."
-if git -C rust_modules/matrix-rust-sdk apply ../../patches/0002-Fix-wasm-SystemTime-in-automatic-call-status.patch; then
-    echo "    ✓ Patch applied (wasm-safe timestamp in automatic_call_status)"
-else
-    echo "    ✗ Patch failed!"
-    exit 1
-fi
-
-echo "==> Step 5b: Removing forced experimental-search from matrix-sdk-ffi..."
-# matrix-sdk-ffi enables matrix-sdk/experimental-search unconditionally, which
-# pulls in tantivy (and rustix/errno) that can't build for wasm32-unknown-unknown.
-# The ffi's own experimental-search feature still gates it, and is off for web.
-sed -i.bak '/^matrix-sdk = /,/^\] }/{/^    "experimental-search"$/d;}' rust_modules/matrix-rust-sdk/bindings/matrix-sdk-ffi/Cargo.toml
-echo "    ✓ Removed"
-
-echo "==> Step 5c: Pinning tracing-appender to 0.2.4..."
-# tracing-appender 0.2.5 depends on the `symlink` crate, which doesn't build for
-# wasm32-unknown-unknown. The ffi only uses `rolling::Rotation`, present in 0.2.4.
-sed -i.bak -E 's/^tracing-appender = \{ version = "[^"]+"/tracing-appender = { version = "=0.2.4"/' rust_modules/matrix-rust-sdk/Cargo.toml
-echo "    ✓ Pinned"
+echo "==> Step 5: Applying matrix-rust-sdk patches..."
+for patch in patches/matrix-rust-sdk/*.patch; do
+    if git -C "$SDK_DIR" apply "../../$patch"; then
+        echo "    ✓ Applied $patch"
+    else
+        echo "    ✗ Patch $patch failed!"
+        exit 1
+    fi
+done
 
 echo "==> Step 6: Removing bindings/wasm from workspace..."
 # Remove the non-existent bindings/wasm from workspace members
-sed -i.bak '/bindings\/wasm/d' rust_modules/matrix-rust-sdk/Cargo.toml
+sed -i.bak '/bindings\/wasm/d' "$SDK_DIR/Cargo.toml"
 echo "    ✓ Removed from workspace"
 
 echo "==> Step 7: Building web (first pass to generate wasm bindings)..."
@@ -48,11 +57,10 @@ echo "==> Step 8: Adding bindings/wasm back to workspace..."
 # Add bindings/wasm back to workspace members now that it exists
 sed -i.bak '/"xtask",/a\
     "bindings/wasm",
-' rust_modules/matrix-rust-sdk/Cargo.toml
+' "$SDK_DIR/Cargo.toml"
 echo "    ✓ Added back to workspace"
 
 echo "==> Step 9: Building web (second pass with complete workspace)..."
-set -e
 pnpm ubrn:web:build:release
 
 echo "==> Step 10: Fixing index.web.ts import..."
@@ -67,12 +75,13 @@ fi
 
 echo "==> Step 11: Optimizing wasm binary with wasm-opt..."
 WASM_FILE="src/generated/wasm-bindgen/index_bg.wasm"
-if ! command -v wasm-opt > /dev/null; then
+# Prefer a wasm-opt on the PATH, else the one from the binaryen npm package.
+WASM_OPT=$(command -v wasm-opt || echo "node_modules/.bin/wasm-opt")
+if [ ! -x "$WASM_OPT" ]; then
     echo "    ⚠ wasm-opt not found (install binaryen), skipping optimization"
 elif [ -f "$WASM_FILE" ]; then
     echo "    Optimizing $WASM_FILE (this may take a few minutes)..."
-    wasm-opt -Oz "$WASM_FILE" -o "${WASM_FILE}.tmp"
-    mv "${WASM_FILE}.tmp" "$WASM_FILE"
+    "$WASM_OPT" -Oz "$WASM_FILE" -o "${WASM_FILE}.tmp" && mv "${WASM_FILE}.tmp" "$WASM_FILE"
     echo "    ✓ wasm binary optimized"
 else
     echo "    ⚠ wasm file not found at $WASM_FILE, skipping optimization"

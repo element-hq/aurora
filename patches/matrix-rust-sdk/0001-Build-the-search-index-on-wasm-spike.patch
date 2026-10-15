@@ -1,0 +1,335 @@
+From 74757e75d0a02cc4a15f5f1899b216373ed65224 Mon Sep 17 00:00:00 2001
+From: David Langley <davidl@element.io>
+Date: Thu, 15 Oct 2026 17:26:34 +0100
+Subject: [PATCH 01/11] Build the search index on wasm (spike)
+
+- matrix-sdk-search: on wasm, tantivy without mmap or zstd and with its
+  `single-threaded` feature; the on-disk/encrypted index builders are
+  gated out, so only in-memory indexes exist there.
+- matrix-sdk: creating an on-disk search index store errors on wasm.
+- A wasm-bindgen test exercises the in-memory index end to end (add,
+  commit, search, merge, remove, edit, pagination) and prints timings.
+
+Spike-only: the workspace patches tantivy and `symlink` to local paths
+(tantivy -> the `single-threaded` fork; `symlink` -> a shim, because
+tracing-appender 0.2.5 pulls it in and it has no wasm support).
+---
+ Cargo.toml                                    |   2 +
+ crates/matrix-sdk-search/Cargo.toml           |  17 ++-
+ crates/matrix-sdk-search/src/index/builder.rs |  20 ++-
+ crates/matrix-sdk-search/src/lib.rs           |   2 +
+ .../matrix-sdk-search/tests/wasm_in_memory.rs | 129 ++++++++++++++++++
+ crates/matrix-sdk/src/search_index/mod.rs     |   9 ++
+ 6 files changed, 174 insertions(+), 5 deletions(-)
+ create mode 100644 crates/matrix-sdk-search/tests/wasm_in_memory.rs
+
+diff --git a/Cargo.toml b/Cargo.toml
+index 1149a6ce3..b240ec2b8 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -252,6 +252,8 @@ lto = false
+ [patch.crates-io]
+ async-compat = { git = "https://github.com/element-hq/async-compat", rev = "5a27c8b290f1f1dcfc0c4ec22c464e38528aa591" }
+ const_panic = { git = "https://github.com/jplatte/const_panic", rev = "e0b317a9a7bde2d48a7d15b6a60d70e4a41d3b5f" }
++# tantivy with a `single-threaded` feature, so the search index works on wasm.
++tantivy = { path = "../tantivy-wasm" }
+ 
+ [patch."https://github.com/ruma/ruma"]
+ # Needed to disable checksums since they're incorrect in 32bit devices.
+diff --git a/crates/matrix-sdk-search/Cargo.toml b/crates/matrix-sdk-search/Cargo.toml
+index 164fca738..26d582252 100644
+--- a/crates/matrix-sdk-search/Cargo.toml
++++ b/crates/matrix-sdk-search/Cargo.toml
+@@ -23,7 +23,6 @@ once_cell.workspace = true
+ pbkdf2.workspace = true
+ rand = { workspace = true, features = ["thread_rng"] }
+ sha2 = { workspace =  true, features = ["alloc", "zeroize"] }
+-tantivy = { version = "0.26.1", default-features = false, features = ["mmap", "stopwords", "stemmer", "lz4-compression", "columnar-zstd-compression"] }
+ tracing = { workspace = true, features = ["attributes"] }
+ thiserror.workspace = true
+ ruma = { workspace = true , features = [
+@@ -34,9 +33,25 @@ ruma = { workspace = true , features = [
+ ] }
+ zeroize.workspace = true
+ 
++[target.'cfg(not(target_family = "wasm"))'.dependencies]
++tantivy = { version = "0.26.1", default-features = false, features = ["mmap", "stopwords", "stemmer", "lz4-compression", "columnar-zstd-compression"] }
++
++# On wasm the index lives in memory: no mmap, no zstd (a C dependency), and
++# tantivy must not spawn threads.
++[target.'cfg(target_family = "wasm")'.dependencies]
++tantivy = { version = "0.26.1", default-features = false, features = ["stopwords", "stemmer", "lz4-compression", "single-threaded"] }
++# tantivy's segment ids are uuids, which need a source of randomness on wasm.
++uuid = { workspace = true, features = ["js"] }
++
+ [dev-dependencies]
+ matrix-sdk-test.workspace = true
+ tempfile.workspace = true
+ 
++[target.'cfg(target_family = "wasm")'.dev-dependencies]
++# matrix-sdk-test pulls in matrix-sdk-common, which insists on `js` on wasm.
++matrix-sdk-common = { workspace = true, features = ["js"] }
++wasm-bindgen-test.workspace = true
++js-sys.workspace = true
++
+ [lints]
+ workspace = true
+diff --git a/crates/matrix-sdk-search/src/index/builder.rs b/crates/matrix-sdk-search/src/index/builder.rs
+index ed3fef854..43593db2e 100644
+--- a/crates/matrix-sdk-search/src/index/builder.rs
++++ b/crates/matrix-sdk-search/src/index/builder.rs
+@@ -1,15 +1,20 @@
++// On-disk indexes are backed by mmap'd files, which don't exist on wasm.
++#[cfg(not(target_family = "wasm"))]
+ use std::{fs, path::PathBuf, sync::Arc};
+ 
+ use ruma::OwnedRoomId;
+-use tantivy::{
+-    Index,
+-    directory::{MmapDirectory, error::OpenDirectoryError},
+-};
++#[cfg(not(target_family = "wasm"))]
++use tantivy::directory::{MmapDirectory, error::OpenDirectoryError};
++use tantivy::Index;
++#[cfg(not(target_family = "wasm"))]
+ use zeroize::Zeroizing;
+ 
++#[cfg(not(target_family = "wasm"))]
+ use crate::{
+     encrypted::encrypted_dir::{EncryptedMmapDirectory, PBKDF_COUNT},
+     error::IndexError,
++};
++use crate::{
+     index::RoomIndex,
+     schema::{MatrixSearchIndexSchema, RoomMessageSchema},
+ };
+@@ -19,6 +24,7 @@ pub struct RoomIndexBuilder {}
+ 
+ impl RoomIndexBuilder {
+     /// Make an index on disk
++    #[cfg(not(target_family = "wasm"))]
+     pub fn new_on_disk<R: Into<OwnedRoomId>>(
+         path: PathBuf,
+         room_id: R,
+@@ -33,11 +39,13 @@ impl RoomIndexBuilder {
+ }
+ 
+ /// Incomplete builder for [`RoomIndex`] on disk.
++#[cfg(not(target_family = "wasm"))]
+ pub struct PhysicalRoomIndexBuilder {
+     path: PathBuf,
+     room_id: OwnedRoomId,
+ }
+ 
++#[cfg(not(target_family = "wasm"))]
+ impl PhysicalRoomIndexBuilder {
+     /// Make an new [`PhysicalRoomIndexBuilder`]
+     pub(crate) fn new(path: PathBuf, room_id: OwnedRoomId) -> PhysicalRoomIndexBuilder {
+@@ -63,11 +71,13 @@ impl PhysicalRoomIndexBuilder {
+ }
+ 
+ /// Complete builder for [`RoomIndex`] on disk.
++#[cfg(not(target_family = "wasm"))]
+ pub struct UnencryptedPhysicalRoomIndexBuilder {
+     path: PathBuf,
+     room_id: OwnedRoomId,
+ }
+ 
++#[cfg(not(target_family = "wasm"))]
+ impl UnencryptedPhysicalRoomIndexBuilder {
+     /// Build the [`RoomIndex`]
+     pub fn build(&self) -> Result<RoomIndex, IndexError> {
+@@ -94,12 +104,14 @@ impl UnencryptedPhysicalRoomIndexBuilder {
+ }
+ 
+ /// Complete builder for [`RoomIndex`] on disk.
++#[cfg(not(target_family = "wasm"))]
+ pub struct EncryptedPhysicalRoomIndexBuilder {
+     path: PathBuf,
+     room_id: OwnedRoomId,
+     password: Zeroizing<String>,
+ }
+ 
++#[cfg(not(target_family = "wasm"))]
+ impl EncryptedPhysicalRoomIndexBuilder {
+     /// Build the [`RoomIndex`]
+     pub fn build(&self) -> Result<RoomIndex, IndexError> {
+diff --git a/crates/matrix-sdk-search/src/lib.rs b/crates/matrix-sdk-search/src/lib.rs
+index 1ce36ab40..1f7657998 100644
+--- a/crates/matrix-sdk-search/src/lib.rs
++++ b/crates/matrix-sdk-search/src/lib.rs
+@@ -6,6 +6,8 @@ pub type OpStamp = u64;
+ 
+ pub(crate) const TANTIVY_INDEX_MEMORY_BUDGET: usize = 50_000_000;
+ 
++// The encrypted index is backed by mmap'd files, which don't exist on wasm.
++#[cfg(not(target_family = "wasm"))]
+ mod encrypted;
+ mod schema;
+ mod writer;
+diff --git a/crates/matrix-sdk-search/tests/wasm_in_memory.rs b/crates/matrix-sdk-search/tests/wasm_in_memory.rs
+new file mode 100644
+index 000000000..216e452db
+--- /dev/null
++++ b/crates/matrix-sdk-search/tests/wasm_in_memory.rs
+@@ -0,0 +1,129 @@
++//! Smoke test for the in-memory search index on wasm, where tantivy runs
++//! without threads: adds, commits, searches, merges, removes and edits all
++//! have to happen on the calling thread.
++
++#![cfg(target_family = "wasm")]
++
++use matrix_sdk_search::index::{
++    IndexableEvent, RoomIndexOperation, builder::RoomIndexBuilder,
++};
++use ruma::{MilliSecondsSinceUnixEpoch, OwnedEventId, UInt, owned_user_id, room_id};
++use wasm_bindgen_test::wasm_bindgen_test;
++
++fn event_id(n: u64) -> OwnedEventId {
++    format!("$event{n}:example.org").try_into().unwrap()
++}
++
++/// An event whose timestamp grows with `n`, so results come back newest first
++/// in `n` order. The index orders dates with one-second precision, hence a
++/// second per event.
++fn event(n: u64, body: &str) -> IndexableEvent {
++    let ts = MilliSecondsSinceUnixEpoch(UInt::new(1_700_000_000_000 + n * 1000).unwrap());
++    IndexableEvent::new(
++        event_id(n),
++        event_id(n),
++        owned_user_id!("@alice:example.org"),
++        Some(ts),
++        body.to_owned(),
++    )
++}
++
++#[wasm_bindgen_test]
++fn add_search_merge_remove_edit_in_memory() {
++    let mut index = RoomIndexBuilder::new_in_memory(room_id!("!room:example.org")).build();
++
++    // One bulk add, i.e. one commit.
++    let ops = (0..300)
++        .map(|n| {
++            let body =
++                if n % 3 == 0 { format!("hello world {n}") } else { format!("goodbye moon {n}") };
++            RoomIndexOperation::Add(event(n, &body))
++        })
++        .collect();
++    index.bulk_execute(ops).unwrap();
++
++    let result = index.search("hello", 10, None).unwrap();
++    assert_eq!(result.total_count, 100);
++    assert_eq!(result.events.len(), 10);
++    assert_eq!(result.events[0].1, event_id(297), "newest first");
++    assert_eq!(index.search("goodbye", 10, None).unwrap().total_count, 200);
++    assert_eq!(index.search("nothing", 10, None).unwrap().total_count, 0);
++
++    // Many small commits: one new segment each, enough for the merge policy
++    // to kick in, which runs the merges on this thread too.
++    for n in 300..320 {
++        index.execute(RoomIndexOperation::Add(event(n, "hello again"))).unwrap();
++    }
++    assert_eq!(index.search("hello", 10, None).unwrap().total_count, 120);
++    assert_eq!(index.search("again", 50, None).unwrap().total_count, 20);
++    assert_eq!(index.search("hello", 10, None).unwrap().events[0].1, event_id(319));
++
++    // Remove a committed event.
++    index.execute(RoomIndexOperation::Remove(event_id(0))).unwrap();
++    assert_eq!(index.search("hello", 10, None).unwrap().total_count, 119);
++    assert_eq!(index.search("world", 200, None).unwrap().total_count, 99);
++
++    // Edit: the replacement is a new event whose deletion key is the original.
++    let replacement = IndexableEvent::new(
++        event_id(1000),
++        event_id(3),
++        owned_user_id!("@alice:example.org"),
++        Some(MilliSecondsSinceUnixEpoch(UInt::new(1_700_000_000_000 + 3 * 1000).unwrap())),
++        "edited text".to_owned(),
++    );
++    index.execute(RoomIndexOperation::Edit(event_id(3), replacement)).unwrap();
++    assert_eq!(index.search("hello", 10, None).unwrap().total_count, 118);
++    let edited = index.search("edited", 10, None).unwrap();
++    assert_eq!(edited.total_count, 1);
++    assert_eq!(edited.events[0].1, event_id(1000));
++
++    // Removing the original also removes its edit.
++    index.execute(RoomIndexOperation::Remove(event_id(3))).unwrap();
++    assert_eq!(index.search("edited", 10, None).unwrap().total_count, 0);
++
++    // Pagination.
++    let page2 = index.search("goodbye", 10, Some(10)).unwrap();
++    assert_eq!(page2.total_count, 200);
++    assert_eq!(page2.events.len(), 10);
++    assert!(page2.events[0].0 < index.search("goodbye", 10, None).unwrap().events[9].0);
++}
++
++/// Rough timings for the inline (main-thread) indexing path. Run with
++/// `-- --nocapture` to see them.
++#[wasm_bindgen_test]
++fn timings_in_memory() {
++    const WORDS: &[&str] = &[
++        "the", "quick", "brown", "fox", "jumps", "over", "lazy", "dog", "matrix", "search",
++        "index", "message", "room", "hello", "world", "tantivy", "wasm", "browser", "demo",
++    ];
++    let body = |n: u64| -> String {
++        (0..12).map(|i| WORDS[((n * 7 + i * 3) % WORDS.len() as u64) as usize]).collect::<Vec<_>>().join(" ")
++    };
++    let now = || js_sys::Date::now();
++
++    let mut index = RoomIndexBuilder::new_in_memory(room_id!("!perf:example.org")).build();
++
++    let start = now();
++    let ops = (0..5000).map(|n| RoomIndexOperation::Add(event(n, &body(n)))).collect();
++    index.bulk_execute(ops).unwrap();
++    let bulk_ms = now() - start;
++
++    let start = now();
++    for n in 5000..5200 {
++        index.execute(RoomIndexOperation::Add(event(n, &body(n)))).unwrap();
++    }
++    let commits_ms = now() - start;
++
++    let start = now();
++    let result = index.search("quick fox", 20, None).unwrap();
++    let search_ms = now() - start;
++
++    wasm_bindgen_test::console_log!(
++        "TIMINGS bulk 5000 events in one commit: {bulk_ms:.0} ms; 200 single-event commits: \
++         {commits_ms:.0} ms ({:.1} ms each); search over 5200 events: {search_ms:.1} ms \
++         ({} hits)",
++        commits_ms / 200.0,
++        result.total_count
++    );
++    assert!(result.total_count > 0);
++}
+diff --git a/crates/matrix-sdk/src/search_index/mod.rs b/crates/matrix-sdk/src/search_index/mod.rs
+index e22a3f4b8..e6b21937e 100644
+--- a/crates/matrix-sdk/src/search_index/mod.rs
++++ b/crates/matrix-sdk/src/search_index/mod.rs
+@@ -101,14 +101,23 @@ pub struct SearchIndexGuard<'a> {
+ impl SearchIndexGuard<'_> {
+     fn create_index(&self, room_id: &RoomId) -> Result<RoomIndex, IndexError> {
+         let index = match self.search_index_store_kind {
++            #[cfg(not(target_family = "wasm"))]
+             SearchIndexStoreKind::UnencryptedDirectory(path) => {
+                 RoomIndexBuilder::new_on_disk(path.to_path_buf(), room_id).unencrypted().build()?
+             }
++            #[cfg(not(target_family = "wasm"))]
+             SearchIndexStoreKind::EncryptedDirectory(path, password) => {
+                 RoomIndexBuilder::new_on_disk(path.to_path_buf(), room_id)
+                     .encrypted(password)
+                     .build()?
+             }
++            #[cfg(target_family = "wasm")]
++            SearchIndexStoreKind::UnencryptedDirectory(_)
++            | SearchIndexStoreKind::EncryptedDirectory(_, _) => {
++                return Err(IndexError::IO(std::io::Error::other(
++                    "on-disk search indexes are not supported on wasm",
++                )));
++            }
+             SearchIndexStoreKind::InMemory => RoomIndexBuilder::new_in_memory(room_id).build(),
+         };
+         Ok(index)
+-- 
+2.55.0
+

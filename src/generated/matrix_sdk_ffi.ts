@@ -4,7 +4,7 @@
 /* eslint-disable */
 // @ts-nocheck
 import * as wasmBundle from "./wasm-bindgen/index.js";
-import { type UniffiRustFutureContinuationCallback, type UniffiForeignFutureDroppedCallback, type UniffiForeignFutureDroppedCallbackStruct, type UniffiVTableCallbackInterfaceMatrixSdkFfiAccountDataListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiBackupStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiBackupSteadyStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiBeaconInfoListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiCallDeclineListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiClientDelegate, type UniffiVTableCallbackInterfaceMatrixSdkFfiClientSessionDelegate, type UniffiVTableCallbackInterfaceMatrixSdkFfiDehydratedDeviceEventListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiDuplicateKeyUploadErrorListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiEnableRecoveryProgressListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiGeneratedQrLoginProgressListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiGrantGeneratedQrLoginProgressListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiGrantQrLoginProgressListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiIdentityStatusChangeListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiIgnoredUsersListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiKnockRequestsListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiLiveLocationsListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiMediaPreviewConfigListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiNotificationSettingsDelegate, type UniffiVTableCallbackInterfaceMatrixSdkFfiPaginationStatusListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiProfileListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiProgressWatcher, type UniffiVTableCallbackInterfaceMatrixSdkFfiQrLoginProgressListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRecoveryStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomAccountDataListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomDirectorySearchEntriesListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomInfoListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomListEntriesListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomListLoadingStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomListServiceStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomListServiceSyncIndicatorListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSendQueueListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSendQueueRoomErrorListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSendQueueRoomUpdateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSessionVerificationControllerDelegate, type UniffiVTableCallbackInterfaceMatrixSdkFfiSpaceRoomListEntriesListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSpaceRoomListPaginationStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSpaceRoomListSpaceListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSpaceServiceJoinedSpacesListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSpaceServiceSpaceFiltersListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSyncListenerV2, type UniffiVTableCallbackInterfaceMatrixSdkFfiSyncNotificationListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSyncServiceStateObserver, type UniffiVTableCallbackInterfaceMatrixSdkFfiThreadListEntriesListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiThreadListPaginationStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiTimelineListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiTypingNotificationsListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiUnableToDecryptDelegate, type UniffiVTableCallbackInterfaceMatrixSdkFfiVerificationStateListener, type UniffiForeignFutureResultRustBuffer, type UniffiForeignFutureCompleterustBuffer, type UniffiVTableCallbackInterfaceMatrixSdkFfiWidgetCapabilitiesProvider,
+import { type UniffiRustFutureContinuationCallback, type UniffiForeignFutureDroppedCallback, type UniffiForeignFutureDroppedCallbackStruct, type UniffiVTableCallbackInterfaceMatrixSdkFfiAccountDataListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiBackupStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiBackupSteadyStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiBeaconInfoListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiCallDeclineListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiClientDelegate, type UniffiVTableCallbackInterfaceMatrixSdkFfiClientSessionDelegate, type UniffiVTableCallbackInterfaceMatrixSdkFfiDehydratedDeviceEventListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiDuplicateKeyUploadErrorListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiEnableRecoveryProgressListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiGeneratedQrLoginProgressListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiGrantGeneratedQrLoginProgressListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiGrantQrLoginProgressListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiIdentityStatusChangeListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiIgnoredUsersListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiKnockRequestsListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiLiveLocationsListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiMediaPreviewConfigListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiNotificationSettingsDelegate, type UniffiVTableCallbackInterfaceMatrixSdkFfiPaginationStatusListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiProfileListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiProgressWatcher, type UniffiVTableCallbackInterfaceMatrixSdkFfiQrLoginProgressListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRecoveryStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomAccountDataListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomDirectorySearchEntriesListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomInfoListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomListEntriesListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomListLoadingStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomListServiceStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomListServiceSyncIndicatorListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSearchServicePaginationStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSearchServiceResultsListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSendQueueListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSendQueueRoomErrorListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSendQueueRoomUpdateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSessionVerificationControllerDelegate, type UniffiVTableCallbackInterfaceMatrixSdkFfiSpaceRoomListEntriesListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSpaceRoomListPaginationStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSpaceRoomListSpaceListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSpaceServiceJoinedSpacesListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSpaceServiceSpaceFiltersListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSyncListenerV2, type UniffiVTableCallbackInterfaceMatrixSdkFfiSyncNotificationListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSyncServiceStateObserver, type UniffiVTableCallbackInterfaceMatrixSdkFfiThreadListEntriesListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiThreadListPaginationStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiTimelineListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiTypingNotificationsListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiUnableToDecryptDelegate, type UniffiVTableCallbackInterfaceMatrixSdkFfiVerificationStateListener, type UniffiForeignFutureResultRustBuffer, type UniffiForeignFutureCompleterustBuffer, type UniffiVTableCallbackInterfaceMatrixSdkFfiWidgetCapabilitiesProvider,
 } from "./matrix_sdk_ffi-ffi";
 import { type OAuthAuthorizationDataLike, type RoomPowerLevelChanges, type ServerVendorInfo, type TileServerInfo, type VirtualElementCallWidgetConfig, type VirtualElementCallWidgetProperties, BackupDownloadStrategy, PaginationStatus, RoomMemberRole,
 } from "./matrix_sdk";
@@ -16,7 +16,7 @@ import { type MediaScanResponse, ErrorReason,
 } from "./matrix_sdk_contentscanner";
 import { type DecryptionSettings, CollectStrategy, IdentityState, QrCodeIntent, UtdCause,
 } from "./matrix_sdk_crypto";
-import { EventItemOrigin, LatestEventValueLocalState, RoomListFilterCategory, RoomListFilterReadReceipts, RoomPinnedEventsChange, SpaceRoomListPaginationState, ThreadListPaginationState, TimelineEventFilter, TimelineEventFocusThreadMode, TimelineEventShieldStateCode, TimelineReadReceiptTracking,
+import { EventItemOrigin, LatestEventValueLocalState, RoomListFilterCategory, RoomListFilterReadReceipts, RoomPinnedEventsChange, SearchServicePaginationState, SpaceRoomListPaginationState, ThreadListPaginationState, TimelineEventFilter, TimelineEventFocusThreadMode, TimelineEventShieldStateCode, TimelineReadReceiptTracking,
 } from "./matrix_sdk_ui";
 import { MessageLikeEventType, RoomAccountDataEventType, StateEventType,
 } from "./ruma_events";
@@ -33,7 +33,7 @@ const { FfiConverterTypeErrorReason, FfiConverterTypeMediaScanResponse } = uniff
 import uniffiMatrixSdkCryptoModule from "./matrix_sdk_crypto";
 const { FfiConverterTypeCollectStrategy, FfiConverterTypeDecryptionSettings, FfiConverterTypeIdentityState, FfiConverterTypeQrCodeIntent, FfiConverterTypeUtdCause } = uniffiMatrixSdkCryptoModule.converters;
 import uniffiMatrixSdkUiModule from "./matrix_sdk_ui";
-const { FfiConverterTypeEventItemOrigin, FfiConverterTypeLatestEventValueLocalState, FfiConverterTypeRoomListFilterCategory, FfiConverterTypeRoomListFilterReadReceipts, FfiConverterTypeRoomPinnedEventsChange, FfiConverterTypeSpaceRoomListPaginationState, FfiConverterTypeThreadListPaginationState, FfiConverterTypeTimelineEventFilter, FfiConverterTypeTimelineEventFocusThreadMode, FfiConverterTypeTimelineEventShieldStateCode, FfiConverterTypeTimelineReadReceiptTracking } = uniffiMatrixSdkUiModule.converters;
+const { FfiConverterTypeEventItemOrigin, FfiConverterTypeLatestEventValueLocalState, FfiConverterTypeRoomListFilterCategory, FfiConverterTypeRoomListFilterReadReceipts, FfiConverterTypeRoomPinnedEventsChange, FfiConverterTypeSearchServicePaginationState, FfiConverterTypeSpaceRoomListPaginationState, FfiConverterTypeThreadListPaginationState, FfiConverterTypeTimelineEventFilter, FfiConverterTypeTimelineEventFocusThreadMode, FfiConverterTypeTimelineEventShieldStateCode, FfiConverterTypeTimelineReadReceiptTracking } = uniffiMatrixSdkUiModule.converters;
 import uniffiRumaEventsModule from "./ruma_events";
 const { FfiConverterTypeMessageLikeEventType, FfiConverterTypeRoomAccountDataEventType, FfiConverterTypeStateEventType } = uniffiRumaEventsModule.converters;
 // wasm1: wrap the wasm-bindgen namespace once so the codegen call sites can
@@ -16909,6 +16909,64 @@ const FfiConverterTypeMediaPreviewConfig = (() => {
         allocationSize(value: TypeName): number {
             return FfiConverterOptionalTypeMediaPreviews.allocationSize(value.mediaPreviews) +
              FfiConverterOptionalTypeInviteAvatars.allocationSize(value.inviteAvatars);
+            
+        }
+    };
+    return new FFIConverter();
+})();
+
+/**
+ * A message matching a search query, with its content and sender resolved.
+ */
+export type MessageSearchResult = {
+    eventId: string,
+    sender: string,
+    senderProfile: ProfileDetails,
+    content: TimelineItemContent,
+    timestamp: Timestamp
+}
+
+/**
+ * Generated factory for {@link MessageSearchResult} record objects.
+ */
+export const MessageSearchResult = (() => {
+    const defaults = () => ({
+    });
+    const create = (() => {
+        return uniffiCreateRecord<MessageSearchResult, ReturnType<typeof defaults>>(defaults);
+    })();
+    return Object.freeze({
+        create,
+        new: create,
+        defaults: () => Object.freeze(defaults()) as Partial<MessageSearchResult>,
+    });
+})();
+
+const FfiConverterTypeMessageSearchResult = (() => {
+    type TypeName = MessageSearchResult;
+    class FFIConverter extends AbstractFfiConverterByteArray<TypeName> {
+        readFromCursor(c: Cursor): TypeName {
+            return {
+                eventId: FfiConverterString.readFromCursor(c), 
+                sender: FfiConverterString.readFromCursor(c), 
+                senderProfile: FfiConverterTypeProfileDetails.readFromCursor(c), 
+                content: FfiConverterTypeTimelineItemContent.readFromCursor(c), 
+                timestamp: FfiConverterTypeTimestamp.readFromCursor(c)
+            };
+        }
+        writeIntoCursor(value: TypeName, c: Cursor): void {
+            FfiConverterString.writeIntoCursor(value.eventId, c);
+            FfiConverterString.writeIntoCursor(value.sender, c);
+            FfiConverterTypeProfileDetails.writeIntoCursor(value.senderProfile, c);
+            FfiConverterTypeTimelineItemContent.writeIntoCursor(value.content, c);
+            FfiConverterTypeTimestamp.writeIntoCursor(value.timestamp, c);
+        }
+        allocationSize(value: TypeName): number {
+            return FfiConverterString.allocationSize(value.eventId) +
+             FfiConverterString.allocationSize(value.sender) +
+             FfiConverterTypeProfileDetails.allocationSize(value.senderProfile) +
+             FfiConverterTypeTimelineItemContent.allocationSize(value.content) +
+             FfiConverterTypeTimestamp.allocationSize(value.timestamp);
             
         }
     };
@@ -46363,6 +46421,625 @@ const FfiConverterTypeRuleKind = (() => {
     return new FFIConverter();
 })();
 
+
+// Enum: SearchServiceResult
+export enum SearchServiceResult_Tags {
+    Message = "Message"
+}
+/**
+ * A single search result, tagged by the kind of entity it represents.
+ */
+export const SearchServiceResult = (() => {
+
+    type Message__interface = {
+        tag: SearchServiceResult_Tags.Message;
+        inner: 
+Readonly<{roomId: string; result: MessageSearchResult}>
+    };
+    /**
+     * A message (room timeline event) matching the query.
+     */
+    class Message_ extends UniffiEnum implements Message__interface {
+        /**
+         * @private
+         * This field is private and should not be used, use `tag` instead.
+         */
+        readonly [uniffiTypeNameSymbol] = "SearchServiceResult";
+        readonly tag = SearchServiceResult_Tags.Message;
+        readonly inner: 
+Readonly<{roomId: string; result: MessageSearchResult}>;
+        constructor(
+inner: {roomId: string; result: MessageSearchResult }) {
+            super("SearchServiceResult", "Message");
+
+            this.inner = Object.freeze(inner);
+        }
+        static new(
+inner: {roomId: string; result: MessageSearchResult }): Message_ {
+            return new Message_(inner);
+        }
+
+        static instanceOf(obj: any): obj is Message_ {
+            return obj.tag === SearchServiceResult_Tags.Message;
+        }
+
+    }
+
+    function instanceOf(obj: any): obj is SearchServiceResult {
+        return obj[uniffiTypeNameSymbol] === "SearchServiceResult";
+    }
+
+    return Object.freeze({
+        instanceOf,
+  Message: Message_
+    });
+
+})();
+/**
+ * A single search result, tagged by the kind of entity it represents.
+ */
+export type SearchServiceResult = InstanceType<
+    typeof SearchServiceResult['Message']
+>;
+
+// FfiConverter for enum SearchServiceResult
+const FfiConverterTypeSearchServiceResult = (() => {
+    type TypeName = SearchServiceResult;
+    class FFIConverter extends AbstractFfiConverterByteArray<TypeName> {
+        readFromCursor(c: Cursor): TypeName {
+            switch (c.readI32()) {
+                case 1: return new SearchServiceResult.Message({roomId: FfiConverterString.readFromCursor(c), result: FfiConverterTypeMessageSearchResult.readFromCursor(c) });
+                default: throw new UniffiInternalError.UnexpectedEnumCase();
+            }
+        }
+        writeIntoCursor(value: TypeName, c: Cursor): void {
+            switch (value.tag) {
+                case SearchServiceResult_Tags.Message: {
+                    c.writeI32(1);
+                    const inner = value.inner;
+                    FfiConverterString.writeIntoCursor(inner.roomId, c);
+                    FfiConverterTypeMessageSearchResult.writeIntoCursor(inner.result, c);
+                    return;
+                }
+                default:
+                    // Throwing from here means that SearchServiceResult_Tags hasn't matched an ordinal.
+                    throw new UniffiInternalError.UnexpectedEnumCase();
+            }
+        }
+        allocationSize(value: TypeName): number {
+            switch (value.tag) {
+                case SearchServiceResult_Tags.Message: {
+                    const inner = value.inner;
+                    let size = 4;
+                    size += FfiConverterString.allocationSize(inner.roomId);
+                    size += FfiConverterTypeMessageSearchResult.allocationSize(inner.result);
+                    return size;
+                }
+                default: throw new UniffiInternalError.UnexpectedEnumCase();
+            }
+        }
+    }
+    return new FFIConverter();
+})();
+
+
+// Enum: SearchServiceResultsUpdate
+export enum SearchServiceResultsUpdate_Tags {
+    Append = "Append",
+    Clear = "Clear",
+    PushFront = "PushFront",
+    PushBack = "PushBack",
+    PopFront = "PopFront",
+    PopBack = "PopBack",
+    Insert = "Insert",
+    Set = "Set",
+    Remove = "Remove",
+    Truncate = "Truncate",
+    Reset = "Reset"
+}
+export const SearchServiceResultsUpdate = (() => {
+
+    type Append__interface = {
+        tag: SearchServiceResultsUpdate_Tags.Append;
+        inner: 
+Readonly<{values: Array<SearchServiceResult>}>
+    };
+    class Append_ extends UniffiEnum implements Append__interface {
+        /**
+         * @private
+         * This field is private and should not be used, use `tag` instead.
+         */
+        readonly [uniffiTypeNameSymbol] = "SearchServiceResultsUpdate";
+        readonly tag = SearchServiceResultsUpdate_Tags.Append;
+        readonly inner: 
+Readonly<{values: Array<SearchServiceResult>}>;
+        constructor(
+inner: {values: Array<SearchServiceResult> }) {
+            super("SearchServiceResultsUpdate", "Append");
+
+            this.inner = Object.freeze(inner);
+        }
+        static new(
+inner: {values: Array<SearchServiceResult> }): Append_ {
+            return new Append_(inner);
+        }
+
+        static instanceOf(obj: any): obj is Append_ {
+            return obj.tag === SearchServiceResultsUpdate_Tags.Append;
+        }
+
+    }
+
+    type Clear__interface = {
+        tag: SearchServiceResultsUpdate_Tags.Clear
+    };
+    class Clear_ extends UniffiEnum implements Clear__interface {
+        /**
+         * @private
+         * This field is private and should not be used, use `tag` instead.
+         */
+        readonly [uniffiTypeNameSymbol] = "SearchServiceResultsUpdate";
+        readonly tag = SearchServiceResultsUpdate_Tags.Clear;
+        constructor() {
+            super("SearchServiceResultsUpdate", "Clear");
+        }
+
+        static new(): Clear_ {
+            return new Clear_();
+        }
+
+        static instanceOf(obj: any): obj is Clear_ {
+            return obj.tag === SearchServiceResultsUpdate_Tags.Clear;
+        }
+
+    }
+
+    type PushFront__interface = {
+        tag: SearchServiceResultsUpdate_Tags.PushFront;
+        inner: 
+Readonly<{value: SearchServiceResult}>
+    };
+    class PushFront_ extends UniffiEnum implements PushFront__interface {
+        /**
+         * @private
+         * This field is private and should not be used, use `tag` instead.
+         */
+        readonly [uniffiTypeNameSymbol] = "SearchServiceResultsUpdate";
+        readonly tag = SearchServiceResultsUpdate_Tags.PushFront;
+        readonly inner: 
+Readonly<{value: SearchServiceResult}>;
+        constructor(
+inner: {value: SearchServiceResult }) {
+            super("SearchServiceResultsUpdate", "PushFront");
+
+            this.inner = Object.freeze(inner);
+        }
+        static new(
+inner: {value: SearchServiceResult }): PushFront_ {
+            return new PushFront_(inner);
+        }
+
+        static instanceOf(obj: any): obj is PushFront_ {
+            return obj.tag === SearchServiceResultsUpdate_Tags.PushFront;
+        }
+
+    }
+
+    type PushBack__interface = {
+        tag: SearchServiceResultsUpdate_Tags.PushBack;
+        inner: 
+Readonly<{value: SearchServiceResult}>
+    };
+    class PushBack_ extends UniffiEnum implements PushBack__interface {
+        /**
+         * @private
+         * This field is private and should not be used, use `tag` instead.
+         */
+        readonly [uniffiTypeNameSymbol] = "SearchServiceResultsUpdate";
+        readonly tag = SearchServiceResultsUpdate_Tags.PushBack;
+        readonly inner: 
+Readonly<{value: SearchServiceResult}>;
+        constructor(
+inner: {value: SearchServiceResult }) {
+            super("SearchServiceResultsUpdate", "PushBack");
+
+            this.inner = Object.freeze(inner);
+        }
+        static new(
+inner: {value: SearchServiceResult }): PushBack_ {
+            return new PushBack_(inner);
+        }
+
+        static instanceOf(obj: any): obj is PushBack_ {
+            return obj.tag === SearchServiceResultsUpdate_Tags.PushBack;
+        }
+
+    }
+
+    type PopFront__interface = {
+        tag: SearchServiceResultsUpdate_Tags.PopFront
+    };
+    class PopFront_ extends UniffiEnum implements PopFront__interface {
+        /**
+         * @private
+         * This field is private and should not be used, use `tag` instead.
+         */
+        readonly [uniffiTypeNameSymbol] = "SearchServiceResultsUpdate";
+        readonly tag = SearchServiceResultsUpdate_Tags.PopFront;
+        constructor() {
+            super("SearchServiceResultsUpdate", "PopFront");
+        }
+
+        static new(): PopFront_ {
+            return new PopFront_();
+        }
+
+        static instanceOf(obj: any): obj is PopFront_ {
+            return obj.tag === SearchServiceResultsUpdate_Tags.PopFront;
+        }
+
+    }
+
+    type PopBack__interface = {
+        tag: SearchServiceResultsUpdate_Tags.PopBack
+    };
+    class PopBack_ extends UniffiEnum implements PopBack__interface {
+        /**
+         * @private
+         * This field is private and should not be used, use `tag` instead.
+         */
+        readonly [uniffiTypeNameSymbol] = "SearchServiceResultsUpdate";
+        readonly tag = SearchServiceResultsUpdate_Tags.PopBack;
+        constructor() {
+            super("SearchServiceResultsUpdate", "PopBack");
+        }
+
+        static new(): PopBack_ {
+            return new PopBack_();
+        }
+
+        static instanceOf(obj: any): obj is PopBack_ {
+            return obj.tag === SearchServiceResultsUpdate_Tags.PopBack;
+        }
+
+    }
+
+    type Insert__interface = {
+        tag: SearchServiceResultsUpdate_Tags.Insert;
+        inner: 
+Readonly<{index: number; value: SearchServiceResult}>
+    };
+    class Insert_ extends UniffiEnum implements Insert__interface {
+        /**
+         * @private
+         * This field is private and should not be used, use `tag` instead.
+         */
+        readonly [uniffiTypeNameSymbol] = "SearchServiceResultsUpdate";
+        readonly tag = SearchServiceResultsUpdate_Tags.Insert;
+        readonly inner: 
+Readonly<{index: number; value: SearchServiceResult}>;
+        constructor(
+inner: {index: number; value: SearchServiceResult }) {
+            super("SearchServiceResultsUpdate", "Insert");
+
+            this.inner = Object.freeze(inner);
+        }
+        static new(
+inner: {index: number; value: SearchServiceResult }): Insert_ {
+            return new Insert_(inner);
+        }
+
+        static instanceOf(obj: any): obj is Insert_ {
+            return obj.tag === SearchServiceResultsUpdate_Tags.Insert;
+        }
+
+    }
+
+    type Set__interface = {
+        tag: SearchServiceResultsUpdate_Tags.Set;
+        inner: 
+Readonly<{index: number; value: SearchServiceResult}>
+    };
+    class Set_ extends UniffiEnum implements Set__interface {
+        /**
+         * @private
+         * This field is private and should not be used, use `tag` instead.
+         */
+        readonly [uniffiTypeNameSymbol] = "SearchServiceResultsUpdate";
+        readonly tag = SearchServiceResultsUpdate_Tags.Set;
+        readonly inner: 
+Readonly<{index: number; value: SearchServiceResult}>;
+        constructor(
+inner: {index: number; value: SearchServiceResult }) {
+            super("SearchServiceResultsUpdate", "Set");
+
+            this.inner = Object.freeze(inner);
+        }
+        static new(
+inner: {index: number; value: SearchServiceResult }): Set_ {
+            return new Set_(inner);
+        }
+
+        static instanceOf(obj: any): obj is Set_ {
+            return obj.tag === SearchServiceResultsUpdate_Tags.Set;
+        }
+
+    }
+
+    type Remove__interface = {
+        tag: SearchServiceResultsUpdate_Tags.Remove;
+        inner: 
+Readonly<{index: number}>
+    };
+    class Remove_ extends UniffiEnum implements Remove__interface {
+        /**
+         * @private
+         * This field is private and should not be used, use `tag` instead.
+         */
+        readonly [uniffiTypeNameSymbol] = "SearchServiceResultsUpdate";
+        readonly tag = SearchServiceResultsUpdate_Tags.Remove;
+        readonly inner: 
+Readonly<{index: number}>;
+        constructor(
+inner: {index: number }) {
+            super("SearchServiceResultsUpdate", "Remove");
+
+            this.inner = Object.freeze(inner);
+        }
+        static new(
+inner: {index: number }): Remove_ {
+            return new Remove_(inner);
+        }
+
+        static instanceOf(obj: any): obj is Remove_ {
+            return obj.tag === SearchServiceResultsUpdate_Tags.Remove;
+        }
+
+    }
+
+    type Truncate__interface = {
+        tag: SearchServiceResultsUpdate_Tags.Truncate;
+        inner: 
+Readonly<{length: number}>
+    };
+    class Truncate_ extends UniffiEnum implements Truncate__interface {
+        /**
+         * @private
+         * This field is private and should not be used, use `tag` instead.
+         */
+        readonly [uniffiTypeNameSymbol] = "SearchServiceResultsUpdate";
+        readonly tag = SearchServiceResultsUpdate_Tags.Truncate;
+        readonly inner: 
+Readonly<{length: number}>;
+        constructor(
+inner: {length: number }) {
+            super("SearchServiceResultsUpdate", "Truncate");
+
+            this.inner = Object.freeze(inner);
+        }
+        static new(
+inner: {length: number }): Truncate_ {
+            return new Truncate_(inner);
+        }
+
+        static instanceOf(obj: any): obj is Truncate_ {
+            return obj.tag === SearchServiceResultsUpdate_Tags.Truncate;
+        }
+
+    }
+
+    type Reset__interface = {
+        tag: SearchServiceResultsUpdate_Tags.Reset;
+        inner: 
+Readonly<{values: Array<SearchServiceResult>}>
+    };
+    class Reset_ extends UniffiEnum implements Reset__interface {
+        /**
+         * @private
+         * This field is private and should not be used, use `tag` instead.
+         */
+        readonly [uniffiTypeNameSymbol] = "SearchServiceResultsUpdate";
+        readonly tag = SearchServiceResultsUpdate_Tags.Reset;
+        readonly inner: 
+Readonly<{values: Array<SearchServiceResult>}>;
+        constructor(
+inner: {values: Array<SearchServiceResult> }) {
+            super("SearchServiceResultsUpdate", "Reset");
+
+            this.inner = Object.freeze(inner);
+        }
+        static new(
+inner: {values: Array<SearchServiceResult> }): Reset_ {
+            return new Reset_(inner);
+        }
+
+        static instanceOf(obj: any): obj is Reset_ {
+            return obj.tag === SearchServiceResultsUpdate_Tags.Reset;
+        }
+
+    }
+
+    function instanceOf(obj: any): obj is SearchServiceResultsUpdate {
+        return obj[uniffiTypeNameSymbol] === "SearchServiceResultsUpdate";
+    }
+
+    return Object.freeze({
+        instanceOf,
+  Append: Append_, 
+  Clear: Clear_, 
+  PushFront: PushFront_, 
+  PushBack: PushBack_, 
+  PopFront: PopFront_, 
+  PopBack: PopBack_, 
+  Insert: Insert_, 
+  Set: Set_, 
+  Remove: Remove_, 
+  Truncate: Truncate_, 
+  Reset: Reset_
+    });
+
+})();
+export type SearchServiceResultsUpdate = InstanceType<
+    typeof SearchServiceResultsUpdate['Append' | 'Clear' | 'PushFront' | 'PushBack' | 'PopFront' | 'PopBack' | 'Insert' | 'Set' | 'Remove' | 'Truncate' | 'Reset']
+>;
+
+// FfiConverter for enum SearchServiceResultsUpdate
+const FfiConverterTypeSearchServiceResultsUpdate = (() => {
+    type TypeName = SearchServiceResultsUpdate;
+    class FFIConverter extends AbstractFfiConverterByteArray<TypeName> {
+        readFromCursor(c: Cursor): TypeName {
+            switch (c.readI32()) {
+                case 1: return new SearchServiceResultsUpdate.Append({values: FfiConverterSequenceTypeSearchServiceResult.readFromCursor(c) });
+                case 2: return new SearchServiceResultsUpdate.Clear();
+                case 3: return new SearchServiceResultsUpdate.PushFront({value: FfiConverterTypeSearchServiceResult.readFromCursor(c) });
+                case 4: return new SearchServiceResultsUpdate.PushBack({value: FfiConverterTypeSearchServiceResult.readFromCursor(c) });
+                case 5: return new SearchServiceResultsUpdate.PopFront();
+                case 6: return new SearchServiceResultsUpdate.PopBack();
+                case 7: return new SearchServiceResultsUpdate.Insert({index: FfiConverterUInt32.readFromCursor(c), value: FfiConverterTypeSearchServiceResult.readFromCursor(c) });
+                case 8: return new SearchServiceResultsUpdate.Set({index: FfiConverterUInt32.readFromCursor(c), value: FfiConverterTypeSearchServiceResult.readFromCursor(c) });
+                case 9: return new SearchServiceResultsUpdate.Remove({index: FfiConverterUInt32.readFromCursor(c) });
+                case 10: return new SearchServiceResultsUpdate.Truncate({length: FfiConverterUInt32.readFromCursor(c) });
+                case 11: return new SearchServiceResultsUpdate.Reset({values: FfiConverterSequenceTypeSearchServiceResult.readFromCursor(c) });
+                default: throw new UniffiInternalError.UnexpectedEnumCase();
+            }
+        }
+        writeIntoCursor(value: TypeName, c: Cursor): void {
+            switch (value.tag) {
+                case SearchServiceResultsUpdate_Tags.Append: {
+                    c.writeI32(1);
+                    const inner = value.inner;
+                    FfiConverterSequenceTypeSearchServiceResult.writeIntoCursor(inner.values, c);
+                    return;
+                }
+                case SearchServiceResultsUpdate_Tags.Clear: {
+                    c.writeI32(2);
+                    return;
+                }
+                case SearchServiceResultsUpdate_Tags.PushFront: {
+                    c.writeI32(3);
+                    const inner = value.inner;
+                    FfiConverterTypeSearchServiceResult.writeIntoCursor(inner.value, c);
+                    return;
+                }
+                case SearchServiceResultsUpdate_Tags.PushBack: {
+                    c.writeI32(4);
+                    const inner = value.inner;
+                    FfiConverterTypeSearchServiceResult.writeIntoCursor(inner.value, c);
+                    return;
+                }
+                case SearchServiceResultsUpdate_Tags.PopFront: {
+                    c.writeI32(5);
+                    return;
+                }
+                case SearchServiceResultsUpdate_Tags.PopBack: {
+                    c.writeI32(6);
+                    return;
+                }
+                case SearchServiceResultsUpdate_Tags.Insert: {
+                    c.writeI32(7);
+                    const inner = value.inner;
+                    FfiConverterUInt32.writeIntoCursor(inner.index, c);
+                    FfiConverterTypeSearchServiceResult.writeIntoCursor(inner.value, c);
+                    return;
+                }
+                case SearchServiceResultsUpdate_Tags.Set: {
+                    c.writeI32(8);
+                    const inner = value.inner;
+                    FfiConverterUInt32.writeIntoCursor(inner.index, c);
+                    FfiConverterTypeSearchServiceResult.writeIntoCursor(inner.value, c);
+                    return;
+                }
+                case SearchServiceResultsUpdate_Tags.Remove: {
+                    c.writeI32(9);
+                    const inner = value.inner;
+                    FfiConverterUInt32.writeIntoCursor(inner.index, c);
+                    return;
+                }
+                case SearchServiceResultsUpdate_Tags.Truncate: {
+                    c.writeI32(10);
+                    const inner = value.inner;
+                    FfiConverterUInt32.writeIntoCursor(inner.length, c);
+                    return;
+                }
+                case SearchServiceResultsUpdate_Tags.Reset: {
+                    c.writeI32(11);
+                    const inner = value.inner;
+                    FfiConverterSequenceTypeSearchServiceResult.writeIntoCursor(inner.values, c);
+                    return;
+                }
+                default:
+                    // Throwing from here means that SearchServiceResultsUpdate_Tags hasn't matched an ordinal.
+                    throw new UniffiInternalError.UnexpectedEnumCase();
+            }
+        }
+        allocationSize(value: TypeName): number {
+            switch (value.tag) {
+                case SearchServiceResultsUpdate_Tags.Append: {
+                    const inner = value.inner;
+                    let size = 4;
+                    size += FfiConverterSequenceTypeSearchServiceResult.allocationSize(inner.values);
+                    return size;
+                }
+                case SearchServiceResultsUpdate_Tags.Clear: {
+                    return 4;
+                }
+                case SearchServiceResultsUpdate_Tags.PushFront: {
+                    const inner = value.inner;
+                    let size = 4;
+                    size += FfiConverterTypeSearchServiceResult.allocationSize(inner.value);
+                    return size;
+                }
+                case SearchServiceResultsUpdate_Tags.PushBack: {
+                    const inner = value.inner;
+                    let size = 4;
+                    size += FfiConverterTypeSearchServiceResult.allocationSize(inner.value);
+                    return size;
+                }
+                case SearchServiceResultsUpdate_Tags.PopFront: {
+                    return 4;
+                }
+                case SearchServiceResultsUpdate_Tags.PopBack: {
+                    return 4;
+                }
+                case SearchServiceResultsUpdate_Tags.Insert: {
+                    const inner = value.inner;
+                    let size = 4;
+                    size += FfiConverterUInt32.allocationSize(inner.index);
+                    size += FfiConverterTypeSearchServiceResult.allocationSize(inner.value);
+                    return size;
+                }
+                case SearchServiceResultsUpdate_Tags.Set: {
+                    const inner = value.inner;
+                    let size = 4;
+                    size += FfiConverterUInt32.allocationSize(inner.index);
+                    size += FfiConverterTypeSearchServiceResult.allocationSize(inner.value);
+                    return size;
+                }
+                case SearchServiceResultsUpdate_Tags.Remove: {
+                    const inner = value.inner;
+                    let size = 4;
+                    size += FfiConverterUInt32.allocationSize(inner.index);
+                    return size;
+                }
+                case SearchServiceResultsUpdate_Tags.Truncate: {
+                    const inner = value.inner;
+                    let size = 4;
+                    size += FfiConverterUInt32.allocationSize(inner.length);
+                    return size;
+                }
+                case SearchServiceResultsUpdate_Tags.Reset: {
+                    const inner = value.inner;
+                    let size = 4;
+                    size += FfiConverterSequenceTypeSearchServiceResult.allocationSize(inner.values);
+                    return size;
+                }
+                default: throw new UniffiInternalError.UnexpectedEnumCase();
+            }
+        }
+    }
+    return new FFIConverter();
+})();
+
 export interface SessionVerificationEmojiLike {
     
     description(): string;
@@ -53756,6 +54433,357 @@ const uniffiTypeRoomDirectorySearchObjectFactory: UniffiObjectFactory<RoomDirect
 const FfiConverterTypeRoomDirectorySearch = new FfiConverterObject(uniffiTypeRoomDirectorySearchObjectFactory);
 
 
+export interface SearchServicePaginationStateListener {
+    
+    onUpdate(paginationState: SearchServicePaginationState): void;
+}
+
+
+
+// Put the implementation in a struct so we don't pollute the top-level namespace
+const uniffiCallbackInterfaceSearchServicePaginationStateListener: { vtable: any; register: () => void; } = {
+    // Create the VTable using a series of closures.
+    // ts automatically converts these into C callback functions.
+    vtable: {
+        on_update: (
+            uniffiHandle: bigint,
+            paginationState: Uint8Array,) => {
+            const uniffiMakeCall = 
+            ()
+            : void => {
+                const jsCallback = FfiConverterTypeSearchServicePaginationStateListener.lift(uniffiHandle);
+                return jsCallback.onUpdate(
+                    FfiConverterTypeSearchServicePaginationState.lift(paginationState)
+                )
+            };
+            const uniffiResult = UniffiResult.ready<void>();
+            const uniffiHandleSuccess = (obj: any) => {};
+            const uniffiHandleError = (code: number, errBuf: UniffiByteArray) => {
+                UniffiResult.writeError(uniffiResult, code, errBuf);
+            };
+            uniffiTraitInterfaceCall(
+                /*makeCall:*/ uniffiMakeCall,
+                /*handleSuccess:*/ uniffiHandleSuccess,
+                /*handleError:*/ uniffiHandleError,
+                /*lowerString:*/ FfiConverterString.lower.bind(FfiConverterString),
+                /*alloc:*/ nativeModule().rustbuffer_alloc,
+            )
+            return uniffiResult;
+        },
+        uniffi_free: (uniffiHandle: UniffiHandle): void => {
+            // this will throw a stale handle error if the handle isn't found.
+            FfiConverterTypeSearchServicePaginationStateListener.drop(uniffiHandle);
+        },
+        uniffi_clone: (uniffiHandle: UniffiHandle): UniffiHandle => {
+            return FfiConverterTypeSearchServicePaginationStateListener.clone(uniffiHandle);
+        }
+    },
+    register: () => {nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_init_callback_vtable_searchservicepaginationstatelistener(
+            uniffiCallbackInterfaceSearchServicePaginationStateListener.vtable
+        );
+    },
+};
+
+// FfiConverter protocol for callback interfaces
+const FfiConverterTypeSearchServicePaginationStateListener = new FfiConverterCallback<SearchServicePaginationStateListener>();
+
+
+export interface SearchServiceResultsListener {
+    
+    onUpdate(updates: Array<SearchServiceResultsUpdate>): void;
+}
+
+
+
+// Put the implementation in a struct so we don't pollute the top-level namespace
+const uniffiCallbackInterfaceSearchServiceResultsListener: { vtable: any; register: () => void; } = {
+    // Create the VTable using a series of closures.
+    // ts automatically converts these into C callback functions.
+    vtable: {
+        on_update: (
+            uniffiHandle: bigint,
+            updates: Uint8Array,) => {
+            const uniffiMakeCall = 
+            ()
+            : void => {
+                const jsCallback = FfiConverterTypeSearchServiceResultsListener.lift(uniffiHandle);
+                return jsCallback.onUpdate(
+                    FfiConverterSequenceTypeSearchServiceResultsUpdate.lift(updates)
+                )
+            };
+            const uniffiResult = UniffiResult.ready<void>();
+            const uniffiHandleSuccess = (obj: any) => {};
+            const uniffiHandleError = (code: number, errBuf: UniffiByteArray) => {
+                UniffiResult.writeError(uniffiResult, code, errBuf);
+            };
+            uniffiTraitInterfaceCall(
+                /*makeCall:*/ uniffiMakeCall,
+                /*handleSuccess:*/ uniffiHandleSuccess,
+                /*handleError:*/ uniffiHandleError,
+                /*lowerString:*/ FfiConverterString.lower.bind(FfiConverterString),
+                /*alloc:*/ nativeModule().rustbuffer_alloc,
+            )
+            return uniffiResult;
+        },
+        uniffi_free: (uniffiHandle: UniffiHandle): void => {
+            // this will throw a stale handle error if the handle isn't found.
+            FfiConverterTypeSearchServiceResultsListener.drop(uniffiHandle);
+        },
+        uniffi_clone: (uniffiHandle: UniffiHandle): UniffiHandle => {
+            return FfiConverterTypeSearchServiceResultsListener.clone(uniffiHandle);
+        }
+    },
+    register: () => {nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_init_callback_vtable_searchserviceresultslistener(
+            uniffiCallbackInterfaceSearchServiceResultsListener.vtable
+        );
+    },
+};
+
+// FfiConverter protocol for callback interfaces
+const FfiConverterTypeSearchServiceResultsListener = new FfiConverterCallback<SearchServiceResultsListener>();
+
+/**
+ * A reactive, paginated search across all the user's data.
+ */
+export interface SearchServiceLike {
+    
+/**
+ * Load the next page of results if a page isn't already loading and the
+ * end hasn't been reached. Otherwise it no-ops.
+ */
+    paginate(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
+/**
+ * Returns the current pagination state.
+ */
+    paginationState(): SearchServicePaginationState;
+/**
+ * Set (or update) the search query.
+ * Clears the current results, restarts pagination from scratch and loads
+ * the first page. Call [`Self::paginate`] to load any further pages.
+ */
+    setQuery(query: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
+/**
+ * Subscribe to pagination state updates.
+ */
+    subscribeToPaginationStateUpdates(listener: SearchServicePaginationStateListener): TaskHandleLike;
+/**
+ * Subscribe to the search results.
+ */
+    subscribeToResults(listener: SearchServiceResultsListener, asyncOpts_?: { signal: AbortSignal }): Promise<TaskHandleLike>;
+}
+/**
+ * @deprecated Use `SearchServiceLike` instead.
+ */
+export type SearchServiceInterface = SearchServiceLike;
+
+
+/**
+ * A reactive, paginated search across all the user's data.
+ */
+export class SearchService extends UniffiAbstractObject implements SearchServiceLike {
+
+    readonly [uniffiTypeNameSymbol] = "SearchService";
+    readonly [destructorGuardSymbol]: UniffiGcObject;
+    readonly [pointerLiteralSymbol]: UniffiHandle;
+    // No primary constructor declared for this class.
+private constructor(pointer: UniffiHandle) {
+    super();
+    this[pointerLiteralSymbol] = pointer;
+    this[destructorGuardSymbol] = uniffiTypeSearchServiceObjectFactory.bless(pointer);
+}
+
+    
+
+    
+/**
+ * Load the next page of results if a page isn't already loading and the
+ * end hasn't been reached. Otherwise it no-ops.
+ */
+    async paginate(asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_searchservice_paginate(
+                    uniffiTypeSearchServiceObjectFactory.clonePointer(this)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_void,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_void,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_void,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_void,
+            /*liftFunc:*/ (_v) => {},
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
+ * Returns the current pagination state.
+ */
+    paginationState(): SearchServicePaginationState {
+    const __rb: Uint8Array = uniffiCaller.rustCall(
+            /*caller:*/ (callStatus) => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_searchservice_pagination_state(
+                uniffiTypeSearchServiceObjectFactory.clonePointer(this),
+                callStatus);
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+    );
+    try {
+        return FfiConverterTypeSearchServicePaginationState.lift(__rb);
+    } finally {
+        nativeModule().rustbuffer_free(__rb);
+    }
+    }
+    
+/**
+ * Set (or update) the search query.
+ * Clears the current results, restarts pagination from scratch and loads
+ * the first page. Call [`Self::paginate`] to load any further pages.
+ */
+    async setQuery(query: string, asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_searchservice_set_query(
+                    uniffiTypeSearchServiceObjectFactory.clonePointer(this),FfiConverterString.lower(query, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_void,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_void,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_void,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_void,
+            /*liftFunc:*/ (_v) => {},
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
+ * Subscribe to pagination state updates.
+ */
+    subscribeToPaginationStateUpdates(listener: SearchServicePaginationStateListener): TaskHandleLike {
+    return FfiConverterTypeTaskHandle.lift(uniffiCaller.rustCall(
+            /*caller:*/ (callStatus) => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_searchservice_subscribe_to_pagination_state_updates(
+                uniffiTypeSearchServiceObjectFactory.clonePointer(this),
+        FfiConverterTypeSearchServicePaginationStateListener.lower(listener, nativeModule().rustbuffer_alloc),
+                callStatus);
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+    ));
+    }
+    
+/**
+ * Subscribe to the search results.
+ */
+    async subscribeToResults(listener: SearchServiceResultsListener, asyncOpts_?: { signal: AbortSignal }): Promise<TaskHandleLike> {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_searchservice_subscribe_to_results(
+                    uniffiTypeSearchServiceObjectFactory.clonePointer(this),FfiConverterTypeSearchServiceResultsListener.lower(listener, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_u64,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_u64,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_u64,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_u64,
+            // Async returns always go through the JS-side converter: the
+            // FFI symbol returns the future handle (u64), and the user-level
+            // RustBuffer comes back via the shared `rust_future_complete_*`
+            // export. The bytes the runtime hands back must be deserialized
+            // here using the per-callable return-type converter.
+            /*liftFunc:*/ FfiConverterTypeTaskHandle.lift.bind(FfiConverterTypeTaskHandle),
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            
+        );
+    }
+    
+
+    uniffiDestroy(): void {
+        const ptr = (this as any)[destructorGuardSymbol];
+        if (ptr !== undefined) {
+            const pointer = uniffiTypeSearchServiceObjectFactory.pointer(this);
+            uniffiTypeSearchServiceObjectFactory.freePointer(pointer);
+            uniffiTypeSearchServiceObjectFactory.unbless(ptr);
+            delete (this as any)[destructorGuardSymbol];
+        }
+    }
+
+    static instanceOf(obj_: any): obj_ is SearchService {
+        return uniffiTypeSearchServiceObjectFactory.isConcreteType(obj_);
+    }
+
+    
+}
+
+const uniffiTypeSearchServiceObjectFactory: UniffiObjectFactory<SearchServiceLike> = (() => {
+    
+    /// <reference lib="es2021" />
+    const registry = typeof FinalizationRegistry !== 'undefined' ? new FinalizationRegistry<UniffiHandle>((heldValue: UniffiHandle) => {
+        uniffiTypeSearchServiceObjectFactory.freePointer(heldValue);
+    }) : null;
+    
+    return {
+    create(pointer: UniffiHandle): SearchServiceLike {
+        const instance = Object.create(SearchService.prototype);
+        instance[pointerLiteralSymbol] = pointer;
+        instance[destructorGuardSymbol] = this.bless(pointer);
+        instance[uniffiTypeNameSymbol] = "SearchService";
+        return instance;
+    },
+
+    
+    bless(p: UniffiHandle): UniffiGcObject {
+        const ptr = {
+            p, // make sure this object doesn't get optimized away.
+            markDestroyed: () => undefined,
+        };
+        if (registry) {
+            registry.register(ptr, p, ptr);
+        }
+        return ptr;
+    },
+
+    unbless(ptr_: UniffiGcObject) {
+        if (registry) {
+            registry.unregister(ptr_);
+        }
+    },
+
+    pointer(obj_: SearchServiceLike): UniffiHandle {
+        if ((obj_ as any)[destructorGuardSymbol] === undefined) {
+            throw new UniffiInternalError.UnexpectedNullPointer();
+        }
+        return (obj_ as any)[pointerLiteralSymbol];
+    },
+
+    clonePointer(obj_: SearchServiceLike): UniffiHandle {
+        const pointer = this.pointer(obj_);
+        return uniffiCaller.rustCall(
+            /*caller:*/ (callStatus) => nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_clone_searchservice(pointer, callStatus),
+            /*liftString:*/ FfiConverterString.lift
+        );
+    },
+
+    freePointer(pointer: UniffiHandle): void {
+        uniffiCaller.rustCall(
+            /*caller:*/ (callStatus) => nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_free_searchservice(pointer, callStatus),
+            /*liftString:*/ FfiConverterString.lift
+        );
+    },
+
+    isConcreteType(obj_: any): obj_ is SearchServiceLike {
+        return obj_[destructorGuardSymbol] && obj_[uniffiTypeNameSymbol] === "SearchService";
+    },
+}})();
+const FfiConverterTypeSearchService = new FfiConverterObject(uniffiTypeSearchServiceObjectFactory);
+
+
 export interface ClientDelegate {
     
 /**
@@ -56742,6 +57770,11 @@ export interface ClientLike {
     ignoreUser(userId: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
     ignoredUsers(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<Array<string>>;
 /**
+ * Index the events already in the event cache, so message search can
+ * find history from previous sessions.
+ */
+    indexCachedEvents(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
+/**
  * Checks if the server supports the LiveKit RTC focus for placing calls.
  *
  * Transports are discovered through the authenticated
@@ -56964,6 +57997,15 @@ export interface ClientLike {
     roomAliasExists(roomAlias: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<boolean>;
     roomDirectorySearch(): RoomDirectorySearchLike;
     rooms(): Array<RoomLike>;
+/**
+ * Create a search service.
+ *
+ * The search service aggregates results of different kinds (currently only
+ * messages) into a single reactive, paginated list of typed
+ * [`SearchResult`]s. Call [`SearchService::set_query`] to start or update
+ * the search, then [`SearchService::paginate`] to load more results.
+ */
+    searchService(): SearchServiceLike;
     searchUsers(searchTerm: string, limit: bigint, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<SearchUsersResults>;
 /**
  * The URL of the server.
@@ -58528,6 +59570,29 @@ private constructor(pointer: UniffiHandle) {
     }
     
 /**
+ * Index the events already in the event cache, so message search can
+ * find history from previous sessions.
+ */
+    async indexCachedEvents(asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_index_cached_events(
+                    uniffiTypeClientObjectFactory.clonePointer(this)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_void,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_void,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_void,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_void,
+            /*liftFunc:*/ (_v) => {},
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
  * Checks if the server supports the LiveKit RTC focus for placing calls.
  *
  * Transports are discovered through the authenticated
@@ -59412,6 +60477,25 @@ private constructor(pointer: UniffiHandle) {
     } finally {
         nativeModule().rustbuffer_free(__rb);
     }
+    }
+    
+/**
+ * Create a search service.
+ *
+ * The search service aggregates results of different kinds (currently only
+ * messages) into a single reactive, paginated list of typed
+ * [`SearchResult`]s. Call [`SearchService::set_query`] to start or update
+ * the search, then [`SearchService::paginate`] to load more results.
+ */
+    searchService(): SearchServiceLike {
+    return FfiConverterTypeSearchService.lift(uniffiCaller.rustCall(
+            /*caller:*/ (callStatus) => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_search_service(
+                uniffiTypeClientObjectFactory.clonePointer(this),
+                callStatus);
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+    ));
     }
     
     async searchUsers(searchTerm: string, limit: bigint, asyncOpts_?: { signal: AbortSignal }): Promise<SearchUsersResults> /*throws*/ {
@@ -60831,6 +61915,21 @@ export interface ClientBuilderLike {
  */
     threadsEnabled(enabled: boolean, threadSubscriptions: boolean): ClientBuilderLike;
     userAgent(userAgent: string): ClientBuilderLike;
+/**
+ * Set up the search index store for this client, which is used to store
+ * the message search index locally.
+ *
+ * As soon as this is enabled, messages will start to be indexed, and can
+ * be later queried for search.
+ *
+ * `path` is the directory where the search index will be stored. It must
+ * be unique per session. On the web, where there is no filesystem, it
+ * names the IndexedDB database the index is saved in instead.
+ *
+ * `key` is an optional high-entropy key to encrypt the search index at
+ * rest. If `None`, the search index will be stored unencrypted.
+ */
+    withSearchIndexStore(path: string, key: string | undefined): ClientBuilderLike;
 }
 /**
  * @deprecated Use `ClientBuilderLike` instead.
@@ -61331,6 +62430,33 @@ export class ClientBuilder extends UniffiAbstractObject implements ClientBuilder
                 return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_clientbuilder_user_agent(
                 uniffiTypeClientBuilderObjectFactory.clonePointer(this),
         FfiConverterString.lower(userAgent, nativeModule().rustbuffer_alloc),
+                callStatus);
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+    ));
+    }
+    
+/**
+ * Set up the search index store for this client, which is used to store
+ * the message search index locally.
+ *
+ * As soon as this is enabled, messages will start to be indexed, and can
+ * be later queried for search.
+ *
+ * `path` is the directory where the search index will be stored. It must
+ * be unique per session. On the web, where there is no filesystem, it
+ * names the IndexedDB database the index is saved in instead.
+ *
+ * `key` is an optional high-entropy key to encrypt the search index at
+ * rest. If `None`, the search index will be stored unencrypted.
+ */
+    withSearchIndexStore(path: string, key: string | undefined): ClientBuilderLike {
+    return FfiConverterTypeClientBuilder.lift(uniffiCaller.rustCall(
+            /*caller:*/ (callStatus) => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_clientbuilder_with_search_index_store(
+                uniffiTypeClientBuilderObjectFactory.clonePointer(this),
+        FfiConverterString.lower(path, nativeModule().rustbuffer_alloc),
+        FfiConverterOptionalString.lower(key, nativeModule().rustbuffer_alloc),
                 callStatus);
             },
             /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
@@ -62117,6 +63243,9 @@ const FfiConverterMapTypeTagNameTypeTagInfo = new FfiConverterMap(FfiConverterTy
 // FfiConverter for Array<RoomDescription>
 const FfiConverterSequenceTypeRoomDescription = new FfiConverterArray(FfiConverterTypeRoomDescription);
 
+// FfiConverter for Array<SearchServiceResult>
+const FfiConverterSequenceTypeSearchServiceResult = new FfiConverterArray(FfiConverterTypeSearchServiceResult);
+
 // FfiConverter for Array<SessionVerificationEmojiLike>
 const FfiConverterSequenceTypeSessionVerificationEmoji = new FfiConverterArray(FfiConverterTypeSessionVerificationEmoji);
 
@@ -62176,6 +63305,9 @@ const FfiConverterOptionalTypeResolvedRoomAlias = new FfiConverterOptional(FfiCo
 
 // FfiConverter for Array<RoomDirectorySearchEntryUpdate>
 const FfiConverterSequenceTypeRoomDirectorySearchEntryUpdate = new FfiConverterArray(FfiConverterTypeRoomDirectorySearchEntryUpdate);
+
+// FfiConverter for Array<SearchServiceResultsUpdate>
+const FfiConverterSequenceTypeSearchServiceResultsUpdate = new FfiConverterArray(FfiConverterTypeSearchServiceResultsUpdate);
 
 // FfiConverter for ClientDelegate | undefined
 const FfiConverterOptionalTypeClientDelegate = new FfiConverterOptional(FfiConverterTypeClientDelegate);
@@ -62448,6 +63580,9 @@ function uniffiEnsureInitialized() {
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_ignored_users() !== 57288) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_ignored_users");
     }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_index_cached_events() !== 23871) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_index_cached_events");
+    }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_is_livekit_rtc_supported() !== 26302) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_is_livekit_rtc_supported");
     }
@@ -62549,6 +63684,9 @@ function uniffiEnsureInitialized() {
     }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_rooms() !== 57092) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_rooms");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_search_service() !== 60223) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_search_service");
     }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_search_users() !== 23484) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_search_users");
@@ -62753,6 +63891,9 @@ function uniffiEnsureInitialized() {
     }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_user_agent() !== 31638) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_user_agent");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_with_search_index_store() !== 50733) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_with_search_index_store");
     }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_constructor_contentscanner_new() !== 43408) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_constructor_contentscanner_new");
@@ -63552,6 +64693,21 @@ function uniffiEnsureInitialized() {
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompreview_own_membership_details() !== 16335) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_roompreview_own_membership_details");
     }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_searchservice_paginate() !== 9347) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_searchservice_paginate");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_searchservice_pagination_state() !== 10729) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_searchservice_pagination_state");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_searchservice_set_query() !== 26375) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_searchservice_set_query");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_searchservice_subscribe_to_pagination_state_updates() !== 33651) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_searchservice_subscribe_to_pagination_state_updates");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_searchservice_subscribe_to_results() !== 60148) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_searchservice_subscribe_to_results");
+    }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_constructor_secretsbundlewithuserid_from_str() !== 28891) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_constructor_secretsbundlewithuserid_from_str");
     }
@@ -63946,6 +65102,8 @@ function uniffiEnsureInitialized() {
     uniffiCallbackInterfaceRoomAccountDataListener.register();
     uniffiCallbackInterfaceSyncNotificationListener.register();
     uniffiCallbackInterfaceRoomDirectorySearchEntriesListener.register();
+    uniffiCallbackInterfaceSearchServicePaginationStateListener.register();
+    uniffiCallbackInterfaceSearchServiceResultsListener.register();
     uniffiCallbackInterfaceClientDelegate.register();
     uniffiCallbackInterfaceUnableToDecryptDelegate.register();
     uniffiCallbackInterfaceSpaceRoomListPaginationStateListener.register();
@@ -64078,6 +65236,7 @@ export default Object.freeze({
     FfiConverterTypeMessageContent,
     FfiConverterTypeMessageFormat,
     FfiConverterTypeMessageLikeEventContent,
+    FfiConverterTypeMessageSearchResult,
     FfiConverterTypeMessageType,
     FfiConverterTypeMsgLikeContent,
     FfiConverterTypeMsgLikeKind,
@@ -64179,6 +65338,9 @@ export default Object.freeze({
     FfiConverterTypeRtcNotificationType,
     FfiConverterTypeRuleKind,
     FfiConverterTypeRuleset,
+    FfiConverterTypeSearchService,
+    FfiConverterTypeSearchServiceResult,
+    FfiConverterTypeSearchServiceResultsUpdate,
     FfiConverterTypeSearchUsersResults,
     FfiConverterTypeSecretStorageEncryptionAlgorithm,
     FfiConverterTypeSecretStorageV1AesHmacSha2Properties,

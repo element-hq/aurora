@@ -1,0 +1,687 @@
+From ccc6c30f58f5c76e6f4de814ec323b360336a66f Mon Sep 17 00:00:00 2001
+From: David Langley <davidl@element.io>
+Date: Thu, 15 Oct 2026 17:26:34 +0100
+Subject: [PATCH] Add a `single-threaded` feature for targets without threads
+ (wasm)
+
+With the feature on, nothing in the indexing pipeline spawns a thread:
+
+- indexing workers run on the calling thread when the pipeline is closed,
+  i.e. at commit (`join_workers`), and the pipeline is unbounded so that
+  `add_document` can't block waiting for a worker;
+- segment-updater tasks run inline, and merges are queued and drained
+  iteratively by the outermost task rather than recursing per merge;
+- single-segment no-op merges are skipped, as an inline chain of them
+  would never let a commit return;
+- the doc-store compressor and directory watch callbacks run inline, and
+  `RamDirectory` no longer holds its lock while calling the callbacks;
+- `Index::writer` falls back to one worker where `available_parallelism`
+  is unsupported.
+
+The threaded build is unchanged.
+---
+ Cargo.toml                          |   4 +
+ src/directory/ram_directory.rs      |   6 +-
+ src/directory/watch_event_router.rs |  40 +++--
+ src/index/index.rs                  |   8 +-
+ src/indexer/index_writer.rs         | 218 +++++++++++++++++++---------
+ src/indexer/segment_updater.rs      | 109 +++++++++++++-
+ src/store/store_compressor.rs       |   3 +-
+ 7 files changed, 298 insertions(+), 90 deletions(-)
+
+diff --git a/Cargo.toml b/Cargo.toml
+index f1f2e513..937ae5d7 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -127,6 +127,10 @@ columnar-zstd-compression = ["columnar/zstd-compression"]
+ failpoints = ["fail", "fail/failpoints"]
+ unstable = []                            # useful for benches.
+ 
++# Run the indexing pipeline, segment updates and merges on the calling thread
++# instead of on dedicated threads. For targets without threads, such as wasm.
++single-threaded = []
++
+ quickwit = ["sstable", "futures-util", "futures-channel"]
+ 
+ # Compares only the hash of a string when indexing data.
+diff --git a/src/directory/ram_directory.rs b/src/directory/ram_directory.rs
+index 7ea6db9e..17e1f382 100644
+--- a/src/directory/ram_directory.rs
++++ b/src/directory/ram_directory.rs
+@@ -225,7 +225,11 @@ impl Directory for RamDirectory {
+         let path_buf = PathBuf::from(path);
+         self.fs.write().unwrap().write(path_buf, data);
+         if path == *META_FILEPATH {
+-            drop(self.fs.write().unwrap().watch_router.broadcast());
++            // The callbacks are called outside of the `fs` lock: in
++            // `single-threaded` mode they run right here, and a reader
++            // reloading itself reads from this directory.
++            let callbacks = self.fs.read().unwrap().watch_router.list_callback();
++            drop(WatchCallbackList::broadcast_callbacks(callbacks));
+         }
+         Ok(())
+     }
+diff --git a/src/directory/watch_event_router.rs b/src/directory/watch_event_router.rs
+index 572c2c5a..6b97560a 100644
+--- a/src/directory/watch_event_router.rs
++++ b/src/directory/watch_event_router.rs
+@@ -58,7 +58,9 @@ impl WatchCallbackList {
+         WatchHandle::new(watch_callback_arc)
+     }
+ 
+-    fn list_callback(&self) -> Vec<WatchCallback> {
++    /// Lists the live callbacks, so that they can be called later with
++    /// [`WatchCallbackList::broadcast_callbacks`], e.g. outside of a lock.
++    pub(crate) fn list_callback(&self) -> Vec<WatchCallback> {
+         let mut callbacks: Vec<WatchCallback> = vec![];
+         let mut router_wlock = self.router.write().unwrap();
+         let mut i = 0;
+@@ -75,22 +77,36 @@ impl WatchCallbackList {
+ 
+     /// Triggers all callbacks
+     pub fn broadcast(&self) -> FutureResult<()> {
+-        let callbacks = self.list_callback();
++        Self::broadcast_callbacks(self.list_callback())
++    }
++
++    /// Triggers the given callbacks, as listed by [`WatchCallbackList::list_callback`].
++    ///
++    /// In `single-threaded` mode the callbacks run on the current thread
++    /// before this returns, so the caller must not hold a lock they need.
++    pub(crate) fn broadcast_callbacks(callbacks: Vec<WatchCallback>) -> FutureResult<()> {
+         let (result, sender) = FutureResult::create("One of the callback panicked.");
+         if callbacks.is_empty() {
+             let _ = sender.send(Ok(()));
+             return result;
+         }
+-        let spawn_res = std::thread::Builder::new()
+-            .name("watch-callbacks".to_string())
+-            .spawn(move || {
+-                for callback in callbacks {
+-                    callback.call();
+-                }
+-                let _ = sender.send(Ok(()));
+-            });
+-        if let Err(err) = spawn_res {
+-            error!("Failed to spawn thread to call watch callbacks. Cause: {err:?}");
++        let call_callbacks = move || {
++            for callback in callbacks {
++                callback.call();
++            }
++            let _ = sender.send(Ok(()));
++        };
++        // Without threads, the callbacks are called right away on the current thread.
++        #[cfg(feature = "single-threaded")]
++        call_callbacks();
++        #[cfg(not(feature = "single-threaded"))]
++        {
++            let spawn_res = std::thread::Builder::new()
++                .name("watch-callbacks".to_string())
++                .spawn(call_callbacks);
++            if let Err(err) = spawn_res {
++                error!("Failed to spawn thread to call watch callbacks. Cause: {err:?}");
++            }
+         }
+         result
+     }
+diff --git a/src/index/index.rs b/src/index/index.rs
+index 5495ddce..c2023ddf 100644
+--- a/src/index/index.rs
++++ b/src/index/index.rs
+@@ -614,7 +614,13 @@ impl Index {
+         &self,
+         memory_budget_in_bytes: usize,
+     ) -> crate::Result<IndexWriter<D>> {
+-        let mut num_threads = std::cmp::min(available_parallelism()?.get(), MAX_NUM_THREAD);
++        // Platforms without threads (e.g. wasm) cannot report their parallelism:
++        // a single worker is used there.
++        let available_threads = available_parallelism().map(|n| n.get()).unwrap_or(1);
++        let mut num_threads = std::cmp::min(available_threads, MAX_NUM_THREAD);
++        if cfg!(feature = "single-threaded") {
++            num_threads = 1;
++        }
+         let memory_budget_num_bytes_per_thread = memory_budget_in_bytes / num_threads;
+         if memory_budget_num_bytes_per_thread < MEMORY_BUDGET_NUM_BYTES_MIN {
+             num_threads = (memory_budget_in_bytes / MEMORY_BUDGET_NUM_BYTES_MIN).max(1);
+diff --git a/src/indexer/index_writer.rs b/src/indexer/index_writer.rs
+index 7ffc3861..5b410549 100644
+--- a/src/indexer/index_writer.rs
++++ b/src/indexer/index_writer.rs
+@@ -1,6 +1,8 @@
+ use std::ops::Range;
+ use std::sync::Arc;
++#[cfg(not(feature = "single-threaded"))]
+ use std::thread;
++#[cfg(not(feature = "single-threaded"))]
+ use std::thread::JoinHandle;
+ 
+ use common::BitSet;
+@@ -15,7 +17,7 @@ use crate::fastfield::write_alive_bitset;
+ use crate::index::{Index, Segment, SegmentComponent, SegmentId, SegmentMeta, SegmentReader};
+ use crate::indexer::delete_queue::{DeleteCursor, DeleteQueue};
+ use crate::indexer::doc_opstamp_mapping::DocToOpstampMapping;
+-use crate::indexer::index_writer_status::IndexWriterStatus;
++use crate::indexer::index_writer_status::{IndexWriterBomb, IndexWriterStatus};
+ use crate::indexer::operation::DeleteOperation;
+ use crate::indexer::stamper::Stamper;
+ use crate::indexer::{MergePolicy, SegmentEntry, SegmentWriter};
+@@ -37,6 +39,7 @@ pub const MAX_NUM_THREAD: usize = 8;
+ 
+ // Add document will block if the number of docs waiting in the queue to be indexed
+ // reaches `PIPELINE_MAX_SIZE_IN_DOCS`
++#[cfg(not(feature = "single-threaded"))]
+ const PIPELINE_MAX_SIZE_IN_DOCS: usize = 10_000;
+ 
+ fn error_in_index_worker_thread(context: &str) -> TantivyError {
+@@ -45,6 +48,80 @@ fn error_in_index_worker_thread(context: &str) -> TantivyError {
+     ))
+ }
+ 
++/// Creates the pipeline through which documents are sent to the indexing workers.
++fn document_channel<D: Document>() -> (AddBatchSender<D>, AddBatchReceiver<D>) {
++    // Without worker threads nobody drains the pipeline until the next commit,
++    // so a bounded channel would block `add_document` forever once it is full.
++    #[cfg(feature = "single-threaded")]
++    {
++        crossbeam_channel::unbounded()
++    }
++    #[cfg(not(feature = "single-threaded"))]
++    {
++        crossbeam_channel::bounded(PIPELINE_MAX_SIZE_IN_DOCS)
++    }
++}
++
++/// An indexing worker pulls batches of documents off the pipeline and turns
++/// them into segments, until the pipeline is closed.
++///
++/// Normally each worker runs on its own thread. In `single-threaded` mode
++/// (no threads available, e.g. on wasm) the workers are instead run on the
++/// current thread once the pipeline is closed, i.e. when the `IndexWriter`
++/// prepares a commit.
++struct IndexingWorker<D: Document> {
++    document_receiver: AddBatchReceiver<D>,
++    index_writer_bomb: IndexWriterBomb<D>,
++    segment_updater: SegmentUpdater,
++    delete_cursor: DeleteCursor,
++    mem_budget: usize,
++    index: Index,
++}
++
++impl<D: Document> IndexingWorker<D> {
++    fn run(self) -> crate::Result<()> {
++        let IndexingWorker {
++            document_receiver,
++            index_writer_bomb,
++            segment_updater,
++            mut delete_cursor,
++            mem_budget,
++            index,
++        } = self;
++        loop {
++            let mut document_iterator = document_receiver
++                .clone()
++                .into_iter()
++                .filter(|batch| !batch.is_empty())
++                .peekable();
++
++            // The peeking here is to avoid creating a new segment's files
++            // if no document are available.
++            //
++            // This is a valid guarantee as the peeked document now belongs to
++            // our local iterator.
++            if let Some(batch) = document_iterator.peek() {
++                assert!(!batch.is_empty());
++                delete_cursor.skip_to(batch[0].opstamp);
++            } else {
++                // No more documents.
++                // It happens when there is a commit, or if the `IndexWriter`
++                // was dropped.
++                index_writer_bomb.defuse();
++                return Ok(());
++            }
++
++            index_documents(
++                mem_budget,
++                index.new_segment(),
++                &mut document_iterator,
++                &segment_updater,
++                delete_cursor.clone(),
++            )?;
++        }
++    }
++}
++
+ #[derive(Clone, bon::Builder)]
+ /// A builder for creating a new [IndexWriter] for an index.
+ pub struct IndexWriterOptions {
+@@ -77,13 +154,19 @@ pub struct IndexWriter<D: Document = TantivyDocument> {
+ 
+     options: IndexWriterOptions,
+ 
++    #[cfg(not(feature = "single-threaded"))]
+     workers_join_handle: Vec<JoinHandle<crate::Result<()>>>,
++    // Workers waiting to be run on the current thread, see `IndexingWorker`.
++    #[cfg(feature = "single-threaded")]
++    pending_workers: Vec<IndexingWorker<D>>,
+ 
+     index_writer_status: IndexWriterStatus<D>,
+     operation_sender: AddBatchSender<D>,
+ 
+     segment_updater: SegmentUpdater,
+ 
++    // Only used to name the worker threads.
++    #[cfg_attr(feature = "single-threaded", allow(dead_code))]
+     worker_id: usize,
+ 
+     delete_queue: DeleteQueue,
+@@ -300,8 +383,7 @@ impl<D: Document> IndexWriter<D> {
+             return Err(TantivyError::InvalidArgument(err_msg));
+         }
+ 
+-        let (document_sender, document_receiver) =
+-            crossbeam_channel::bounded(PIPELINE_MAX_SIZE_IN_DOCS);
++        let (document_sender, document_receiver) = document_channel();
+ 
+         let delete_queue = DeleteQueue::default();
+ 
+@@ -326,7 +408,10 @@ impl<D: Document> IndexWriter<D> {
+ 
+             segment_updater,
+ 
++            #[cfg(not(feature = "single-threaded"))]
+             workers_join_handle: vec![],
++            #[cfg(feature = "single-threaded")]
++            pending_workers: vec![],
+ 
+             delete_queue,
+ 
+@@ -356,13 +441,8 @@ impl<D: Document> IndexWriter<D> {
+         // dropping the last reference to the segment_updater.
+         self.drop_sender();
+ 
+-        let former_workers_handles = std::mem::take(&mut self.workers_join_handle);
+-        for join_handle in former_workers_handles {
+-            join_handle
+-                .join()
+-                .map_err(|_| error_in_index_worker_thread("Worker thread panicked."))?
+-                .map_err(|_| error_in_index_worker_thread("Worker thread failed."))?;
+-        }
++        self.join_workers()
++            .map_err(|_| error_in_index_worker_thread("Worker thread failed."))?;
+ 
+         let result = self
+             .segment_updater
+@@ -409,55 +489,56 @@ impl<D: Document> IndexWriter<D> {
+             })
+     }
+ 
+-    /// Spawns a new worker thread for indexing.
+-    /// The thread consumes documents from the pipeline.
++    /// Adds a new worker for indexing.
++    /// The worker consumes documents from the pipeline.
++    ///
++    /// The worker gets a thread of its own, except in `single-threaded` mode
++    /// where it is run on the current thread by `join_workers`.
+     fn add_indexing_worker(&mut self) -> crate::Result<()> {
+-        let document_receiver_clone = self.operation_receiver()?;
+-        let index_writer_bomb = self.index_writer_status.create_bomb();
+-
+-        let segment_updater = self.segment_updater.clone();
+-
+-        let mut delete_cursor = self.delete_queue.cursor();
+-
+-        let mem_budget = self.options.memory_budget_per_thread;
+-        let index = self.index.clone();
+-        let join_handle: JoinHandle<crate::Result<()>> = thread::Builder::new()
+-            .name(format!("thrd-tantivy-index{}", self.worker_id))
+-            .spawn(move || {
+-                loop {
+-                    let mut document_iterator = document_receiver_clone
+-                        .clone()
+-                        .into_iter()
+-                        .filter(|batch| !batch.is_empty())
+-                        .peekable();
+-
+-                    // The peeking here is to avoid creating a new segment's files
+-                    // if no document are available.
+-                    //
+-                    // This is a valid guarantee as the peeked document now belongs to
+-                    // our local iterator.
+-                    if let Some(batch) = document_iterator.peek() {
+-                        assert!(!batch.is_empty());
+-                        delete_cursor.skip_to(batch[0].opstamp);
+-                    } else {
+-                        // No more documents.
+-                        // It happens when there is a commit, or if the `IndexWriter`
+-                        // was dropped.
+-                        index_writer_bomb.defuse();
+-                        return Ok(());
+-                    }
+-
+-                    index_documents(
+-                        mem_budget,
+-                        index.new_segment(),
+-                        &mut document_iterator,
+-                        &segment_updater,
+-                        delete_cursor.clone(),
+-                    )?;
+-                }
+-            })?;
++        let worker = IndexingWorker {
++            document_receiver: self.operation_receiver()?,
++            index_writer_bomb: self.index_writer_status.create_bomb(),
++            segment_updater: self.segment_updater.clone(),
++            delete_cursor: self.delete_queue.cursor(),
++            mem_budget: self.options.memory_budget_per_thread,
++            index: self.index.clone(),
++        };
++        #[cfg(not(feature = "single-threaded"))]
++        {
++            let join_handle: JoinHandle<crate::Result<()>> = thread::Builder::new()
++                .name(format!("thrd-tantivy-index{}", self.worker_id))
++                .spawn(move || worker.run())?;
++            self.workers_join_handle.push(join_handle);
++        }
++        #[cfg(feature = "single-threaded")]
++        self.pending_workers.push(worker);
+         self.worker_id += 1;
+-        self.workers_join_handle.push(join_handle);
++        Ok(())
++    }
++
++    /// Waits for all the indexing workers to finish indexing the documents
++    /// pending in the pipeline, and returns the first worker error if any.
++    ///
++    /// The pipeline's sender must have been dropped or replaced beforehand,
++    /// otherwise the workers never terminate.
++    fn join_workers(&mut self) -> crate::Result<()> {
++        #[cfg(not(feature = "single-threaded"))]
++        {
++            for join_handle in std::mem::take(&mut self.workers_join_handle) {
++                join_handle
++                    .join()
++                    .map_err(|e| TantivyError::ErrorInThread(format!("{e:?}")))??;
++            }
++        }
++        #[cfg(feature = "single-threaded")]
++        {
++            // The workers never got a thread of their own: run them now, on the
++            // current thread. The pipeline is closed, so each one terminates
++            // once it has indexed everything that was pending.
++            for worker in std::mem::take(&mut self.pending_workers) {
++                worker.run()?;
++            }
++        }
+         Ok(())
+     }
+ 
+@@ -547,8 +628,7 @@ impl<D: Document> IndexWriter<D> {
+     ///
+     /// Returns the former segment_ready channel.
+     fn recreate_document_channel(&mut self) {
+-        let (document_sender, document_receiver) =
+-            crossbeam_channel::bounded(PIPELINE_MAX_SIZE_IN_DOCS);
++        let (document_sender, document_receiver) = document_channel();
+         self.operation_sender = document_sender;
+         self.index_writer_status = IndexWriterStatus::from(document_receiver);
+     }
+@@ -632,15 +712,8 @@ impl<D: Document> IndexWriter<D> {
+         // and recreate a new one.
+         self.recreate_document_channel();
+ 
+-        let former_workers_join_handle = std::mem::take(&mut self.workers_join_handle);
+-
+-        for worker_handle in former_workers_join_handle {
+-            let indexing_worker_result = worker_handle
+-                .join()
+-                .map_err(|e| TantivyError::ErrorInThread(format!("{e:?}")))?;
+-            indexing_worker_result?;
+-            self.add_indexing_worker()?;
+-        }
++        self.join_workers()?;
++        self.start_workers()?;
+ 
+         let commit_opstamp = self.stamper.stamp();
+         let prepared_commit = PreparedCommit::new(self, commit_opstamp);
+@@ -808,9 +881,14 @@ impl<D: Document> Drop for IndexWriter<D> {
+     fn drop(&mut self) {
+         self.segment_updater.kill();
+         self.drop_sender();
+-        for work in self.workers_join_handle.drain(..) {
+-            let _ = work.join();
++        #[cfg(not(feature = "single-threaded"))]
++        {
++            for work in self.workers_join_handle.drain(..) {
++                let _ = work.join();
++            }
+         }
++        // In `single-threaded` mode the pending workers are simply dropped:
++        // the segment updater is killed, so there is nothing left for them to do.
+     }
+ }
+ 
+diff --git a/src/indexer/segment_updater.rs b/src/indexer/segment_updater.rs
+index bf35c52b..7bed07eb 100644
+--- a/src/indexer/segment_updater.rs
++++ b/src/indexer/segment_updater.rs
+@@ -1,12 +1,19 @@
+ use std::any::Any;
+ use std::borrow::BorrowMut;
++#[cfg(feature = "single-threaded")]
++use std::collections::VecDeque;
+ use std::collections::HashSet;
+ use std::io::Write;
+ use std::ops::Deref;
+ use std::path::PathBuf;
++#[cfg(feature = "single-threaded")]
++use std::sync::atomic::AtomicUsize;
+ use std::sync::atomic::{AtomicBool, Ordering};
++#[cfg(feature = "single-threaded")]
++use std::sync::Mutex;
+ use std::sync::{Arc, RwLock};
+ 
++#[cfg(not(feature = "single-threaded"))]
+ use rayon::{ThreadPool, ThreadPoolBuilder};
+ 
+ use super::segment_manager::SegmentManager;
+@@ -258,8 +265,17 @@ pub(crate) struct InnerSegmentUpdater {
+     // This should be up to date as all update happen through
+     // the unique active `SegmentUpdater`.
+     active_index_meta: RwLock<Arc<IndexMeta>>,
++    // In `single-threaded` mode there are no pools: tasks run right away on
++    // the thread that requests them, and merges are queued and run once the
++    // outermost task is done (see `run_inline`).
++    #[cfg(not(feature = "single-threaded"))]
+     pool: ThreadPool,
++    #[cfg(not(feature = "single-threaded"))]
+     merge_thread_pool: ThreadPool,
++    #[cfg(feature = "single-threaded")]
++    inline_depth: AtomicUsize,
++    #[cfg(feature = "single-threaded")]
++    pending_merges: Mutex<VecDeque<Box<dyn FnOnce() + Send>>>,
+ 
+     index: Index,
+     segment_manager: SegmentManager,
+@@ -274,10 +290,11 @@ impl SegmentUpdater {
+         index: Index,
+         stamper: Stamper,
+         delete_cursor: &DeleteCursor,
+-        num_merge_threads: usize,
++        #[cfg_attr(feature = "single-threaded", allow(unused_variables))] num_merge_threads: usize,
+     ) -> crate::Result<SegmentUpdater> {
+         let segments = index.searchable_segment_metas()?;
+         let segment_manager = SegmentManager::from_segments(segments, delete_cursor);
++        #[cfg(not(feature = "single-threaded"))]
+         let pool = ThreadPoolBuilder::new()
+             .thread_name(|_| "segment_updater".to_string())
+             .num_threads(1)
+@@ -287,6 +304,7 @@ impl SegmentUpdater {
+                     "Failed to spawn segment updater thread".to_string(),
+                 )
+             })?;
++        #[cfg(not(feature = "single-threaded"))]
+         let merge_thread_pool = ThreadPoolBuilder::new()
+             .thread_name(|i| format!("merge_thread_{i}"))
+             .num_threads(num_merge_threads)
+@@ -308,8 +326,14 @@ impl SegmentUpdater {
+         let index_meta = index.load_metas()?;
+         Ok(SegmentUpdater(Arc::new(InnerSegmentUpdater {
+             active_index_meta: RwLock::new(Arc::new(index_meta)),
++            #[cfg(not(feature = "single-threaded"))]
+             pool,
++            #[cfg(not(feature = "single-threaded"))]
+             merge_thread_pool,
++            #[cfg(feature = "single-threaded")]
++            inline_depth: AtomicUsize::new(0),
++            #[cfg(feature = "single-threaded")]
++            pending_merges: Mutex::new(VecDeque::new()),
+             index,
+             segment_manager,
+             merge_policy: RwLock::new(Arc::new(DefaultMergePolicy::default())),
+@@ -338,13 +362,60 @@ impl SegmentUpdater {
+         let (scheduled_result, sender) = FutureResult::create(
+             "A segment_updater future did not succeed. This should never happen.",
+         );
+-        self.pool.spawn(|| {
++        let job = move || {
+             let task_result = task();
+             let _ = sender.send(task_result);
+-        });
++        };
++        #[cfg(not(feature = "single-threaded"))]
++        self.pool.spawn(job);
++        // Without threads, the task runs right away on the current thread, so
++        // its result is already there when the returned future is waited on.
++        #[cfg(feature = "single-threaded")]
++        self.run_inline(job);
+         scheduled_result
+     }
+ 
++    /// Runs `job` on the current thread, followed by the merges it queued.
++    ///
++    /// A task that ends a merge is itself run from within a merge, so tasks
++    /// nest. Merges however are only queued (see `queue_merge`), and drained
++    /// here by the outermost call, iteratively: a long chain of merges would
++    /// otherwise recurse once per merge and overflow the stack.
++    #[cfg(feature = "single-threaded")]
++    fn run_inline(&self, job: impl FnOnce()) {
++        struct DepthGuard<'a>(&'a AtomicUsize);
++        impl Drop for DepthGuard<'_> {
++            fn drop(&mut self) {
++                self.0.fetch_sub(1, Ordering::Relaxed);
++            }
++        }
++        let depth = self.inline_depth.fetch_add(1, Ordering::Relaxed);
++        let _guard = DepthGuard(&self.inline_depth);
++        job();
++        if depth == 0 {
++            loop {
++                // The lock is released before running the merge, which queues
++                // further merges itself.
++                let next_merge = self.pending_merges.lock().unwrap().pop_front();
++                match next_merge {
++                    Some(merge_job) => merge_job(),
++                    None => break,
++                }
++            }
++        }
++    }
++
++    /// Queues a merge to run once the current task is done, or runs it right
++    /// away when no task is running. See `run_inline`.
++    #[cfg(feature = "single-threaded")]
++    fn queue_merge(&self, merge_job: impl FnOnce() + Send + 'static) {
++        if self.inline_depth.load(Ordering::Relaxed) == 0 {
++            self.run_inline(merge_job);
++        } else {
++            self.pending_merges.lock().unwrap().push_back(Box::new(merge_job));
++        }
++    }
++
+     pub fn schedule_add_segment(&self, segment_entry: SegmentEntry) -> FutureResult<()> {
+         let segment_updater = self.clone();
+         self.schedule_task(move || {
+@@ -513,7 +584,7 @@ impl SegmentUpdater {
+         let (scheduled_result, merging_future_send) =
+             FutureResult::create("Merge operation failed.");
+ 
+-        self.merge_thread_pool.spawn(move || {
++        let merge_job = move || {
+             // The fact that `merge_operation` is moved here is important.
+             // Its lifetime is used to track how many merging thread are currently running,
+             // as well as which segment is currently in merge and therefore should not be
+@@ -562,7 +633,13 @@ impl SegmentUpdater {
+                     let _send_result = merging_future_send.send(Err(merge_error));
+                 }
+             }
+-        });
++        };
++        #[cfg(not(feature = "single-threaded"))]
++        self.merge_thread_pool.spawn(merge_job);
++        // Without threads, the merge runs on the current thread, once the
++        // task that requested it (if any) is done.
++        #[cfg(feature = "single-threaded")]
++        self.queue_merge(merge_job);
+ 
+         scheduled_result
+     }
+@@ -590,6 +667,7 @@ impl SegmentUpdater {
+         let mut merge_candidates: Vec<MergeOperation> = merge_policy
+             .compute_merge_candidates(&uncommitted_segments)
+             .into_iter()
++            .filter(|merge_candidate| !Self::is_noop_merge(merge_candidate, &uncommitted_segments))
+             .map(|merge_candidate| {
+                 MergeOperation::new(&self.merge_operations, current_opstamp, merge_candidate.0)
+             })
+@@ -599,6 +677,7 @@ impl SegmentUpdater {
+         let committed_merge_candidates = merge_policy
+             .compute_merge_candidates(&committed_segments)
+             .into_iter()
++            .filter(|merge_candidate| !Self::is_noop_merge(merge_candidate, &committed_segments))
+             .map(|merge_candidate: MergeCandidate| {
+                 MergeOperation::new(&self.merge_operations, commit_opstamp, merge_candidate.0)
+             });
+@@ -611,6 +690,26 @@ impl SegmentUpdater {
+         }
+     }
+ 
++    /// Whether this merge would only copy a single segment that has no deletes,
++    /// i.e. a no-op. A merge policy may propose one (e.g. with
++    /// `min_num_segments(1)`), and then propose it again for the merged
++    /// segment, endlessly.
++    ///
++    /// With threads that chain is harmless: it runs in the background and dies
++    /// with the writer. In `single-threaded` mode it would never let the
++    /// current commit return, so such merges are skipped.
++    fn is_noop_merge(candidate: &MergeCandidate, segments: &[SegmentMeta]) -> bool {
++        if cfg!(not(feature = "single-threaded")) {
++            return false;
++        }
++        match candidate.0.as_slice() {
++            [segment_id] => segments
++                .iter()
++                .any(|meta| meta.id() == *segment_id && meta.num_deleted_docs() == 0),
++            _ => false,
++        }
++    }
++
+     /// Queues a `end_merge` in the segment updater and blocks until it is successfully processed.
+     fn end_merge(
+         &self,
+diff --git a/src/store/store_compressor.rs b/src/store/store_compressor.rs
+index 20211b25..31d88f7d 100644
+--- a/src/store/store_compressor.rs
++++ b/src/store/store_compressor.rs
+@@ -24,7 +24,8 @@ enum BlockCompressorVariants {
+ impl BlockCompressor {
+     pub fn new(compressor: Compressor, wrt: WritePtr, dedicated_thread: bool) -> io::Result<Self> {
+         let block_compressor_impl = BlockCompressorImpl::new(compressor, wrt);
+-        if dedicated_thread {
++        // Without threads, compression always happens on the calling thread.
++        if dedicated_thread && cfg!(not(feature = "single-threaded")) {
+             let dedicated_thread_compressor =
+                 DedicatedThreadBlockCompressorImpl::new(block_compressor_impl)?;
+             Ok(BlockCompressor(BlockCompressorVariants::DedicatedThread(
+-- 
+2.55.0
+

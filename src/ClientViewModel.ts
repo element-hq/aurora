@@ -7,19 +7,21 @@
  *
  */
 
-import {
-    createAuthenticationClient,
-    restoreClient,
-    validateNativeSlidingSync,
-} from "./utils/clientBuilder";
 import { BaseViewModel } from "@element-hq/web-shared-components";
-import { MemberListViewModel } from "./MemberList/MemberListViewModel";
-import { TimelineViewModel } from "./Timeline/TimelineViewModel";
-import { RoomViewModel } from "./Room/RoomViewModel";
+import { EncryptionFlowViewModel } from "./CryptoSetup/EncryptionFlowViewModel";
+import {
+    ClientState,
+    type ClientViewActions,
+    type ClientViewSnapshot,
+    type LoginParams,
+    type Props,
+    type RoomHistoryEntry,
+} from "./client-view.types";
 import {
     type ClientInterface,
     type ClientSessionDelegate,
     type HomeserverLoginDetailsInterface,
+    initPlatform,
     LogLevel,
     type OAuthAuthorizationDataInterface,
     OAuthPrompt,
@@ -27,23 +29,45 @@ import {
     type Session,
     type SyncServiceInterface,
     type TaskHandleInterface,
-    initPlatform,
 } from "./index.web.ts";
-import { getOidcConfiguration } from "./oidcConfig";
-import { printRustError } from "./utils/printRustError";
-import {
-    ClientState,
-    type ClientViewActions,
-    type ClientViewSnapshot,
-    type LoginParams,
-    type Props,
-} from "./client-view.types";
 import type { Credential } from "./Login/credentials.types";
-import { EncryptionFlowViewModel } from "./CryptoSetup/EncryptionFlowViewModel";
 import { LoginFlowViewModel } from "./Login/LoginFlowViewModel";
+import { getOidcConfiguration } from "./oidcConfig";
+import { RoomViewModel } from "./Room/RoomViewModel";
 import { RoomListViewViewModel } from "./RoomList/RoomListViewViewModel";
+import { GlobalSearchViewModel } from "./Search/GlobalSearchViewModel";
 import { SetStatusViewModel } from "./UserStatus/SetStatusViewModel";
+import {
+    createAuthenticationClient,
+    restoreClient,
+    validateNativeSlidingSync,
+} from "./utils/clientBuilder";
+import { mxcToUrl } from "./utils/mxcToUrl";
+import { printRustError } from "./utils/printRustError";
 import { userStatusFromProfile } from "./utils/userStatus";
+
+let platformInitialised = false;
+
+/**
+ * Set up the SDK's logging once per page: it can only be initialised once,
+ * and both session restore and login need it.
+ */
+function ensurePlatformInitialised(): void {
+    if (platformInitialised) return;
+    platformInitialised = true;
+    initPlatform(
+        {
+            logLevel: LogLevel.Info,
+            // Add e.g. TraceLogPacks.Search or TraceLogPacks.EventCache here to
+            // debug the search index; they're very chatty.
+            traceLogPacks: [],
+            extraTargets: [],
+            writeToStdoutOrSystem: true,
+            writeToFiles: undefined,
+        },
+        true,
+    );
+}
 
 export class ClientViewModel
     extends BaseViewModel<ClientViewSnapshot, Props>
@@ -58,6 +82,10 @@ export class ClientViewModel
     private storagePassphrase?: string;
     private storageStoreId?: string;
     private currentRoomId?: string;
+    /** Rooms viewed in order, for back/forward navigation. */
+    private roomHistory: string[] = [];
+    private roomHistoryIndex = -1;
+    private roomHistoryEntries = new Map<string, RoomHistoryEntry>();
 
     public constructor(props: Props) {
         super(props, {
@@ -65,6 +93,10 @@ export class ClientViewModel
             roomViewModel: undefined,
             roomListViewModel: undefined,
             loginFlowViewModel: undefined,
+            globalSearchViewModel: undefined,
+            canGoBack: false,
+            canGoForward: false,
+            recentRooms: [],
             userId: undefined,
             displayName: undefined,
             avatarUrl: undefined,
@@ -204,6 +236,8 @@ export class ClientViewModel
                 throw new Error("No session found");
             }
 
+            ensurePlatformInitialised();
+
             // Try to restore the client - if this fails due to decryption errors,
             // clean up the corrupted store to prevent getting stuck in a loop
             try {
@@ -265,6 +299,10 @@ export class ClientViewModel
         }
 
         this.client = undefined;
+        this.getSnapshot().globalSearchViewModel?.dispose();
+        this.roomHistory = [];
+        this.roomHistoryIndex = -1;
+        this.roomHistoryEntries.clear();
 
         this.ownProfileHandle?.cancel();
         this.ownProfileHandle = undefined;
@@ -276,6 +314,10 @@ export class ClientViewModel
             roomListViewModel: undefined,
             userId: undefined,
             displayName: undefined,
+            globalSearchViewModel: undefined,
+            canGoBack: false,
+            canGoForward: false,
+            recentRooms: [],
             avatarUrl: undefined,
             userStatus: undefined,
             setStatusViewModel: undefined,
@@ -307,16 +349,7 @@ export class ClientViewModel
         }
 
         try {
-            initPlatform(
-                {
-                    logLevel: LogLevel.Trace,
-                    traceLogPacks: [],
-                    extraTargets: [],
-                    writeToStdoutOrSystem: true,
-                    writeToFiles: undefined,
-                },
-                true,
-            );
+            ensurePlatformInitialised();
 
             // Call the appropriate login method based on credential type
             if (credentials.type === "password") {
@@ -575,14 +608,33 @@ export class ClientViewModel
 
             if (import.meta.env.DEV) this.exposeClearCaches();
 
+            const globalSearchViewModel = new GlobalSearchViewModel({
+                client: this.client,
+                roomListService: this.roomListService,
+                openRoom: this.openRoom.bind(this),
+            });
+
             console.log("Sync services created, transitioning to Syncing");
             this.snapshot.merge({
                 clientState: ClientState.Syncing,
                 roomListViewModel,
+                globalSearchViewModel,
             });
             this.subscribeToOwnProfile();
             await this.syncService.start();
             console.log("syncing...");
+
+            // Seed the search index with the history already in the event
+            // cache (the SDK does it once per index); new events are indexed
+            // as they arrive.
+            this.client
+                .indexCachedEvents()
+                .then(() =>
+                    console.log("Search index seeded from the event cache"),
+                )
+                .catch((e) =>
+                    printRustError("Failed to seed the search index", e),
+                );
         } catch (e) {
             printRustError("syncing failed", e);
             this.snapshot.merge({ clientState: ClientState.Unknown });
@@ -689,7 +741,68 @@ export class ClientViewModel
         snapshot.roomListViewModel?.setActiveRoom(roomId);
     }
 
+    /**
+     * Open a room as a user navigation: drops any forward history and
+     * records the room so back/forward and the history menu can return to it.
+     */
     public openRoom(roomId: string): void {
+        if (roomId === "" || roomId === this.currentRoomId) return;
+
+        this.roomHistory = this.roomHistory.slice(0, this.roomHistoryIndex + 1);
+        this.roomHistory.push(roomId);
+        this.roomHistoryIndex = this.roomHistory.length - 1;
+
         this.setCurrentRoom(roomId);
+        this.updateNavigationState();
+    }
+
+    public goBack(): void {
+        if (this.roomHistoryIndex <= 0) return;
+        this.roomHistoryIndex--;
+        this.setCurrentRoom(this.roomHistory[this.roomHistoryIndex]);
+        this.updateNavigationState();
+    }
+
+    public goForward(): void {
+        if (this.roomHistoryIndex >= this.roomHistory.length - 1) return;
+        this.roomHistoryIndex++;
+        this.setCurrentRoom(this.roomHistory[this.roomHistoryIndex]);
+        this.updateNavigationState();
+    }
+
+    private updateNavigationState(): void {
+        // Most recently viewed first, each room once.
+        const recentIds = Array.from(new Set([...this.roomHistory].reverse()));
+        this.snapshot.merge({
+            canGoBack: this.roomHistoryIndex > 0,
+            canGoForward: this.roomHistoryIndex < this.roomHistory.length - 1,
+            recentRooms: recentIds
+                .map((id) => this.roomHistoryEntries.get(id))
+                .filter((entry) => entry !== undefined),
+        });
+        // Fill in names and avatars for rooms we haven't resolved yet.
+        for (const id of recentIds) {
+            if (!this.roomHistoryEntries.has(id)) this.resolveHistoryEntry(id);
+        }
+    }
+
+    private async resolveHistoryEntry(roomId: string): Promise<void> {
+        try {
+            const client = this.client;
+            const room = client?.getRoom(roomId);
+            if (!client || !room) return;
+            const info = await room.roomInfo();
+            this.roomHistoryEntries.set(roomId, {
+                roomId,
+                name: info.displayName?.trim() || roomId,
+                address: info.canonicalAlias ?? roomId,
+                avatarUrl: info.avatarUrl
+                    ? mxcToUrl(client, info.avatarUrl)
+                    : undefined,
+            });
+            this.updateNavigationState();
+        } catch (e) {
+            printRustError(`Failed to load room ${roomId} for history`, e);
+        }
     }
 }

@@ -1,0 +1,103 @@
+From e998b5a65c498907ce2ae5a0f7029316c87349ed Mon Sep 17 00:00:00 2001
+From: David Langley <davidl@element.io>
+Date: Thu, 15 Oct 2026 17:55:20 +0100
+Subject: [PATCH 04/11] Make the search service build on wasm
+
+- The boxed result streams don't require Send on wasm, where futures
+  aren't Send and everything runs on one thread.
+- The FFI converts search errors without going through anyhow, which
+  requires Send + Sync.
+- The automatic call status uses ruma::time::SystemTime, which is
+  std::time except on wasm.
+---
+ bindings/matrix-sdk-ffi/src/search_service.rs  | 5 +++--
+ crates/matrix-sdk-ui/src/search_service.rs     | 8 ++++++++
+ crates/matrix-sdk/src/automatic_call_status.rs | 3 ++-
+ crates/matrix-sdk/src/message_search.rs        | 6 ++++++
+ 4 files changed, 19 insertions(+), 3 deletions(-)
+
+diff --git a/bindings/matrix-sdk-ffi/src/search_service.rs b/bindings/matrix-sdk-ffi/src/search_service.rs
+index 0bb784e8d..909a493bc 100644
+--- a/bindings/matrix-sdk-ffi/src/search_service.rs
++++ b/bindings/matrix-sdk-ffi/src/search_service.rs
+@@ -56,13 +56,14 @@ impl SearchService {
+     /// Clears the current results, restarts pagination from scratch and loads
+     /// the first page. Call [`Self::paginate`] to load any further pages.
+     pub async fn set_query(&self, query: String) -> Result<(), ClientError> {
+-        self.inner.set_query(query).await.map_err(|err| ClientError::from(anyhow::Error::from(err)))
++        // Not via `anyhow`: the search error isn't `Send + Sync` on wasm.
++        self.inner.set_query(query).await.map_err(ClientError::from_err)
+     }
+ 
+     /// Load the next page of results if a page isn't already loading and the
+     /// end hasn't been reached. Otherwise it no-ops.
+     pub async fn paginate(&self) -> Result<(), ClientError> {
+-        self.inner.paginate().await.map_err(|err| ClientError::from(anyhow::Error::from(err)))
++        self.inner.paginate().await.map_err(ClientError::from_err)
+     }
+ 
+     /// Returns the current pagination state.
+diff --git a/crates/matrix-sdk-ui/src/search_service.rs b/crates/matrix-sdk-ui/src/search_service.rs
+index 90eb2cb34..f4c04e1fb 100644
+--- a/crates/matrix-sdk-ui/src/search_service.rs
++++ b/crates/matrix-sdk-ui/src/search_service.rs
+@@ -40,9 +40,17 @@ use crate::timeline::{Profile, TimelineDetails, TimelineItemContent};
+ 
+ /// A boxed stream of pages of resolved search hits, as produced by the SDK's
+ /// global message search.
++#[cfg(not(target_family = "wasm"))]
+ type ResultsStream =
+     Pin<Box<dyn Stream<Item = Result<Vec<(OwnedRoomId, TimelineEvent)>, SearchError>> + Send>>;
+ 
++/// A boxed stream of pages of resolved search hits, as produced by the SDK's
++/// global message search. Futures aren't `Send` on wasm, where everything runs
++/// on one thread.
++#[cfg(target_family = "wasm")]
++type ResultsStream =
++    Pin<Box<dyn Stream<Item = Result<Vec<(OwnedRoomId, TimelineEvent)>, SearchError>>>>;
++
+ /// Whether the search service is currently loading a page of results.
+ #[cfg_attr(feature = "uniffi", derive(uniffi::Enum), uniffi(name = "SearchServicePaginationState"))]
+ #[derive(Clone, Debug, Eq, PartialEq)]
+diff --git a/crates/matrix-sdk/src/automatic_call_status.rs b/crates/matrix-sdk/src/automatic_call_status.rs
+index c2e89ca6d..9f2407975 100644
+--- a/crates/matrix-sdk/src/automatic_call_status.rs
++++ b/crates/matrix-sdk/src/automatic_call_status.rs
+@@ -20,13 +20,14 @@
+ use std::{
+     collections::HashSet,
+     sync::{Arc, Mutex},
+-    time::SystemTime,
+ };
+ 
+ use matrix_sdk_common::executor::spawn;
++// `ruma::time` is `std::time` except on wasm, where the clock comes from JavaScript.
+ use ruma::{
+     OwnedRoomId, SecondsSinceUnixEpoch,
+     events::{OriginalSyncStateEvent, call::member::CallMemberEventContent},
++    time::SystemTime,
+ };
+ use tracing::warn;
+ 
+diff --git a/crates/matrix-sdk/src/message_search.rs b/crates/matrix-sdk/src/message_search.rs
+index 7627d5490..6ca65f068 100644
+--- a/crates/matrix-sdk/src/message_search.rs
++++ b/crates/matrix-sdk/src/message_search.rs
+@@ -98,8 +98,14 @@ const SEARCH_RESULTS_PAGE_SIZE: usize = 100;
+ 
+ /// A boxed, score-descending stream of `(score, event_id)` results for a single
+ /// room.
++#[cfg(not(target_family = "wasm"))]
+ type RoomResultStream = Pin<Box<dyn Stream<Item = Result<(f32, OwnedEventId), IndexError>> + Send>>;
+ 
++/// A boxed, score-descending stream of `(score, event_id)` results for a single
++/// room. Futures aren't `Send` on wasm, where everything runs on one thread.
++#[cfg(target_family = "wasm")]
++type RoomResultStream = Pin<Box<dyn Stream<Item = Result<(f32, OwnedEventId), IndexError>>>>;
++
+ /// A cursor over one room's score-descending search results, used while merging
+ /// results across rooms.
+ struct RoomStreamCursor {
+-- 
+2.55.0
+

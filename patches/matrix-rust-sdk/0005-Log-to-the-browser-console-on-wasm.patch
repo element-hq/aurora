@@ -1,0 +1,171 @@
+From bea6837be0d7bb43d82cbda8ae2decac108816a3 Mon Sep 17 00:00:00 2001
+From: David Langley <davidl@element.io>
+Date: Thu, 15 Oct 2026 19:40:14 +0100
+Subject: [PATCH 05/11] Log to the browser console on wasm
+
+The FFI never installed a tracing subscriber on wasm, so nothing the
+SDK logged was visible in the browser. `init_platform` now builds the
+same subscriber as on other platforms, with the stdout layer writing
+each event to the matching `console.*` method, no timestamps (the
+console has its own, and `SystemTime::now` isn't available on wasm),
+and without `log_panics` or `RUST_BACKTRACE`, which have no
+environment to live in there.
+---
+ bindings/matrix-sdk-ffi/Cargo.toml          |  2 +
+ bindings/matrix-sdk-ffi/src/platform/mod.rs | 92 ++++++++++++++++++++-
+ 2 files changed, 90 insertions(+), 4 deletions(-)
+
+diff --git a/bindings/matrix-sdk-ffi/Cargo.toml b/bindings/matrix-sdk-ffi/Cargo.toml
+index e3dab0d59..89fe00f48 100644
+--- a/bindings/matrix-sdk-ffi/Cargo.toml
++++ b/bindings/matrix-sdk-ffi/Cargo.toml
+@@ -120,6 +120,8 @@ oauth2.workspace = true
+ 
+ [target.'cfg(target_family = "wasm")'.dependencies]
+ console_error_panic_hook = { version = "0.1.7", default-features = false }
++# Logs go to the browser console.
++web-sys = { workspace = true, features = ["console"] }
+ tokio = { workspace = true, features = ["sync", "macros"] }
+ uniffi = { workspace = true, features = ["wasm-unstable-single-threaded"] }
+ futures-executor.workspace = true
+diff --git a/bindings/matrix-sdk-ffi/src/platform/mod.rs b/bindings/matrix-sdk-ffi/src/platform/mod.rs
+index 4080f2c6a..a42f85b6d 100644
+--- a/bindings/matrix-sdk-ffi/src/platform/mod.rs
++++ b/bindings/matrix-sdk-ffi/src/platform/mod.rs
+@@ -53,6 +53,67 @@ const DEFAULT_MAX_AGE_SECONDS: u64 = 7 * 24 * 60 * 60;
+ mod rolling_writer;
+ pub mod tracing;
+ 
++/// Logging to the browser console, for wasm builds.
++#[cfg(target_family = "wasm")]
++mod web_console {
++    use std::io;
++
++    use tracing_core::{Level, Metadata};
++    use tracing_subscriber::fmt::MakeWriter;
++    use web_sys::wasm_bindgen::JsValue;
++
++    /// Buffers one formatted event and hands it to the console method
++    /// matching its level when dropped.
++    pub(super) struct WebConsoleWriter {
++        level: Level,
++        buffer: Vec<u8>,
++    }
++
++    impl io::Write for WebConsoleWriter {
++        fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
++            self.buffer.extend_from_slice(buf);
++            Ok(buf.len())
++        }
++
++        fn flush(&mut self) -> io::Result<()> {
++            if self.buffer.is_empty() {
++                return Ok(());
++            }
++            let message = String::from_utf8_lossy(&self.buffer);
++            let message = JsValue::from_str(message.trim_end());
++            match self.level {
++                Level::ERROR => web_sys::console::error_1(&message),
++                Level::WARN => web_sys::console::warn_1(&message),
++                Level::INFO => web_sys::console::info_1(&message),
++                Level::DEBUG | Level::TRACE => web_sys::console::debug_1(&message),
++            }
++            self.buffer.clear();
++            Ok(())
++        }
++    }
++
++    impl Drop for WebConsoleWriter {
++        fn drop(&mut self) {
++            let _ = io::Write::flush(self);
++        }
++    }
++
++    /// A [`MakeWriter`] producing one [`WebConsoleWriter`] per event.
++    pub(super) struct MakeWebConsoleWriter;
++
++    impl<'a> MakeWriter<'a> for MakeWebConsoleWriter {
++        type Writer = WebConsoleWriter;
++
++        fn make_writer(&'a self) -> Self::Writer {
++            WebConsoleWriter { level: Level::INFO, buffer: Vec::new() }
++        }
++
++        fn make_writer_for(&'a self, meta: &Metadata<'_>) -> Self::Writer {
++            WebConsoleWriter { level: *meta.level(), buffer: Vec::new() }
++        }
++    }
++}
++
+ #[cfg(target_os = "android")]
+ mod android_platform;
+ 
+@@ -71,7 +132,9 @@ struct EventFormatter {
+ 
+ impl EventFormatter {
+     fn new() -> Self {
+-        Self { display_timestamp: true, display_level: true }
++        // The browser console adds its own timestamps, and `SystemTime::now`
++        // isn't available on wasm anyway.
++        Self { display_timestamp: !cfg!(target_family = "wasm"), display_level: true }
+     }
+ 
+     #[cfg(target_os = "android")]
+@@ -239,7 +302,15 @@ fn text_layers(
+                 }
+             }
+ 
+-            #[cfg(not(target_os = "android"))]
++            #[cfg(target_family = "wasm")]
++            return fmt::layer()
++                .fmt_fields(FieldsFormatterFormStdoutOrSystem::default())
++                .event_format(EventFormatter::new())
++                // See comment above.
++                .with_ansi(false)
++                .with_writer(web_console::MakeWebConsoleWriter);
++
++            #[cfg(not(any(target_os = "android", target_family = "wasm")))]
+             return fmt::layer()
+                 .fmt_fields(FieldsFormatterFormStdoutOrSystem::default())
+                 .event_format(EventFormatter::new())
+@@ -544,15 +615,18 @@ impl TracingConfiguration {
+     /// holding onto it.
+     #[cfg_attr(not(feature = "sentry"), allow(unused_mut))]
+     fn build(mut self) -> LoggingCtx {
+-        // Show full backtraces, if we run into panics.
++        // Show full backtraces, if we run into panics. There is no environment
++        // to set on wasm (and trying to panics).
+         //
+         // FIXME: Use safe API for this once stable. Tracking issue:
+         //        https://github.com/rust-lang/rust/issues/93346
++        #[cfg(not(target_family = "wasm"))]
+         unsafe {
+             std::env::set_var("RUST_BACKTRACE", "1");
+         }
+ 
+-        // Log panics.
++        // Log panics. On wasm `console_error_panic_hook` already does this.
++        #[cfg(not(target_family = "wasm"))]
+         log_panics::init();
+ 
+         let env_filter = build_tracing_filter(&self);
+@@ -701,6 +775,16 @@ pub fn init_platform(
+     {
+         console_error_panic_hook::set_once();
+     }
++    #[cfg(target_family = "wasm")]
++    {
++        // No tokio runtime to set up in the browser: everything runs on the
++        // JS event loop.
++        let _ = use_lightweight_tokio_runtime;
++        LOGGING.set(config.build()).map_err(|_| ClientError::Generic {
++            msg: "logger already initialized".to_owned(),
++            details: None,
++        })?;
++    }
+     #[cfg(not(target_family = "wasm"))]
+     {
+         LOGGING.set(config.build()).map_err(|_| ClientError::Generic {
+-- 
+2.55.0
+

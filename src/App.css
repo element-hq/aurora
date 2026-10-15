@@ -42,7 +42,9 @@ body {
     flex: 1 1 auto;
     flex-direction: row;
     width: 100%;
-    height: 100%;
+    /* Fill what's left under the top bar, and anchor the search overlay. */
+    min-height: 0;
+    position: relative;
 }
 
 .mx_LoginPage {

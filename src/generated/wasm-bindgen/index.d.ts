@@ -431,6 +431,8 @@ export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_ignore_user():
 
 export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_ignored_users(): number;
 
+export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_index_cached_events(): number;
+
 export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_is_livekit_rtc_supported(): number;
 
 export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_is_login_with_qr_code_supported(): number;
@@ -498,6 +500,8 @@ export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_room_alias_exi
 export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_room_directory_search(): number;
 
 export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_rooms(): number;
+
+export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_search_service(): number;
 
 export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_search_users(): number;
 
@@ -632,6 +636,8 @@ export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_system_
 export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_threads_enabled(): number;
 
 export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_user_agent(): number;
+
+export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_with_search_index_store(): number;
 
 export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientdelegate_did_receive_auth_error(): number;
 
@@ -1205,6 +1211,20 @@ export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompreview_leave(): 
 
 export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompreview_own_membership_details(): number;
 
+export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_searchservice_paginate(): number;
+
+export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_searchservice_pagination_state(): number;
+
+export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_searchservice_set_query(): number;
+
+export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_searchservice_subscribe_to_pagination_state_updates(): number;
+
+export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_searchservice_subscribe_to_results(): number;
+
+export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_searchservicepaginationstatelistener_on_update(): number;
+
+export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_searchserviceresultslistener_on_update(): number;
+
 export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_secretsbundlewithuserid_contains_backup_key(): number;
 
 export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_sendattachmentjoinhandle_cancel(): number;
@@ -1553,6 +1573,8 @@ export function ubrn_uniffi_matrix_sdk_ffi_fn_clone_roompowerlevels(handle: bigi
 
 export function ubrn_uniffi_matrix_sdk_ffi_fn_clone_roompreview(handle: bigint, f_status_: RustCallStatus): bigint;
 
+export function ubrn_uniffi_matrix_sdk_ffi_fn_clone_searchservice(handle: bigint, f_status_: RustCallStatus): bigint;
+
 export function ubrn_uniffi_matrix_sdk_ffi_fn_clone_secretsbundlewithuserid(handle: bigint, f_status_: RustCallStatus): bigint;
 
 export function ubrn_uniffi_matrix_sdk_ffi_fn_clone_sendattachmentjoinhandle(handle: bigint, f_status_: RustCallStatus): bigint;
@@ -1686,6 +1708,8 @@ export function ubrn_uniffi_matrix_sdk_ffi_fn_free_roommessageeventcontentwithou
 export function ubrn_uniffi_matrix_sdk_ffi_fn_free_roompowerlevels(handle: bigint, f_status_: RustCallStatus): void;
 
 export function ubrn_uniffi_matrix_sdk_ffi_fn_free_roompreview(handle: bigint, f_status_: RustCallStatus): void;
+
+export function ubrn_uniffi_matrix_sdk_ffi_fn_free_searchservice(handle: bigint, f_status_: RustCallStatus): void;
 
 export function ubrn_uniffi_matrix_sdk_ffi_fn_free_secretsbundlewithuserid(handle: bigint, f_status_: RustCallStatus): void;
 
@@ -1841,6 +1865,10 @@ export function ubrn_uniffi_matrix_sdk_ffi_fn_init_callback_vtable_roomlistservi
 
 export function ubrn_uniffi_matrix_sdk_ffi_fn_init_callback_vtable_roomlistservicesyncindicatorlistener(vtable: any): void;
 
+export function ubrn_uniffi_matrix_sdk_ffi_fn_init_callback_vtable_searchservicepaginationstatelistener(vtable: any): void;
+
+export function ubrn_uniffi_matrix_sdk_ffi_fn_init_callback_vtable_searchserviceresultslistener(vtable: any): void;
+
 export function ubrn_uniffi_matrix_sdk_ffi_fn_init_callback_vtable_sendqueuelistener(vtable: any): void;
 
 export function ubrn_uniffi_matrix_sdk_ffi_fn_init_callback_vtable_sendqueueroomerrorlistener(vtable: any): void;
@@ -1973,6 +2001,8 @@ export function ubrn_uniffi_matrix_sdk_ffi_fn_method_client_ignore_user(ptr: big
 
 export function ubrn_uniffi_matrix_sdk_ffi_fn_method_client_ignored_users(ptr: bigint): bigint;
 
+export function ubrn_uniffi_matrix_sdk_ffi_fn_method_client_index_cached_events(ptr: bigint): bigint;
+
 export function ubrn_uniffi_matrix_sdk_ffi_fn_method_client_is_livekit_rtc_supported(ptr: bigint): bigint;
 
 export function ubrn_uniffi_matrix_sdk_ffi_fn_method_client_is_login_with_qr_code_supported(ptr: bigint): bigint;
@@ -2040,6 +2070,8 @@ export function ubrn_uniffi_matrix_sdk_ffi_fn_method_client_room_alias_exists(pt
 export function ubrn_uniffi_matrix_sdk_ffi_fn_method_client_room_directory_search(ptr: bigint, f_status_: RustCallStatus): bigint;
 
 export function ubrn_uniffi_matrix_sdk_ffi_fn_method_client_rooms(ptr: bigint, f_status_: RustCallStatus): Uint8Array;
+
+export function ubrn_uniffi_matrix_sdk_ffi_fn_method_client_search_service(ptr: bigint, f_status_: RustCallStatus): bigint;
 
 export function ubrn_uniffi_matrix_sdk_ffi_fn_method_client_search_users(ptr: bigint, search_term: Uint8Array, limit: bigint): bigint;
 
@@ -2174,6 +2206,8 @@ export function ubrn_uniffi_matrix_sdk_ffi_fn_method_clientbuilder_system_is_mem
 export function ubrn_uniffi_matrix_sdk_ffi_fn_method_clientbuilder_threads_enabled(ptr: bigint, enabled: number, thread_subscriptions: number, f_status_: RustCallStatus): bigint;
 
 export function ubrn_uniffi_matrix_sdk_ffi_fn_method_clientbuilder_user_agent(ptr: bigint, user_agent: Uint8Array, f_status_: RustCallStatus): bigint;
+
+export function ubrn_uniffi_matrix_sdk_ffi_fn_method_clientbuilder_with_search_index_store(ptr: bigint, path: Uint8Array, key: Uint8Array, f_status_: RustCallStatus): bigint;
 
 export function ubrn_uniffi_matrix_sdk_ffi_fn_method_contentscanner_scan(ptr: bigint, client: bigint, media_source: bigint): bigint;
 
@@ -2696,6 +2730,16 @@ export function ubrn_uniffi_matrix_sdk_ffi_fn_method_roompreview_inviter(ptr: bi
 export function ubrn_uniffi_matrix_sdk_ffi_fn_method_roompreview_leave(ptr: bigint): bigint;
 
 export function ubrn_uniffi_matrix_sdk_ffi_fn_method_roompreview_own_membership_details(ptr: bigint): bigint;
+
+export function ubrn_uniffi_matrix_sdk_ffi_fn_method_searchservice_paginate(ptr: bigint): bigint;
+
+export function ubrn_uniffi_matrix_sdk_ffi_fn_method_searchservice_pagination_state(ptr: bigint, f_status_: RustCallStatus): Uint8Array;
+
+export function ubrn_uniffi_matrix_sdk_ffi_fn_method_searchservice_set_query(ptr: bigint, query: Uint8Array): bigint;
+
+export function ubrn_uniffi_matrix_sdk_ffi_fn_method_searchservice_subscribe_to_pagination_state_updates(ptr: bigint, listener: bigint, f_status_: RustCallStatus): bigint;
+
+export function ubrn_uniffi_matrix_sdk_ffi_fn_method_searchservice_subscribe_to_results(ptr: bigint, listener: bigint): bigint;
 
 export function ubrn_uniffi_matrix_sdk_ffi_fn_method_secretsbundlewithuserid_contains_backup_key(ptr: bigint, f_status_: RustCallStatus): number;
 
@@ -3311,6 +3355,8 @@ export interface InitOutput {
     readonly uniffi_matrix_sdk_ffi_checksum_method_client_ignore_user: () => number;
     readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_ignored_users: () => number;
     readonly uniffi_matrix_sdk_ffi_checksum_method_client_ignored_users: () => number;
+    readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_index_cached_events: () => number;
+    readonly uniffi_matrix_sdk_ffi_checksum_method_client_index_cached_events: () => number;
     readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_is_livekit_rtc_supported: () => number;
     readonly uniffi_matrix_sdk_ffi_checksum_method_client_is_livekit_rtc_supported: () => number;
     readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_is_login_with_qr_code_supported: () => number;
@@ -3379,6 +3425,8 @@ export interface InitOutput {
     readonly uniffi_matrix_sdk_ffi_checksum_method_client_room_directory_search: () => number;
     readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_rooms: () => number;
     readonly uniffi_matrix_sdk_ffi_checksum_method_client_rooms: () => number;
+    readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_search_service: () => number;
+    readonly uniffi_matrix_sdk_ffi_checksum_method_client_search_service: () => number;
     readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_search_users: () => number;
     readonly uniffi_matrix_sdk_ffi_checksum_method_client_search_users: () => number;
     readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_server: () => number;
@@ -3513,6 +3561,8 @@ export interface InitOutput {
     readonly uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_threads_enabled: () => number;
     readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_user_agent: () => number;
     readonly uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_user_agent: () => number;
+    readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_with_search_index_store: () => number;
+    readonly uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_with_search_index_store: () => number;
     readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientdelegate_did_receive_auth_error: () => number;
     readonly uniffi_matrix_sdk_ffi_checksum_method_clientdelegate_did_receive_auth_error: () => number;
     readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientdelegate_on_background_task_error_report: () => number;
@@ -4085,6 +4135,20 @@ export interface InitOutput {
     readonly uniffi_matrix_sdk_ffi_checksum_method_roompreview_leave: () => number;
     readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompreview_own_membership_details: () => number;
     readonly uniffi_matrix_sdk_ffi_checksum_method_roompreview_own_membership_details: () => number;
+    readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_searchservice_paginate: () => number;
+    readonly uniffi_matrix_sdk_ffi_checksum_method_searchservice_paginate: () => number;
+    readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_searchservice_pagination_state: () => number;
+    readonly uniffi_matrix_sdk_ffi_checksum_method_searchservice_pagination_state: () => number;
+    readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_searchservice_set_query: () => number;
+    readonly uniffi_matrix_sdk_ffi_checksum_method_searchservice_set_query: () => number;
+    readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_searchservice_subscribe_to_pagination_state_updates: () => number;
+    readonly uniffi_matrix_sdk_ffi_checksum_method_searchservice_subscribe_to_pagination_state_updates: () => number;
+    readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_searchservice_subscribe_to_results: () => number;
+    readonly uniffi_matrix_sdk_ffi_checksum_method_searchservice_subscribe_to_results: () => number;
+    readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_searchservicepaginationstatelistener_on_update: () => number;
+    readonly uniffi_matrix_sdk_ffi_checksum_method_searchservicepaginationstatelistener_on_update: () => number;
+    readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_searchserviceresultslistener_on_update: () => number;
+    readonly uniffi_matrix_sdk_ffi_checksum_method_searchserviceresultslistener_on_update: () => number;
     readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_secretsbundlewithuserid_contains_backup_key: () => number;
     readonly uniffi_matrix_sdk_ffi_checksum_method_secretsbundlewithuserid_contains_backup_key: () => number;
     readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_sendattachmentjoinhandle_cancel: () => number;
@@ -4433,6 +4497,8 @@ export interface InitOutput {
     readonly uniffi_matrix_sdk_ffi_fn_clone_roompowerlevels: (a: bigint, b: number) => bigint;
     readonly ubrn_uniffi_matrix_sdk_ffi_fn_clone_roompreview: (a: bigint, b: number) => bigint;
     readonly uniffi_matrix_sdk_ffi_fn_clone_roompreview: (a: bigint, b: number) => bigint;
+    readonly ubrn_uniffi_matrix_sdk_ffi_fn_clone_searchservice: (a: bigint, b: number) => bigint;
+    readonly uniffi_matrix_sdk_ffi_fn_clone_searchservice: (a: bigint, b: number) => bigint;
     readonly ubrn_uniffi_matrix_sdk_ffi_fn_clone_secretsbundlewithuserid: (a: bigint, b: number) => bigint;
     readonly uniffi_matrix_sdk_ffi_fn_clone_secretsbundlewithuserid: (a: bigint, b: number) => bigint;
     readonly ubrn_uniffi_matrix_sdk_ffi_fn_clone_sendattachmentjoinhandle: (a: bigint, b: number) => bigint;
@@ -4567,6 +4633,8 @@ export interface InitOutput {
     readonly uniffi_matrix_sdk_ffi_fn_free_roompowerlevels: (a: bigint, b: number) => void;
     readonly ubrn_uniffi_matrix_sdk_ffi_fn_free_roompreview: (a: bigint, b: number) => void;
     readonly uniffi_matrix_sdk_ffi_fn_free_roompreview: (a: bigint, b: number) => void;
+    readonly ubrn_uniffi_matrix_sdk_ffi_fn_free_searchservice: (a: bigint, b: number) => void;
+    readonly uniffi_matrix_sdk_ffi_fn_free_searchservice: (a: bigint, b: number) => void;
     readonly ubrn_uniffi_matrix_sdk_ffi_fn_free_secretsbundlewithuserid: (a: bigint, b: number) => void;
     readonly uniffi_matrix_sdk_ffi_fn_free_secretsbundlewithuserid: (a: bigint, b: number) => void;
     readonly ubrn_uniffi_matrix_sdk_ffi_fn_free_sendattachmentjoinhandle: (a: bigint, b: number) => void;
@@ -4721,6 +4789,10 @@ export interface InitOutput {
     readonly uniffi_matrix_sdk_ffi_fn_init_callback_vtable_roomlistservicestatelistener: (a: number) => void;
     readonly ubrn_uniffi_matrix_sdk_ffi_fn_init_callback_vtable_roomlistservicesyncindicatorlistener: (a: any) => void;
     readonly uniffi_matrix_sdk_ffi_fn_init_callback_vtable_roomlistservicesyncindicatorlistener: (a: number) => void;
+    readonly ubrn_uniffi_matrix_sdk_ffi_fn_init_callback_vtable_searchservicepaginationstatelistener: (a: any) => void;
+    readonly uniffi_matrix_sdk_ffi_fn_init_callback_vtable_searchservicepaginationstatelistener: (a: number) => void;
+    readonly ubrn_uniffi_matrix_sdk_ffi_fn_init_callback_vtable_searchserviceresultslistener: (a: any) => void;
+    readonly uniffi_matrix_sdk_ffi_fn_init_callback_vtable_searchserviceresultslistener: (a: number) => void;
     readonly ubrn_uniffi_matrix_sdk_ffi_fn_init_callback_vtable_sendqueuelistener: (a: any) => void;
     readonly uniffi_matrix_sdk_ffi_fn_init_callback_vtable_sendqueuelistener: (a: number) => void;
     readonly ubrn_uniffi_matrix_sdk_ffi_fn_init_callback_vtable_sendqueueroomerrorlistener: (a: any) => void;
@@ -4853,6 +4925,8 @@ export interface InitOutput {
     readonly uniffi_matrix_sdk_ffi_fn_method_client_ignore_user: (a: bigint, b: number) => bigint;
     readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_client_ignored_users: (a: bigint) => bigint;
     readonly uniffi_matrix_sdk_ffi_fn_method_client_ignored_users: (a: bigint) => bigint;
+    readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_client_index_cached_events: (a: bigint) => bigint;
+    readonly uniffi_matrix_sdk_ffi_fn_method_client_index_cached_events: (a: bigint) => bigint;
     readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_client_is_livekit_rtc_supported: (a: bigint) => bigint;
     readonly uniffi_matrix_sdk_ffi_fn_method_client_is_livekit_rtc_supported: (a: bigint) => bigint;
     readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_client_is_login_with_qr_code_supported: (a: bigint) => bigint;
@@ -4921,6 +4995,8 @@ export interface InitOutput {
     readonly uniffi_matrix_sdk_ffi_fn_method_client_room_directory_search: (a: bigint, b: number) => bigint;
     readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_client_rooms: (a: bigint, b: number) => [number, number];
     readonly uniffi_matrix_sdk_ffi_fn_method_client_rooms: (a: number, b: bigint, c: number) => void;
+    readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_client_search_service: (a: bigint, b: number) => bigint;
+    readonly uniffi_matrix_sdk_ffi_fn_method_client_search_service: (a: bigint, b: number) => bigint;
     readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_client_search_users: (a: bigint, b: number, c: number, d: bigint) => bigint;
     readonly uniffi_matrix_sdk_ffi_fn_method_client_search_users: (a: bigint, b: number, c: bigint) => bigint;
     readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_client_server: (a: bigint, b: number) => [number, number];
@@ -5055,6 +5131,8 @@ export interface InitOutput {
     readonly uniffi_matrix_sdk_ffi_fn_method_clientbuilder_threads_enabled: (a: bigint, b: number, c: number, d: number) => bigint;
     readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_clientbuilder_user_agent: (a: bigint, b: number, c: number, d: number) => bigint;
     readonly uniffi_matrix_sdk_ffi_fn_method_clientbuilder_user_agent: (a: bigint, b: number, c: number) => bigint;
+    readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_clientbuilder_with_search_index_store: (a: bigint, b: number, c: number, d: number, e: number, f: number) => bigint;
+    readonly uniffi_matrix_sdk_ffi_fn_method_clientbuilder_with_search_index_store: (a: bigint, b: number, c: number, d: number) => bigint;
     readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_contentscanner_scan: (a: bigint, b: bigint, c: bigint) => bigint;
     readonly uniffi_matrix_sdk_ffi_fn_method_contentscanner_scan: (a: bigint, b: bigint, c: bigint) => bigint;
     readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_continuationmessagesender_cancel: (a: bigint) => bigint;
@@ -5577,6 +5655,16 @@ export interface InitOutput {
     readonly uniffi_matrix_sdk_ffi_fn_method_roompreview_leave: (a: bigint) => bigint;
     readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_roompreview_own_membership_details: (a: bigint) => bigint;
     readonly uniffi_matrix_sdk_ffi_fn_method_roompreview_own_membership_details: (a: bigint) => bigint;
+    readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_searchservice_paginate: (a: bigint) => bigint;
+    readonly uniffi_matrix_sdk_ffi_fn_method_searchservice_paginate: (a: bigint) => bigint;
+    readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_searchservice_pagination_state: (a: bigint, b: number) => [number, number];
+    readonly uniffi_matrix_sdk_ffi_fn_method_searchservice_pagination_state: (a: number, b: bigint, c: number) => void;
+    readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_searchservice_set_query: (a: bigint, b: number, c: number) => bigint;
+    readonly uniffi_matrix_sdk_ffi_fn_method_searchservice_set_query: (a: bigint, b: number) => bigint;
+    readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_searchservice_subscribe_to_pagination_state_updates: (a: bigint, b: bigint, c: number) => bigint;
+    readonly uniffi_matrix_sdk_ffi_fn_method_searchservice_subscribe_to_pagination_state_updates: (a: bigint, b: bigint, c: number) => bigint;
+    readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_searchservice_subscribe_to_results: (a: bigint, b: bigint) => bigint;
+    readonly uniffi_matrix_sdk_ffi_fn_method_searchservice_subscribe_to_results: (a: bigint, b: bigint) => bigint;
     readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_secretsbundlewithuserid_contains_backup_key: (a: bigint, b: number) => number;
     readonly uniffi_matrix_sdk_ffi_fn_method_secretsbundlewithuserid_contains_backup_key: (a: bigint, b: number) => number;
     readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_sendattachmentjoinhandle_cancel: (a: bigint, b: number) => void;
@@ -5905,22 +5993,14 @@ export interface InitOutput {
     readonly uniffi_ruma_events_fn_method_todeviceeventtype_uniffi_trait_eq_ne: (a: number, b: number, c: number) => number;
     readonly ubrn_uniffi_ruma_events_fn_method_todeviceeventtype_uniffi_trait_hash: (a: number, b: number, c: number) => bigint;
     readonly uniffi_ruma_events_fn_method_todeviceeventtype_uniffi_trait_hash: (a: number, b: number) => bigint;
-    readonly __wbg_foreignfuturecompletef32_free: (a: number, b: number) => void;
-    readonly foreignfuturecompletef32_call: (a: number, b: number, c: bigint, d: any) => void;
-    readonly __wbg_foreignfuturecompletei32_free: (a: number, b: number) => void;
-    readonly __wbg_foreignfuturecompleteu8_free: (a: number, b: number) => void;
-    readonly __wbg_foreignfuturecompletevoid_free: (a: number, b: number) => void;
-    readonly foreignfuturecompletei32_call: (a: number, b: number, c: bigint, d: any) => void;
-    readonly foreignfuturecompleteu8_call: (a: number, b: number, c: bigint, d: any) => void;
-    readonly foreignfuturecompletevoid_call: (a: number, b: number, c: bigint, d: any) => void;
-    readonly ubrn_ffi_matrix_sdk_ui_uniffi_contract_version: () => number;
-    readonly ffi_matrix_sdk_ui_uniffi_contract_version: () => number;
-    readonly __wbg_foreignfuturecompletei16_free: (a: number, b: number) => void;
-    readonly foreignfuturecompletei16_call: (a: number, b: number, c: bigint, d: any) => void;
-    readonly ubrn_ffi_matrix_sdk_base_uniffi_contract_version: () => number;
-    readonly ffi_matrix_sdk_base_uniffi_contract_version: () => number;
+    readonly __wbg_foreignfuturecompleteu64_free: (a: number, b: number) => void;
+    readonly foreignfuturecompleteu64_call: (a: number, b: number, c: bigint, d: any) => void;
+    readonly ubrn_ffi_matrix_sdk_contentscanner_uniffi_contract_version: () => number;
+    readonly ffi_matrix_sdk_contentscanner_uniffi_contract_version: () => number;
     readonly ubrn_ffi_matrix_sdk_crypto_uniffi_contract_version: () => number;
     readonly ffi_matrix_sdk_crypto_uniffi_contract_version: () => number;
+    readonly ubrn_ffi_matrix_sdk_ui_uniffi_contract_version: () => number;
+    readonly ffi_matrix_sdk_ui_uniffi_contract_version: () => number;
     readonly ubrn_ffi_matrix_sdk_uniffi_contract_version: () => number;
     readonly ffi_matrix_sdk_uniffi_contract_version: () => number;
     readonly ubrn_uniffi_matrix_sdk_checksum_method_oauthauthorizationdata_login_url: () => number;
@@ -5943,24 +6023,32 @@ export interface InitOutput {
     readonly uniffi_matrix_sdk_fn_free_oauthauthorizationdata: (a: bigint, b: number) => void;
     readonly ubrn_uniffi_matrix_sdk_fn_method_oauthauthorizationdata_login_url: (a: bigint, b: number) => [number, number];
     readonly uniffi_matrix_sdk_fn_method_oauthauthorizationdata_login_url: (a: number, b: bigint, c: number) => void;
-    readonly __wbg_foreignfuturecompleteu32_free: (a: number, b: number) => void;
-    readonly foreignfuturecompleteu32_call: (a: number, b: number, c: bigint, d: any) => void;
+    readonly __wbg_foreignfuturecompletei16_free: (a: number, b: number) => void;
+    readonly __wbg_foreignfuturecompletei64_free: (a: number, b: number) => void;
+    readonly __wbg_foreignfuturecompleteu16_free: (a: number, b: number) => void;
+    readonly foreignfuturecompletei16_call: (a: number, b: number, c: bigint, d: any) => void;
+    readonly foreignfuturecompletei64_call: (a: number, b: number, c: bigint, d: any) => void;
+    readonly foreignfuturecompleteu16_call: (a: number, b: number, c: bigint, d: any) => void;
+    readonly ubrn_ffi_matrix_sdk_base_uniffi_contract_version: () => number;
+    readonly ffi_matrix_sdk_base_uniffi_contract_version: () => number;
+    readonly __wbg_foreignfuturecompletef64_free: (a: number, b: number) => void;
+    readonly __wbg_foreignfuturecompletei32_free: (a: number, b: number) => void;
+    readonly __wbg_foreignfuturecompletevoid_free: (a: number, b: number) => void;
+    readonly foreignfuturecompletef64_call: (a: number, b: number, c: bigint, d: any) => void;
+    readonly foreignfuturecompletei32_call: (a: number, b: number, c: bigint, d: any) => void;
+    readonly foreignfuturecompletevoid_call: (a: number, b: number, c: bigint, d: any) => void;
     readonly ubrn_ffi_matrix_sdk_common_uniffi_contract_version: () => number;
     readonly ffi_matrix_sdk_common_uniffi_contract_version: () => number;
-    readonly ubrn_ffi_matrix_sdk_contentscanner_uniffi_contract_version: () => number;
-    readonly ffi_matrix_sdk_contentscanner_uniffi_contract_version: () => number;
-    readonly __wbg_foreignfuturecompletef64_free: (a: number, b: number) => void;
-    readonly __wbg_foreignfuturecompleteu16_free: (a: number, b: number) => void;
-    readonly __wbg_foreignfuturecompleteu64_free: (a: number, b: number) => void;
-    readonly foreignfuturecompletef64_call: (a: number, b: number, c: bigint, d: any) => void;
-    readonly foreignfuturecompleteu16_call: (a: number, b: number, c: bigint, d: any) => void;
-    readonly foreignfuturecompleteu64_call: (a: number, b: number, c: bigint, d: any) => void;
-    readonly __wbg_foreignfuturecompletei64_free: (a: number, b: number) => void;
+    readonly __wbg_foreignfuturecompleteu32_free: (a: number, b: number) => void;
+    readonly foreignfuturecompleteu32_call: (a: number, b: number, c: bigint, d: any) => void;
+    readonly __wbg_foreignfuturecompletef32_free: (a: number, b: number) => void;
     readonly __wbg_foreignfuturecompletei8_free: (a: number, b: number) => void;
     readonly __wbg_foreignfuturecompleterustbuffer_free: (a: number, b: number) => void;
-    readonly foreignfuturecompletei64_call: (a: number, b: number, c: bigint, d: any) => void;
+    readonly foreignfuturecompletef32_call: (a: number, b: number, c: bigint, d: any) => void;
     readonly foreignfuturecompletei8_call: (a: number, b: number, c: bigint, d: any) => void;
     readonly foreignfuturecompleterustbuffer_call: (a: number, b: number, c: bigint, d: any) => void;
+    readonly __wbg_foreignfuturecompleteu8_free: (a: number, b: number) => void;
+    readonly foreignfuturecompleteu8_call: (a: number, b: number, c: bigint, d: any) => void;
     readonly __wbg_get_rustcallstatus_code: (a: number) => number;
     readonly __wbg_rustcallstatus_free: (a: number, b: number) => void;
     readonly __wbg_set_rustcallstatus_code: (a: number, b: number) => void;
@@ -6335,12 +6423,12 @@ export interface InitOutput {
     readonly ffi_ruma_events_rustbuffer_free: (a: number, b: number) => void;
     readonly ffi_ruma_events_rustbuffer_from_bytes: (a: number, b: number, c: number) => void;
     readonly ffi_ruma_events_rustbuffer_reserve: (a: number, b: number, c: bigint, d: number) => void;
-    readonly wasm_bindgen_4dd230343bba0616___convert__closures_____invoke___wasm_bindgen_4dd230343bba0616___JsValue__core_608f92abc48d28da___result__Result_____wasm_bindgen_4dd230343bba0616___JsError___true_: (a: number, b: number, c: any) => [number, number];
-    readonly wasm_bindgen_4dd230343bba0616___convert__closures_____invoke___web_sys_23e6a97038fe64e9___features__gen_IdbVersionChangeEvent__IdbVersionChangeEvent__core_608f92abc48d28da___result__Result_____wasm_bindgen_4dd230343bba0616___JsValue___true_: (a: number, b: number, c: any) => [number, number];
-    readonly wasm_bindgen_4dd230343bba0616___convert__closures_____invoke___web_sys_23e6a97038fe64e9___features__gen_Event__Event______true_: (a: number, b: number, c: any) => void;
-    readonly wasm_bindgen_4dd230343bba0616___convert__closures_____invoke_______true_: (a: number, b: number) => void;
-    readonly wasm_bindgen_4dd230343bba0616___convert__closures_____invoke_______true__1_: (a: number, b: number) => void;
-    readonly wasm_bindgen_4dd230343bba0616___convert__closures_____invoke_______true__2_: (a: number, b: number) => void;
+    readonly wasm_bindgen__convert__closures_____invoke__hb7b4653daa9af1ff: (a: number, b: number, c: any) => [number, number];
+    readonly wasm_bindgen__convert__closures_____invoke__h507d203446d0cd80: (a: number, b: number, c: any) => [number, number];
+    readonly wasm_bindgen__convert__closures_____invoke__hcf24e66390ee4de3: (a: number, b: number, c: any) => void;
+    readonly wasm_bindgen__convert__closures_____invoke__h329dd351c4b7ba6c: (a: number, b: number) => void;
+    readonly wasm_bindgen__convert__closures_____invoke__h9f990332fe8d5ca6: (a: number, b: number) => void;
+    readonly wasm_bindgen__convert__closures_____invoke__hdc11baa25630383d: (a: number, b: number) => void;
     readonly __wbindgen_malloc: (a: number, b: number) => number;
     readonly __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;
     readonly __wbindgen_exn_store: (a: number) => void;

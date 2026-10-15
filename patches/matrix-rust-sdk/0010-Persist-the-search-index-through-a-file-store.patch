@@ -1,0 +1,1326 @@
+From af67fc18a8850438c2a04f26025f4790dbed7c68 Mon Sep 17 00:00:00 2001
+From: David Langley <davidl@element.io>
+Date: Thu, 15 Oct 2026 21:02:39 +0100
+Subject: [PATCH 10/11] Persist the search index through a file store
+
+Where there is no filesystem, like the web, a room's index is kept in
+memory and persisted through a `SearchIndexFileStore`: after each
+commit, the files that changed are saved, atomically, and they are
+loaded back when the index is next opened. The files are encrypted
+with the same scheme as the on-disk `EncryptedMmapDirectory`, whose
+key derivation moves to a shared `FileCipher`, so an index that can't
+be read (another key, an older format) is recreated like on disk.
+
+Tantivy's `Directory` is synchronous while stores usually aren't, so a
+`PersistedRamDirectory` tracks what was written and deleted, and the
+`SearchIndexGuard`, whose operations become async, saves the changes
+after each one. `SearchIndexStoreKind::Store` carries the store and the
+key.
+
+A persisted index also remembers, with a marker in the store (or a file
+in the index directory), that `Client::index_cached_events` ran, so the
+cached events are only indexed once, as upstream does for its reindex.
+---
+ crates/matrix-sdk-search/Cargo.toml           |   4 +
+ .../src/encrypted/encrypted_dir.rs            |  46 +---
+ crates/matrix-sdk-search/src/encrypted/mod.rs | 149 ++++++++++++
+ crates/matrix-sdk-search/src/error.rs         |  10 +
+ crates/matrix-sdk-search/src/index/builder.rs | 193 ++++++++++++++-
+ crates/matrix-sdk-search/src/index/mod.rs     |  60 ++++-
+ .../src/index/persisted_dir.rs                | 230 ++++++++++++++++++
+ crates/matrix-sdk-search/src/lib.rs           |   3 +-
+ crates/matrix-sdk-search/src/store.rs         |  96 ++++++++
+ crates/matrix-sdk/src/message_search.rs       |   4 +-
+ crates/matrix-sdk/src/search_index/mod.rs     | 170 ++++++++++---
+ 11 files changed, 885 insertions(+), 80 deletions(-)
+ create mode 100644 crates/matrix-sdk-search/src/index/persisted_dir.rs
+ create mode 100644 crates/matrix-sdk-search/src/store.rs
+
+diff --git a/crates/matrix-sdk-search/Cargo.toml b/crates/matrix-sdk-search/Cargo.toml
+index ae8d29a90..924b82d39 100644
+--- a/crates/matrix-sdk-search/Cargo.toml
++++ b/crates/matrix-sdk-search/Cargo.toml
+@@ -14,9 +14,11 @@ rustdoc-args = ["--cfg", "docsrs", "--generate-link-to-definition"]
+ 
+ [dependencies]
+ aes = { version = "0.9.2", default-features = false }
++async-trait.workspace = true
+ ctr = { version = "0.10.1", default-features = false}
+ hmac = { workspace = true, features = ["zeroize"] }
+ hkdf.workspace = true
++matrix-sdk-common.workspace = true
+ matrix-sdk-test = { workspace = true, optional = true }
+ once_cell.workspace = true
+ rand = { workspace = true, features = ["thread_rng"] }
+@@ -38,6 +40,8 @@ tantivy = { version = "0.26.1", default-features = false, features = ["mmap", "s
+ # tantivy must not spawn threads.
+ [target.'cfg(target_family = "wasm")'.dependencies]
+ tantivy = { version = "0.26.1", default-features = false, features = ["stopwords", "stemmer", "lz4-compression", "single-threaded"] }
++# matrix-sdk-common insists on `js` on wasm.
++matrix-sdk-common = { workspace = true, features = ["js"] }
+ # tantivy's segment ids are uuids, which need a source of randomness on wasm.
+ uuid = { workspace = true, features = ["js"] }
+ 
+diff --git a/crates/matrix-sdk-search/src/encrypted/encrypted_dir.rs b/crates/matrix-sdk-search/src/encrypted/encrypted_dir.rs
+index b85f84c35..fe631a2b9 100644
+--- a/crates/matrix-sdk-search/src/encrypted/encrypted_dir.rs
++++ b/crates/matrix-sdk-search/src/encrypted/encrypted_dir.rs
+@@ -19,14 +19,10 @@ use std::{
+     sync::Arc,
+ };
+ 
+-use aes::{
+-    Aes256,
+-    cipher::{KeyInit, KeyIvInit, StreamCipher},
+-};
+-use hkdf::Hkdf;
++use aes::cipher::{KeyInit, KeyIvInit, StreamCipher};
+ use hmac::{HmacReset, Mac};
+ use sha2::{
+-    Sha256, Sha512,
++    Sha256,
+     digest::{FixedOutputReset, Update},
+ };
+ use tantivy::directory::{
+@@ -34,24 +30,11 @@ use tantivy::directory::{
+     WatchCallback, WatchHandle, WritePtr,
+     error::{DeleteError, LockError, OpenDirectoryError, OpenReadError, OpenWriteError},
+ };
+-use zeroize::Zeroizing;
+-
+-type Aes256Ctr = ctr::Ctr128BE<Aes256>;
+-
+-use crate::encrypted::encrypted_stream::{AesReader, AesWriter};
+ 
+-/// KeyBuffer type that makes sure that the buffer is zeroed out before being
+-/// dropped.
+-type KeyBuffer = Zeroizing<Vec<u8>>;
+-
+-// 16 byte random IV for the AES-CTR mode.
+-const IV_SIZE: usize = 16;
+-// 32 byte or 256 bit encryption keys.
+-const KEY_SIZE: usize = 32;
+-// 32 byte message authentication code since HMAC-SHA256 is used.
+-const MAC_LENGTH: usize = 32;
+-// HKDF info, making the derived keys unique to the search index.
+-const HKDF_INFO: &[u8] = b"matrix-sdk-search-encryption-key";
++use crate::encrypted::{
++    Aes256Ctr, IV_SIZE, KeyBuffer, MAC_LENGTH, derive_keys,
++    encrypted_stream::{AesReader, AesWriter},
++};
+ 
+ trait IntoTvError<E> {
+     fn into_tv_err(self, path: &Path) -> E;
+@@ -126,24 +109,15 @@ impl EncryptedMmapDirectory {
+     pub fn open_or_create<P: AsRef<Path>>(path: P, key: &str) -> Result<Self, OpenDirectoryError> {
+         let path = path.as_ref();
+ 
+-        if key.is_empty() {
+-            return Err(IoError::other("empty key").into_tv_err(path));
+-        }
++        // Expand the key into an encryption and MAC key.
++        let (encryption_key, mac_key) = derive_keys(key).map_err(|err| err.into_tv_err(path))?;
+ 
+         create_dir_all(path).map_err(|err| err.into_tv_err(path))?;
+ 
+-        // Expand the key into an encryption and MAC key.
+-        let mut hkdf_result = Zeroizing::new([0u8; KEY_SIZE * 2]);
+-        Hkdf::<Sha512>::new(None, key.as_bytes())
+-            .expand(HKDF_INFO, &mut *hkdf_result)
+-            .map_err(|e| IoError::other(format!("unable to expand the key: {e:?}")))
+-            .map_err(|err| err.into_tv_err(path))?;
+-        let (encryption_key, mac_key) = hkdf_result.split_at(KEY_SIZE);
+-
+         Ok(EncryptedMmapDirectory {
+             mmap_dir: tantivy::directory::MmapDirectory::open(path)?,
+-            encryption_key: Zeroizing::new(encryption_key.to_vec()),
+-            mac_key: Zeroizing::new(mac_key.to_vec()),
++            encryption_key,
++            mac_key,
+         })
+     }
+ }
+diff --git a/crates/matrix-sdk-search/src/encrypted/mod.rs b/crates/matrix-sdk-search/src/encrypted/mod.rs
+index 8300d6d91..83a5bfe97 100644
+--- a/crates/matrix-sdk-search/src/encrypted/mod.rs
++++ b/crates/matrix-sdk-search/src/encrypted/mod.rs
+@@ -1,2 +1,151 @@
++// Copyright 2025 The Matrix.org Foundation C.I.C.
++//
++// Licensed under the Apache License, Version 2.0 (the "License");
++// you may not use this file except in compliance with the License.
++// You may obtain a copy of the License at
++//
++//     http://www.apache.org/licenses/LICENSE-2.0
++//
++// Unless required by applicable law or agreed to in writing, software
++// distributed under the License is distributed on an "AS IS" BASIS,
++// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++// See the License for the specific language governing permissions and
++// limitations under the License.
++
++//! Encryption of the files of an index: the key derivation and the file
++//! format, shared by the on-disk directory and the persisted in-memory one.
++
++// The encrypted on-disk directory is backed by mmap'd files, which don't
++// exist on wasm.
++#[cfg(not(target_family = "wasm"))]
+ pub mod encrypted_dir;
+ pub mod encrypted_stream;
++
++use std::{
++    fmt,
++    io::{Cursor, Error as IoError, Read, Result as IoResult, Write},
++};
++
++use aes::Aes256;
++use hkdf::Hkdf;
++use hmac::HmacReset;
++use sha2::{Sha256, Sha512};
++use zeroize::Zeroizing;
++
++use self::encrypted_stream::{AesReader, AesWriter};
++
++pub(crate) type Aes256Ctr = ctr::Ctr128BE<Aes256>;
++
++/// KeyBuffer type that makes sure that the buffer is zeroed out before being
++/// dropped.
++pub(crate) type KeyBuffer = Zeroizing<Vec<u8>>;
++
++/// 16 byte random IV for the AES-CTR mode.
++pub(crate) const IV_SIZE: usize = 16;
++/// 32 byte or 256 bit encryption keys.
++pub(crate) const KEY_SIZE: usize = 32;
++/// 32 byte message authentication code since HMAC-SHA256 is used.
++pub(crate) const MAC_LENGTH: usize = 32;
++/// HKDF info, making the derived keys unique to the search index.
++pub(crate) const HKDF_INFO: &[u8] = b"matrix-sdk-search-encryption-key";
++
++/// Expand a high-entropy key, without any key stretching, into a 256 bit
++/// encryption key and a 256 bit MAC key:
++///
++/// ```text
++///     encryption_key, mac_key = HKDF(SHA512, key, info = "matrix-sdk-search-encryption-key", 512)
++/// ```
++pub(crate) fn derive_keys(key: &str) -> IoResult<(KeyBuffer, KeyBuffer)> {
++    if key.is_empty() {
++        return Err(IoError::other("empty key"));
++    }
++
++    let mut hkdf_result = Zeroizing::new([0u8; KEY_SIZE * 2]);
++    Hkdf::<Sha512>::new(None, key.as_bytes())
++        .expand(HKDF_INFO, &mut *hkdf_result)
++        .map_err(|e| IoError::other(format!("unable to expand the key: {e:?}")))?;
++    let (encryption_key, mac_key) = hkdf_result.split_at(KEY_SIZE);
++
++    Ok((Zeroizing::new(encryption_key.to_vec()), Zeroizing::new(mac_key.to_vec())))
++}
++
++/// Encrypts and authenticates whole files, in the format of
++/// [`EncryptedMmapDirectory`](encrypted_dir::EncryptedMmapDirectory): AES-CTR
++/// with a random IV, and an HMAC-SHA256 of the ciphertext at the end:
++///
++/// ```text
++///     file_data = (iv || ciphertext || mac)
++/// ```
++#[derive(Clone)]
++pub(crate) struct FileCipher {
++    encryption_key: KeyBuffer,
++    mac_key: KeyBuffer,
++}
++
++impl FileCipher {
++    /// Make a cipher from a high-entropy key, see [`derive_keys`].
++    pub(crate) fn new(key: &str) -> IoResult<Self> {
++        let (encryption_key, mac_key) = derive_keys(key)?;
++        Ok(Self { encryption_key, mac_key })
++    }
++
++    /// Encrypt and authenticate a file.
++    pub(crate) fn encrypt(&self, data: &[u8]) -> IoResult<Vec<u8>> {
++        let mut encrypted = Vec::with_capacity(data.len() + IV_SIZE + MAC_LENGTH);
++        let mut writer = AesWriter::<Aes256Ctr, HmacReset<Sha256>, _>::new(
++            &mut encrypted,
++            &self.encryption_key,
++            &self.mac_key,
++            IV_SIZE,
++        )?;
++        writer.write_all(data)?;
++        writer.finalize()?;
++        drop(writer);
++        Ok(encrypted)
++    }
++
++    /// Authenticate and decrypt a file; fails if it was encrypted with another
++    /// key or tampered with.
++    pub(crate) fn decrypt(&self, data: &[u8]) -> IoResult<Vec<u8>> {
++        let mut reader = AesReader::<Aes256Ctr, _>::new::<HmacReset<Sha256>>(
++            Cursor::new(data),
++            &self.encryption_key,
++            &self.mac_key,
++            IV_SIZE,
++            MAC_LENGTH,
++        )?;
++        let mut decrypted = Vec::with_capacity(data.len().saturating_sub(IV_SIZE + MAC_LENGTH));
++        reader.read_to_end(&mut decrypted)?;
++        Ok(decrypted)
++    }
++}
++
++impl fmt::Debug for FileCipher {
++    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
++        f.debug_struct("FileCipher").finish_non_exhaustive()
++    }
++}
++
++#[cfg(test)]
++mod tests {
++    use super::FileCipher;
++
++    #[test]
++    fn encrypt_and_decrypt_a_file() {
++        let cipher = FileCipher::new("a high-entropy key").unwrap();
++        let encrypted = cipher.encrypt(b"hello").unwrap();
++        assert_ne!(&encrypted[16..21], b"hello");
++        assert_eq!(cipher.decrypt(&encrypted).unwrap(), b"hello");
++
++        // Another key fails the MAC.
++        let other = FileCipher::new("another key").unwrap();
++        assert!(other.decrypt(&encrypted).is_err());
++
++        // So does tampering.
++        let mut tampered = encrypted.clone();
++        tampered[17] ^= 1;
++        assert!(cipher.decrypt(&tampered).is_err());
++
++        assert!(FileCipher::new("").is_err());
++    }
++}
+diff --git a/crates/matrix-sdk-search/src/error.rs b/crates/matrix-sdk-search/src/error.rs
+index b00fb5c40..fa1a0955e 100644
+--- a/crates/matrix-sdk-search/src/error.rs
++++ b/crates/matrix-sdk-search/src/error.rs
+@@ -56,6 +56,10 @@ pub enum IndexError {
+     /// IO error
+     #[error(transparent)]
+     IO(std::io::Error),
++
++    /// Error from the store a persisted index is kept in
++    #[error(transparent)]
++    Store(crate::store::SearchIndexStoreError),
+ }
+ 
+ impl From<tantivy::TantivyError> for IndexError {
+@@ -94,6 +98,12 @@ impl From<std::io::Error> for IndexError {
+     }
+ }
+ 
++impl From<crate::store::SearchIndexStoreError> for IndexError {
++    fn from(err: crate::store::SearchIndexStoreError) -> IndexError {
++        IndexError::Store(err)
++    }
++}
++
+ /// Internal representation of Schema errors.
+ #[derive(Error, Debug)]
+ pub enum IndexSchemaError {
+diff --git a/crates/matrix-sdk-search/src/index/builder.rs b/crates/matrix-sdk-search/src/index/builder.rs
+index fc7668818..f7192b01c 100644
+--- a/crates/matrix-sdk-search/src/index/builder.rs
++++ b/crates/matrix-sdk-search/src/index/builder.rs
+@@ -10,16 +10,17 @@ use ruma::OwnedRoomId;
+ #[cfg(not(target_family = "wasm"))]
+ use tantivy::directory::{MmapDirectory, error::OpenDirectoryError};
+ use tantivy::Index;
+-#[cfg(not(target_family = "wasm"))]
+ use tracing::warn;
+-#[cfg(not(target_family = "wasm"))]
+ use zeroize::Zeroizing;
+ 
+ #[cfg(not(target_family = "wasm"))]
+-use crate::{encrypted::encrypted_dir::EncryptedMmapDirectory, error::IndexError};
++use crate::encrypted::encrypted_dir::EncryptedMmapDirectory;
+ use crate::{
+-    index::RoomIndex,
++    encrypted::FileCipher,
++    error::IndexError,
++    index::{RoomIndex, persisted_dir::PersistedRamDirectory},
+     schema::{MatrixSearchIndexSchema, RoomMessageSchema},
++    store::IndexFile,
+ };
+ 
+ /// Builder for [`RoomIndex`].
+@@ -39,6 +40,16 @@ impl RoomIndexBuilder {
+     pub fn new_in_memory<R: Into<OwnedRoomId>>(room_id: R) -> MemoryRoomIndexBuilder {
+         MemoryRoomIndexBuilder::new(room_id.into())
+     }
++
++    /// Make an index kept in memory and persisted through a
++    /// [`SearchIndexFileStore`](crate::store::SearchIndexFileStore), starting
++    /// from the files loaded from it.
++    pub fn new_persisted<R: Into<OwnedRoomId>>(
++        room_id: R,
++        files: Vec<IndexFile>,
++    ) -> PersistedRoomIndexBuilder {
++        PersistedRoomIndexBuilder { room_id: room_id.into(), files, key: None }
++    }
+ }
+ 
+ /// Incomplete builder for [`RoomIndex`] on disk.
+@@ -158,3 +169,177 @@ impl MemoryRoomIndexBuilder {
+         RoomIndex::new_with(index, schema, &self.room_id)
+     }
+ }
++
++/// Builder for a [`RoomIndex`] kept in memory and persisted through a
++/// [`SearchIndexFileStore`](crate::store::SearchIndexFileStore).
++pub struct PersistedRoomIndexBuilder {
++    room_id: OwnedRoomId,
++    files: Vec<IndexFile>,
++    key: Option<Zeroizing<String>>,
++}
++
++impl PersistedRoomIndexBuilder {
++    /// Encrypt the files with the given high-entropy key.
++    pub fn encrypted<K: Into<String>>(mut self, key: K) -> Self {
++        self.key = Some(Zeroizing::new(key.into()));
++        self
++    }
++
++    /// Build the [`RoomIndex`].
++    ///
++    /// Files that can't be read, e.g. because they were encrypted with another
++    /// key or in an older format, are dropped: the index starts empty, and the
++    /// next [`RoomIndex::take_file_changes`] deletes them from the store.
++    pub fn build(self) -> Result<RoomIndex, IndexError> {
++        let cipher = self.key.as_deref().map(|key| FileCipher::new(key)).transpose()?;
++        let schema = RoomMessageSchema::new();
++
++        let open = || -> Result<(Index, PersistedRamDirectory), IndexError> {
++            let files = self
++                .files
++                .iter()
++                .map(|file| {
++                    let data = match &cipher {
++                        Some(cipher) => cipher.decrypt(&file.data)?,
++                        None => file.data.clone(),
++                    };
++                    Ok::<_, IndexError>((file.name.clone(), data))
++                })
++                .collect::<Result<Vec<_>, _>>()?;
++            let directory = PersistedRamDirectory::from_files(files)?;
++            let index = Index::open_or_create(directory.clone(), schema.as_tantivy_schema())?;
++            Ok((index, directory))
++        };
++
++        let (index, directory) = match open() {
++            Ok(opened) => opened,
++            Err(err) if !self.files.is_empty() => {
++                // It can't tell a wrong key from other errors.
++                warn!(room_id = %self.room_id, "Recreating the search index: {err}");
++                let directory = PersistedRamDirectory::replacing(
++                    self.files.iter().map(|file| file.name.clone()),
++                );
++                let index = Index::open_or_create(directory.clone(), schema.as_tantivy_schema())?;
++                (index, directory)
++            }
++            Err(err) => return Err(err),
++        };
++
++        Ok(RoomIndex::new_persisted(index, schema, &self.room_id, directory, cipher))
++    }
++}
++
++#[cfg(test)]
++mod tests {
++    use std::collections::HashMap;
++
++    use ruma::{event_id, room_id, user_id};
++
++    use super::RoomIndexBuilder;
++    use crate::{
++        index::{IndexableEvent, RoomIndex, RoomIndexOperation},
++        store::IndexFile,
++    };
++
++    fn add(body: &str, n: u8) -> RoomIndexOperation {
++        let event_id = format!("$event{n}:example.org").try_into().unwrap();
++        RoomIndexOperation::Add(IndexableEvent::new(
++            event_id,
++            event_id!("$original:example.org").to_owned(),
++            user_id!("@alice:example.org").to_owned(),
++            None,
++            body.to_owned(),
++        ))
++    }
++
++    /// A store of one room, kept as a map of files: what a
++    /// `SearchIndexFileStore` would hold. Returns the number of deletions.
++    fn save(store: &mut HashMap<String, Vec<u8>>, index: &RoomIndex) -> usize {
++        let changes = index.take_file_changes().expect("persisted").unwrap();
++        let deleted = changes.delete.len();
++        for name in changes.delete {
++            store.remove(&name);
++        }
++        for file in changes.put {
++            store.insert(file.name, file.data);
++        }
++        deleted
++    }
++
++    fn load(store: &HashMap<String, Vec<u8>>) -> Vec<IndexFile> {
++        store.iter().map(|(name, data)| IndexFile { name: name.clone(), data: data.clone() }).collect()
++    }
++
++    #[test]
++    fn persisted_index_survives_a_reload() {
++        let room_id = room_id!("!room:example.org");
++        let mut store = HashMap::new();
++
++        let mut index = RoomIndexBuilder::new_persisted(room_id, vec![]).encrypted("key").build().unwrap();
++        // Creating the index writes its meta.
++        save(&mut store, &index);
++        assert!(store.contains_key("meta.json"));
++
++        index.execute(add("hello world", 1)).unwrap();
++        save(&mut store, &index);
++        assert!(store.len() > 1, "segment files");
++        assert!(store.values().all(|data| !data.windows(5).any(|w| w == b"hello")), "encrypted");
++
++        // Many commits, so segments get merged: merged-away files are deleted.
++        // `bulk_execute` waits for the merges, which `execute` leaves to
++        // background threads on native.
++        let mut deleted = 0;
++        for n in 2..40 {
++            index.bulk_execute(vec![add("hello again", n)]).unwrap();
++            deleted += save(&mut store, &index);
++        }
++        assert!(deleted > 0, "merged-away segment files were deleted");
++        drop(index);
++
++        let index = RoomIndexBuilder::new_persisted(room_id, load(&store)).encrypted("key").build().unwrap();
++        assert_eq!(index.search("hello", 100, None).unwrap().len(), 39);
++        assert_eq!(index.search("world", 10, None).unwrap().len(), 1);
++        assert!(index.take_file_changes().unwrap().unwrap().is_empty(), "loading changes nothing");
++
++        // The store only holds what the index references, lock files excluded.
++        assert!(store.keys().all(|name| !name.ends_with(".lock")));
++        assert!(store.len() < 39 * 5, "segments were merged: {} files", store.len());
++    }
++
++    #[test]
++    fn persisted_index_is_recreated_with_another_key() {
++        let room_id = room_id!("!room:example.org");
++        let mut store = HashMap::new();
++
++        let mut index = RoomIndexBuilder::new_persisted(room_id, vec![]).encrypted("key").build().unwrap();
++        index.execute(add("hello", 1)).unwrap();
++        save(&mut store, &index);
++        // The old segment files; the meta files get rewritten under the same names.
++        let stale: Vec<_> = store
++            .keys()
++            .filter(|name| !name.ends_with(".json"))
++            .cloned()
++            .collect();
++        assert!(!stale.is_empty());
++        let old_meta = store["meta.json"].clone();
++
++        // Another key can't read the files: the index starts empty and the
++        // stale files get deleted on the next save.
++        let mut index = RoomIndexBuilder::new_persisted(room_id, load(&store)).encrypted("other").build().unwrap();
++        assert!(index.search("hello", 10, None).unwrap().is_empty());
++        index.execute(add("fresh", 2)).unwrap();
++        save(&mut store, &index);
++        assert!(stale.iter().all(|name| !store.contains_key(name)), "stale files deleted");
++        assert_ne!(store["meta.json"], old_meta, "meta rewritten");
++
++        // Unencrypted works the same way.
++        let index = RoomIndexBuilder::new_persisted(room_id, load(&store)).encrypted("other").build().unwrap();
++        assert_eq!(index.search("fresh", 10, None).unwrap().len(), 1);
++        let mut store = HashMap::new();
++        let mut index = RoomIndexBuilder::new_persisted(room_id, vec![]).build().unwrap();
++        index.execute(add("plain", 3)).unwrap();
++        save(&mut store, &index);
++        let index = RoomIndexBuilder::new_persisted(room_id, load(&store)).build().unwrap();
++        assert_eq!(index.search("plain", 10, None).unwrap().len(), 1);
++    }
++}
+diff --git a/crates/matrix-sdk-search/src/index/mod.rs b/crates/matrix-sdk-search/src/index/mod.rs
+index a47d2aca3..cf92810d6 100644
+--- a/crates/matrix-sdk-search/src/index/mod.rs
++++ b/crates/matrix-sdk-search/src/index/mod.rs
+@@ -14,6 +14,7 @@
+ 
+ /// A module for building a [`RoomIndex`]
+ pub mod builder;
++pub(crate) mod persisted_dir;
+ 
+ use std::{
+     collections::{HashMap, HashSet},
+@@ -32,8 +33,11 @@ use tracing::{debug, error, warn};
+ 
+ use crate::{
+     OpStamp, TANTIVY_INDEX_MEMORY_BUDGET,
++    encrypted::FileCipher,
+     error::IndexError,
++    index::persisted_dir::PersistedRamDirectory,
+     schema::{MatrixSearchIndexSchema, RoomMessageSchema},
++    store::{IndexFile, IndexFileChanges},
+     writer::SearchIndexWriter,
+ };
+ 
+@@ -136,6 +140,30 @@ pub struct RoomIndex {
+     /// It is costly to create one, so let's keep it in memory when needed; see
+     /// [`RoomIndex::reader`] to learn more.
+     reader: OnceCell<IndexReader>,
++    /// How the index is persisted, if it is.
++    persistence: Option<Persistence>,
++}
++
++/// How a [`RoomIndex`] kept in memory is persisted: through its directory,
++/// which remembers the files that changed, and the cipher they are saved with.
++struct Persistence {
++    directory: PersistedRamDirectory,
++    cipher: Option<FileCipher>,
++}
++
++impl Persistence {
++    fn take_file_changes(&self) -> Result<IndexFileChanges, IndexError> {
++        let (written, deleted) = self.directory.take_changes()?;
++        let mut put = Vec::with_capacity(written.len());
++        for (name, data) in written {
++            let data = match &self.cipher {
++                Some(cipher) => cipher.encrypt(&data)?,
++                None => data,
++            };
++            put.push(IndexFile { name, data });
++        }
++        Ok(IndexFileChanges { put, delete: deleted })
++    }
+ }
+ 
+ impl fmt::Debug for RoomIndex {
+@@ -158,9 +186,35 @@ impl RoomIndex {
+             uncommitted_adds: HashMap::new(),
+             uncommitted_removes: HashSet::new(),
+             reader: OnceCell::new(),
++            persistence: None,
+         }
+     }
+ 
++    /// Make a [`RoomIndex`] kept in memory in `directory` and persisted
++    /// through a [`SearchIndexFileStore`](crate::store::SearchIndexFileStore),
++    /// with its files encrypted by `cipher` if given.
++    pub(crate) fn new_persisted(
++        index: Index,
++        schema: RoomMessageSchema,
++        room_id: &RoomId,
++        directory: PersistedRamDirectory,
++        cipher: Option<FileCipher>,
++    ) -> RoomIndex {
++        let mut room_index = Self::new_with(index, schema, room_id);
++        room_index.persistence = Some(Persistence { directory, cipher });
++        room_index
++    }
++
++    /// The files of this index that changed since the last call, ready to be
++    /// saved in its [`SearchIndexFileStore`](crate::store::SearchIndexFileStore):
++    /// encrypted if the index is. `None` if the index isn't persisted.
++    ///
++    /// Call it after each [`RoomIndex::execute`] or
++    /// [`RoomIndex::bulk_execute`], which commit.
++    pub fn take_file_changes(&self) -> Option<Result<IndexFileChanges, IndexError>> {
++        self.persistence.as_ref().map(Persistence::take_file_changes)
++    }
++
+     /// Get a [`SearchIndexWriter`] for this index.
+     fn writer(&self) -> Result<SearchIndexWriter, IndexError> {
+         let writer = self.index.writer(TANTIVY_INDEX_MEMORY_BUDGET)?;
+@@ -366,7 +420,7 @@ impl RoomIndex {
+                     | OpenDirectoryError::NotADirectory(_) => return Err(err),
+                 },
+                 // Bubble
+-                IndexError::QueryParserError(_) => return Err(err),
++                IndexError::QueryParserError(_) | IndexError::Store(_) => return Err(err),
+                 // Ignore
+                 IndexError::CannotIndexRedactedMessage
+                 | IndexError::EmptyMessage
+@@ -547,7 +601,7 @@ mod tests {
+             .build()
+             .unwrap();
+         index.execute(add).unwrap();
+-        assert_eq!(index.search("body", 10, None).unwrap().events.len(), 1);
++        assert_eq!(index.search("body", 10, None).unwrap().len(), 1);
+         drop(index);
+ 
+         // The index can't be decrypted with another key, so it's
+@@ -556,7 +610,7 @@ mod tests {
+             .encrypted("another key")
+             .build()
+             .unwrap();
+-        assert!(index.search("body", 10, None).unwrap().events.is_empty());
++        assert!(index.search("body", 10, None).unwrap().is_empty());
+     }
+ 
+     #[test]
+diff --git a/crates/matrix-sdk-search/src/index/persisted_dir.rs b/crates/matrix-sdk-search/src/index/persisted_dir.rs
+new file mode 100644
+index 000000000..f016accbf
+--- /dev/null
++++ b/crates/matrix-sdk-search/src/index/persisted_dir.rs
+@@ -0,0 +1,230 @@
++// Copyright 2026 The Matrix.org Foundation C.I.C.
++//
++// Licensed under the Apache License, Version 2.0 (the "License");
++// you may not use this file except in compliance with the License.
++// You may obtain a copy of the License at
++//
++//     http://www.apache.org/licenses/LICENSE-2.0
++//
++// Unless required by applicable law or agreed to in writing, software
++// distributed under the License is distributed on an "AS IS" BASIS,
++// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++// See the License for the specific language governing permissions and
++// limitations under the License.
++
++//! A tantivy directory kept in memory, which remembers which files changed so
++//! they can be saved elsewhere.
++
++use std::{
++    collections::BTreeSet,
++    fmt, io,
++    path::{Path, PathBuf},
++    sync::{Arc, Mutex},
++};
++
++use tantivy::directory::{
++    Directory, FileHandle, FileSlice, RamDirectory, WatchCallback, WatchHandle, WritePtr,
++    error::{DeleteError, OpenReadError, OpenWriteError},
++};
++
++/// The files written and deleted since the changes were last taken.
++#[derive(Default)]
++struct Changes {
++    written: BTreeSet<PathBuf>,
++    deleted: BTreeSet<PathBuf>,
++}
++
++/// A [`RamDirectory`] which tracks the files written and deleted, so that a
++/// [`SearchIndexFileStore`](crate::store::SearchIndexFileStore) can be kept up
++/// to date after each commit.
++///
++/// Tantivy's `Directory` is synchronous while stores typically aren't, so the
++/// directory doesn't save anything itself: the owner calls
++/// [`PersistedRamDirectory::take_changes`] after a commit and saves them.
++///
++/// Lock files are transient and never tracked.
++#[derive(Clone, Default)]
++pub(crate) struct PersistedRamDirectory {
++    ram: RamDirectory,
++    changes: Arc<Mutex<Changes>>,
++}
++
++impl PersistedRamDirectory {
++    /// A directory holding the given files, none of which counts as changed.
++    pub(crate) fn from_files(
++        files: impl IntoIterator<Item = (String, Vec<u8>)>,
++    ) -> io::Result<Self> {
++        let directory = Self::default();
++        for (name, data) in files {
++            directory.ram.atomic_write(Path::new(&name), &data)?;
++        }
++        Ok(directory)
++    }
++
++    /// An empty directory replacing stored files which couldn't be read: the
++    /// next changes taken delete them.
++    pub(crate) fn replacing(stale_files: impl IntoIterator<Item = String>) -> Self {
++        let directory = Self::default();
++        directory
++            .changes
++            .lock()
++            .unwrap()
++            .deleted
++            .extend(stale_files.into_iter().map(PathBuf::from));
++        directory
++    }
++
++    /// The files written, with their current contents, and the files deleted
++    /// since the last call.
++    pub(crate) fn take_changes(&self) -> io::Result<(Vec<(String, Vec<u8>)>, Vec<String>)> {
++        let Changes { written, deleted } = std::mem::take(&mut *self.changes.lock().unwrap());
++
++        let mut put = Vec::with_capacity(written.len());
++        for path in written {
++            match self.ram.open_read(&path) {
++                Ok(file) => put.push((name(&path), file.read_bytes()?.as_slice().to_vec())),
++                // Written then deleted, e.g. a segment merged away: it is in
++                // `deleted` already.
++                Err(OpenReadError::FileDoesNotExist(_)) => {}
++                Err(err) => return Err(io::Error::other(err)),
++            }
++        }
++
++        Ok((put, deleted.iter().map(|path| name(path)).collect()))
++    }
++
++    fn track_written(&self, path: &Path) {
++        if is_lock_file(path) {
++            return;
++        }
++        let mut changes = self.changes.lock().unwrap();
++        changes.deleted.remove(path);
++        changes.written.insert(path.to_path_buf());
++    }
++
++    fn track_deleted(&self, path: &Path) {
++        if is_lock_file(path) {
++            return;
++        }
++        let mut changes = self.changes.lock().unwrap();
++        changes.written.remove(path);
++        changes.deleted.insert(path.to_path_buf());
++    }
++}
++
++fn name(path: &Path) -> String {
++    path.to_string_lossy().into_owned()
++}
++
++/// Tantivy's lock files (`.tantivy-writer.lock`, `.tantivy-meta.lock`), which
++/// only exist while a lock is held.
++fn is_lock_file(path: &Path) -> bool {
++    path.extension().is_some_and(|extension| extension == "lock")
++}
++
++impl fmt::Debug for PersistedRamDirectory {
++    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
++        write!(f, "PersistedRamDirectory")
++    }
++}
++
++impl Directory for PersistedRamDirectory {
++    fn get_file_handle(&self, path: &Path) -> Result<Arc<dyn FileHandle>, OpenReadError> {
++        self.ram.get_file_handle(path)
++    }
++
++    fn open_read(&self, path: &Path) -> Result<FileSlice, OpenReadError> {
++        self.ram.open_read(path)
++    }
++
++    fn delete(&self, path: &Path) -> Result<(), DeleteError> {
++        self.ram.delete(path)?;
++        self.track_deleted(path);
++        Ok(())
++    }
++
++    fn exists(&self, path: &Path) -> Result<bool, OpenReadError> {
++        self.ram.exists(path)
++    }
++
++    fn open_write(&self, path: &Path) -> Result<WritePtr, OpenWriteError> {
++        let writer = self.ram.open_write(path)?;
++        self.track_written(path);
++        Ok(writer)
++    }
++
++    fn atomic_read(&self, path: &Path) -> Result<Vec<u8>, OpenReadError> {
++        self.ram.atomic_read(path)
++    }
++
++    fn atomic_write(&self, path: &Path, data: &[u8]) -> io::Result<()> {
++        self.ram.atomic_write(path, data)?;
++        self.track_written(path);
++        Ok(())
++    }
++
++    fn sync_directory(&self) -> io::Result<()> {
++        self.ram.sync_directory()
++    }
++
++    fn watch(&self, watch_callback: WatchCallback) -> tantivy::Result<WatchHandle> {
++        self.ram.watch(watch_callback)
++    }
++}
++
++#[cfg(test)]
++mod tests {
++    use std::{io::Write, path::Path};
++
++    use tantivy::directory::{Directory, TerminatingWrite};
++
++    use super::PersistedRamDirectory;
++
++    #[test]
++    fn changes_are_tracked_and_taken_once() {
++        let directory = PersistedRamDirectory::from_files([("old".to_owned(), b"old".to_vec())])
++            .unwrap();
++        assert!(directory.exists(Path::new("old")).unwrap());
++
++        // Loaded files aren't changes.
++        let (put, deleted) = directory.take_changes().unwrap();
++        assert!(put.is_empty() && deleted.is_empty());
++
++        directory.atomic_write(Path::new("meta.json"), b"{}").unwrap();
++        let mut writer = directory.open_write(Path::new("seg.idx")).unwrap();
++        writer.write_all(b"segment").unwrap();
++        writer.terminate().unwrap();
++        directory.delete(Path::new("old")).unwrap();
++
++        // Lock files are never tracked.
++        directory.atomic_write(Path::new(".tantivy-meta.lock"), b"").unwrap();
++        directory.delete(Path::new(".tantivy-meta.lock")).unwrap();
++
++        let (put, deleted) = directory.take_changes().unwrap();
++        assert_eq!(
++            put,
++            vec![("meta.json".to_owned(), b"{}".to_vec()), ("seg.idx".to_owned(), b"segment".to_vec())]
++        );
++        assert_eq!(deleted, vec!["old".to_owned()]);
++
++        // Taken once.
++        let (put, deleted) = directory.take_changes().unwrap();
++        assert!(put.is_empty() && deleted.is_empty());
++
++        // Written then deleted is just deleted.
++        directory.atomic_write(Path::new("tmp"), b"x").unwrap();
++        directory.delete(Path::new("tmp")).unwrap();
++        let (put, deleted) = directory.take_changes().unwrap();
++        assert!(put.is_empty());
++        assert_eq!(deleted, vec!["tmp".to_owned()]);
++    }
++
++    #[test]
++    fn replacing_deletes_the_stale_files() {
++        let directory = PersistedRamDirectory::replacing(["a".to_owned(), "b".to_owned()]);
++        assert!(!directory.exists(Path::new("a")).unwrap());
++        let (put, deleted) = directory.take_changes().unwrap();
++        assert!(put.is_empty());
++        assert_eq!(deleted, vec!["a".to_owned(), "b".to_owned()]);
++    }
++}
+diff --git a/crates/matrix-sdk-search/src/lib.rs b/crates/matrix-sdk-search/src/lib.rs
+index 1f7657998..8582e8775 100644
+--- a/crates/matrix-sdk-search/src/lib.rs
++++ b/crates/matrix-sdk-search/src/lib.rs
+@@ -6,8 +6,6 @@ pub type OpStamp = u64;
+ 
+ pub(crate) const TANTIVY_INDEX_MEMORY_BUDGET: usize = 50_000_000;
+ 
+-// The encrypted index is backed by mmap'd files, which don't exist on wasm.
+-#[cfg(not(target_family = "wasm"))]
+ mod encrypted;
+ mod schema;
+ mod writer;
+@@ -16,3 +14,4 @@ mod writer;
+ pub mod error;
+ /// A module for the search index.
+ pub mod index;
++pub mod store;
+diff --git a/crates/matrix-sdk-search/src/store.rs b/crates/matrix-sdk-search/src/store.rs
+new file mode 100644
+index 000000000..15afd5b7c
+--- /dev/null
++++ b/crates/matrix-sdk-search/src/store.rs
+@@ -0,0 +1,96 @@
++// Copyright 2026 The Matrix.org Foundation C.I.C.
++//
++// Licensed under the Apache License, Version 2.0 (the "License");
++// you may not use this file except in compliance with the License.
++// You may obtain a copy of the License at
++//
++//     http://www.apache.org/licenses/LICENSE-2.0
++//
++// Unless required by applicable law or agreed to in writing, software
++// distributed under the License is distributed on an "AS IS" BASIS,
++// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++// See the License for the specific language governing permissions and
++// limitations under the License.
++
++//! Where a persisted search index keeps its files.
++//!
++//! On platforms without a filesystem, like the web, a room's index is kept in
++//! memory and its files are saved through a [`SearchIndexFileStore`] after
++//! each commit, then loaded back from it when the index is next opened.
++
++use std::{error::Error, fmt};
++
++use async_trait::async_trait;
++use matrix_sdk_common::{SendOutsideWasm, SyncOutsideWasm};
++use ruma::RoomId;
++
++/// A file of a room's index, as stored: encrypted if the index is.
++#[derive(Clone)]
++pub struct IndexFile {
++    /// The file's name, unique within the room's index.
++    pub name: String,
++    /// The file's contents.
++    pub data: Vec<u8>,
++}
++
++impl fmt::Debug for IndexFile {
++    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
++        f.debug_struct("IndexFile").field("name", &self.name).field("len", &self.data.len()).finish()
++    }
++}
++
++/// The files of a room's index that changed since they were last saved.
++#[derive(Clone, Debug, Default)]
++pub struct IndexFileChanges {
++    /// Files to write, replacing any with the same name.
++    pub put: Vec<IndexFile>,
++    /// Names of files to delete.
++    pub delete: Vec<String>,
++}
++
++impl IndexFileChanges {
++    /// Whether there is nothing to save.
++    pub fn is_empty(&self) -> bool {
++        self.put.is_empty() && self.delete.is_empty()
++    }
++}
++
++/// An error from a [`SearchIndexFileStore`].
++#[derive(Debug, thiserror::Error)]
++#[error(transparent)]
++pub struct SearchIndexStoreError(Box<dyn Error + Send + Sync>);
++
++impl SearchIndexStoreError {
++    /// Wrap a store's own error.
++    pub fn backend(error: impl Error + Send + Sync + 'static) -> Self {
++        Self(Box::new(error))
++    }
++}
++
++/// A store for the files of persisted room indexes, e.g. IndexedDB on the web.
++///
++/// Files are opaque: when the index is encrypted, they are encrypted before
++/// they get here.
++#[cfg_attr(target_family = "wasm", async_trait(?Send))]
++#[cfg_attr(not(target_family = "wasm"), async_trait)]
++pub trait SearchIndexFileStore: fmt::Debug + SendOutsideWasm + SyncOutsideWasm {
++    /// All the files of a room's index; empty if it has never been saved.
++    async fn load_room(&self, room_id: &RoomId) -> Result<Vec<IndexFile>, SearchIndexStoreError>;
++
++    /// Write and delete files of a room's index, atomically: either every
++    /// change is saved or none is, so a saved index is always consistent.
++    async fn save_room(
++        &self,
++        room_id: &RoomId,
++        changes: IndexFileChanges,
++    ) -> Result<(), SearchIndexStoreError>;
++
++    /// Delete every file of a room's index.
++    async fn delete_room(&self, room_id: &RoomId) -> Result<(), SearchIndexStoreError>;
++
++    /// Read a value kept alongside the indexes, e.g. a marker.
++    async fn get_value(&self, key: &str) -> Result<Option<Vec<u8>>, SearchIndexStoreError>;
++
++    /// Write a value kept alongside the indexes.
++    async fn set_value(&self, key: &str, value: Vec<u8>) -> Result<(), SearchIndexStoreError>;
++}
+diff --git a/crates/matrix-sdk/src/message_search.rs b/crates/matrix-sdk/src/message_search.rs
+index 6ca65f068..0460b76cc 100644
+--- a/crates/matrix-sdk/src/message_search.rs
++++ b/crates/matrix-sdk/src/message_search.rs
+@@ -132,7 +132,9 @@ impl Room {
+         pagination_offset: Option<usize>,
+     ) -> Result<Vec<(f32, OwnedEventId)>, IndexError> {
+         let mut search_index_guard = self.client.search_index().lock().await;
+-        search_index_guard.search(query, max_number_of_results, pagination_offset, self.room_id())
++        search_index_guard
++            .search(query, max_number_of_results, pagination_offset, self.room_id())
++            .await
+     }
+ }
+ 
+diff --git a/crates/matrix-sdk/src/search_index/mod.rs b/crates/matrix-sdk/src/search_index/mod.rs
+index eaa8214c9..b4df3a58b 100644
+--- a/crates/matrix-sdk/src/search_index/mod.rs
++++ b/crates/matrix-sdk/src/search_index/mod.rs
+@@ -25,6 +25,7 @@ use matrix_sdk_base::{
+ use matrix_sdk_search::{
+     error::IndexError,
+     index::{IndexableEvent, RoomIndex, RoomIndexOperation, builder::RoomIndexBuilder},
++    store::SearchIndexFileStore,
+ };
+ use ruma::{
+     EventId, MilliSecondsSinceUnixEpoch, OwnedEventId, OwnedRoomId, RoomId,
+@@ -56,10 +57,24 @@ pub enum SearchIndexStoreKind {
+     UnencryptedDirectory(PathBuf),
+     /// Store encrypted, with the given high-entropy key, in file system folder
+     EncryptedDirectory(PathBuf, Key),
++    /// Keep the indexes in memory and save their files through a
++    /// [`SearchIndexFileStore`], e.g. IndexedDB on the web, encrypted with
++    /// the given high-entropy key if any.
++    Store {
++        /// Where the files are saved.
++        store: Arc<dyn SearchIndexFileStore>,
++        /// The key the files are encrypted with, if they are.
++        key: Option<Key>,
++    },
+     /// Store in memory
+     InMemory,
+ }
+ 
++/// Marker telling that the events saved in the event cache store have been
++/// indexed, see [`Client::index_cached_events`](crate::Client::index_cached_events).
++/// Bump it when the index format changes, so the events get indexed again.
++const REINDEX_MARKER: &str = "reindexed-v1";
++
+ /// Object that handles inteeraction with [`RoomIndex`]'s for search
+ #[derive(Clone, Debug)]
+ pub struct SearchIndex {
+@@ -86,6 +101,52 @@ impl SearchIndex {
+             search_index_store_kind: &self.search_index_store_kind,
+         }
+     }
++
++    /// Whether the events saved in the event cache store have already been
++    /// indexed into this index, which is persisted.
++    pub(crate) async fn has_indexed_cached_events(&self) -> bool {
++        match &self.search_index_store_kind {
++            SearchIndexStoreKind::Store { store, .. } => match store.get_value(REINDEX_MARKER).await
++            {
++                Ok(marker) => marker.is_some(),
++                Err(err) => {
++                    warn!("couldn't read the search index's reindex marker: {err}");
++                    false
++                }
++            },
++            #[cfg(not(target_family = "wasm"))]
++            SearchIndexStoreKind::UnencryptedDirectory(path)
++            | SearchIndexStoreKind::EncryptedDirectory(path, _) => {
++                path.join(REINDEX_MARKER).exists()
++            }
++            #[cfg(target_family = "wasm")]
++            SearchIndexStoreKind::UnencryptedDirectory(_)
++            | SearchIndexStoreKind::EncryptedDirectory(_, _) => false,
++            SearchIndexStoreKind::InMemory => false,
++        }
++    }
++
++    /// Remember that the events saved in the event cache store have been
++    /// indexed into this index, if it is persisted.
++    pub(crate) async fn mark_cached_events_indexed(&self) {
++        let result = match &self.search_index_store_kind {
++            SearchIndexStoreKind::Store { store, .. } => {
++                store.set_value(REINDEX_MARKER, Vec::new()).await.map_err(|err| err.to_string())
++            }
++            #[cfg(not(target_family = "wasm"))]
++            SearchIndexStoreKind::UnencryptedDirectory(path)
++            | SearchIndexStoreKind::EncryptedDirectory(path, _) => std::fs::create_dir_all(path)
++                .and_then(|()| std::fs::write(path.join(REINDEX_MARKER), b""))
++                .map_err(|err| err.to_string()),
++            #[cfg(target_family = "wasm")]
++            SearchIndexStoreKind::UnencryptedDirectory(_)
++            | SearchIndexStoreKind::EncryptedDirectory(_, _) => Ok(()),
++            SearchIndexStoreKind::InMemory => Ok(()),
++        };
++        if let Err(err) = result {
++            warn!("couldn't write the search index's reindex marker: {err}");
++        }
++    }
+ }
+ 
+ /// Object that represents an acquired [`SearchIndex`].
+@@ -99,7 +160,8 @@ pub struct SearchIndexGuard<'a> {
+ }
+ 
+ impl SearchIndexGuard<'_> {
+-    fn create_index(&self, room_id: &RoomId) -> Result<RoomIndex, IndexError> {
++    /// Open a room's index, loading it from its store if it is persisted.
++    async fn open_index(&self, room_id: &RoomId) -> Result<RoomIndex, IndexError> {
+         let index = match self.search_index_store_kind {
+             #[cfg(not(target_family = "wasm"))]
+             SearchIndexStoreKind::UnencryptedDirectory(path) => {
+@@ -116,11 +178,56 @@ impl SearchIndexGuard<'_> {
+                     "on-disk search indexes are not supported on wasm",
+                 )));
+             }
++            SearchIndexStoreKind::Store { store, key } => {
++                let files = store.load_room(room_id).await?;
++                debug!(%room_id, files = files.len(), "loaded the search index");
++                let builder = RoomIndexBuilder::new_persisted(room_id, files);
++                match key {
++                    Some(key) => builder.encrypted(key.clone()).build()?,
++                    None => builder.build()?,
++                }
++            }
+             SearchIndexStoreKind::InMemory => RoomIndexBuilder::new_in_memory(room_id).build(),
+         };
+         Ok(index)
+     }
+ 
++    /// The room's index, opened if it wasn't yet.
++    async fn index_for(&mut self, room_id: &RoomId) -> Result<&mut RoomIndex, IndexError> {
++        if !self.index_map.contains_key(room_id) {
++            let index = self.open_index(room_id).await?;
++            self.index_map.insert(room_id.to_owned(), index);
++        }
++        Ok(self.index_map.get_mut(room_id).expect("index should exist"))
++    }
++
++    /// Save what a room's index changed since the last save, if it is
++    /// persisted. Failures are logged: the index stays usable in memory.
++    async fn persist(&self, room_id: &RoomId) {
++        let SearchIndexStoreKind::Store { store, .. } = self.search_index_store_kind else {
++            return;
++        };
++        let Some(changes) = self.index_map.get(room_id).and_then(RoomIndex::take_file_changes)
++        else {
++            return;
++        };
++        match changes {
++            Ok(changes) if changes.is_empty() => {}
++            Ok(changes) => {
++                debug!(
++                    %room_id,
++                    put = changes.put.len(),
++                    delete = changes.delete.len(),
++                    "saving the search index"
++                );
++                if let Err(err) = store.save_room(room_id, changes).await {
++                    warn!(%room_id, "couldn't save the search index: {err}");
++                }
++            }
++            Err(err) => warn!(%room_id, "couldn't collect the search index's changes: {err}"),
++        }
++    }
++
+     /// Handle a [`RoomIndexOperation`] in the [`RoomIndex`] of a given
+     /// [`RoomId`]
+     ///
+@@ -128,19 +235,14 @@ impl SearchIndexGuard<'_> {
+     /// event type.
+     ///
+     /// Prefer [`SearchIndexGuard::bulk_execute`] for multiple operations.
+-    pub(crate) fn execute(
++    pub(crate) async fn execute(
+         &mut self,
+         operation: RoomIndexOperation,
+         room_id: &RoomId,
+     ) -> Result<(), IndexError> {
+-        if !self.index_map.contains_key(room_id) {
+-            let index = self.create_index(room_id)?;
+-            self.index_map.insert(room_id.to_owned(), index);
+-        }
+-
+-        let index = self.index_map.get_mut(room_id).expect("index should exist");
+-
+-        index.execute(operation)
++        let result = self.index_for(room_id).await?.execute(operation);
++        self.persist(room_id).await;
++        result
+     }
+ 
+     /// Handle a [`RoomIndexOperation`] in the [`RoomIndex`] of a given
+@@ -148,38 +250,26 @@ impl SearchIndexGuard<'_> {
+     ///
+     /// This which will add/remove/edit an event in the index based on the
+     /// event type.
+-    pub(crate) fn bulk_execute(
++    pub(crate) async fn bulk_execute(
+         &mut self,
+         operations: Vec<RoomIndexOperation>,
+         room_id: &RoomId,
+     ) -> Result<(), IndexError> {
+-        if !self.index_map.contains_key(room_id) {
+-            let index = self.create_index(room_id)?;
+-            self.index_map.insert(room_id.to_owned(), index);
+-        }
+-
+-        let index = self.index_map.get_mut(room_id).expect("index should exist");
+-
+-        index.bulk_execute(operations)
++        let result = self.index_for(room_id).await?.bulk_execute(operations);
++        self.persist(room_id).await;
++        result
+     }
+ 
+     /// Search a [`Room`]'s index for the query and return at most
+     /// max_number_of_results results.
+-    pub(crate) fn search(
++    pub(crate) async fn search(
+         &mut self,
+         query: &str,
+         max_number_of_results: usize,
+         pagination_offset: Option<usize>,
+         room_id: &RoomId,
+     ) -> Result<Vec<(f32, OwnedEventId)>, IndexError> {
+-        if !self.index_map.contains_key(room_id) {
+-            let index = self.create_index(room_id)?;
+-            self.index_map.insert(room_id.to_owned(), index);
+-        }
+-
+-        let index = self.index_map.get_mut(room_id).expect("index should exist");
+-
+-        index.search(query, max_number_of_results, pagination_offset)
++        self.index_for(room_id).await?.search(query, max_number_of_results, pagination_offset)
+     }
+ 
+     /// Given a [`TimelineEvent`] this function will derive a
+@@ -198,7 +288,7 @@ impl SearchIndexGuard<'_> {
+         if let Some(index_operation) =
+             parse_timeline_event(room_cache, event, redaction_rules).await
+         {
+-            self.execute(index_operation, room_id)
++            self.execute(index_operation, room_id).await
+         } else {
+             Ok(())
+         }
+@@ -220,7 +310,7 @@ impl SearchIndexGuard<'_> {
+ 
+         let operations: Vec<_> = join_all(futures).await.into_iter().flatten().collect();
+ 
+-        self.bulk_execute(operations, room_id)
++        self.bulk_execute(operations, room_id).await
+     }
+ }
+ 
+@@ -507,12 +597,16 @@ async fn parse_timeline_event(
+ 
+ impl crate::Client {
+     /// Feed every event already in the event cache store into the search
+-    /// index, for all joined rooms.
++    /// index, for all joined rooms, once.
+     ///
+     /// The index only receives events as they reach the event cache (from
+-    /// sync or from paginating the server), so an in-memory index, the only
+-    /// kind on wasm, starts empty on every launch. This fills it with the
+-    /// history the client has already cached locally.
++    /// sync or from paginating the server), so it can miss events the event
++    /// cache already has: ones stored before search was enabled, ones dropped
++    /// by the indexer, or all of them for an in-memory index, which starts
++    /// empty on every launch. This fills it with the history the client has
++    /// already cached locally.
++    ///
++    /// A persisted index remembers that this ran, so it only runs once.
+     pub async fn index_cached_events(&self) -> Result<(), crate::Error> {
+         use matrix_sdk_common::{
+             cross_process_lock::MappedCrossProcessLockState,
+@@ -521,6 +615,11 @@ impl crate::Client {
+ 
+         use crate::event_cache::EventCacheError;
+ 
++        if self.search_index().has_indexed_cached_events().await {
++            debug!("the cached events were already indexed");
++            return Ok(());
++        }
++
+         let store = self.event_cache_store().lock().await.map_err(EventCacheError::from)?;
+         let store = match &store {
+             MappedCrossProcessLockState::Clean(guard)
+@@ -566,6 +665,9 @@ impl crate::Client {
+             }
+         }
+ 
++        // Only now, so an interrupted run starts over next time.
++        self.search_index().mark_cached_events_indexed().await;
++
+         Ok(())
+     }
+ }
+-- 
+2.55.0
+

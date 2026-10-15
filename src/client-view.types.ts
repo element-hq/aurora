@@ -5,16 +5,15 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import type { MemberListViewModel } from "./MemberList/MemberListViewModel";
-import type { SessionStore } from "./SessionStore";
-import type { TimelineViewModel } from "./Timeline/TimelineViewModel";
+import type { UserStatus } from "@element-hq/web-shared-components";
 import type { ClientViewModel } from "./ClientViewModel";
 import type { EncryptionFlowViewModel } from "./CryptoSetup/EncryptionFlowViewModel";
 import type { LoginFlowViewModel } from "./Login/LoginFlowViewModel";
-import type { RoomListViewViewModel } from "./RoomList/RoomListViewViewModel";
 import type { RoomViewModel } from "./Room/RoomViewModel";
+import type { RoomListViewViewModel } from "./RoomList/RoomListViewViewModel";
+import type { GlobalSearchViewModel } from "./Search/GlobalSearchViewModel";
+import type { SessionStore } from "./SessionStore";
 import type { SetStatusViewModel } from "./UserStatus/SetStatusViewModel";
-import type { UserStatus } from "@element-hq/web-shared-components";
 
 export enum ClientState {
     Unknown = 0,
@@ -40,6 +39,15 @@ export interface Props {
     onLogin?: (userId: string, clientViewModel: ClientViewModel) => void;
 }
 
+/** A room the user viewed, as listed in the top bar's history menu. */
+export interface RoomHistoryEntry {
+    roomId: string;
+    name: string;
+    /** Canonical alias or room ID, shown under the name. */
+    address: string;
+    avatarUrl?: string;
+}
+
 /**
  * Snapshot represents the complete state of the client view
  */
@@ -58,6 +66,18 @@ export interface ClientViewSnapshot {
 
     /** ViewModel for encryption and recovery management */
     encryptionFlowViewModel?: EncryptionFlowViewModel;
+
+    /** ViewModel for the global search in the top bar, once the client is ready */
+    globalSearchViewModel?: GlobalSearchViewModel;
+
+    /** Whether there is a previously viewed room to go back to */
+    canGoBack: boolean;
+
+    /** Whether there is a room to go forward to after going back */
+    canGoForward: boolean;
+
+    /** Recently viewed rooms, most recent first */
+    recentRooms: RoomHistoryEntry[];
 
     /** Current user ID */
     userId?: string;
@@ -98,4 +118,19 @@ export interface ClientViewActions {
      * Set the current room and initialize its timeline/member stores
      */
     setCurrentRoom(roomId: string): void;
+
+    /**
+     * Open a room as a user navigation, recording it in the history
+     */
+    openRoom(roomId: string): void;
+
+    /**
+     * Go back to the previously viewed room
+     */
+    goBack(): void;
+
+    /**
+     * Go forward again after going back
+     */
+    goForward(): void;
 }
