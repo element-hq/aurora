@@ -6,18 +6,15 @@
  */
 
 import "./SidePanelView.css";
-import React, { type JSX, useEffect, useState } from "react";
 
 import ChatIcon from "@vector-im/compound-design-tokens/assets/web/icons/chat";
 import LeaveIcon from "@vector-im/compound-design-tokens/assets/web/icons/leave";
 import SettingsIcon from "@vector-im/compound-design-tokens/assets/web/icons/settings";
+import type { JSX } from "react";
 import type { ClientViewModel } from "./ClientViewModel";
-import BaseAvatar from "./MemberList/BaseAvatar";
-import { UserMenu } from "./UserMenu";
 
 type SidePanelViewProps = {
     clientStore: ClientViewModel;
-    onAddAccount: () => void;
 };
 
 function onSpaceClick() {
@@ -30,13 +27,9 @@ function onSettingsClick() {
 
 export function SidePanelView({
     clientStore,
-    onAddAccount,
 }: SidePanelViewProps): JSX.Element {
     return (
         <>
-            <div className="mx_SidePanel_avatar">
-                <UserMenu onAddAccount={onAddAccount} />
-            </div>
             <button
                 className="mx_SidePanel_icon mx_SidePanel_icon_selected"
                 onClick={() => onSpaceClick()}
