@@ -47,7 +47,8 @@ export const ResetIdentityWarningScreen: React.FC<
             <div
                 style={{
                     backgroundColor: "var(--cpd-color-bg-subtle-secondary)",
-                    borderRadius: "var(--cpd-radius-md)",
+                    // The same radius as compound's VisualList, which element-web uses here
+                    borderRadius: "var(--cpd-space-3x)",
                     padding: "var(--cpd-space-4x)",
                     marginBottom: "var(--cpd-space-4x)",
                 }}
