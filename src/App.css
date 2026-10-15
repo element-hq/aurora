@@ -9,6 +9,13 @@ body {
     width: 100%;
     height: 100%;
     margin: 0px;
+    /* The text rendering element-web sets on body, which shared-components are designed against */
+    font-feature-settings:
+        "kern" 1,
+        "liga" 1,
+        "calt" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 #root {
@@ -91,13 +98,18 @@ body {
     flex: 1 1 0;
     /* TimelineView fills its parent, so this needs a definite height */
     min-height: 0;
+    /* element-web's body text. Set here rather than on body, which is a different size in
+       aurora, so the em-based letter spacing works out the same. */
+    font: var(--cpd-font-body-md-regular);
+    letter-spacing: var(--cpd-font-letter-spacing-body-md);
 }
 
 /* The rows are absolutely positioned, so padding on the list wouldn't inset them:
    it goes on each row instead. Horizontal only, so row measurements are unaffected. */
 .mx_Timeline .mx_TimelineView_tile {
     box-sizing: border-box;
-    padding-inline: var(--cpd-space-2x);
+    /* Matches element-web's --RoomView_MessageList-padding */
+    padding-inline: 18px;
 }
 
 /* The spinner row shown while history loads. A fixed height so it always measures the same. */
@@ -124,50 +136,32 @@ body {
     visibility: visible;
 }
 
-/* The first tile in a group has an avatar, which the timestamp would overlap.
-   translate, because the shell owns the slot's inset and margin. */
-.mx_EventTile:not(.mx_EventTile_continuation) .mx_EventTile_timestamp {
-    translate: 0 var(--cpd-space-2x);
+/* Sender name colours, picked per user by DisambiguatedProfileView's colorClass.
+   The same as element-web's (_common.pcss), which shared-components leave to the app. */
+.mx_Username_color1 {
+    color: var(--cpd-color-text-decorative-1);
 }
-
-.mx_Sender {
-    display: flex;
-    align-items: center;
-    gap: var(--cpd-space-1x);
-    font-size: var(--cpd-font-size-body-sm);
-    font-weight: var(--cpd-font-weight-semibold);
-    color: var(--cpd-color-text-secondary);
+.mx_Username_color2 {
+    color: var(--cpd-color-text-decorative-2);
+}
+.mx_Username_color3 {
+    color: var(--cpd-color-text-decorative-3);
+}
+.mx_Username_color4 {
+    color: var(--cpd-color-text-decorative-4);
+}
+.mx_Username_color5 {
+    color: var(--cpd-color-text-decorative-5);
+}
+.mx_Username_color6 {
+    color: var(--cpd-color-text-decorative-6);
 }
 
 .mx_Content {
     font-size: var(--cpd-font-size-body-md);
     color: var(--cpd-color-text-primary);
-}
-
-.mx_StateEventTile {
-    display: block;
-    position: relative;
-}
-
-.mx_StateEventTile::before {
-    content: "";
-    display: block;
-    height: var(--cpd-space-0-5x);
-}
-
-.mx_StateEventTile::after {
-    content: "";
-    display: block;
-    height: var(--cpd-space-0-5x);
-}
-
-.mx_StateEventTile {
-    padding-left: var(--cpd-space-14x);
-}
-
-.mx_StateAvatar {
-    position: relative;
-    top: var(--cpd-space-1x);
+    /* Keep a run of combining characters (zalgo) from spilling out of the message */
+    overflow: hidden;
 }
 
 /* Our own messages that the server doesn't have yet */

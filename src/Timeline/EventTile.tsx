@@ -3,14 +3,14 @@ import {
     ActionBarView,
     DecryptionFailureBodyView,
     DecryptionFailureReason,
+    DisambiguatedProfileView,
     type EventSendState,
     EventTileView,
     MessageTimestampView,
     RedactedBodyView,
     TextualEventView,
-    UserStatusIconView,
 } from "@element-hq/web-shared-components";
-import { Avatar } from "@vector-im/compound-web";
+import { Avatar, useIdColorHash } from "@vector-im/compound-web";
 import classNames from "classnames";
 import type React from "react";
 import { type ReactElement, type ReactNode, useState } from "react";
@@ -120,6 +120,23 @@ function getDecryptionFailureReason(
     }
 }
 
+// How element-web shows times and dates in the timeline (DateUtils.ts)
+const timeFormat = new Intl.DateTimeFormat(undefined, {
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23",
+});
+const fullDateFormat = new Intl.DateTimeFormat(undefined, {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hourCycle: "h23",
+});
+
 /** Show a media message's caption under it, if it has one. */
 function withCaption(
     media: ReactElement,
@@ -225,6 +242,7 @@ export const EventTile: React.FC<EventTileProp> = ({
     }> = ProfileDetails.Ready.instanceOf(event.senderProfile)
         ? event.senderProfile.inner
         : {};
+    const senderColorClass = `mx_Username_color${useIdColorHash(event.sender)}`;
 
     let body: string | ReactElement | undefined;
     let stateChange: ReactNode[] | ReactNode | undefined = undefined;
@@ -456,30 +474,36 @@ export const EventTile: React.FC<EventTileProp> = ({
                                 ? mxcToUrl(client, senderProfile.avatarUrl)
                                 : ""
                         }
-                        size="32px"
+                        size="30px"
                     />
                 ),
                 sender: continuation ? undefined : (
-                    <span className="mx_Sender">
-                        {senderProfile.displayName || event.sender}
-                        <UserStatusIconView
-                            vm={
-                                new StaticViewModel({
-                                    status: userStatusFromProfile(
-                                        senderProfile.status,
-                                        senderProfile.call,
-                                    ),
-                                })
-                            }
-                        />
-                    </span>
+                    <DisambiguatedProfileView
+                        vm={
+                            new StaticViewModel({
+                                displayName:
+                                    senderProfile.displayName || event.sender,
+                                colorClass: senderColorClass,
+                                emphasizeDisplayName: true,
+                                // Someone else has the same name: show who this is
+                                displayIdentifier:
+                                    senderProfile.displayNameAmbiguous
+                                        ? event.sender
+                                        : undefined,
+                                userStatus: userStatusFromProfile(
+                                    senderProfile.status,
+                                    senderProfile.call,
+                                ),
+                            })
+                        }
+                    />
                 ),
                 timestamp: (
                     <MessageTimestampView
                         vm={
                             new StaticViewModel({
-                                ts: sentAt.toLocaleTimeString(),
-                                tsSentAt: sentAt.toLocaleString(),
+                                ts: timeFormat.format(sentAt),
+                                tsSentAt: fullDateFormat.format(sentAt),
                             })
                         }
                     />
