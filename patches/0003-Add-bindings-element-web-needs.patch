@@ -34,7 +34,7 @@ index 474d3d310..ba58ff7a2 100644
      pub fn supports_password_login(&self) -> bool {
          self.supports_password_login
 diff --git a/bindings/matrix-sdk-ffi/src/client.rs b/bindings/matrix-sdk-ffi/src/client.rs
-index 67d875724..fddc9eb0b 100644
+index 67d875724..e4cd56a22 100644
 --- a/bindings/matrix-sdk-ffi/src/client.rs
 +++ b/bindings/matrix-sdk-ffi/src/client.rs
 @@ -571,6 +571,21 @@ impl Client {
@@ -67,7 +67,7 @@ index 67d875724..fddc9eb0b 100644
              supports_password_login,
          })
      }
-@@ -3732,3 +3748,804 @@ mod tests {
+@@ -3732,3 +3748,846 @@ mod tests {
          assert!(converted.call.is_none());
      }
  }
@@ -872,6 +872,48 @@ index 67d875724..fddc9eb0b 100644
 +        })))
 +    }
 +}
++
++/// Told of the timeline events of all rooms as they come down sync.
++#[matrix_sdk_ffi_macros::export(callback_interface)]
++pub trait RoomEventJsonListener: SyncOutsideWasm + SendOutsideWasm {
++    /// An event arrived in a room, decrypted if it could be. `encrypted` says
++    /// whether it was sent encrypted.
++    fn on_event(&self, room_id: String, event_json: String, encrypted: bool);
++}
++
++#[matrix_sdk_ffi_macros::export]
++impl Client {
++    /// Calls the listener with each timeline event that comes down sync, in
++    /// whatever room, for as long as the returned handle is kept.
++    pub fn observe_room_timeline_events(
++        &self,
++        listener: Box<dyn RoomEventJsonListener>,
++    ) -> Arc<TaskHandle> {
++        use matrix_sdk::deserialized_responses::EncryptionInfo;
++        use ruma::events::AnySyncTimelineEvent;
++
++        let listener: Arc<dyn RoomEventJsonListener> = listener.into();
++        let handle = self.inner.add_event_handler(
++            move |event: Raw<AnySyncTimelineEvent>,
++                  room: matrix_sdk::Room,
++                  encryption_info: Option<EncryptionInfo>| {
++                let listener = listener.clone();
++                async move {
++                    listener.on_event(
++                        room.room_id().to_string(),
++                        event.json().get().to_owned(),
++                        encryption_info.is_some(),
++                    )
++                }
++            },
++        );
++        let guard = self.inner.event_handler_drop_guard(handle);
++        Arc::new(TaskHandle::new(get_runtime_handle().spawn(async move {
++            let _guard = guard;
++            std::future::pending::<()>().await
++        })))
++    }
++}
 diff --git a/bindings/matrix-sdk-ffi/src/encryption.rs b/bindings/matrix-sdk-ffi/src/encryption.rs
 index cf71a3ac4..f263565d0 100644
 --- a/bindings/matrix-sdk-ffi/src/encryption.rs
@@ -910,10 +952,10 @@ index cf71a3ac4..f263565d0 100644
 +    }
 +}
 diff --git a/bindings/matrix-sdk-ffi/src/room/mod.rs b/bindings/matrix-sdk-ffi/src/room/mod.rs
-index ee11d99d3..f9eba9b46 100644
+index ee11d99d3..27b453485 100644
 --- a/bindings/matrix-sdk-ffi/src/room/mod.rs
 +++ b/bindings/matrix-sdk-ffi/src/room/mod.rs
-@@ -2181,3 +2181,243 @@ mod tests {
+@@ -2181,3 +2181,277 @@ mod tests {
              .expect("Room::drop panicked on a non-tokio thread");
      }
  }
@@ -1155,6 +1197,40 @@ index ee11d99d3..f9eba9b46 100644
 +        );
 +        self.inner.invite_user_by_3pid(invite).await?;
 +        Ok(())
++    }
++}
++
++/// A page of a room's history.
++#[derive(uniffi::Record)]
++pub struct MessagesPage {
++    /// The events, as JSON, decrypted where possible, in the order asked for.
++    pub events: Vec<String>,
++    /// Where to carry on from for the next page; none at the end of the room.
++    pub end: Option<String>,
++}
++
++#[matrix_sdk_ffi_macros::export]
++impl Room {
++    /// Asks the homeserver for a page of the room's events, from a pagination
++    /// token (or from the newest event, going backwards, without one). This
++    /// touches no timeline: it is for crawling history, to index it, say.
++    pub async fn messages_json(
++        &self,
++        from: Option<String>,
++        backwards: bool,
++        limit: u32,
++    ) -> Result<MessagesPage, ClientError> {
++        use matrix_sdk::room::MessagesOptions;
++
++        let mut options =
++            if backwards { MessagesOptions::backward() } else { MessagesOptions::forward() };
++        options.from = from;
++        options.limit = limit.into();
++        let messages = self.inner.messages(options).await?;
++        Ok(MessagesPage {
++            events: messages.chunk.iter().map(|e| e.raw().json().get().to_owned()).collect(),
++            end: messages.end,
++        })
 +    }
 +}
 diff --git a/bindings/matrix-sdk-ffi/src/timeline/mod.rs b/bindings/matrix-sdk-ffi/src/timeline/mod.rs

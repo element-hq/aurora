@@ -240,6 +240,14 @@ export type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomDirectorySearchEntriesL
   uniffi_clone: UniffiCallbackInterfaceCloneMatrixSdkFfiRoomDirectorySearchEntriesListener;
   on_update: UniffiCallbackInterfaceMatrixSdkFfiRoomDirectorySearchEntriesListenerMethod0;
 };
+type UniffiCallbackInterfaceMatrixSdkFfiRoomEventJsonListenerMethod0 = (uniffiHandle: bigint, roomId: Uint8Array, eventJson: Uint8Array, encrypted: number) => UniffiResult<void>;
+type UniffiCallbackInterfaceCloneMatrixSdkFfiRoomEventJsonListener = (handle: bigint) => UniffiResult<void>;
+type UniffiCallbackInterfaceFreeMatrixSdkFfiRoomEventJsonListener = (handle: bigint) => void;
+export type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomEventJsonListener = {
+  uniffi_free: UniffiCallbackInterfaceFreeMatrixSdkFfiRoomEventJsonListener;
+  uniffi_clone: UniffiCallbackInterfaceCloneMatrixSdkFfiRoomEventJsonListener;
+  on_event: UniffiCallbackInterfaceMatrixSdkFfiRoomEventJsonListenerMethod0;
+};
 type UniffiCallbackInterfaceMatrixSdkFfiRoomInfoListenerMethod0 = (uniffiHandle: bigint, roomInfo: Uint8Array) => UniffiResult<void>;
 type UniffiCallbackInterfaceCloneMatrixSdkFfiRoomInfoListener = (handle: bigint) => UniffiResult<void>;
 type UniffiCallbackInterfaceFreeMatrixSdkFfiRoomInfoListener = (handle: bigint) => void;

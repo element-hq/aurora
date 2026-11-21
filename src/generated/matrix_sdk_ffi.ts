@@ -4,7 +4,7 @@
 /* eslint-disable */
 // @ts-nocheck
 import * as wasmBundle from "./wasm-bindgen/index.js";
-import { type UniffiRustFutureContinuationCallback, type UniffiForeignFutureDroppedCallback, type UniffiForeignFutureDroppedCallbackStruct, type UniffiVTableCallbackInterfaceMatrixSdkFfiAccountDataListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiBackupStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiBackupSteadyStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiBeaconInfoListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiCallDeclineListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiClientDelegate, type UniffiVTableCallbackInterfaceMatrixSdkFfiClientSessionDelegate, type UniffiVTableCallbackInterfaceMatrixSdkFfiDehydratedDeviceEventListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiDevicesUpdatesListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiDuplicateKeyUploadErrorListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiEnableRecoveryProgressListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiGeneratedQrLoginProgressListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiGrantGeneratedQrLoginProgressListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiGrantQrLoginProgressListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiIdentityStatusChangeListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiIgnoredUsersListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiKnockRequestsListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiLiveLocationsListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiMediaPreviewConfigListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiNotificationSettingsDelegate, type UniffiVTableCallbackInterfaceMatrixSdkFfiPaginationStatusListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiProfileListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiProgressWatcher, type UniffiVTableCallbackInterfaceMatrixSdkFfiQrLoginProgressListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRawEventListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRecoveryStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomAccountDataListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomDirectorySearchEntriesListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomInfoListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomListEntriesListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomListLoadingStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomListServiceStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomListServiceSyncIndicatorListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSendQueueListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSendQueueRoomErrorListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSendQueueRoomUpdateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSessionVerificationControllerDelegate, type UniffiVTableCallbackInterfaceMatrixSdkFfiSpaceRoomListEntriesListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSpaceRoomListPaginationStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSpaceRoomListSpaceListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSpaceServiceJoinedSpacesListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSpaceServiceSpaceFiltersListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSyncListenerV2, type UniffiVTableCallbackInterfaceMatrixSdkFfiSyncNotificationListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSyncServiceStateObserver, type UniffiVTableCallbackInterfaceMatrixSdkFfiThreadListEntriesListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiThreadListPaginationStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiTimelineListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiTypingNotificationsListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiUnableToDecryptDelegate, type UniffiVTableCallbackInterfaceMatrixSdkFfiVerificationStateListener, type UniffiForeignFutureResultRustBuffer, type UniffiForeignFutureCompleterustBuffer, type UniffiVTableCallbackInterfaceMatrixSdkFfiWidgetCapabilitiesProvider,
+import { type UniffiRustFutureContinuationCallback, type UniffiForeignFutureDroppedCallback, type UniffiForeignFutureDroppedCallbackStruct, type UniffiVTableCallbackInterfaceMatrixSdkFfiAccountDataListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiBackupStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiBackupSteadyStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiBeaconInfoListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiCallDeclineListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiClientDelegate, type UniffiVTableCallbackInterfaceMatrixSdkFfiClientSessionDelegate, type UniffiVTableCallbackInterfaceMatrixSdkFfiDehydratedDeviceEventListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiDevicesUpdatesListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiDuplicateKeyUploadErrorListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiEnableRecoveryProgressListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiGeneratedQrLoginProgressListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiGrantGeneratedQrLoginProgressListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiGrantQrLoginProgressListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiIdentityStatusChangeListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiIgnoredUsersListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiKnockRequestsListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiLiveLocationsListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiMediaPreviewConfigListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiNotificationSettingsDelegate, type UniffiVTableCallbackInterfaceMatrixSdkFfiPaginationStatusListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiProfileListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiProgressWatcher, type UniffiVTableCallbackInterfaceMatrixSdkFfiQrLoginProgressListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRawEventListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRecoveryStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomAccountDataListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomDirectorySearchEntriesListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomEventJsonListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomInfoListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomListEntriesListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomListLoadingStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomListServiceStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomListServiceSyncIndicatorListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSendQueueListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSendQueueRoomErrorListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSendQueueRoomUpdateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSessionVerificationControllerDelegate, type UniffiVTableCallbackInterfaceMatrixSdkFfiSpaceRoomListEntriesListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSpaceRoomListPaginationStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSpaceRoomListSpaceListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSpaceServiceJoinedSpacesListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSpaceServiceSpaceFiltersListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSyncListenerV2, type UniffiVTableCallbackInterfaceMatrixSdkFfiSyncNotificationListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSyncServiceStateObserver, type UniffiVTableCallbackInterfaceMatrixSdkFfiThreadListEntriesListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiThreadListPaginationStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiTimelineListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiTypingNotificationsListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiUnableToDecryptDelegate, type UniffiVTableCallbackInterfaceMatrixSdkFfiVerificationStateListener, type UniffiForeignFutureResultRustBuffer, type UniffiForeignFutureCompleterustBuffer, type UniffiVTableCallbackInterfaceMatrixSdkFfiWidgetCapabilitiesProvider,
 } from "./matrix_sdk_ffi-ffi";
 import { type OAuthAuthorizationDataLike, type RoomPowerLevelChanges, type ServerVendorInfo, type TileServerInfo, type VirtualElementCallWidgetConfig, type VirtualElementCallWidgetProperties, BackupDownloadStrategy, PaginationStatus, RoomMemberRole,
 } from "./matrix_sdk";
@@ -17018,6 +17018,58 @@ const FfiConverterTypeMediaPreviewConfig = (() => {
 })();
 
 /**
+ * A page of a room's history.
+ */
+export type MessagesPage = {
+    /**
+     * The events, as JSON, decrypted where possible, in the order asked for.
+     */
+    events: Array<string>,
+    /**
+     * Where to carry on from for the next page; none at the end of the room.
+     */
+    end?: string
+}
+
+/**
+ * Generated factory for {@link MessagesPage} record objects.
+ */
+export const MessagesPage = (() => {
+    const defaults = () => ({
+    });
+    const create = (() => {
+        return uniffiCreateRecord<MessagesPage, ReturnType<typeof defaults>>(defaults);
+    })();
+    return Object.freeze({
+        create,
+        new: create,
+        defaults: () => Object.freeze(defaults()) as Partial<MessagesPage>,
+    });
+})();
+
+const FfiConverterTypeMessagesPage = (() => {
+    type TypeName = MessagesPage;
+    class FFIConverter extends AbstractFfiConverterByteArray<TypeName> {
+        readFromCursor(c: Cursor): TypeName {
+            return {
+                events: FfiConverterSequenceString.readFromCursor(c), 
+                end: FfiConverterOptionalString.readFromCursor(c)
+            };
+        }
+        writeIntoCursor(value: TypeName, c: Cursor): void {
+            FfiConverterSequenceString.writeIntoCursor(value.events, c);
+            FfiConverterOptionalString.writeIntoCursor(value.end, c);
+        }
+        allocationSize(value: TypeName): number {
+            return FfiConverterSequenceString.allocationSize(value.events) +
+             FfiConverterOptionalString.allocationSize(value.end);
+            
+        }
+    };
+    return new FFIConverter();
+})();
+
+/**
  * A validation session for a phone number.
  */
 export type MsisdnTokenSession = {
@@ -30407,6 +30459,12 @@ export interface RoomLike {
  * The room's current membership state.
  */
     membership(): Membership;
+/**
+ * Asks the homeserver for a page of the room's events, from a pagination
+ * token (or from the newest event, going backwards, without one). This
+ * touches no timeline: it is for crawling history, to index it, say.
+ */
+    messagesJson(from: string | undefined, backwards: boolean, limit: number, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<MessagesPage>;
     ownUserId(): string;
 /**
  * Asks the homeserver for the roots of the threads of the room which the
@@ -32457,6 +32515,44 @@ private constructor(pointer: UniffiHandle) {
     } finally {
         nativeModule().rustbuffer_free(__rb);
     }
+    }
+    
+/**
+ * Asks the homeserver for a page of the room's events, from a pagination
+ * token (or from the newest event, going backwards, without one). This
+ * touches no timeline: it is for crawling history, to index it, say.
+ */
+    async messagesJson(from: string | undefined, backwards: boolean, limit: number, asyncOpts_?: { signal: AbortSignal }): Promise<MessagesPage> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_room_messages_json(
+                    uniffiTypeRoomObjectFactory.clonePointer(this),FfiConverterOptionalString.lower(from, nativeModule().rustbuffer_alloc),FfiConverterBool.lower(backwards, nativeModule().rustbuffer_alloc),FfiConverterUInt32.lower(limit, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_rust_buffer,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_rust_buffer,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_rust_buffer,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_rust_buffer,
+            // Async returns always go through the JS-side converter: the
+            // FFI symbol returns the future handle (u64), and the user-level
+            // RustBuffer comes back via the shared `rust_future_complete_*`
+            // export. The bytes the runtime hands back must be deserialized
+            // here using the per-callable return-type converter.
+            // Borrowed view over foreign memory: the call site owns the free,
+            // as on the sync paths. Unconditional — a no-op where buffers are
+            // already JS-owned.
+            /*liftFunc:*/ (__rb) => {
+                try {
+                    return FfiConverterTypeMessagesPage.lift(__rb);
+                } finally {
+                    nativeModule().rustbuffer_free(__rb);
+                }
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
     }
     
     ownUserId(): string {
@@ -54807,6 +54903,72 @@ const FfiConverterTypeRoomAccountDataListener = new FfiConverterCallback<RoomAcc
 
 
 /**
+ * Told of the timeline events of all rooms as they come down sync.
+ */
+export interface RoomEventJsonListener {
+    
+/**
+ * An event arrived in a room, decrypted if it could be. `encrypted` says
+ * whether it was sent encrypted.
+ */
+    onEvent(roomId: string, eventJson: string, encrypted: boolean): void;
+}
+
+
+
+// Put the implementation in a struct so we don't pollute the top-level namespace
+const uniffiCallbackInterfaceRoomEventJsonListener: { vtable: any; register: () => void; } = {
+    // Create the VTable using a series of closures.
+    // ts automatically converts these into C callback functions.
+    vtable: {
+        on_event: (
+            uniffiHandle: bigint,
+            roomId: Uint8Array,
+            eventJson: Uint8Array,
+            encrypted: number,) => {
+            const uniffiMakeCall = 
+            ()
+            : void => {
+                const jsCallback = FfiConverterTypeRoomEventJsonListener.lift(uniffiHandle);
+                return jsCallback.onEvent(
+                    FfiConverterString.lift(roomId), 
+                    FfiConverterString.lift(eventJson), 
+                    FfiConverterBool.lift(encrypted)
+                )
+            };
+            const uniffiResult = UniffiResult.ready<void>();
+            const uniffiHandleSuccess = (obj: any) => {};
+            const uniffiHandleError = (code: number, errBuf: UniffiByteArray) => {
+                UniffiResult.writeError(uniffiResult, code, errBuf);
+            };
+            uniffiTraitInterfaceCall(
+                /*makeCall:*/ uniffiMakeCall,
+                /*handleSuccess:*/ uniffiHandleSuccess,
+                /*handleError:*/ uniffiHandleError,
+                /*lowerString:*/ FfiConverterString.lower.bind(FfiConverterString),
+                /*alloc:*/ nativeModule().rustbuffer_alloc,
+            )
+            return uniffiResult;
+        },
+        uniffi_free: (uniffiHandle: UniffiHandle): void => {
+            // this will throw a stale handle error if the handle isn't found.
+            FfiConverterTypeRoomEventJsonListener.drop(uniffiHandle);
+        },
+        uniffi_clone: (uniffiHandle: UniffiHandle): UniffiHandle => {
+            return FfiConverterTypeRoomEventJsonListener.clone(uniffiHandle);
+        }
+    },
+    register: () => {nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_init_callback_vtable_roomeventjsonlistener(
+            uniffiCallbackInterfaceRoomEventJsonListener.vtable
+        );
+    },
+};
+
+// FfiConverter protocol for callback interfaces
+const FfiConverterTypeRoomEventJsonListener = new FfiConverterCallback<RoomEventJsonListener>();
+
+
+/**
  * A listener for notifications generated from sync responses.
  *
  * This is called during sync for each event that triggers a notification
@@ -58426,6 +58588,11 @@ export interface ClientLike {
  */
     observeRoomAccountDataEvent(roomId: string, eventType: RoomAccountDataEventType, listener: RoomAccountDataListener) /*throws*/: TaskHandleLike;
 /**
+ * Calls the listener with each timeline event that comes down sync, in
+ * whatever room, for as long as the returned handle is kept.
+ */
+    observeRoomTimelineEvents(listener: RoomEventJsonListener): TaskHandleLike;
+/**
  * Calls the listener with each to-device event that comes down sync,
  * decrypted where it was encrypted, for as long as the returned handle
  * is kept.
@@ -61289,6 +61456,22 @@ private constructor(pointer: UniffiHandle) {
         FfiConverterString.lower(roomId, nativeModule().rustbuffer_alloc),
         FfiConverterTypeRoomAccountDataEventType.lower(eventType, nativeModule().rustbuffer_alloc),
         FfiConverterTypeRoomAccountDataListener.lower(listener, nativeModule().rustbuffer_alloc),
+                callStatus);
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+    ));
+    }
+    
+/**
+ * Calls the listener with each timeline event that comes down sync, in
+ * whatever room, for as long as the returned handle is kept.
+ */
+    observeRoomTimelineEvents(listener: RoomEventJsonListener): TaskHandleLike {
+    return FfiConverterTypeTaskHandle.lift(uniffiCaller.rustCall(
+            /*caller:*/ (callStatus) => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_observe_room_timeline_events(
+                uniffiTypeClientObjectFactory.clonePointer(this),
+        FfiConverterTypeRoomEventJsonListener.lower(listener, nativeModule().rustbuffer_alloc),
                 callStatus);
             },
             /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
@@ -65450,6 +65633,9 @@ function uniffiEnsureInitialized() {
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_observe_room_account_data_event() !== 22353) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_observe_room_account_data_event");
     }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_observe_room_timeline_events() !== 27615) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_observe_room_timeline_events");
+    }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_observe_to_device_events() !== 4906) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_observe_to_device_events");
     }
@@ -66290,6 +66476,9 @@ function uniffiEnsureInitialized() {
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_membership() !== 65038) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_membership");
     }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_messages_json() !== 49628) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_messages_json");
+    }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_own_user_id() !== 32346) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_own_user_id");
     }
@@ -67002,6 +67191,7 @@ function uniffiEnsureInitialized() {
     uniffiCallbackInterfaceAccountDataListener.register();
     uniffiCallbackInterfaceRawEventListener.register();
     uniffiCallbackInterfaceRoomAccountDataListener.register();
+    uniffiCallbackInterfaceRoomEventJsonListener.register();
     uniffiCallbackInterfaceSyncNotificationListener.register();
     uniffiCallbackInterfaceRoomDirectorySearchEntriesListener.register();
     uniffiCallbackInterfaceClientDelegate.register();
@@ -67140,6 +67330,7 @@ export default Object.freeze({
     FfiConverterTypeMessageFormat,
     FfiConverterTypeMessageLikeEventContent,
     FfiConverterTypeMessageType,
+    FfiConverterTypeMessagesPage,
     FfiConverterTypeMsgLikeContent,
     FfiConverterTypeMsgLikeKind,
     FfiConverterTypeMsisdnTokenSession,
