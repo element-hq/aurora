@@ -34,7 +34,7 @@ index 474d3d310..ba58ff7a2 100644
      pub fn supports_password_login(&self) -> bool {
          self.supports_password_login
 diff --git a/bindings/matrix-sdk-ffi/src/client.rs b/bindings/matrix-sdk-ffi/src/client.rs
-index 67d875724..c1281df38 100644
+index 67d875724..fddc9eb0b 100644
 --- a/bindings/matrix-sdk-ffi/src/client.rs
 +++ b/bindings/matrix-sdk-ffi/src/client.rs
 @@ -571,6 +571,21 @@ impl Client {
@@ -67,7 +67,7 @@ index 67d875724..c1281df38 100644
              supports_password_login,
          })
      }
-@@ -3732,3 +3748,753 @@ mod tests {
+@@ -3732,3 +3748,804 @@ mod tests {
          assert!(converted.call.is_none());
      }
  }
@@ -821,6 +821,57 @@ index 67d875724..c1281df38 100644
 +        })
 +    }
 +}
++
++/// Told of events as their JSON.
++#[matrix_sdk_ffi_macros::export(callback_interface)]
++pub trait RawEventListener: SyncOutsideWasm + SendOutsideWasm {
++    /// An event arrived. `encrypted` says whether it was sent encrypted
++    /// (always false for account data).
++    fn on_event(&self, event_json: String, encrypted: bool);
++}
++
++#[matrix_sdk_ffi_macros::export]
++impl Client {
++    /// Calls the listener with each global account data event that comes down
++    /// sync, whatever its type, for as long as the returned handle is kept.
++    pub fn observe_raw_account_data(&self, listener: Box<dyn RawEventListener>) -> Arc<TaskHandle> {
++        use ruma::events::AnyGlobalAccountDataEvent;
++
++        let listener: Arc<dyn RawEventListener> = listener.into();
++        let handle = self.inner.add_event_handler(move |event: Raw<AnyGlobalAccountDataEvent>| {
++            let listener = listener.clone();
++            async move { listener.on_event(event.json().get().to_owned(), false) }
++        });
++        let guard = self.inner.event_handler_drop_guard(handle);
++        Arc::new(TaskHandle::new(get_runtime_handle().spawn(async move {
++            let _guard = guard;
++            std::future::pending::<()>().await
++        })))
++    }
++
++    /// Calls the listener with each to-device event that comes down sync,
++    /// decrypted where it was encrypted, for as long as the returned handle
++    /// is kept.
++    pub fn observe_to_device_events(&self, listener: Box<dyn RawEventListener>) -> Arc<TaskHandle> {
++        use matrix_sdk::deserialized_responses::EncryptionInfo;
++        use ruma::events::AnyToDeviceEvent;
++
++        let listener: Arc<dyn RawEventListener> = listener.into();
++        let handle = self.inner.add_event_handler(
++            move |event: Raw<AnyToDeviceEvent>, encryption_info: Option<EncryptionInfo>| {
++                let listener = listener.clone();
++                async move {
++                    listener.on_event(event.json().get().to_owned(), encryption_info.is_some())
++                }
++            },
++        );
++        let guard = self.inner.event_handler_drop_guard(handle);
++        Arc::new(TaskHandle::new(get_runtime_handle().spawn(async move {
++            let _guard = guard;
++            std::future::pending::<()>().await
++        })))
++    }
++}
 diff --git a/bindings/matrix-sdk-ffi/src/encryption.rs b/bindings/matrix-sdk-ffi/src/encryption.rs
 index cf71a3ac4..f263565d0 100644
 --- a/bindings/matrix-sdk-ffi/src/encryption.rs
@@ -1106,6 +1157,27 @@ index ee11d99d3..f9eba9b46 100644
 +        Ok(())
 +    }
 +}
+diff --git a/bindings/matrix-sdk-ffi/src/timeline/mod.rs b/bindings/matrix-sdk-ffi/src/timeline/mod.rs
+index e0e6018a4..89d254d66 100644
+--- a/bindings/matrix-sdk-ffi/src/timeline/mod.rs
++++ b/bindings/matrix-sdk-ffi/src/timeline/mod.rs
+@@ -1088,6 +1088,8 @@ pub struct EventTimelineItem {
+     forwarder_profile: Option<ProfileDetails>,
+     is_own: bool,
+     is_editable: bool,
++    /// Whether the user's push rules highlight the event (a mention, say).
++    is_highlighted: bool,
+     content: TimelineItemContent,
+     /// The raw Matrix event type string (e.g. `"m.room.message"`), or `None`
+     /// when the original type is not available (e.g. redacted events).
+@@ -1116,6 +1118,7 @@ impl From<matrix_sdk_ui::timeline::EventTimelineItem> for EventTimelineItem {
+             forwarder_profile: item.forwarder_profile().map(Into::into),
+             is_own: item.is_own(),
+             is_editable: item.is_editable(),
++            is_highlighted: item.is_highlighted(),
+             content: item.content().clone().into(),
+             event_type_raw: item.content().event_type_str(),
+             timestamp: item.timestamp().into(),
 diff --git a/crates/matrix-sdk/src/automatic_call_status.rs b/crates/matrix-sdk/src/automatic_call_status.rs
 index c2e89ca6d..81bd79d83 100644
 --- a/crates/matrix-sdk/src/automatic_call_status.rs

@@ -208,6 +208,14 @@ export type UniffiVTableCallbackInterfaceMatrixSdkFfiQrLoginProgressListener = {
   uniffi_clone: UniffiCallbackInterfaceCloneMatrixSdkFfiQrLoginProgressListener;
   on_update: UniffiCallbackInterfaceMatrixSdkFfiQrLoginProgressListenerMethod0;
 };
+type UniffiCallbackInterfaceMatrixSdkFfiRawEventListenerMethod0 = (uniffiHandle: bigint, eventJson: Uint8Array, encrypted: number) => UniffiResult<void>;
+type UniffiCallbackInterfaceCloneMatrixSdkFfiRawEventListener = (handle: bigint) => UniffiResult<void>;
+type UniffiCallbackInterfaceFreeMatrixSdkFfiRawEventListener = (handle: bigint) => void;
+export type UniffiVTableCallbackInterfaceMatrixSdkFfiRawEventListener = {
+  uniffi_free: UniffiCallbackInterfaceFreeMatrixSdkFfiRawEventListener;
+  uniffi_clone: UniffiCallbackInterfaceCloneMatrixSdkFfiRawEventListener;
+  on_event: UniffiCallbackInterfaceMatrixSdkFfiRawEventListenerMethod0;
+};
 type UniffiCallbackInterfaceMatrixSdkFfiRecoveryStateListenerMethod0 = (uniffiHandle: bigint, status: Uint8Array) => UniffiResult<void>;
 type UniffiCallbackInterfaceCloneMatrixSdkFfiRecoveryStateListener = (handle: bigint) => UniffiResult<void>;
 type UniffiCallbackInterfaceFreeMatrixSdkFfiRecoveryStateListener = (handle: bigint) => void;

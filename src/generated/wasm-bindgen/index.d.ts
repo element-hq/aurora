@@ -505,7 +505,11 @@ export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_notifications_
 
 export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_observe_account_data_event(): number;
 
+export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_observe_raw_account_data(): number;
+
 export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_observe_room_account_data_event(): number;
+
+export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_observe_to_device_events(): number;
 
 export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_optimize_stores(): number;
 
@@ -962,6 +966,8 @@ export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_qrcodedata_server_nam
 export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_qrcodedata_to_bytes(): number;
 
 export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_qrloginprogresslistener_on_update(): number;
+
+export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_raweventlistener_on_event(): number;
 
 export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_recoverystatelistener_on_update(): number;
 
@@ -1939,6 +1945,8 @@ export function ubrn_uniffi_matrix_sdk_ffi_fn_init_callback_vtable_progresswatch
 
 export function ubrn_uniffi_matrix_sdk_ffi_fn_init_callback_vtable_qrloginprogresslistener(vtable: any): void;
 
+export function ubrn_uniffi_matrix_sdk_ffi_fn_init_callback_vtable_raweventlistener(vtable: any): void;
+
 export function ubrn_uniffi_matrix_sdk_ffi_fn_init_callback_vtable_recoverystatelistener(vtable: any): void;
 
 export function ubrn_uniffi_matrix_sdk_ffi_fn_init_callback_vtable_roomaccountdatalistener(vtable: any): void;
@@ -2161,7 +2169,11 @@ export function ubrn_uniffi_matrix_sdk_ffi_fn_method_client_notifications_json(p
 
 export function ubrn_uniffi_matrix_sdk_ffi_fn_method_client_observe_account_data_event(ptr: bigint, event_type: Uint8Array, listener: bigint, f_status_: RustCallStatus): bigint;
 
+export function ubrn_uniffi_matrix_sdk_ffi_fn_method_client_observe_raw_account_data(ptr: bigint, listener: bigint, f_status_: RustCallStatus): bigint;
+
 export function ubrn_uniffi_matrix_sdk_ffi_fn_method_client_observe_room_account_data_event(ptr: bigint, room_id: Uint8Array, event_type: Uint8Array, listener: bigint, f_status_: RustCallStatus): bigint;
+
+export function ubrn_uniffi_matrix_sdk_ffi_fn_method_client_observe_to_device_events(ptr: bigint, listener: bigint, f_status_: RustCallStatus): bigint;
 
 export function ubrn_uniffi_matrix_sdk_ffi_fn_method_client_optimize_stores(ptr: bigint): bigint;
 
@@ -3609,8 +3621,12 @@ export interface InitOutput {
     readonly uniffi_matrix_sdk_ffi_checksum_method_client_notifications_json: () => number;
     readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_observe_account_data_event: () => number;
     readonly uniffi_matrix_sdk_ffi_checksum_method_client_observe_account_data_event: () => number;
+    readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_observe_raw_account_data: () => number;
+    readonly uniffi_matrix_sdk_ffi_checksum_method_client_observe_raw_account_data: () => number;
     readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_observe_room_account_data_event: () => number;
     readonly uniffi_matrix_sdk_ffi_checksum_method_client_observe_room_account_data_event: () => number;
+    readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_observe_to_device_events: () => number;
+    readonly uniffi_matrix_sdk_ffi_checksum_method_client_observe_to_device_events: () => number;
     readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_optimize_stores: () => number;
     readonly uniffi_matrix_sdk_ffi_checksum_method_client_optimize_stores: () => number;
     readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_pause: () => number;
@@ -4067,6 +4083,8 @@ export interface InitOutput {
     readonly uniffi_matrix_sdk_ffi_checksum_method_qrcodedata_to_bytes: () => number;
     readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_qrloginprogresslistener_on_update: () => number;
     readonly uniffi_matrix_sdk_ffi_checksum_method_qrloginprogresslistener_on_update: () => number;
+    readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_raweventlistener_on_event: () => number;
+    readonly uniffi_matrix_sdk_ffi_checksum_method_raweventlistener_on_event: () => number;
     readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_recoverystatelistener_on_update: () => number;
     readonly uniffi_matrix_sdk_ffi_checksum_method_recoverystatelistener_on_update: () => number;
     readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_account_data: () => number;
@@ -5043,6 +5061,8 @@ export interface InitOutput {
     readonly uniffi_matrix_sdk_ffi_fn_init_callback_vtable_progresswatcher: (a: number) => void;
     readonly ubrn_uniffi_matrix_sdk_ffi_fn_init_callback_vtable_qrloginprogresslistener: (a: any) => void;
     readonly uniffi_matrix_sdk_ffi_fn_init_callback_vtable_qrloginprogresslistener: (a: number) => void;
+    readonly ubrn_uniffi_matrix_sdk_ffi_fn_init_callback_vtable_raweventlistener: (a: any) => void;
+    readonly uniffi_matrix_sdk_ffi_fn_init_callback_vtable_raweventlistener: (a: number) => void;
     readonly ubrn_uniffi_matrix_sdk_ffi_fn_init_callback_vtable_recoverystatelistener: (a: any) => void;
     readonly uniffi_matrix_sdk_ffi_fn_init_callback_vtable_recoverystatelistener: (a: number) => void;
     readonly ubrn_uniffi_matrix_sdk_ffi_fn_init_callback_vtable_roomaccountdatalistener: (a: any) => void;
@@ -5265,8 +5285,12 @@ export interface InitOutput {
     readonly uniffi_matrix_sdk_ffi_fn_method_client_notifications_json: (a: bigint, b: number, c: number, d: number) => bigint;
     readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_client_observe_account_data_event: (a: bigint, b: number, c: number, d: bigint, e: number) => bigint;
     readonly uniffi_matrix_sdk_ffi_fn_method_client_observe_account_data_event: (a: bigint, b: number, c: bigint, d: number) => bigint;
+    readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_client_observe_raw_account_data: (a: bigint, b: bigint, c: number) => bigint;
+    readonly uniffi_matrix_sdk_ffi_fn_method_client_observe_raw_account_data: (a: bigint, b: bigint, c: number) => bigint;
     readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_client_observe_room_account_data_event: (a: bigint, b: number, c: number, d: number, e: number, f: bigint, g: number) => bigint;
     readonly uniffi_matrix_sdk_ffi_fn_method_client_observe_room_account_data_event: (a: bigint, b: number, c: number, d: bigint, e: number) => bigint;
+    readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_client_observe_to_device_events: (a: bigint, b: bigint, c: number) => bigint;
+    readonly uniffi_matrix_sdk_ffi_fn_method_client_observe_to_device_events: (a: bigint, b: bigint, c: number) => bigint;
     readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_client_optimize_stores: (a: bigint) => bigint;
     readonly uniffi_matrix_sdk_ffi_fn_method_client_optimize_stores: (a: bigint) => bigint;
     readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_client_pause: (a: bigint) => bigint;
@@ -6353,32 +6377,10 @@ export interface InitOutput {
     readonly uniffi_ruma_events_fn_method_todeviceeventtype_uniffi_trait_eq_ne: (a: number, b: number, c: number) => number;
     readonly ubrn_uniffi_ruma_events_fn_method_todeviceeventtype_uniffi_trait_hash: (a: number, b: number, c: number) => bigint;
     readonly uniffi_ruma_events_fn_method_todeviceeventtype_uniffi_trait_hash: (a: number, b: number) => bigint;
-    readonly __wbg_foreignfuturecompletei8_free: (a: number, b: number) => void;
-    readonly __wbg_foreignfuturecompleterustbuffer_free: (a: number, b: number) => void;
-    readonly __wbg_foreignfuturecompleteu64_free: (a: number, b: number) => void;
-    readonly foreignfuturecompletei8_call: (a: number, b: number, c: bigint, d: any) => void;
-    readonly foreignfuturecompleterustbuffer_call: (a: number, b: number, c: bigint, d: any) => void;
-    readonly foreignfuturecompleteu64_call: (a: number, b: number, c: bigint, d: any) => void;
-    readonly __wbg_foreignfuturecompletef32_free: (a: number, b: number) => void;
-    readonly __wbg_foreignfuturecompletei32_free: (a: number, b: number) => void;
-    readonly __wbg_foreignfuturecompleteu32_free: (a: number, b: number) => void;
-    readonly foreignfuturecompletef32_call: (a: number, b: number, c: bigint, d: any) => void;
-    readonly foreignfuturecompletei32_call: (a: number, b: number, c: bigint, d: any) => void;
-    readonly foreignfuturecompleteu32_call: (a: number, b: number, c: bigint, d: any) => void;
-    readonly __wbg_foreignfuturecompletei16_free: (a: number, b: number) => void;
-    readonly __wbg_foreignfuturecompletei64_free: (a: number, b: number) => void;
-    readonly __wbg_foreignfuturecompletevoid_free: (a: number, b: number) => void;
-    readonly foreignfuturecompletei16_call: (a: number, b: number, c: bigint, d: any) => void;
-    readonly foreignfuturecompletei64_call: (a: number, b: number, c: bigint, d: any) => void;
-    readonly foreignfuturecompletevoid_call: (a: number, b: number, c: bigint, d: any) => void;
-    readonly __wbg_foreignfuturecompletef64_free: (a: number, b: number) => void;
-    readonly foreignfuturecompletef64_call: (a: number, b: number, c: bigint, d: any) => void;
     readonly ubrn_ffi_matrix_sdk_contentscanner_uniffi_contract_version: () => number;
     readonly ffi_matrix_sdk_contentscanner_uniffi_contract_version: () => number;
     readonly ubrn_ffi_matrix_sdk_crypto_uniffi_contract_version: () => number;
     readonly ffi_matrix_sdk_crypto_uniffi_contract_version: () => number;
-    readonly ubrn_ffi_matrix_sdk_ui_uniffi_contract_version: () => number;
-    readonly ffi_matrix_sdk_ui_uniffi_contract_version: () => number;
     readonly ubrn_ffi_matrix_sdk_uniffi_contract_version: () => number;
     readonly ffi_matrix_sdk_uniffi_contract_version: () => number;
     readonly ubrn_uniffi_matrix_sdk_checksum_method_oauthauthorizationdata_login_url: () => number;
@@ -6401,14 +6403,36 @@ export interface InitOutput {
     readonly uniffi_matrix_sdk_fn_free_oauthauthorizationdata: (a: bigint, b: number) => void;
     readonly ubrn_uniffi_matrix_sdk_fn_method_oauthauthorizationdata_login_url: (a: bigint, b: number) => [number, number];
     readonly uniffi_matrix_sdk_fn_method_oauthauthorizationdata_login_url: (a: number, b: bigint, c: number) => void;
-    readonly __wbg_foreignfuturecompleteu8_free: (a: number, b: number) => void;
-    readonly foreignfuturecompleteu8_call: (a: number, b: number, c: bigint, d: any) => void;
-    readonly ubrn_ffi_matrix_sdk_common_uniffi_contract_version: () => number;
-    readonly ffi_matrix_sdk_common_uniffi_contract_version: () => number;
-    readonly ubrn_ffi_matrix_sdk_base_uniffi_contract_version: () => number;
-    readonly ffi_matrix_sdk_base_uniffi_contract_version: () => number;
+    readonly ubrn_ffi_matrix_sdk_ui_uniffi_contract_version: () => number;
+    readonly ffi_matrix_sdk_ui_uniffi_contract_version: () => number;
     readonly __wbg_foreignfuturecompleteu16_free: (a: number, b: number) => void;
     readonly foreignfuturecompleteu16_call: (a: number, b: number, c: bigint, d: any) => void;
+    readonly __wbg_foreignfuturecompletei8_free: (a: number, b: number) => void;
+    readonly __wbg_foreignfuturecompleterustbuffer_free: (a: number, b: number) => void;
+    readonly __wbg_foreignfuturecompleteu64_free: (a: number, b: number) => void;
+    readonly foreignfuturecompletei8_call: (a: number, b: number, c: bigint, d: any) => void;
+    readonly foreignfuturecompleterustbuffer_call: (a: number, b: number, c: bigint, d: any) => void;
+    readonly foreignfuturecompleteu64_call: (a: number, b: number, c: bigint, d: any) => void;
+    readonly ubrn_ffi_matrix_sdk_base_uniffi_contract_version: () => number;
+    readonly ffi_matrix_sdk_base_uniffi_contract_version: () => number;
+    readonly __wbg_foreignfuturecompletei16_free: (a: number, b: number) => void;
+    readonly __wbg_foreignfuturecompletei64_free: (a: number, b: number) => void;
+    readonly __wbg_foreignfuturecompletevoid_free: (a: number, b: number) => void;
+    readonly foreignfuturecompletei16_call: (a: number, b: number, c: bigint, d: any) => void;
+    readonly foreignfuturecompletei64_call: (a: number, b: number, c: bigint, d: any) => void;
+    readonly foreignfuturecompletevoid_call: (a: number, b: number, c: bigint, d: any) => void;
+    readonly __wbg_foreignfuturecompletef64_free: (a: number, b: number) => void;
+    readonly foreignfuturecompletef64_call: (a: number, b: number, c: bigint, d: any) => void;
+    readonly __wbg_foreignfuturecompleteu8_free: (a: number, b: number) => void;
+    readonly foreignfuturecompleteu8_call: (a: number, b: number, c: bigint, d: any) => void;
+    readonly __wbg_foreignfuturecompletef32_free: (a: number, b: number) => void;
+    readonly __wbg_foreignfuturecompletei32_free: (a: number, b: number) => void;
+    readonly __wbg_foreignfuturecompleteu32_free: (a: number, b: number) => void;
+    readonly foreignfuturecompletef32_call: (a: number, b: number, c: bigint, d: any) => void;
+    readonly foreignfuturecompletei32_call: (a: number, b: number, c: bigint, d: any) => void;
+    readonly foreignfuturecompleteu32_call: (a: number, b: number, c: bigint, d: any) => void;
+    readonly ubrn_ffi_matrix_sdk_common_uniffi_contract_version: () => number;
+    readonly ffi_matrix_sdk_common_uniffi_contract_version: () => number;
     readonly __wbg_get_rustcallstatus_code: (a: number) => number;
     readonly __wbg_rustcallstatus_free: (a: number, b: number) => void;
     readonly __wbg_set_rustcallstatus_code: (a: number, b: number) => void;
