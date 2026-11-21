@@ -34,7 +34,7 @@ index 474d3d310..ba58ff7a2 100644
      pub fn supports_password_login(&self) -> bool {
          self.supports_password_login
 diff --git a/bindings/matrix-sdk-ffi/src/client.rs b/bindings/matrix-sdk-ffi/src/client.rs
-index 67d875724..71ac89580 100644
+index 67d875724..c1281df38 100644
 --- a/bindings/matrix-sdk-ffi/src/client.rs
 +++ b/bindings/matrix-sdk-ffi/src/client.rs
 @@ -571,6 +571,21 @@ impl Client {
@@ -67,7 +67,7 @@ index 67d875724..71ac89580 100644
              supports_password_login,
          })
      }
-@@ -3732,3 +3748,701 @@ mod tests {
+@@ -3732,3 +3748,753 @@ mod tests {
          assert!(converted.call.is_none());
      }
  }
@@ -769,11 +769,100 @@ index 67d875724..71ac89580 100644
 +        Ok(imported as u64)
 +    }
 +}
++
++#[matrix_sdk_ffi_macros::export]
++impl Client {
++    /// Has the homeserver bind a validated email address or phone number of
++    /// the account to the user's Matrix ID on an identity server, so that
++    /// others can find them by it.
++    pub async fn bind_threepid(
++        &self,
++        client_secret: String,
++        id_server: String,
++        id_access_token: String,
++        sid: String,
++    ) -> Result<(), ClientError> {
++        let request = ruma::api::client::account::bind_3pid::v3::Request::new(
++            ruma::OwnedClientSecret::try_from(client_secret)?,
++            ruma::api::client::account::IdentityServerInfo::new(id_server, id_access_token),
++            ruma::OwnedSessionId::try_from(sid)?,
++        );
++        self.inner.send(request).await?;
++        Ok(())
++    }
++
++    /// Has the homeserver remove such a binding from an identity server (the
++    /// one it was bound on, if none is given).
++    pub async fn unbind_threepid(
++        &self,
++        medium: String,
++        address: String,
++        id_server: Option<String>,
++    ) -> Result<(), ClientError> {
++        let mut request =
++            ruma::api::client::account::unbind_3pid::v3::Request::new(medium.into(), address);
++        request.id_server = id_server;
++        self.inner.send(request).await?;
++        Ok(())
++    }
++
++    /// The time zone a user has set in their profile (`m.tz`), if any.
++    pub async fn profile_time_zone(&self, user_id: String) -> Result<Option<String>, ClientError> {
++        use ruma::profile::{ProfileFieldName, ProfileFieldValue};
++
++        let field = self
++            .inner
++            .account()
++            .fetch_profile_field_of(UserId::parse(user_id)?, ProfileFieldName::TimeZone)
++            .await?;
++        Ok(match field {
++            Some(ProfileFieldValue::TimeZone(time_zone)) => Some(time_zone),
++            _ => None,
++        })
++    }
++}
+diff --git a/bindings/matrix-sdk-ffi/src/encryption.rs b/bindings/matrix-sdk-ffi/src/encryption.rs
+index cf71a3ac4..f263565d0 100644
+--- a/bindings/matrix-sdk-ffi/src/encryption.rs
++++ b/bindings/matrix-sdk-ffi/src/encryption.rs
+@@ -1114,3 +1114,32 @@ impl From<&matrix_sdk::encryption::OAuthCrossSigningResetInfo> for OAuthCrossSig
+         Self { approval_url: value.approval_url.to_string() }
+     }
+ }
++
++/// Told when devices are first seen or change (a user signs in somewhere
++/// new, say, or a device becomes cross-signed).
++#[matrix_sdk_ffi_macros::export(callback_interface)]
++pub trait DevicesUpdatesListener: SyncOutsideWasm + SendOutsideWasm {
++    /// Devices of these users are new or have changed.
++    fn on_update(&self, user_ids: Vec<String>);
++}
++
++#[matrix_sdk_ffi_macros::export]
++impl Encryption {
++    /// Calls the listener whenever devices are first seen or change, for as
++    /// long as the returned handle is kept.
++    pub fn devices_updates_listener(
++        self: Arc<Self>,
++        listener: Box<dyn DevicesUpdatesListener>,
++    ) -> Arc<TaskHandle> {
++        Arc::new(TaskHandle::new(get_runtime_handle().spawn(async move {
++            let Ok(stream) = self.inner.devices_stream().await else { return };
++            let mut stream = std::pin::pin!(stream);
++            while let Some(updates) = stream.next().await {
++                let mut user_ids: Vec<String> =
++                    updates.new.keys().chain(updates.changed.keys()).map(ToString::to_string).collect();
++                user_ids.dedup();
++                listener.on_update(user_ids);
++            }
++        })))
++    }
++}
 diff --git a/bindings/matrix-sdk-ffi/src/room/mod.rs b/bindings/matrix-sdk-ffi/src/room/mod.rs
-index ee11d99d3..a3a76e4b0 100644
+index ee11d99d3..f9eba9b46 100644
 --- a/bindings/matrix-sdk-ffi/src/room/mod.rs
 +++ b/bindings/matrix-sdk-ffi/src/room/mod.rs
-@@ -2181,3 +2181,176 @@ mod tests {
+@@ -2181,3 +2181,243 @@ mod tests {
              .expect("Room::drop panicked on a non-tokio thread");
      }
  }
@@ -947,6 +1036,73 @@ index ee11d99d3..a3a76e4b0 100644
 +    /// Takes a tag off the room.
 +    pub async fn remove_tag(&self, tag: String) -> Result<(), ClientError> {
 +        self.inner.remove_tag(tag.into()).await?;
++        Ok(())
++    }
++}
++
++/// A page of the events relating to an event.
++#[derive(uniffi::Record)]
++pub struct RelationsPage {
++    /// The events, as JSON, decrypted where possible, oldest first.
++    pub events: Vec<String>,
++    /// Where to carry on from for the next page, if there is one.
++    pub next_token: Option<String>,
++}
++
++#[matrix_sdk_ffi_macros::export]
++impl Room {
++    /// Like `relations_json`, a page at a time: pass the previous page's
++    /// `next_token` to get the one after it.
++    pub async fn relations_page_json(
++        &self,
++        event_id: String,
++        relation_type: Option<String>,
++        event_type: Option<String>,
++        from: Option<String>,
++    ) -> Result<RelationsPage, ClientError> {
++        use matrix_sdk::room::{IncludeRelations, RelationsOptions};
++
++        let mut options = RelationsOptions::default();
++        options.dir = ruma::api::Direction::Forward;
++        options.from = from;
++        options.include_relations = match (relation_type, event_type) {
++            (Some(relation), Some(event)) => {
++                IncludeRelations::RelationsOfTypeAndEventType(relation.into(), event.into())
++            }
++            (Some(relation), None) => IncludeRelations::RelationsOfType(relation.into()),
++            _ => IncludeRelations::AllRelations,
++        };
++        let relations = self.inner.relations(EventId::parse(event_id)?, options).await?;
++        Ok(RelationsPage {
++            events: relations.chunk.iter().map(|e| e.raw().json().get().to_owned()).collect(),
++            next_token: relations.next_batch_token,
++        })
++    }
++
++    /// The type of the room from its creation event (`m.space`, say), if it
++    /// has one.
++    pub fn room_type(&self) -> Option<String> {
++        self.inner.room_type().map(|room_type| room_type.to_string())
++    }
++
++    /// Invites someone to the room by an email address (medium `email`) or
++    /// phone number (`msisdn`), which the identity server looks up.
++    pub async fn invite_user_by_3pid(
++        &self,
++        id_server: String,
++        id_access_token: String,
++        medium: String,
++        address: String,
++    ) -> Result<(), ClientError> {
++        let invite = ruma::api::client::membership::Invite3pid::from(
++            ruma::api::client::membership::Invite3pidInit {
++                id_server,
++                id_access_token,
++                medium: medium.into(),
++                address,
++            },
++        );
++        self.inner.invite_user_by_3pid(invite).await?;
 +        Ok(())
 +    }
 +}

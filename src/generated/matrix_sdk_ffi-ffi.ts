@@ -80,6 +80,14 @@ export type UniffiVTableCallbackInterfaceMatrixSdkFfiDehydratedDeviceEventListen
   uniffi_clone: UniffiCallbackInterfaceCloneMatrixSdkFfiDehydratedDeviceEventListener;
   on_event: UniffiCallbackInterfaceMatrixSdkFfiDehydratedDeviceEventListenerMethod0;
 };
+type UniffiCallbackInterfaceMatrixSdkFfiDevicesUpdatesListenerMethod0 = (uniffiHandle: bigint, userIds: Uint8Array) => UniffiResult<void>;
+type UniffiCallbackInterfaceCloneMatrixSdkFfiDevicesUpdatesListener = (handle: bigint) => UniffiResult<void>;
+type UniffiCallbackInterfaceFreeMatrixSdkFfiDevicesUpdatesListener = (handle: bigint) => void;
+export type UniffiVTableCallbackInterfaceMatrixSdkFfiDevicesUpdatesListener = {
+  uniffi_free: UniffiCallbackInterfaceFreeMatrixSdkFfiDevicesUpdatesListener;
+  uniffi_clone: UniffiCallbackInterfaceCloneMatrixSdkFfiDevicesUpdatesListener;
+  on_update: UniffiCallbackInterfaceMatrixSdkFfiDevicesUpdatesListenerMethod0;
+};
 type UniffiCallbackInterfaceMatrixSdkFfiDuplicateKeyUploadErrorListenerMethod0 = (uniffiHandle: bigint, message: Uint8Array) => UniffiResult<void>;
 type UniffiCallbackInterfaceCloneMatrixSdkFfiDuplicateKeyUploadErrorListener = (handle: bigint) => UniffiResult<void>;
 type UniffiCallbackInterfaceFreeMatrixSdkFfiDuplicateKeyUploadErrorListener = (handle: bigint) => void;

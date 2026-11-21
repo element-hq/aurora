@@ -353,6 +353,8 @@ export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_avatar_url(): 
 
 export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_await_room_remote_echo(): number;
 
+export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_bind_threepid(): number;
+
 export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_cached_avatar_url(): number;
 
 export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_can_deactivate_account(): number;
@@ -511,6 +513,8 @@ export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_pause(): numbe
 
 export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_presence(): number;
 
+export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_profile_time_zone(): number;
+
 export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_push_rules_json(): number;
 
 export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_pushers_json(): number;
@@ -629,6 +633,8 @@ export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_total_unread_n
 
 export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_track_recently_visited_room(): number;
 
+export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_unbind_threepid(): number;
+
 export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_unignore_user(): number;
 
 export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_upload_avatar(): number;
@@ -717,6 +723,8 @@ export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_continuationmessagese
 
 export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_dehydrateddeviceeventlistener_on_event(): number;
 
+export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_devicesupdateslistener_on_update(): number;
+
 export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_duplicatekeyuploaderrorlistener_on_duplicate_key_upload_error(): number;
 
 export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_enablerecoveryprogresslistener_on_update(): number;
@@ -734,6 +742,8 @@ export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_curve25519
 export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_dehydrated_device_event_listener(): number;
 
 export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_delete_dehydrated_device(): number;
+
+export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_devices_updates_listener(): number;
 
 export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_disable_recovery(): number;
 
@@ -1017,6 +1027,8 @@ export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_ignore_device_tr
 
 export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_ignore_user(): number;
 
+export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_invite_user_by_3pid(): number;
+
 export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_invite_user_by_id(): number;
 
 export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_invited_members_count(): number;
@@ -1095,6 +1107,8 @@ export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_redact(): number
 
 export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_relations_json(): number;
 
+export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_relations_page_json(): number;
+
 export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_remove_avatar(): number;
 
 export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_remove_room_alias_from_room_directory(): number;
@@ -1110,6 +1124,8 @@ export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_reset_power_leve
 export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_room_events_debug_string(): number;
 
 export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_room_info(): number;
+
+export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_room_type(): number;
 
 export function ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_save_composer_draft(): number;
 
@@ -1891,6 +1907,8 @@ export function ubrn_uniffi_matrix_sdk_ffi_fn_init_callback_vtable_clientsession
 
 export function ubrn_uniffi_matrix_sdk_ffi_fn_init_callback_vtable_dehydrateddeviceeventlistener(vtable: any): void;
 
+export function ubrn_uniffi_matrix_sdk_ffi_fn_init_callback_vtable_devicesupdateslistener(vtable: any): void;
+
 export function ubrn_uniffi_matrix_sdk_ffi_fn_init_callback_vtable_duplicatekeyuploaderrorlistener(vtable: any): void;
 
 export function ubrn_uniffi_matrix_sdk_ffi_fn_init_callback_vtable_enablerecoveryprogresslistener(vtable: any): void;
@@ -1990,6 +2008,8 @@ export function ubrn_uniffi_matrix_sdk_ffi_fn_method_client_available_sliding_sy
 export function ubrn_uniffi_matrix_sdk_ffi_fn_method_client_avatar_url(ptr: bigint): bigint;
 
 export function ubrn_uniffi_matrix_sdk_ffi_fn_method_client_await_room_remote_echo(ptr: bigint, room_id: Uint8Array): bigint;
+
+export function ubrn_uniffi_matrix_sdk_ffi_fn_method_client_bind_threepid(ptr: bigint, client_secret: Uint8Array, id_server: Uint8Array, id_access_token: Uint8Array, sid: Uint8Array): bigint;
 
 export function ubrn_uniffi_matrix_sdk_ffi_fn_method_client_cached_avatar_url(ptr: bigint): bigint;
 
@@ -2149,6 +2169,8 @@ export function ubrn_uniffi_matrix_sdk_ffi_fn_method_client_pause(ptr: bigint): 
 
 export function ubrn_uniffi_matrix_sdk_ffi_fn_method_client_presence(ptr: bigint, user_id: Uint8Array): bigint;
 
+export function ubrn_uniffi_matrix_sdk_ffi_fn_method_client_profile_time_zone(ptr: bigint, user_id: Uint8Array): bigint;
+
 export function ubrn_uniffi_matrix_sdk_ffi_fn_method_client_push_rules_json(ptr: bigint): bigint;
 
 export function ubrn_uniffi_matrix_sdk_ffi_fn_method_client_pushers_json(ptr: bigint): bigint;
@@ -2267,6 +2289,8 @@ export function ubrn_uniffi_matrix_sdk_ffi_fn_method_client_total_unread_notific
 
 export function ubrn_uniffi_matrix_sdk_ffi_fn_method_client_track_recently_visited_room(ptr: bigint, room: Uint8Array): bigint;
 
+export function ubrn_uniffi_matrix_sdk_ffi_fn_method_client_unbind_threepid(ptr: bigint, medium: Uint8Array, address: Uint8Array, id_server: Uint8Array): bigint;
+
 export function ubrn_uniffi_matrix_sdk_ffi_fn_method_client_unignore_user(ptr: bigint, user_id: Uint8Array): bigint;
 
 export function ubrn_uniffi_matrix_sdk_ffi_fn_method_client_upload_avatar(ptr: bigint, mime_type: Uint8Array, data: Uint8Array): bigint;
@@ -2358,6 +2382,8 @@ export function ubrn_uniffi_matrix_sdk_ffi_fn_method_encryption_curve25519_key(p
 export function ubrn_uniffi_matrix_sdk_ffi_fn_method_encryption_dehydrated_device_event_listener(ptr: bigint, listener: bigint, f_status_: RustCallStatus): bigint;
 
 export function ubrn_uniffi_matrix_sdk_ffi_fn_method_encryption_delete_dehydrated_device(ptr: bigint): bigint;
+
+export function ubrn_uniffi_matrix_sdk_ffi_fn_method_encryption_devices_updates_listener(ptr: bigint, listener: bigint, f_status_: RustCallStatus): bigint;
 
 export function ubrn_uniffi_matrix_sdk_ffi_fn_method_encryption_disable_recovery(ptr: bigint): bigint;
 
@@ -2619,6 +2645,8 @@ export function ubrn_uniffi_matrix_sdk_ffi_fn_method_room_ignore_device_trust_an
 
 export function ubrn_uniffi_matrix_sdk_ffi_fn_method_room_ignore_user(ptr: bigint, user_id: Uint8Array): bigint;
 
+export function ubrn_uniffi_matrix_sdk_ffi_fn_method_room_invite_user_by_3pid(ptr: bigint, id_server: Uint8Array, id_access_token: Uint8Array, medium: Uint8Array, address: Uint8Array): bigint;
+
 export function ubrn_uniffi_matrix_sdk_ffi_fn_method_room_invite_user_by_id(ptr: bigint, user_id: Uint8Array): bigint;
 
 export function ubrn_uniffi_matrix_sdk_ffi_fn_method_room_invited_members_count(ptr: bigint, f_status_: RustCallStatus): bigint;
@@ -2697,6 +2725,8 @@ export function ubrn_uniffi_matrix_sdk_ffi_fn_method_room_redact(ptr: bigint, ev
 
 export function ubrn_uniffi_matrix_sdk_ffi_fn_method_room_relations_json(ptr: bigint, event_id: Uint8Array, relation_type: Uint8Array, event_type: Uint8Array): bigint;
 
+export function ubrn_uniffi_matrix_sdk_ffi_fn_method_room_relations_page_json(ptr: bigint, event_id: Uint8Array, relation_type: Uint8Array, event_type: Uint8Array, from: Uint8Array): bigint;
+
 export function ubrn_uniffi_matrix_sdk_ffi_fn_method_room_remove_avatar(ptr: bigint): bigint;
 
 export function ubrn_uniffi_matrix_sdk_ffi_fn_method_room_remove_room_alias_from_room_directory(ptr: bigint, alias: Uint8Array): bigint;
@@ -2712,6 +2742,8 @@ export function ubrn_uniffi_matrix_sdk_ffi_fn_method_room_reset_power_levels(ptr
 export function ubrn_uniffi_matrix_sdk_ffi_fn_method_room_room_events_debug_string(ptr: bigint): bigint;
 
 export function ubrn_uniffi_matrix_sdk_ffi_fn_method_room_room_info(ptr: bigint): bigint;
+
+export function ubrn_uniffi_matrix_sdk_ffi_fn_method_room_room_type(ptr: bigint, f_status_: RustCallStatus): Uint8Array;
 
 export function ubrn_uniffi_matrix_sdk_ffi_fn_method_room_save_composer_draft(ptr: bigint, draft: Uint8Array, thread_root: Uint8Array): bigint;
 
@@ -3425,6 +3457,8 @@ export interface InitOutput {
     readonly uniffi_matrix_sdk_ffi_checksum_method_client_avatar_url: () => number;
     readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_await_room_remote_echo: () => number;
     readonly uniffi_matrix_sdk_ffi_checksum_method_client_await_room_remote_echo: () => number;
+    readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_bind_threepid: () => number;
+    readonly uniffi_matrix_sdk_ffi_checksum_method_client_bind_threepid: () => number;
     readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_cached_avatar_url: () => number;
     readonly uniffi_matrix_sdk_ffi_checksum_method_client_cached_avatar_url: () => number;
     readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_can_deactivate_account: () => number;
@@ -3583,6 +3617,8 @@ export interface InitOutput {
     readonly uniffi_matrix_sdk_ffi_checksum_method_client_pause: () => number;
     readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_presence: () => number;
     readonly uniffi_matrix_sdk_ffi_checksum_method_client_presence: () => number;
+    readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_profile_time_zone: () => number;
+    readonly uniffi_matrix_sdk_ffi_checksum_method_client_profile_time_zone: () => number;
     readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_push_rules_json: () => number;
     readonly uniffi_matrix_sdk_ffi_checksum_method_client_push_rules_json: () => number;
     readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_pushers_json: () => number;
@@ -3701,6 +3737,8 @@ export interface InitOutput {
     readonly uniffi_matrix_sdk_ffi_checksum_method_client_total_unread_notifications: () => number;
     readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_track_recently_visited_room: () => number;
     readonly uniffi_matrix_sdk_ffi_checksum_method_client_track_recently_visited_room: () => number;
+    readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_unbind_threepid: () => number;
+    readonly uniffi_matrix_sdk_ffi_checksum_method_client_unbind_threepid: () => number;
     readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_unignore_user: () => number;
     readonly uniffi_matrix_sdk_ffi_checksum_method_client_unignore_user: () => number;
     readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_upload_avatar: () => number;
@@ -3789,6 +3827,8 @@ export interface InitOutput {
     readonly uniffi_matrix_sdk_ffi_checksum_method_continuationmessagesender_confirm: () => number;
     readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_dehydrateddeviceeventlistener_on_event: () => number;
     readonly uniffi_matrix_sdk_ffi_checksum_method_dehydrateddeviceeventlistener_on_event: () => number;
+    readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_devicesupdateslistener_on_update: () => number;
+    readonly uniffi_matrix_sdk_ffi_checksum_method_devicesupdateslistener_on_update: () => number;
     readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_duplicatekeyuploaderrorlistener_on_duplicate_key_upload_error: () => number;
     readonly uniffi_matrix_sdk_ffi_checksum_method_duplicatekeyuploaderrorlistener_on_duplicate_key_upload_error: () => number;
     readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_enablerecoveryprogresslistener_on_update: () => number;
@@ -3807,6 +3847,8 @@ export interface InitOutput {
     readonly uniffi_matrix_sdk_ffi_checksum_method_encryption_dehydrated_device_event_listener: () => number;
     readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_delete_dehydrated_device: () => number;
     readonly uniffi_matrix_sdk_ffi_checksum_method_encryption_delete_dehydrated_device: () => number;
+    readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_devices_updates_listener: () => number;
+    readonly uniffi_matrix_sdk_ffi_checksum_method_encryption_devices_updates_listener: () => number;
     readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_disable_recovery: () => number;
     readonly uniffi_matrix_sdk_ffi_checksum_method_encryption_disable_recovery: () => number;
     readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_ed25519_key: () => number;
@@ -4089,6 +4131,8 @@ export interface InitOutput {
     readonly uniffi_matrix_sdk_ffi_checksum_method_room_ignore_device_trust_and_resend: () => number;
     readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_ignore_user: () => number;
     readonly uniffi_matrix_sdk_ffi_checksum_method_room_ignore_user: () => number;
+    readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_invite_user_by_3pid: () => number;
+    readonly uniffi_matrix_sdk_ffi_checksum_method_room_invite_user_by_3pid: () => number;
     readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_invite_user_by_id: () => number;
     readonly uniffi_matrix_sdk_ffi_checksum_method_room_invite_user_by_id: () => number;
     readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_invited_members_count: () => number;
@@ -4167,6 +4211,8 @@ export interface InitOutput {
     readonly uniffi_matrix_sdk_ffi_checksum_method_room_redact: () => number;
     readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_relations_json: () => number;
     readonly uniffi_matrix_sdk_ffi_checksum_method_room_relations_json: () => number;
+    readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_relations_page_json: () => number;
+    readonly uniffi_matrix_sdk_ffi_checksum_method_room_relations_page_json: () => number;
     readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_remove_avatar: () => number;
     readonly uniffi_matrix_sdk_ffi_checksum_method_room_remove_avatar: () => number;
     readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_remove_room_alias_from_room_directory: () => number;
@@ -4183,6 +4229,8 @@ export interface InitOutput {
     readonly uniffi_matrix_sdk_ffi_checksum_method_room_room_events_debug_string: () => number;
     readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_room_info: () => number;
     readonly uniffi_matrix_sdk_ffi_checksum_method_room_room_info: () => number;
+    readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_room_type: () => number;
+    readonly uniffi_matrix_sdk_ffi_checksum_method_room_room_type: () => number;
     readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_save_composer_draft: () => number;
     readonly uniffi_matrix_sdk_ffi_checksum_method_room_save_composer_draft: () => number;
     readonly ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_send_live_location: () => number;
@@ -4963,6 +5011,8 @@ export interface InitOutput {
     readonly uniffi_matrix_sdk_ffi_fn_init_callback_vtable_clientsessiondelegate: (a: number) => void;
     readonly ubrn_uniffi_matrix_sdk_ffi_fn_init_callback_vtable_dehydrateddeviceeventlistener: (a: any) => void;
     readonly uniffi_matrix_sdk_ffi_fn_init_callback_vtable_dehydrateddeviceeventlistener: (a: number) => void;
+    readonly ubrn_uniffi_matrix_sdk_ffi_fn_init_callback_vtable_devicesupdateslistener: (a: any) => void;
+    readonly uniffi_matrix_sdk_ffi_fn_init_callback_vtable_devicesupdateslistener: (a: number) => void;
     readonly ubrn_uniffi_matrix_sdk_ffi_fn_init_callback_vtable_duplicatekeyuploaderrorlistener: (a: any) => void;
     readonly uniffi_matrix_sdk_ffi_fn_init_callback_vtable_duplicatekeyuploaderrorlistener: (a: number) => void;
     readonly ubrn_uniffi_matrix_sdk_ffi_fn_init_callback_vtable_enablerecoveryprogresslistener: (a: any) => void;
@@ -5063,6 +5113,8 @@ export interface InitOutput {
     readonly uniffi_matrix_sdk_ffi_fn_method_client_avatar_url: (a: bigint) => bigint;
     readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_client_await_room_remote_echo: (a: bigint, b: number, c: number) => bigint;
     readonly uniffi_matrix_sdk_ffi_fn_method_client_await_room_remote_echo: (a: bigint, b: number) => bigint;
+    readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_client_bind_threepid: (a: bigint, b: number, c: number, d: number, e: number, f: number, g: number, h: number, i: number) => bigint;
+    readonly uniffi_matrix_sdk_ffi_fn_method_client_bind_threepid: (a: bigint, b: number, c: number, d: number, e: number) => bigint;
     readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_client_cached_avatar_url: (a: bigint) => bigint;
     readonly uniffi_matrix_sdk_ffi_fn_method_client_cached_avatar_url: (a: bigint) => bigint;
     readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_client_can_deactivate_account: (a: bigint, b: number) => number;
@@ -5221,6 +5273,8 @@ export interface InitOutput {
     readonly uniffi_matrix_sdk_ffi_fn_method_client_pause: (a: bigint) => bigint;
     readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_client_presence: (a: bigint, b: number, c: number) => bigint;
     readonly uniffi_matrix_sdk_ffi_fn_method_client_presence: (a: bigint, b: number) => bigint;
+    readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_client_profile_time_zone: (a: bigint, b: number, c: number) => bigint;
+    readonly uniffi_matrix_sdk_ffi_fn_method_client_profile_time_zone: (a: bigint, b: number) => bigint;
     readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_client_push_rules_json: (a: bigint) => bigint;
     readonly uniffi_matrix_sdk_ffi_fn_method_client_push_rules_json: (a: bigint) => bigint;
     readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_client_pushers_json: (a: bigint) => bigint;
@@ -5339,6 +5393,8 @@ export interface InitOutput {
     readonly uniffi_matrix_sdk_ffi_fn_method_client_total_unread_notifications: (a: bigint, b: number) => bigint;
     readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_client_track_recently_visited_room: (a: bigint, b: number, c: number) => bigint;
     readonly uniffi_matrix_sdk_ffi_fn_method_client_track_recently_visited_room: (a: bigint, b: number) => bigint;
+    readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_client_unbind_threepid: (a: bigint, b: number, c: number, d: number, e: number, f: number, g: number) => bigint;
+    readonly uniffi_matrix_sdk_ffi_fn_method_client_unbind_threepid: (a: bigint, b: number, c: number, d: number) => bigint;
     readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_client_unignore_user: (a: bigint, b: number, c: number) => bigint;
     readonly uniffi_matrix_sdk_ffi_fn_method_client_unignore_user: (a: bigint, b: number) => bigint;
     readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_client_upload_avatar: (a: bigint, b: number, c: number, d: number, e: number) => bigint;
@@ -5431,6 +5487,8 @@ export interface InitOutput {
     readonly uniffi_matrix_sdk_ffi_fn_method_encryption_dehydrated_device_event_listener: (a: bigint, b: bigint, c: number) => bigint;
     readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_encryption_delete_dehydrated_device: (a: bigint) => bigint;
     readonly uniffi_matrix_sdk_ffi_fn_method_encryption_delete_dehydrated_device: (a: bigint) => bigint;
+    readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_encryption_devices_updates_listener: (a: bigint, b: bigint, c: number) => bigint;
+    readonly uniffi_matrix_sdk_ffi_fn_method_encryption_devices_updates_listener: (a: bigint, b: bigint, c: number) => bigint;
     readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_encryption_disable_recovery: (a: bigint) => bigint;
     readonly uniffi_matrix_sdk_ffi_fn_method_encryption_disable_recovery: (a: bigint) => bigint;
     readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_encryption_ed25519_key: (a: bigint) => bigint;
@@ -5691,6 +5749,8 @@ export interface InitOutput {
     readonly uniffi_matrix_sdk_ffi_fn_method_room_ignore_device_trust_and_resend: (a: bigint, b: number, c: bigint) => bigint;
     readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_room_ignore_user: (a: bigint, b: number, c: number) => bigint;
     readonly uniffi_matrix_sdk_ffi_fn_method_room_ignore_user: (a: bigint, b: number) => bigint;
+    readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_room_invite_user_by_3pid: (a: bigint, b: number, c: number, d: number, e: number, f: number, g: number, h: number, i: number) => bigint;
+    readonly uniffi_matrix_sdk_ffi_fn_method_room_invite_user_by_3pid: (a: bigint, b: number, c: number, d: number, e: number) => bigint;
     readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_room_invite_user_by_id: (a: bigint, b: number, c: number) => bigint;
     readonly uniffi_matrix_sdk_ffi_fn_method_room_invite_user_by_id: (a: bigint, b: number) => bigint;
     readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_room_invited_members_count: (a: bigint, b: number) => bigint;
@@ -5769,6 +5829,8 @@ export interface InitOutput {
     readonly uniffi_matrix_sdk_ffi_fn_method_room_redact: (a: bigint, b: number, c: number) => bigint;
     readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_room_relations_json: (a: bigint, b: number, c: number, d: number, e: number, f: number, g: number) => bigint;
     readonly uniffi_matrix_sdk_ffi_fn_method_room_relations_json: (a: bigint, b: number, c: number, d: number) => bigint;
+    readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_room_relations_page_json: (a: bigint, b: number, c: number, d: number, e: number, f: number, g: number, h: number, i: number) => bigint;
+    readonly uniffi_matrix_sdk_ffi_fn_method_room_relations_page_json: (a: bigint, b: number, c: number, d: number, e: number) => bigint;
     readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_room_remove_avatar: (a: bigint) => bigint;
     readonly uniffi_matrix_sdk_ffi_fn_method_room_remove_avatar: (a: bigint) => bigint;
     readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_room_remove_room_alias_from_room_directory: (a: bigint, b: number, c: number) => bigint;
@@ -5785,6 +5847,8 @@ export interface InitOutput {
     readonly uniffi_matrix_sdk_ffi_fn_method_room_room_events_debug_string: (a: bigint) => bigint;
     readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_room_room_info: (a: bigint) => bigint;
     readonly uniffi_matrix_sdk_ffi_fn_method_room_room_info: (a: bigint) => bigint;
+    readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_room_room_type: (a: bigint, b: number) => [number, number];
+    readonly uniffi_matrix_sdk_ffi_fn_method_room_room_type: (a: number, b: bigint, c: number) => void;
     readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_room_save_composer_draft: (a: bigint, b: number, c: number, d: number, e: number) => bigint;
     readonly uniffi_matrix_sdk_ffi_fn_method_room_save_composer_draft: (a: bigint, b: number, c: number) => bigint;
     readonly ubrn_uniffi_matrix_sdk_ffi_fn_method_room_send_live_location: (a: bigint, b: number, c: number) => bigint;
@@ -6289,10 +6353,6 @@ export interface InitOutput {
     readonly uniffi_ruma_events_fn_method_todeviceeventtype_uniffi_trait_eq_ne: (a: number, b: number, c: number) => number;
     readonly ubrn_uniffi_ruma_events_fn_method_todeviceeventtype_uniffi_trait_hash: (a: number, b: number, c: number) => bigint;
     readonly uniffi_ruma_events_fn_method_todeviceeventtype_uniffi_trait_hash: (a: number, b: number) => bigint;
-    readonly __wbg_foreignfuturecompleteu8_free: (a: number, b: number) => void;
-    readonly foreignfuturecompleteu8_call: (a: number, b: number, c: bigint, d: any) => void;
-    readonly __wbg_foreignfuturecompletef64_free: (a: number, b: number) => void;
-    readonly foreignfuturecompletef64_call: (a: number, b: number, c: bigint, d: any) => void;
     readonly __wbg_foreignfuturecompletei8_free: (a: number, b: number) => void;
     readonly __wbg_foreignfuturecompleterustbuffer_free: (a: number, b: number) => void;
     readonly __wbg_foreignfuturecompleteu64_free: (a: number, b: number) => void;
@@ -6311,8 +6371,14 @@ export interface InitOutput {
     readonly foreignfuturecompletei16_call: (a: number, b: number, c: bigint, d: any) => void;
     readonly foreignfuturecompletei64_call: (a: number, b: number, c: bigint, d: any) => void;
     readonly foreignfuturecompletevoid_call: (a: number, b: number, c: bigint, d: any) => void;
+    readonly __wbg_foreignfuturecompletef64_free: (a: number, b: number) => void;
+    readonly foreignfuturecompletef64_call: (a: number, b: number, c: bigint, d: any) => void;
+    readonly ubrn_ffi_matrix_sdk_contentscanner_uniffi_contract_version: () => number;
+    readonly ffi_matrix_sdk_contentscanner_uniffi_contract_version: () => number;
     readonly ubrn_ffi_matrix_sdk_crypto_uniffi_contract_version: () => number;
     readonly ffi_matrix_sdk_crypto_uniffi_contract_version: () => number;
+    readonly ubrn_ffi_matrix_sdk_ui_uniffi_contract_version: () => number;
+    readonly ffi_matrix_sdk_ui_uniffi_contract_version: () => number;
     readonly ubrn_ffi_matrix_sdk_uniffi_contract_version: () => number;
     readonly ffi_matrix_sdk_uniffi_contract_version: () => number;
     readonly ubrn_uniffi_matrix_sdk_checksum_method_oauthauthorizationdata_login_url: () => number;
@@ -6335,16 +6401,14 @@ export interface InitOutput {
     readonly uniffi_matrix_sdk_fn_free_oauthauthorizationdata: (a: bigint, b: number) => void;
     readonly ubrn_uniffi_matrix_sdk_fn_method_oauthauthorizationdata_login_url: (a: bigint, b: number) => [number, number];
     readonly uniffi_matrix_sdk_fn_method_oauthauthorizationdata_login_url: (a: number, b: bigint, c: number) => void;
-    readonly __wbg_foreignfuturecompleteu16_free: (a: number, b: number) => void;
-    readonly foreignfuturecompleteu16_call: (a: number, b: number, c: bigint, d: any) => void;
-    readonly ubrn_ffi_matrix_sdk_base_uniffi_contract_version: () => number;
-    readonly ffi_matrix_sdk_base_uniffi_contract_version: () => number;
-    readonly ubrn_ffi_matrix_sdk_contentscanner_uniffi_contract_version: () => number;
-    readonly ffi_matrix_sdk_contentscanner_uniffi_contract_version: () => number;
+    readonly __wbg_foreignfuturecompleteu8_free: (a: number, b: number) => void;
+    readonly foreignfuturecompleteu8_call: (a: number, b: number, c: bigint, d: any) => void;
     readonly ubrn_ffi_matrix_sdk_common_uniffi_contract_version: () => number;
     readonly ffi_matrix_sdk_common_uniffi_contract_version: () => number;
-    readonly ubrn_ffi_matrix_sdk_ui_uniffi_contract_version: () => number;
-    readonly ffi_matrix_sdk_ui_uniffi_contract_version: () => number;
+    readonly ubrn_ffi_matrix_sdk_base_uniffi_contract_version: () => number;
+    readonly ffi_matrix_sdk_base_uniffi_contract_version: () => number;
+    readonly __wbg_foreignfuturecompleteu16_free: (a: number, b: number) => void;
+    readonly foreignfuturecompleteu16_call: (a: number, b: number, c: bigint, d: any) => void;
     readonly __wbg_get_rustcallstatus_code: (a: number) => number;
     readonly __wbg_rustcallstatus_free: (a: number, b: number) => void;
     readonly __wbg_set_rustcallstatus_code: (a: number, b: number) => void;

@@ -4,7 +4,7 @@
 /* eslint-disable */
 // @ts-nocheck
 import * as wasmBundle from "./wasm-bindgen/index.js";
-import { type UniffiRustFutureContinuationCallback, type UniffiForeignFutureDroppedCallback, type UniffiForeignFutureDroppedCallbackStruct, type UniffiVTableCallbackInterfaceMatrixSdkFfiAccountDataListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiBackupStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiBackupSteadyStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiBeaconInfoListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiCallDeclineListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiClientDelegate, type UniffiVTableCallbackInterfaceMatrixSdkFfiClientSessionDelegate, type UniffiVTableCallbackInterfaceMatrixSdkFfiDehydratedDeviceEventListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiDuplicateKeyUploadErrorListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiEnableRecoveryProgressListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiGeneratedQrLoginProgressListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiGrantGeneratedQrLoginProgressListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiGrantQrLoginProgressListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiIdentityStatusChangeListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiIgnoredUsersListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiKnockRequestsListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiLiveLocationsListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiMediaPreviewConfigListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiNotificationSettingsDelegate, type UniffiVTableCallbackInterfaceMatrixSdkFfiPaginationStatusListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiProfileListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiProgressWatcher, type UniffiVTableCallbackInterfaceMatrixSdkFfiQrLoginProgressListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRecoveryStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomAccountDataListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomDirectorySearchEntriesListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomInfoListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomListEntriesListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomListLoadingStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomListServiceStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomListServiceSyncIndicatorListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSendQueueListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSendQueueRoomErrorListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSendQueueRoomUpdateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSessionVerificationControllerDelegate, type UniffiVTableCallbackInterfaceMatrixSdkFfiSpaceRoomListEntriesListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSpaceRoomListPaginationStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSpaceRoomListSpaceListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSpaceServiceJoinedSpacesListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSpaceServiceSpaceFiltersListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSyncListenerV2, type UniffiVTableCallbackInterfaceMatrixSdkFfiSyncNotificationListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSyncServiceStateObserver, type UniffiVTableCallbackInterfaceMatrixSdkFfiThreadListEntriesListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiThreadListPaginationStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiTimelineListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiTypingNotificationsListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiUnableToDecryptDelegate, type UniffiVTableCallbackInterfaceMatrixSdkFfiVerificationStateListener, type UniffiForeignFutureResultRustBuffer, type UniffiForeignFutureCompleterustBuffer, type UniffiVTableCallbackInterfaceMatrixSdkFfiWidgetCapabilitiesProvider,
+import { type UniffiRustFutureContinuationCallback, type UniffiForeignFutureDroppedCallback, type UniffiForeignFutureDroppedCallbackStruct, type UniffiVTableCallbackInterfaceMatrixSdkFfiAccountDataListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiBackupStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiBackupSteadyStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiBeaconInfoListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiCallDeclineListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiClientDelegate, type UniffiVTableCallbackInterfaceMatrixSdkFfiClientSessionDelegate, type UniffiVTableCallbackInterfaceMatrixSdkFfiDehydratedDeviceEventListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiDevicesUpdatesListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiDuplicateKeyUploadErrorListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiEnableRecoveryProgressListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiGeneratedQrLoginProgressListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiGrantGeneratedQrLoginProgressListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiGrantQrLoginProgressListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiIdentityStatusChangeListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiIgnoredUsersListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiKnockRequestsListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiLiveLocationsListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiMediaPreviewConfigListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiNotificationSettingsDelegate, type UniffiVTableCallbackInterfaceMatrixSdkFfiPaginationStatusListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiProfileListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiProgressWatcher, type UniffiVTableCallbackInterfaceMatrixSdkFfiQrLoginProgressListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRecoveryStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomAccountDataListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomDirectorySearchEntriesListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomInfoListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomListEntriesListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomListLoadingStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomListServiceStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomListServiceSyncIndicatorListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSendQueueListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSendQueueRoomErrorListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSendQueueRoomUpdateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSessionVerificationControllerDelegate, type UniffiVTableCallbackInterfaceMatrixSdkFfiSpaceRoomListEntriesListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSpaceRoomListPaginationStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSpaceRoomListSpaceListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSpaceServiceJoinedSpacesListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSpaceServiceSpaceFiltersListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSyncListenerV2, type UniffiVTableCallbackInterfaceMatrixSdkFfiSyncNotificationListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSyncServiceStateObserver, type UniffiVTableCallbackInterfaceMatrixSdkFfiThreadListEntriesListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiThreadListPaginationStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiTimelineListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiTypingNotificationsListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiUnableToDecryptDelegate, type UniffiVTableCallbackInterfaceMatrixSdkFfiVerificationStateListener, type UniffiForeignFutureResultRustBuffer, type UniffiForeignFutureCompleterustBuffer, type UniffiVTableCallbackInterfaceMatrixSdkFfiWidgetCapabilitiesProvider,
 } from "./matrix_sdk_ffi-ffi";
 import { type OAuthAuthorizationDataLike, type RoomPowerLevelChanges, type ServerVendorInfo, type TileServerInfo, type VirtualElementCallWidgetConfig, type VirtualElementCallWidgetProperties, BackupDownloadStrategy, PaginationStatus, RoomMemberRole,
 } from "./matrix_sdk";
@@ -18477,6 +18477,58 @@ const FfiConverterTypePusherIdentifiers = (() => {
 })();
 
 /**
+ * A page of the events relating to an event.
+ */
+export type RelationsPage = {
+    /**
+     * The events, as JSON, decrypted where possible, oldest first.
+     */
+    events: Array<string>,
+    /**
+     * Where to carry on from for the next page, if there is one.
+     */
+    nextToken?: string
+}
+
+/**
+ * Generated factory for {@link RelationsPage} record objects.
+ */
+export const RelationsPage = (() => {
+    const defaults = () => ({
+    });
+    const create = (() => {
+        return uniffiCreateRecord<RelationsPage, ReturnType<typeof defaults>>(defaults);
+    })();
+    return Object.freeze({
+        create,
+        new: create,
+        defaults: () => Object.freeze(defaults()) as Partial<RelationsPage>,
+    });
+})();
+
+const FfiConverterTypeRelationsPage = (() => {
+    type TypeName = RelationsPage;
+    class FFIConverter extends AbstractFfiConverterByteArray<TypeName> {
+        readFromCursor(c: Cursor): TypeName {
+            return {
+                events: FfiConverterSequenceString.readFromCursor(c), 
+                nextToken: FfiConverterOptionalString.readFromCursor(c)
+            };
+        }
+        writeIntoCursor(value: TypeName, c: Cursor): void {
+            FfiConverterSequenceString.writeIntoCursor(value.events, c);
+            FfiConverterOptionalString.writeIntoCursor(value.nextToken, c);
+        }
+        allocationSize(value: TypeName): number {
+            return FfiConverterSequenceString.allocationSize(value.events) +
+             FfiConverterOptionalString.allocationSize(value.nextToken);
+            
+        }
+    };
+    return new FFIConverter();
+})();
+
+/**
  * The config to use for HTTP requests by default in this client.
  */
 export type RequestConfig = {
@@ -30216,6 +30268,11 @@ export interface RoomLike {
  * * `user_id` - The ID of the user to ignore.
  */
     ignoreUser(userId: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
+/**
+ * Invites someone to the room by an email address (medium `email`) or
+ * phone number (`msisdn`), which the identity server looks up.
+ */
+    inviteUserBy3pid(idServer: string, idAccessToken: string, medium: string, address: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
     inviteUserById(userId: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
     invitedMembersCount(): bigint;
 /**
@@ -30401,6 +30458,11 @@ export interface RoomLike {
  */
     relationsJson(eventId: string, relationType: string | undefined, eventType: string | undefined, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<Array<string>>;
 /**
+ * Like `relations_json`, a page at a time: pass the previous page's
+ * `next_token` to get the one after it.
+ */
+    relationsPageJson(eventId: string, relationType: string | undefined, eventType: string | undefined, from: string | undefined, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<RelationsPage>;
+/**
  * Removes the current room avatar
  */
     removeAvatar(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
@@ -30450,6 +30512,11 @@ export interface RoomLike {
  */
     roomEventsDebugString(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<Array<string>>;
     roomInfo(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<RoomInfo>;
+/**
+ * The type of the room from its creation event (`m.space`, say), if it
+ * has one.
+ */
+    roomType(): string | undefined;
 /**
  * Store the given `ComposerDraft` in the state store using the current
  * room id, as identifier.
@@ -31490,6 +31557,29 @@ private constructor(pointer: UniffiHandle) {
             /*rustFutureFunc:*/ () => {
                 return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_room_ignore_user(
                     uniffiTypeRoomObjectFactory.clonePointer(this),FfiConverterString.lower(userId, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_void,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_void,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_void,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_void,
+            /*liftFunc:*/ (_v) => {},
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
+ * Invites someone to the room by an email address (medium `email`) or
+ * phone number (`msisdn`), which the identity server looks up.
+ */
+    async inviteUserBy3pid(idServer: string, idAccessToken: string, medium: string, address: string, asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_room_invite_user_by_3pid(
+                    uniffiTypeRoomObjectFactory.clonePointer(this),FfiConverterString.lower(idServer, nativeModule().rustbuffer_alloc),FfiConverterString.lower(idAccessToken, nativeModule().rustbuffer_alloc),FfiConverterString.lower(medium, nativeModule().rustbuffer_alloc),FfiConverterString.lower(address, nativeModule().rustbuffer_alloc)
                 );
             },
             /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_void,
@@ -32593,6 +32683,43 @@ private constructor(pointer: UniffiHandle) {
     }
     
 /**
+ * Like `relations_json`, a page at a time: pass the previous page's
+ * `next_token` to get the one after it.
+ */
+    async relationsPageJson(eventId: string, relationType: string | undefined, eventType: string | undefined, from: string | undefined, asyncOpts_?: { signal: AbortSignal }): Promise<RelationsPage> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_room_relations_page_json(
+                    uniffiTypeRoomObjectFactory.clonePointer(this),FfiConverterString.lower(eventId, nativeModule().rustbuffer_alloc),FfiConverterOptionalString.lower(relationType, nativeModule().rustbuffer_alloc),FfiConverterOptionalString.lower(eventType, nativeModule().rustbuffer_alloc),FfiConverterOptionalString.lower(from, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_rust_buffer,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_rust_buffer,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_rust_buffer,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_rust_buffer,
+            // Async returns always go through the JS-side converter: the
+            // FFI symbol returns the future handle (u64), and the user-level
+            // RustBuffer comes back via the shared `rust_future_complete_*`
+            // export. The bytes the runtime hands back must be deserialized
+            // here using the per-callable return-type converter.
+            // Borrowed view over foreign memory: the call site owns the free,
+            // as on the sync paths. Unconditional — a no-op where buffers are
+            // already JS-owned.
+            /*liftFunc:*/ (__rb) => {
+                try {
+                    return FfiConverterTypeRelationsPage.lift(__rb);
+                } finally {
+                    nativeModule().rustbuffer_free(__rb);
+                }
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
  * Removes the current room avatar
  */
     async removeAvatar(asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
@@ -32822,6 +32949,26 @@ private constructor(pointer: UniffiHandle) {
             /*asyncOpts:*/ asyncOpts_,
             /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
         );
+    }
+    
+/**
+ * The type of the room from its creation event (`m.space`, say), if it
+ * has one.
+ */
+    roomType(): string | undefined {
+    const __rb: Uint8Array = uniffiCaller.rustCall(
+            /*caller:*/ (callStatus) => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_room_room_type(
+                uniffiTypeRoomObjectFactory.clonePointer(this),
+                callStatus);
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+    );
+    try {
+        return FfiConverterOptionalString.lift(__rb);
+    } finally {
+        nativeModule().rustbuffer_free(__rb);
+    }
     }
     
 /**
@@ -49393,6 +49540,68 @@ const uniffiCallbackInterfaceDehydratedDeviceEventListener: { vtable: any; regis
 const FfiConverterTypeDehydratedDeviceEventListener = new FfiConverterCallback<DehydratedDeviceEventListener>();
 
 
+/**
+ * Told when devices are first seen or change (a user signs in somewhere
+ * new, say, or a device becomes cross-signed).
+ */
+export interface DevicesUpdatesListener {
+    
+/**
+ * Devices of these users are new or have changed.
+ */
+    onUpdate(userIds: Array<string>): void;
+}
+
+
+
+// Put the implementation in a struct so we don't pollute the top-level namespace
+const uniffiCallbackInterfaceDevicesUpdatesListener: { vtable: any; register: () => void; } = {
+    // Create the VTable using a series of closures.
+    // ts automatically converts these into C callback functions.
+    vtable: {
+        on_update: (
+            uniffiHandle: bigint,
+            userIds: Uint8Array,) => {
+            const uniffiMakeCall = 
+            ()
+            : void => {
+                const jsCallback = FfiConverterTypeDevicesUpdatesListener.lift(uniffiHandle);
+                return jsCallback.onUpdate(
+                    FfiConverterSequenceString.lift(userIds)
+                )
+            };
+            const uniffiResult = UniffiResult.ready<void>();
+            const uniffiHandleSuccess = (obj: any) => {};
+            const uniffiHandleError = (code: number, errBuf: UniffiByteArray) => {
+                UniffiResult.writeError(uniffiResult, code, errBuf);
+            };
+            uniffiTraitInterfaceCall(
+                /*makeCall:*/ uniffiMakeCall,
+                /*handleSuccess:*/ uniffiHandleSuccess,
+                /*handleError:*/ uniffiHandleError,
+                /*lowerString:*/ FfiConverterString.lower.bind(FfiConverterString),
+                /*alloc:*/ nativeModule().rustbuffer_alloc,
+            )
+            return uniffiResult;
+        },
+        uniffi_free: (uniffiHandle: UniffiHandle): void => {
+            // this will throw a stale handle error if the handle isn't found.
+            FfiConverterTypeDevicesUpdatesListener.drop(uniffiHandle);
+        },
+        uniffi_clone: (uniffiHandle: UniffiHandle): UniffiHandle => {
+            return FfiConverterTypeDevicesUpdatesListener.clone(uniffiHandle);
+        }
+    },
+    register: () => {nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_init_callback_vtable_devicesupdateslistener(
+            uniffiCallbackInterfaceDevicesUpdatesListener.vtable
+        );
+    },
+};
+
+// FfiConverter protocol for callback interfaces
+const FfiConverterTypeDevicesUpdatesListener = new FfiConverterCallback<DevicesUpdatesListener>();
+
+
 export interface EnableRecoveryProgressListener {
     
     onUpdate(status: EnableRecoveryProgress): void;
@@ -50291,6 +50500,11 @@ export interface EncryptionLike {
  * device is on the server or the server does not implement MSC3814.
  */
     deleteDehydratedDevice(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
+/**
+ * Calls the listener whenever devices are first seen or change, for as
+ * long as the returned handle is kept.
+ */
+    devicesUpdatesListener(listener: DevicesUpdatesListener): TaskHandleLike;
     disableRecovery(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
 /**
  * Get the public ed25519 key of our own device. This is usually what is
@@ -50607,6 +50821,22 @@ private constructor(pointer: UniffiHandle) {
             /*asyncOpts:*/ asyncOpts_,
             /*errorHandler:*/ FfiConverterTypeDehydratedDeviceError.lift.bind(FfiConverterTypeDehydratedDeviceError)
         );
+    }
+    
+/**
+ * Calls the listener whenever devices are first seen or change, for as
+ * long as the returned handle is kept.
+ */
+    devicesUpdatesListener(listener: DevicesUpdatesListener): TaskHandleLike {
+    return FfiConverterTypeTaskHandle.lift(uniffiCaller.rustCall(
+            /*caller:*/ (callStatus) => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_encryption_devices_updates_listener(
+                uniffiTypeEncryptionObjectFactory.clonePointer(this),
+        FfiConverterTypeDevicesUpdatesListener.lower(listener, nativeModule().rustbuffer_alloc),
+                callStatus);
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+    ));
     }
     
     async disableRecovery(asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
@@ -57695,6 +57925,12 @@ export interface ClientLike {
  */
     awaitRoomRemoteEcho(roomId: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<RoomLike>;
 /**
+ * Has the homeserver bind a validated email address or phone number of
+ * the account to the user's Matrix ID on an identity server, so that
+ * others can find them by it.
+ */
+    bindThreepid(clientSecret: string, idServer: string, idAccessToken: string, sid: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
+/**
  * Retrieves an avatar cached from a previous call to [`Self::avatar_url`].
  */
     cachedAvatarUrl(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<string | undefined>;
@@ -58142,6 +58378,10 @@ export interface ClientLike {
  */
     presence(userId: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<UserPresence>;
 /**
+ * The time zone a user has set in their profile (`m.tz`), if any.
+ */
+    profileTimeZone(userId: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<string | undefined>;
+/**
  * Asks the homeserver for the user's push rules, as the JSON of the
  * `global` ruleset. Unlike the `m.push_rules` account data in the store,
  * this reflects a change as soon as it is made.
@@ -58463,6 +58703,11 @@ export interface ClientLike {
  */
     totalUnreadNotifications(): bigint;
     trackRecentlyVisitedRoom(room: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
+/**
+ * Has the homeserver remove such a binding from an identity server (the
+ * one it was bound on, if none is given).
+ */
+    unbindThreepid(medium: string, address: string, idServer: string | undefined, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
     unignoreUser(userId: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
     uploadAvatar(mimeType: string, data: ArrayBuffer, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
     uploadMedia(mimeType: string, data: ArrayBuffer, progressWatcher: ProgressWatcher | undefined, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<string>;
@@ -58773,6 +59018,30 @@ private constructor(pointer: UniffiHandle) {
             // export. The bytes the runtime hands back must be deserialized
             // here using the per-callable return-type converter.
             /*liftFunc:*/ FfiConverterTypeRoom.lift.bind(FfiConverterTypeRoom),
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
+ * Has the homeserver bind a validated email address or phone number of
+ * the account to the user's Matrix ID on an identity server, so that
+ * others can find them by it.
+ */
+    async bindThreepid(clientSecret: string, idServer: string, idAccessToken: string, sid: string, asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_bind_threepid(
+                    uniffiTypeClientObjectFactory.clonePointer(this),FfiConverterString.lower(clientSecret, nativeModule().rustbuffer_alloc),FfiConverterString.lower(idServer, nativeModule().rustbuffer_alloc),FfiConverterString.lower(idAccessToken, nativeModule().rustbuffer_alloc),FfiConverterString.lower(sid, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_void,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_void,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_void,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_void,
+            /*liftFunc:*/ (_v) => {},
             /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
             /*asyncOpts:*/ asyncOpts_,
             /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
@@ -61025,6 +61294,42 @@ private constructor(pointer: UniffiHandle) {
     }
     
 /**
+ * The time zone a user has set in their profile (`m.tz`), if any.
+ */
+    async profileTimeZone(userId: string, asyncOpts_?: { signal: AbortSignal }): Promise<string | undefined> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_profile_time_zone(
+                    uniffiTypeClientObjectFactory.clonePointer(this),FfiConverterString.lower(userId, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_rust_buffer,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_rust_buffer,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_rust_buffer,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_rust_buffer,
+            // Async returns always go through the JS-side converter: the
+            // FFI symbol returns the future handle (u64), and the user-level
+            // RustBuffer comes back via the shared `rust_future_complete_*`
+            // export. The bytes the runtime hands back must be deserialized
+            // here using the per-callable return-type converter.
+            // Borrowed view over foreign memory: the call site owns the free,
+            // as on the sync paths. Unconditional — a no-op where buffers are
+            // already JS-owned.
+            /*liftFunc:*/ (__rb) => {
+                try {
+                    return FfiConverterOptionalString.lift(__rb);
+                } finally {
+                    nativeModule().rustbuffer_free(__rb);
+                }
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
  * Asks the homeserver for the user's push rules, as the JSON of the
  * `global` ruleset. Unlike the `m.push_rules` account data in the store,
  * this reflects a change as soon as it is made.
@@ -62560,6 +62865,29 @@ private constructor(pointer: UniffiHandle) {
             /*rustFutureFunc:*/ () => {
                 return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_track_recently_visited_room(
                     uniffiTypeClientObjectFactory.clonePointer(this),FfiConverterString.lower(room, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_void,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_void,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_void,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_void,
+            /*liftFunc:*/ (_v) => {},
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
+ * Has the homeserver remove such a binding from an identity server (the
+ * one it was bound on, if none is given).
+ */
+    async unbindThreepid(medium: string, address: string, idServer: string | undefined, asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_unbind_threepid(
+                    uniffiTypeClientObjectFactory.clonePointer(this),FfiConverterString.lower(medium, nativeModule().rustbuffer_alloc),FfiConverterString.lower(address, nativeModule().rustbuffer_alloc),FfiConverterOptionalString.lower(idServer, nativeModule().rustbuffer_alloc)
                 );
             },
             /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_void,
@@ -64773,6 +65101,9 @@ function uniffiEnsureInitialized() {
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_await_room_remote_echo() !== 5412) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_await_room_remote_echo");
     }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_bind_threepid() !== 57582) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_bind_threepid");
+    }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_cached_avatar_url() !== 30527) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_cached_avatar_url");
     }
@@ -65010,6 +65341,9 @@ function uniffiEnsureInitialized() {
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_presence() !== 41060) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_presence");
     }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_profile_time_zone() !== 34266) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_profile_time_zone");
+    }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_push_rules_json() !== 53129) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_push_rules_json");
     }
@@ -65187,6 +65521,9 @@ function uniffiEnsureInitialized() {
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_track_recently_visited_room() !== 40498) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_track_recently_visited_room");
     }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_unbind_threepid() !== 17542) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_unbind_threepid");
+    }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_unignore_user() !== 2582) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_unignore_user");
     }
@@ -65330,6 +65667,9 @@ function uniffiEnsureInitialized() {
     }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_delete_dehydrated_device() !== 64344) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_encryption_delete_dehydrated_device");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_devices_updates_listener() !== 3314) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_encryption_devices_updates_listener");
     }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_disable_recovery() !== 43697) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_encryption_disable_recovery");
@@ -65733,6 +66073,9 @@ function uniffiEnsureInitialized() {
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_ignore_user() !== 45929) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_ignore_user");
     }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_invite_user_by_3pid() !== 31413) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_invite_user_by_3pid");
+    }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_invite_user_by_id() !== 27806) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_invite_user_by_id");
     }
@@ -65850,6 +66193,9 @@ function uniffiEnsureInitialized() {
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_relations_json() !== 55234) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_relations_json");
     }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_relations_page_json() !== 22688) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_relations_page_json");
+    }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_remove_avatar() !== 3551) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_remove_avatar");
     }
@@ -65873,6 +66219,9 @@ function uniffiEnsureInitialized() {
     }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_room_info() !== 62185) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_room_info");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_room_type() !== 29009) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_room_type");
     }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_save_composer_draft() !== 42915) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_save_composer_draft");
@@ -66518,6 +66867,7 @@ function uniffiEnsureInitialized() {
     uniffiCallbackInterfaceSyncServiceStateObserver.register();
     uniffiCallbackInterfaceBackupStateListener.register();
     uniffiCallbackInterfaceDehydratedDeviceEventListener.register();
+    uniffiCallbackInterfaceDevicesUpdatesListener.register();
     uniffiCallbackInterfaceEnableRecoveryProgressListener.register();
     uniffiCallbackInterfaceRecoveryStateListener.register();
     uniffiCallbackInterfaceVerificationStateListener.register();
@@ -66727,6 +67077,7 @@ export default Object.freeze({
     FfiConverterTypeRecoveryError,
     FfiConverterTypeRecoveryState,
     FfiConverterTypeRelationType,
+    FfiConverterTypeRelationsPage,
     FfiConverterTypeRequestConfig,
     FfiConverterTypeResolvedRoomAlias,
     FfiConverterTypeRoom,
