@@ -33,6 +33,9 @@ echo "==> Step 5b: Removing forced experimental-search from matrix-sdk-ffi..."
 # pulls in tantivy (and rustix/errno) that can't build for wasm32-unknown-unknown.
 # The ffi's own experimental-search feature still gates it, and is off for web.
 sed -i.bak '/^matrix-sdk = /,/^\] }/{/^    "experimental-search"$/d;}' rust_modules/matrix-rust-sdk/bindings/matrix-sdk-ffi/Cargo.toml
+# The wasm build logs to the browser's console (see init_platform in patch 0003), which needs web-sys's console.
+sed -i.bak 's/^console_error_panic_hook = .*/&\
+web-sys = { workspace = true, features = ["console"] }/' rust_modules/matrix-rust-sdk/bindings/matrix-sdk-ffi/Cargo.toml
 echo "    ✓ Removed"
 
 echo "==> Step 5c: Pinning tracing-appender to 0.2.4..."

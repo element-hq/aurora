@@ -1013,6 +1013,53 @@ index e02266e3d..49f6b0a63 100644
  mod http_client;
  mod identity_status_change;
  mod live_locations_observer;
+diff --git a/bindings/matrix-sdk-ffi/src/platform/mod.rs b/bindings/matrix-sdk-ffi/src/platform/mod.rs
+index daa1a5a58..70b896c32 100644
+--- a/bindings/matrix-sdk-ffi/src/platform/mod.rs
++++ b/bindings/matrix-sdk-ffi/src/platform/mod.rs
+@@ -690,6 +690,42 @@ pub fn init_platform(
+     #[cfg(all(feature = "js", target_family = "wasm"))]
+     {
+         console_error_panic_hook::set_once();
++
++        if config.write_to_stdout_or_system {
++            /// Writes each log line to the browser's console.
++            struct ConsoleWriter(Vec<u8>);
++
++            impl std::io::Write for ConsoleWriter {
++                fn write(&mut self, buf: &[u8]) -> std::io::Result<usize> {
++                    self.0.extend_from_slice(buf);
++                    Ok(buf.len())
++                }
++
++                fn flush(&mut self) -> std::io::Result<()> {
++                    Ok(())
++                }
++            }
++
++            impl Drop for ConsoleWriter {
++                fn drop(&mut self) {
++                    let line = String::from_utf8_lossy(&self.0);
++                    web_sys::console::log_1(&web_sys::wasm_bindgen::JsValue::from_str(
++                        line.trim_end(),
++                    ));
++                }
++            }
++
++            // No timestamps: there is no system clock here, and the console adds its own.
++            let _ = tracing_subscriber::registry()
++                .with(EnvFilter::new(build_tracing_filter(&config)))
++                .with(
++                    fmt::layer()
++                        .with_ansi(false)
++                        .without_time()
++                        .with_writer(|| ConsoleWriter(Vec::new())),
++                )
++                .try_init();
++        }
+     }
+     #[cfg(not(target_family = "wasm"))]
+     {
 diff --git a/bindings/matrix-sdk-ffi/src/room/mod.rs b/bindings/matrix-sdk-ffi/src/room/mod.rs
 index 6d0cd5df5..d291e4871 100644
 --- a/bindings/matrix-sdk-ffi/src/room/mod.rs
