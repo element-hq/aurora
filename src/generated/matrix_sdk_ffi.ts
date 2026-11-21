@@ -58142,6 +58142,12 @@ export interface ClientLike {
  */
     presence(userId: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<UserPresence>;
 /**
+ * Asks the homeserver for the user's push rules, as the JSON of the
+ * `global` ruleset. Unlike the `m.push_rules` account data in the store,
+ * this reflects a change as soon as it is made.
+ */
+    pushRulesJson(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<string>;
+/**
  * Asks the homeserver for the user's pushers, as a JSON array.
  */
     pushersJson(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<string>;
@@ -61008,6 +61014,44 @@ private constructor(pointer: UniffiHandle) {
             /*liftFunc:*/ (__rb) => {
                 try {
                     return FfiConverterTypeUserPresence.lift(__rb);
+                } finally {
+                    nativeModule().rustbuffer_free(__rb);
+                }
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
+ * Asks the homeserver for the user's push rules, as the JSON of the
+ * `global` ruleset. Unlike the `m.push_rules` account data in the store,
+ * this reflects a change as soon as it is made.
+ */
+    async pushRulesJson(asyncOpts_?: { signal: AbortSignal }): Promise<string> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_push_rules_json(
+                    uniffiTypeClientObjectFactory.clonePointer(this)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_rust_buffer,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_rust_buffer,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_rust_buffer,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_rust_buffer,
+            // Async returns always go through the JS-side converter: the
+            // FFI symbol returns the future handle (u64), and the user-level
+            // RustBuffer comes back via the shared `rust_future_complete_*`
+            // export. The bytes the runtime hands back must be deserialized
+            // here using the per-callable return-type converter.
+            // Borrowed view over foreign memory: the call site owns the free,
+            // as on the sync paths. Unconditional — a no-op where buffers are
+            // already JS-owned.
+            /*liftFunc:*/ (__rb) => {
+                try {
+                    return FfiConverterString.lift(__rb);
                 } finally {
                     nativeModule().rustbuffer_free(__rb);
                 }
@@ -64965,6 +65009,9 @@ function uniffiEnsureInitialized() {
     }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_presence() !== 41060) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_presence");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_push_rules_json() !== 53129) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_push_rules_json");
     }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_pushers_json() !== 17507) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_pushers_json");

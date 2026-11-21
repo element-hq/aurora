@@ -34,7 +34,7 @@ index 474d3d310..ba58ff7a2 100644
      pub fn supports_password_login(&self) -> bool {
          self.supports_password_login
 diff --git a/bindings/matrix-sdk-ffi/src/client.rs b/bindings/matrix-sdk-ffi/src/client.rs
-index 67d875724..20a0aa055 100644
+index 67d875724..71ac89580 100644
 --- a/bindings/matrix-sdk-ffi/src/client.rs
 +++ b/bindings/matrix-sdk-ffi/src/client.rs
 @@ -571,6 +571,21 @@ impl Client {
@@ -67,7 +67,7 @@ index 67d875724..20a0aa055 100644
              supports_password_login,
          })
      }
-@@ -3732,3 +3748,693 @@ mod tests {
+@@ -3732,3 +3748,701 @@ mod tests {
          assert!(converted.call.is_none());
      }
  }
@@ -660,6 +660,14 @@ index 67d875724..20a0aa055 100644
 +        let response = self.inner.send(request).await?;
 +        Ok(json!({ "next_token": response.next_token, "notifications": response.notifications })
 +            .to_string())
++    }
++
++    /// Asks the homeserver for the user's push rules, as the JSON of the
++    /// `global` ruleset. Unlike the `m.push_rules` account data in the store,
++    /// this reflects a change as soon as it is made.
++    pub async fn push_rules_json(&self) -> Result<String, ClientError> {
++        let request = ruma::api::client::push::get_pushrules_all::v3::Request::new();
++        Ok(serde_json::to_string(&self.inner.send(request).await?.global)?)
 +    }
 +
 +    /// Enables or disables a push rule of a kind (`override`, `content`...).
