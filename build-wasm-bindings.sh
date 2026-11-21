@@ -10,6 +10,10 @@ echo "==> Step 1: Cleaning..."
 pnpm ubrn:clean
 
 echo "==> Step 2: Checking out..."
+# Our modifications to an existing checkout stop git switching to a new rev
+if [ -d rust_modules/matrix-rust-sdk ]; then
+    git -C rust_modules/matrix-rust-sdk reset --hard HEAD
+fi
 pnpm ubrn:checkout
 
 echo "==> Step 3: Resetting any modifications after checkout..."
@@ -19,14 +23,6 @@ echo "    ✓ Repository clean"
 echo "==> Step 4: Fetching full git history for patch application..."
 # `git apply` does not need the history, so carry on if this fails
 git -C rust_modules/matrix-rust-sdk fetch --unshallow || echo "    ⚠ Could not fetch the full history"
-
-echo "==> Step 5: Applying wasm SystemTime fix patch..."
-if git -C rust_modules/matrix-rust-sdk apply ../../patches/0002-Fix-wasm-SystemTime-in-automatic-call-status.patch; then
-    echo "    ✓ Patch applied (wasm-safe timestamp in automatic_call_status)"
-else
-    echo "    ✗ Patch failed!"
-    exit 1
-fi
 
 echo "==> Step 5a: Applying the bindings Element Web needs..."
 git -C rust_modules/matrix-rust-sdk apply ../../patches/0003-Add-bindings-element-web-needs.patch

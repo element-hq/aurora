@@ -8,3 +8,6 @@ minimumReleaseAgeExclude:
 overrides:
   # vite-plugin-top-level-await 1.6.0 fails with "missing field `type`" on newer @swc/core
   '@swc/core': '~1.15.0'
+patchedDependencies:
+  # Ports the bindings generator to uniffi 0.32, which matrix-rust-sdk now uses
+  uniffi-bindgen-react-native: patches/uniffi-bindgen-react-native-uniffi-0.32.patch

@@ -282,12 +282,12 @@ export const EventTile: React.FC<EventTileProp> = ({
         const canHaveReactions =
             !MsgLikeKind.Redacted.instanceOf(message.kind) &&
             !MsgLikeKind.UnableToDecrypt.instanceOf(message.kind);
-        if (canHaveReactions && message.reactions.length > 0) {
+        if (canHaveReactions && event.reactions.length > 0) {
             footer = (
                 <ReactionsRow
                     tileId={id}
                     itemId={event.eventOrTransactionId}
-                    reactions={message.reactions}
+                    reactions={event.reactions}
                     context={reactions}
                 />
             );
@@ -318,7 +318,7 @@ export const EventTile: React.FC<EventTileProp> = ({
                                     itemId: event.eventOrTransactionId,
                                     anchor,
                                     selected: ownReactionKeys(
-                                        message.reactions,
+                                        event.reactions,
                                         reactions.ownUserId,
                                     ),
                                 });

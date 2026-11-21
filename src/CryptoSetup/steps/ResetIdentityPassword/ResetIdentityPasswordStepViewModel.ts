@@ -83,6 +83,7 @@ export class ResetIdentityPasswordStepViewModel
             const passwordDetails = AuthDataPasswordDetails.create({
                 identifier: this.props.userId,
                 password: password,
+                session: this.props.resetHandle.authType().inner.info.session,
             });
 
             const authData = AuthData.Password.new({ passwordDetails });

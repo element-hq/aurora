@@ -8,6 +8,7 @@
 import { BaseViewModel } from "@element-hq/web-shared-components";
 import type { FlowStepViewModel } from "../utils/FlowStepViewModel";
 import type { ClientInterface, EncryptionInterface } from "../index.web";
+import { AuthData } from "../index.web";
 import {
     ConfirmIdentityStepViewModel,
     IdentityConfirmationAction,
@@ -413,7 +414,11 @@ export class EncryptionFlowViewModel
 
             // Race between OIDC completion and user action on warning screen
             const oidcPromise = handle
-                .reset(undefined)
+                .reset(
+                    AuthData.OAuth.new({
+                        session: handle.authType().inner.info.session,
+                    }),
+                )
                 .then(() => ({ type: "oidc-complete" as const }))
                 .catch((e) => {
                     printRustError("OIDC reset failed", e);

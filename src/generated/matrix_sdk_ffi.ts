@@ -4,9 +4,9 @@
 /* eslint-disable */
 // @ts-nocheck
 import * as wasmBundle from "./wasm-bindgen/index.js";
-import { type UniffiRustFutureContinuationCallback, type UniffiForeignFutureDroppedCallback, type UniffiForeignFutureDroppedCallbackStruct, type UniffiVTableCallbackInterfaceMatrixSdkFfiAccountDataListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiBackupStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiBackupSteadyStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiBeaconInfoListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiCallDeclineListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiClientDelegate, type UniffiVTableCallbackInterfaceMatrixSdkFfiClientSessionDelegate, type UniffiVTableCallbackInterfaceMatrixSdkFfiDehydratedDeviceEventListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiDevicesUpdatesListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiDuplicateKeyUploadErrorListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiEnableRecoveryProgressListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiGeneratedQrLoginProgressListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiGrantGeneratedQrLoginProgressListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiGrantQrLoginProgressListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiIdentityStatusChangeListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiIgnoredUsersListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiKnockRequestsListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiLiveLocationsListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiMediaPreviewConfigListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiNotificationSettingsDelegate, type UniffiVTableCallbackInterfaceMatrixSdkFfiPaginationStatusListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiProfileListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiProgressWatcher, type UniffiVTableCallbackInterfaceMatrixSdkFfiQrLoginProgressListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRawEventListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRecoveryStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomAccountDataListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomDirectorySearchEntriesListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomEventJsonListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomInfoListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomListEntriesListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomListLoadingStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomListServiceStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomListServiceSyncIndicatorListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSendQueueListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSendQueueRoomErrorListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSendQueueRoomUpdateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSessionVerificationControllerDelegate, type UniffiVTableCallbackInterfaceMatrixSdkFfiSpaceRoomListEntriesListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSpaceRoomListPaginationStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSpaceRoomListSpaceListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSpaceServiceJoinedSpacesListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSpaceServiceSpaceFiltersListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSyncListenerV2, type UniffiVTableCallbackInterfaceMatrixSdkFfiSyncNotificationListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSyncServiceStateObserver, type UniffiVTableCallbackInterfaceMatrixSdkFfiThreadListEntriesListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiThreadListPaginationStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiTimelineListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiTypingNotificationsListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiUnableToDecryptDelegate, type UniffiVTableCallbackInterfaceMatrixSdkFfiVerificationStateListener, type UniffiForeignFutureResultRustBuffer, type UniffiForeignFutureCompleterustBuffer, type UniffiVTableCallbackInterfaceMatrixSdkFfiWidgetCapabilitiesProvider,
+import { type UniffiVTableCallbackInterfaceMatrixSdkFfiAccountDataListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiBackupStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiBackupSteadyStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiBeaconInfoListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiCallDeclineListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiClientDelegate, type UniffiVTableCallbackInterfaceMatrixSdkFfiClientSessionDelegate, type UniffiVTableCallbackInterfaceMatrixSdkFfiDehydratedDeviceEventListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiDevicesUpdatesListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiDuplicateKeyUploadErrorListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiEffectiveRetentionListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiEnableRecoveryProgressListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiGeneratedQrLoginProgressListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiGrantGeneratedQrLoginProgressListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiGrantQrLoginProgressListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiIdentityStatusChangeListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiIgnoredUsersListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiInvitePermissionListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiKnockRequestsListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiLiveLocationsListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiMediaPreviewConfigListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiNotificationSettingsDelegate, type UniffiVTableCallbackInterfaceMatrixSdkFfiPaginationStatusListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiProfileListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiProgressWatcher, type UniffiVTableCallbackInterfaceMatrixSdkFfiQrLoginProgressListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRawEventListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRecoveryStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomAccountDataListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomDirectorySearchEntriesListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomEventJsonListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomInfoListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomListEntriesListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomListLoadingStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomListServiceStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomListServiceSyncIndicatorListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomMessageLikeEventsListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomStateEventsListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSendQueueListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSendQueueRoomErrorListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSendQueueRoomUpdateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSessionVerificationControllerDelegate, type UniffiVTableCallbackInterfaceMatrixSdkFfiSpaceRoomListEntriesListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSpaceRoomListPaginationStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSpaceRoomListSpaceListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSpaceServiceJoinedSpacesListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSpaceServiceSpaceFiltersListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSyncListenerV2, type UniffiVTableCallbackInterfaceMatrixSdkFfiSyncNotificationListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiSyncServiceStateObserver, type UniffiVTableCallbackInterfaceMatrixSdkFfiThreadListEntriesListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiThreadListPaginationStateListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiTimelineListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiToDeviceMessageListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiTotalUnreadNotificationsListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiTypingNotificationsListener, type UniffiVTableCallbackInterfaceMatrixSdkFfiUnableToDecryptDelegate, type UniffiVTableCallbackInterfaceMatrixSdkFfiVerificationStateListener, type UniffiForeignFutureResultRustBuffer, type UniffiForeignFutureCompleterustBuffer, type UniffiForeignFutureDroppedCallback, type UniffiForeignFutureDroppedCallbackStruct, type UniffiVTableCallbackInterfaceMatrixSdkFfiWidgetCapabilitiesProvider, type UniffiRustFutureContinuationCallback,
 } from "./matrix_sdk_ffi-ffi";
-import { type OAuthAuthorizationDataLike, type RoomPowerLevelChanges, type ServerVendorInfo, type TileServerInfo, type VirtualElementCallWidgetConfig, type VirtualElementCallWidgetProperties, BackupDownloadStrategy, PaginationStatus, RoomMemberRole,
+import { type OAuthAuthorizationDataLike, type RoomPowerLevelChanges, type ServerVendorInfo, type TileServerInfo, type VirtualElementCallWidgetConfig, type VirtualElementCallWidgetProperties, BackupDownloadStrategy, PaginationStatus, RoomMemberRole, SearchBackfillStrategy,
 } from "./matrix_sdk";
 import { type MediaRetentionPolicy, DmRoomDefinition, EncryptionState,
 } from "./matrix_sdk_base";
@@ -23,7 +23,7 @@ import { MessageLikeEventType, RoomAccountDataEventType, StateEventType,
 import { type FfiConverter, type RustBufferAllocator, type UniffiByteArray, type UniffiDuration, type UniffiGcObject, type UniffiHandle, type UniffiObjectFactory, type UniffiReferenceHolder, type UniffiRustCallStatus, AbstractFfiConverterByteArray, Cursor, FfiConverterArray, FfiConverterArrayBuffer, FfiConverterBool, FfiConverterCallback, FfiConverterDuration, FfiConverterFloat32, FfiConverterFloat64, FfiConverterInt32, FfiConverterInt64, FfiConverterMap, FfiConverterObject, FfiConverterOptional, FfiConverterUInt16, FfiConverterUInt32, FfiConverterUInt64, FfiConverterUInt8, RustBuffer, UniffiAbstractObject, UniffiEnum, UniffiError, UniffiInternalError, UniffiResult, UniffiRustCaller, destructorGuardSymbol, pointerLiteralSymbol, uniffiCreateFfiConverterString, uniffiCreateRecord, uniffiRustCallAsync, uniffiTraitInterfaceCall, uniffiTraitInterfaceCallAsync, uniffiTraitInterfaceCallWithError, uniffiTypeNameSymbol, variantOrdinalSymbol,
 } from "@ubjs/core";
 import uniffiMatrixSdkModule from "./matrix_sdk";
-const { FfiConverterTypeBackupDownloadStrategy, FfiConverterTypeOAuthAuthorizationData, FfiConverterTypePaginationStatus, FfiConverterTypeRoomMemberRole, FfiConverterTypeRoomPowerLevelChanges, FfiConverterTypeServerVendorInfo, FfiConverterTypeTileServerInfo, FfiConverterTypeVirtualElementCallWidgetConfig, FfiConverterTypeVirtualElementCallWidgetProperties } = uniffiMatrixSdkModule.converters;
+const { FfiConverterTypeBackupDownloadStrategy, FfiConverterTypeOAuthAuthorizationData, FfiConverterTypePaginationStatus, FfiConverterTypeRoomMemberRole, FfiConverterTypeRoomPowerLevelChanges, FfiConverterTypeSearchBackfillStrategy, FfiConverterTypeServerVendorInfo, FfiConverterTypeTileServerInfo, FfiConverterTypeVirtualElementCallWidgetConfig, FfiConverterTypeVirtualElementCallWidgetProperties } = uniffiMatrixSdkModule.converters;
 import uniffiMatrixSdkBaseModule from "./matrix_sdk_base";
 const { FfiConverterTypeDmRoomDefinition, FfiConverterTypeEncryptionState, FfiConverterTypeMediaRetentionPolicy } = uniffiMatrixSdkBaseModule.converters;
 import uniffiMatrixSdkCommonModule from "./matrix_sdk_common";
@@ -112,13 +112,14 @@ export function genTransactionId(): string {
     }
 
 /**
- * Create the actual url that can be used to setup the WebView or IFrame
- * that contains the widget.
+ * Create the actual url that can be used to setup the WebView or IFrame that
+ * contains the widget.
  *
  * # Arguments
- * * `widget_settings` - The widget settings to generate the url for.
- * * `room` - A Matrix room which is used to query the logged in username
- * * `props` - Properties from the client that can be used by a widget to adapt
+ *
+ * - `widget_settings` - The widget settings to generate the url for.
+ * - `room` - A Matrix room which is used to query the logged in username
+ * - `props` - Properties from the client that can be used by a widget to adapt
  * to the client. e.g. language, font-scale...
  */
 export async function generateWebviewUrl(widgetSettings: WidgetSettings, room: RoomLike, props: ClientProperties, asyncOpts_?: { signal: AbortSignal }): Promise<string> /*throws*/ {
@@ -385,18 +386,17 @@ export function messageEventContentNew(msgtype: MessageType): RoomMessageEventCo
     }
 
 /**
- * `WidgetSettings` are usually created from a state event.
- * (currently unimplemented)
+ * `WidgetSettings` are usually created from a state event. (currently
+ * unimplemented)
  *
- * In some cases the client wants to create custom `WidgetSettings`
- * for specific rooms based on other conditions.
- * This function returns a `WidgetSettings` object which can be used
- * to setup a widget using `run_client_widget_api`
- * and to generate the correct url for the widget.
+ * In some cases the client wants to create custom `WidgetSettings` for
+ * specific rooms based on other conditions. This function returns a
+ * `WidgetSettings` object which can be used to setup a widget using
+ * `run_client_widget_api` and to generate the correct url for the widget.
  *
  * # Arguments
  *
- * * `props` - A struct containing the configuration parameters for a element
+ * - `props` - A struct containing the configuration parameters for a element
  * call widget.
  */
 export function newVirtualElementCallWidget(props: VirtualElementCallWidgetProperties, config: VirtualElementCallWidgetConfig): WidgetSettings /*throws*/ {
@@ -418,8 +418,8 @@ export function newVirtualElementCallWidget(props: VirtualElementCallWidgetPrope
     }
 
 /**
- * Parse a matrix entity from a given URI, be it either
- * a `matrix.to` link or a `matrix:` URI
+ * Parse a matrix entity from a given URI, be it either a `matrix.to` link or a
+ * `matrix:` URI
  */
 export function parseMatrixEntityFrom(uri: string): MatrixEntity | undefined {
     const __rb: Uint8Array = uniffiCaller.rustCall(
@@ -559,8 +559,8 @@ export function suggestedRoleForPowerLevel(powerLevel: PowerLevel): RoomMemberRo
 /**
  * Progress of an operation in abstract units.
  *
- * Contrary to [`TransmissionProgress`], this allows tracking the progress
- * of sending or receiving a payload in estimated pseudo units representing a
+ * Contrary to [`TransmissionProgress`], this allows tracking the progress of
+ * sending or receiving a payload in estimated pseudo units representing a
  * percentage. This is helpful in cases where the exact progress in bytes isn't
  * known, for instance, because encryption (which changes the size) happens on
  * the fly.
@@ -1217,7 +1217,11 @@ export type AuthDataPasswordDetails = {
     /**
      * The plaintext password.
      */
-    password: string
+    password: string,
+    /**
+     * The UIAA session token.
+     */
+    session: string
 }
 
 /**
@@ -1242,16 +1246,19 @@ const FfiConverterTypeAuthDataPasswordDetails = (() => {
         readFromCursor(c: Cursor): TypeName {
             return {
                 identifier: FfiConverterString.readFromCursor(c), 
-                password: FfiConverterString.readFromCursor(c)
+                password: FfiConverterString.readFromCursor(c), 
+                session: FfiConverterString.readFromCursor(c)
             };
         }
         writeIntoCursor(value: TypeName, c: Cursor): void {
             FfiConverterString.writeIntoCursor(value.identifier, c);
             FfiConverterString.writeIntoCursor(value.password, c);
+            FfiConverterString.writeIntoCursor(value.session, c);
         }
         allocationSize(value: TypeName): number {
             return FfiConverterString.allocationSize(value.identifier) +
-             FfiConverterString.allocationSize(value.password);
+             FfiConverterString.allocationSize(value.password) +
+             FfiConverterString.allocationSize(value.session);
             
         }
     };
@@ -1271,8 +1278,8 @@ const FfiConverterTypeTimestamp = FfiConverterUInt64;
  */
 export type BeaconInfo = {
     /**
-     * The geo URI carrying the user's coordinates
-     * (e.g. `"geo:51.5008,0.1247;u=35"`).
+     * The geo URI carrying the user's coordinates (e.g.
+     * `"geo:51.5008,0.1247;u=35"`).
      */
     geoUri: string,
     /**
@@ -3063,8 +3070,7 @@ Readonly<{key: string}>
     };
     /**
      * Takes into account the current power levels in the room, ensuring the
-     * sender of the event has high enough power to trigger the
-     * notification.
+     * sender of the event has high enough power to trigger the notification.
      */
     class SenderNotificationPermission_ extends UniffiEnum implements SenderNotificationPermission__interface {
         /**
@@ -4006,8 +4012,8 @@ Readonly<{rules: Array<AllowRule>}>
     };
     /**
      * Users can join the room if they are invited, or if they meet any of the
-     * conditions described in a set of [`AllowRule`]s, or they can request
-     * an invite to the room.
+     * conditions described in a set of [`AllowRule`]s, or they can request an
+     * invite to the room.
      */
     class KnockRestricted_ extends UniffiEnum implements KnockRestricted__interface {
         /**
@@ -4207,7 +4213,7 @@ export const RoomHistoryVisibility = (() => {
      * they were invited onwards.
      *
      * Events stop being accessible when the member's state changes to
-     * something other than *invite* or *join*.
+     * something other than _invite_ or _join_.
      */
     class Invited_ extends UniffiEnum implements Invited__interface {
         /**
@@ -4235,9 +4241,8 @@ export const RoomHistoryVisibility = (() => {
     };
     /**
      * Previous events are accessible to newly joined members from the point
-     * they joined the room onwards.
-     * Events stop being accessible when the member's state changes to
-     * something other than *join*.
+     * they joined the room onwards. Events stop being accessible when the
+     * member's state changes to something other than _join_.
      */
     class Joined_ extends UniffiEnum implements Joined__interface {
         /**
@@ -5788,11 +5793,11 @@ export type LiveLocationContent = {
      */
     isLive: boolean,
     /**
-     * The timestamp when this live location sharing session started
-     * (from the `org.matrix.msc3488.ts` field of the originating
-     * `beacon_info` state event).
+     * The timestamp when this live location sharing session started (from the
+     * `org.matrix.msc3488.ts` field of the originating `beacon_info` state
+     * event).
      *
-     * This marks the *beginning* of the session. The session expires at
+     * This marks the _beginning_ of the session. The session expires at
      * `ts + timeout_ms`.
      */
     ts: Timestamp,
@@ -5805,8 +5810,8 @@ export type LiveLocationContent = {
      */
     timeoutMs: bigint,
     /**
-     * The asset type of the beacon (e.g. `Sender` for the user's own
-     * location, `Pin` for a fixed point of interest).
+     * The asset type of the beacon (e.g. `Sender` for the user's own location,
+     * `Pin` for a fixed point of interest).
      */
     assetType: AssetType,
     /**
@@ -6256,92 +6261,6 @@ const FfiConverterTypeMsgLikeKind = (() => {
             }
         }
     }
-    return new FFIConverter();
-})();
-
-export type ReactionSenderData = {
-    senderId: string,
-    timestamp: Timestamp
-}
-
-/**
- * Generated factory for {@link ReactionSenderData} record objects.
- */
-export const ReactionSenderData = (() => {
-    const defaults = () => ({
-    });
-    const create = (() => {
-        return uniffiCreateRecord<ReactionSenderData, ReturnType<typeof defaults>>(defaults);
-    })();
-    return Object.freeze({
-        create,
-        new: create,
-        defaults: () => Object.freeze(defaults()) as Partial<ReactionSenderData>,
-    });
-})();
-
-const FfiConverterTypeReactionSenderData = (() => {
-    type TypeName = ReactionSenderData;
-    class FFIConverter extends AbstractFfiConverterByteArray<TypeName> {
-        readFromCursor(c: Cursor): TypeName {
-            return {
-                senderId: FfiConverterString.readFromCursor(c), 
-                timestamp: FfiConverterTypeTimestamp.readFromCursor(c)
-            };
-        }
-        writeIntoCursor(value: TypeName, c: Cursor): void {
-            FfiConverterString.writeIntoCursor(value.senderId, c);
-            FfiConverterTypeTimestamp.writeIntoCursor(value.timestamp, c);
-        }
-        allocationSize(value: TypeName): number {
-            return FfiConverterString.allocationSize(value.senderId) +
-             FfiConverterTypeTimestamp.allocationSize(value.timestamp);
-            
-        }
-    };
-    return new FFIConverter();
-})();
-
-export type Reaction = {
-    key: string,
-    senders: Array<ReactionSenderData>
-}
-
-/**
- * Generated factory for {@link Reaction} record objects.
- */
-export const Reaction = (() => {
-    const defaults = () => ({
-    });
-    const create = (() => {
-        return uniffiCreateRecord<Reaction, ReturnType<typeof defaults>>(defaults);
-    })();
-    return Object.freeze({
-        create,
-        new: create,
-        defaults: () => Object.freeze(defaults()) as Partial<Reaction>,
-    });
-})();
-
-const FfiConverterTypeReaction = (() => {
-    type TypeName = Reaction;
-    class FFIConverter extends AbstractFfiConverterByteArray<TypeName> {
-        readFromCursor(c: Cursor): TypeName {
-            return {
-                key: FfiConverterString.readFromCursor(c), 
-                senders: FfiConverterSequenceTypeReactionSenderData.readFromCursor(c)
-            };
-        }
-        writeIntoCursor(value: TypeName, c: Cursor): void {
-            FfiConverterString.writeIntoCursor(value.key, c);
-            FfiConverterSequenceTypeReactionSenderData.writeIntoCursor(value.senders, c);
-        }
-        allocationSize(value: TypeName): number {
-            return FfiConverterString.allocationSize(value.key) +
-             FfiConverterSequenceTypeReactionSenderData.allocationSize(value.senders);
-            
-        }
-    };
     return new FFIConverter();
 })();
 
@@ -7277,12 +7196,10 @@ const FfiConverterTypeThreadSummary = new FfiConverterObject(uniffiTypeThreadSum
 
 /**
  * A special kind of [`super::TimelineItemContent`] that groups together
- * different room message types with their respective reactions and thread
- * information.
+ * different room message types with their thread information.
  */
 export type MsgLikeContent = {
     kind: MsgLikeKind,
-    reactions: Array<Reaction>,
     /**
      * The event this message is replying to, if any.
      */
@@ -7319,7 +7236,6 @@ const FfiConverterTypeMsgLikeContent = (() => {
         readFromCursor(c: Cursor): TypeName {
             return {
                 kind: FfiConverterTypeMsgLikeKind.readFromCursor(c), 
-                reactions: FfiConverterSequenceTypeReaction.readFromCursor(c), 
                 inReplyTo: FfiConverterOptionalTypeInReplyToDetails.readFromCursor(c), 
                 threadRoot: FfiConverterOptionalString.readFromCursor(c), 
                 threadSummary: FfiConverterOptionalTypeThreadSummary.readFromCursor(c)
@@ -7327,14 +7243,12 @@ const FfiConverterTypeMsgLikeContent = (() => {
         }
         writeIntoCursor(value: TypeName, c: Cursor): void {
             FfiConverterTypeMsgLikeKind.writeIntoCursor(value.kind, c);
-            FfiConverterSequenceTypeReaction.writeIntoCursor(value.reactions, c);
             FfiConverterOptionalTypeInReplyToDetails.writeIntoCursor(value.inReplyTo, c);
             FfiConverterOptionalString.writeIntoCursor(value.threadRoot, c);
             FfiConverterOptionalTypeThreadSummary.writeIntoCursor(value.threadSummary, c);
         }
         allocationSize(value: TypeName): number {
             return FfiConverterTypeMsgLikeKind.allocationSize(value.kind) +
-             FfiConverterSequenceTypeReaction.allocationSize(value.reactions) +
              FfiConverterOptionalTypeInReplyToDetails.allocationSize(value.inReplyTo) +
              FfiConverterOptionalString.allocationSize(value.threadRoot) +
              FfiConverterOptionalTypeThreadSummary.allocationSize(value.threadSummary);
@@ -7435,8 +7349,8 @@ export const HistoryVisibility = (() => {
      * Previous events are accessible to newly joined members from the point
      * they were invited onwards.
      *
-     * Events stop being accessible when the member' state changes to
-     * something other than *invite* or *join*.
+     * Events stop being accessible when the member' state changes to something
+     * other than _invite_ or _join_.
      */
     class Invited_ extends UniffiEnum implements Invited__interface {
         /**
@@ -7464,9 +7378,8 @@ export const HistoryVisibility = (() => {
     };
     /**
      * Previous events are accessible to newly joined members from the point
-     * they joined the room onwards.
-     * Events stop being accessible when the member' state changes to
-     * something other than *join*.
+     * they joined the room onwards. Events stop being accessible when the
+     * member' state changes to something other than _join_.
      */
     class Joined_ extends UniffiEnum implements Joined__interface {
         /**
@@ -9257,20 +9170,292 @@ const FfiConverterTypeEditRevisionRecord = (() => {
     return new FFIConverter();
 })();
 
+
+// Enum: ShieldState
+export enum ShieldState_Tags {
+    Red = "Red",
+    Grey = "Grey",
+    None = "None"
+}
+/**
+ * Recommended decorations for decrypted messages, representing the message's
+ * authenticity properties.
+ */
+export const ShieldState = (() => {
+
+    type Red__interface = {
+        tag: ShieldState_Tags.Red;
+        inner: 
+Readonly<{code: TimelineEventShieldStateCode}>
+    };
+    /**
+     * A red shield with a tooltip containing a message appropriate to the
+     * associated code should be presented.
+     */
+    class Red_ extends UniffiEnum implements Red__interface {
+        /**
+         * @private
+         * This field is private and should not be used, use `tag` instead.
+         */
+        readonly [uniffiTypeNameSymbol] = "ShieldState";
+        readonly tag = ShieldState_Tags.Red;
+        readonly inner: 
+Readonly<{code: TimelineEventShieldStateCode}>;
+        constructor(
+inner: {code: TimelineEventShieldStateCode }) {
+            super("ShieldState", "Red");
+
+            this.inner = Object.freeze(inner);
+        }
+        static new(
+inner: {code: TimelineEventShieldStateCode }): Red_ {
+            return new Red_(inner);
+        }
+
+        static instanceOf(obj: any): obj is Red_ {
+            return obj.tag === ShieldState_Tags.Red;
+        }
+
+    }
+
+    type Grey__interface = {
+        tag: ShieldState_Tags.Grey;
+        inner: 
+Readonly<{code: TimelineEventShieldStateCode}>
+    };
+    /**
+     * A grey shield with a tooltip containing a message appropriate to the
+     * associated code should be presented.
+     */
+    class Grey_ extends UniffiEnum implements Grey__interface {
+        /**
+         * @private
+         * This field is private and should not be used, use `tag` instead.
+         */
+        readonly [uniffiTypeNameSymbol] = "ShieldState";
+        readonly tag = ShieldState_Tags.Grey;
+        readonly inner: 
+Readonly<{code: TimelineEventShieldStateCode}>;
+        constructor(
+inner: {code: TimelineEventShieldStateCode }) {
+            super("ShieldState", "Grey");
+
+            this.inner = Object.freeze(inner);
+        }
+        static new(
+inner: {code: TimelineEventShieldStateCode }): Grey_ {
+            return new Grey_(inner);
+        }
+
+        static instanceOf(obj: any): obj is Grey_ {
+            return obj.tag === ShieldState_Tags.Grey;
+        }
+
+    }
+
+    type None__interface = {
+        tag: ShieldState_Tags.None
+    };
+    /**
+     * No shield should be presented.
+     */
+    class None_ extends UniffiEnum implements None__interface {
+        /**
+         * @private
+         * This field is private and should not be used, use `tag` instead.
+         */
+        readonly [uniffiTypeNameSymbol] = "ShieldState";
+        readonly tag = ShieldState_Tags.None;
+        constructor() {
+            super("ShieldState", "None");
+        }
+
+        static new(): None_ {
+            return new None_();
+        }
+
+        static instanceOf(obj: any): obj is None_ {
+            return obj.tag === ShieldState_Tags.None;
+        }
+
+    }
+
+    function instanceOf(obj: any): obj is ShieldState {
+        return obj[uniffiTypeNameSymbol] === "ShieldState";
+    }
+
+    return Object.freeze({
+        instanceOf,
+  Red: Red_, 
+  Grey: Grey_, 
+  None: None_
+    });
+
+})();
+/**
+ * Recommended decorations for decrypted messages, representing the message's
+ * authenticity properties.
+ */
+export type ShieldState = InstanceType<
+    typeof ShieldState['Red' | 'Grey' | 'None']
+>;
+
+// FfiConverter for enum ShieldState
+const FfiConverterTypeShieldState = (() => {
+    type TypeName = ShieldState;
+    class FFIConverter extends AbstractFfiConverterByteArray<TypeName> {
+        readFromCursor(c: Cursor): TypeName {
+            switch (c.readI32()) {
+                case 1: return new ShieldState.Red({code: FfiConverterTypeTimelineEventShieldStateCode.readFromCursor(c) });
+                case 2: return new ShieldState.Grey({code: FfiConverterTypeTimelineEventShieldStateCode.readFromCursor(c) });
+                case 3: return new ShieldState.None();
+                default: throw new UniffiInternalError.UnexpectedEnumCase();
+            }
+        }
+        writeIntoCursor(value: TypeName, c: Cursor): void {
+            switch (value.tag) {
+                case ShieldState_Tags.Red: {
+                    c.writeI32(1);
+                    const inner = value.inner;
+                    FfiConverterTypeTimelineEventShieldStateCode.writeIntoCursor(inner.code, c);
+                    return;
+                }
+                case ShieldState_Tags.Grey: {
+                    c.writeI32(2);
+                    const inner = value.inner;
+                    FfiConverterTypeTimelineEventShieldStateCode.writeIntoCursor(inner.code, c);
+                    return;
+                }
+                case ShieldState_Tags.None: {
+                    c.writeI32(3);
+                    return;
+                }
+                default:
+                    // Throwing from here means that ShieldState_Tags hasn't matched an ordinal.
+                    throw new UniffiInternalError.UnexpectedEnumCase();
+            }
+        }
+        allocationSize(value: TypeName): number {
+            switch (value.tag) {
+                case ShieldState_Tags.Red: {
+                    const inner = value.inner;
+                    let size = 4;
+                    size += FfiConverterTypeTimelineEventShieldStateCode.allocationSize(inner.code);
+                    return size;
+                }
+                case ShieldState_Tags.Grey: {
+                    const inner = value.inner;
+                    let size = 4;
+                    size += FfiConverterTypeTimelineEventShieldStateCode.allocationSize(inner.code);
+                    return size;
+                }
+                case ShieldState_Tags.None: {
+                    return 4;
+                }
+                default: throw new UniffiInternalError.UnexpectedEnumCase();
+            }
+        }
+    }
+    return new FFIConverter();
+})();
+
+/**
+ * The encryption data of an event that was sent encrypted (and which we
+ * managed to decrypt).
+ */
+export type EventEncryptionInfo = {
+    /**
+     * The user id this event is cryptographically attested to come from.
+     *
+     * For a to-device message this is what should be trusted, rather than the
+     * `sender` claimed in the event JSON.
+     */
+    senderId: string,
+    /**
+     * The device the event was sent from, as claimed by the sender.
+     */
+    senderDeviceId?: string,
+    /**
+     * The curve25519 key of the device that sent the event.
+     */
+    senderCurve25519Key?: string,
+    /**
+     * The megolm session the event was sent in, if it was sent with megolm.
+     */
+    sessionId?: string,
+    /**
+     * The shield to show for this event, lax interpretation.
+     */
+    shieldState: ShieldState,
+    /**
+     * The shield to show for this event, strict interpretation.
+     */
+    shieldStateStrict: ShieldState
+}
+
+/**
+ * Generated factory for {@link EventEncryptionInfo} record objects.
+ */
+export const EventEncryptionInfo = (() => {
+    const defaults = () => ({
+    });
+    const create = (() => {
+        return uniffiCreateRecord<EventEncryptionInfo, ReturnType<typeof defaults>>(defaults);
+    })();
+    return Object.freeze({
+        create,
+        new: create,
+        defaults: () => Object.freeze(defaults()) as Partial<EventEncryptionInfo>,
+    });
+})();
+
+const FfiConverterTypeEventEncryptionInfo = (() => {
+    type TypeName = EventEncryptionInfo;
+    class FFIConverter extends AbstractFfiConverterByteArray<TypeName> {
+        readFromCursor(c: Cursor): TypeName {
+            return {
+                senderId: FfiConverterString.readFromCursor(c), 
+                senderDeviceId: FfiConverterOptionalString.readFromCursor(c), 
+                senderCurve25519Key: FfiConverterOptionalString.readFromCursor(c), 
+                sessionId: FfiConverterOptionalString.readFromCursor(c), 
+                shieldState: FfiConverterTypeShieldState.readFromCursor(c), 
+                shieldStateStrict: FfiConverterTypeShieldState.readFromCursor(c)
+            };
+        }
+        writeIntoCursor(value: TypeName, c: Cursor): void {
+            FfiConverterString.writeIntoCursor(value.senderId, c);
+            FfiConverterOptionalString.writeIntoCursor(value.senderDeviceId, c);
+            FfiConverterOptionalString.writeIntoCursor(value.senderCurve25519Key, c);
+            FfiConverterOptionalString.writeIntoCursor(value.sessionId, c);
+            FfiConverterTypeShieldState.writeIntoCursor(value.shieldState, c);
+            FfiConverterTypeShieldState.writeIntoCursor(value.shieldStateStrict, c);
+        }
+        allocationSize(value: TypeName): number {
+            return FfiConverterString.allocationSize(value.senderId) +
+             FfiConverterOptionalString.allocationSize(value.senderDeviceId) +
+             FfiConverterOptionalString.allocationSize(value.senderCurve25519Key) +
+             FfiConverterOptionalString.allocationSize(value.sessionId) +
+             FfiConverterTypeShieldState.allocationSize(value.shieldState) +
+             FfiConverterTypeShieldState.allocationSize(value.shieldStateStrict);
+            
+        }
+    };
+    return new FFIConverter();
+})();
+
 /**
  * This type represents the progress of a media (consisting of a file and
  * possibly a thumbnail) being uploaded.
  */
 export type MediaUploadProgress = {
     /**
-     * The index of the media within the transaction. A file and its
-     * thumbnail share the same index. Will always be 0 for non-gallery
-     * media uploads.
+     * The index of the media within the transaction. A file and its thumbnail
+     * share the same index. Will always be 0 for non-gallery media uploads.
      */
     index: bigint,
     /**
-     * The current combined upload progress for both the file and,
-     * if it exists, its thumbnail.
+     * The current combined upload progress for both the file and, if it
+     * exists, its thumbnail.
      */
     progress: AbstractProgress
 }
@@ -9319,6 +9504,7 @@ export enum QueueWedgeError_Tags {
     InsecureDevices = "InsecureDevices",
     IdentityViolations = "IdentityViolations",
     CrossVerificationRequired = "CrossVerificationRequired",
+    ExpiredAccessToken = "ExpiredAccessToken",
     MissingMediaContent = "MissingMediaContent",
     InvalidMimeType = "InvalidMimeType",
     GenericApiError = "GenericApiError"
@@ -9433,6 +9619,34 @@ inner: {users: Array<string> }): IdentityViolations_ {
 
     }
 
+    type ExpiredAccessToken__interface = {
+        tag: QueueWedgeError_Tags.ExpiredAccessToken
+    };
+    /**
+     * The access token was rejected, and the request is waiting for the
+     * session to have a working one again.
+     */
+    class ExpiredAccessToken_ extends UniffiEnum implements ExpiredAccessToken__interface {
+        /**
+         * @private
+         * This field is private and should not be used, use `tag` instead.
+         */
+        readonly [uniffiTypeNameSymbol] = "QueueWedgeError";
+        readonly tag = QueueWedgeError_Tags.ExpiredAccessToken;
+        constructor() {
+            super("QueueWedgeError", "ExpiredAccessToken");
+        }
+
+        static new(): ExpiredAccessToken_ {
+            return new ExpiredAccessToken_();
+        }
+
+        static instanceOf(obj: any): obj is ExpiredAccessToken_ {
+            return obj.tag === QueueWedgeError_Tags.ExpiredAccessToken;
+        }
+
+    }
+
     type MissingMediaContent__interface = {
         tag: QueueWedgeError_Tags.MissingMediaContent
     };
@@ -9537,6 +9751,7 @@ inner: {msg: string }): GenericApiError_ {
   InsecureDevices: InsecureDevices_, 
   IdentityViolations: IdentityViolations_, 
   CrossVerificationRequired: CrossVerificationRequired_, 
+  ExpiredAccessToken: ExpiredAccessToken_, 
   MissingMediaContent: MissingMediaContent_, 
   InvalidMimeType: InvalidMimeType_, 
   GenericApiError: GenericApiError_
@@ -9554,7 +9769,7 @@ inner: {msg: string }): GenericApiError_ {
  * sending. If not the only solution is to delete the local event.
  */
 export type QueueWedgeError = InstanceType<
-    typeof QueueWedgeError['InsecureDevices' | 'IdentityViolations' | 'CrossVerificationRequired' | 'MissingMediaContent' | 'InvalidMimeType' | 'GenericApiError']
+    typeof QueueWedgeError['InsecureDevices' | 'IdentityViolations' | 'CrossVerificationRequired' | 'ExpiredAccessToken' | 'MissingMediaContent' | 'InvalidMimeType' | 'GenericApiError']
 >;
 
 // FfiConverter for enum QueueWedgeError
@@ -9566,9 +9781,10 @@ const FfiConverterTypeQueueWedgeError = (() => {
                 case 1: return new QueueWedgeError.InsecureDevices({userDeviceMap: FfiConverterMapStringSequenceString.readFromCursor(c) });
                 case 2: return new QueueWedgeError.IdentityViolations({users: FfiConverterSequenceString.readFromCursor(c) });
                 case 3: return new QueueWedgeError.CrossVerificationRequired();
-                case 4: return new QueueWedgeError.MissingMediaContent();
-                case 5: return new QueueWedgeError.InvalidMimeType({mimeType: FfiConverterString.readFromCursor(c) });
-                case 6: return new QueueWedgeError.GenericApiError({msg: FfiConverterString.readFromCursor(c) });
+                case 4: return new QueueWedgeError.ExpiredAccessToken();
+                case 5: return new QueueWedgeError.MissingMediaContent();
+                case 6: return new QueueWedgeError.InvalidMimeType({mimeType: FfiConverterString.readFromCursor(c) });
+                case 7: return new QueueWedgeError.GenericApiError({msg: FfiConverterString.readFromCursor(c) });
                 default: throw new UniffiInternalError.UnexpectedEnumCase();
             }
         }
@@ -9590,18 +9806,22 @@ const FfiConverterTypeQueueWedgeError = (() => {
                     c.writeI32(3);
                     return;
                 }
-                case QueueWedgeError_Tags.MissingMediaContent: {
+                case QueueWedgeError_Tags.ExpiredAccessToken: {
                     c.writeI32(4);
                     return;
                 }
-                case QueueWedgeError_Tags.InvalidMimeType: {
+                case QueueWedgeError_Tags.MissingMediaContent: {
                     c.writeI32(5);
+                    return;
+                }
+                case QueueWedgeError_Tags.InvalidMimeType: {
+                    c.writeI32(6);
                     const inner = value.inner;
                     FfiConverterString.writeIntoCursor(inner.mimeType, c);
                     return;
                 }
                 case QueueWedgeError_Tags.GenericApiError: {
-                    c.writeI32(6);
+                    c.writeI32(7);
                     const inner = value.inner;
                     FfiConverterString.writeIntoCursor(inner.msg, c);
                     return;
@@ -9626,6 +9846,9 @@ const FfiConverterTypeQueueWedgeError = (() => {
                     return size;
                 }
                 case QueueWedgeError_Tags.CrossVerificationRequired: {
+                    return 4;
+                }
+                case QueueWedgeError_Tags.ExpiredAccessToken: {
                     return 4;
                 }
                 case QueueWedgeError_Tags.MissingMediaContent: {
@@ -9847,6 +10070,99 @@ const FfiConverterTypeEventSendState = (() => {
             }
         }
     }
+    return new FFIConverter();
+})();
+
+export type ReactionSenderData = {
+    senderId: string,
+    timestamp: Timestamp,
+    /**
+     * Send state of the reaction when it's ours and pending, `None` otherwise.
+     */
+    sendState?: EventSendState
+}
+
+/**
+ * Generated factory for {@link ReactionSenderData} record objects.
+ */
+export const ReactionSenderData = (() => {
+    const defaults = () => ({
+    });
+    const create = (() => {
+        return uniffiCreateRecord<ReactionSenderData, ReturnType<typeof defaults>>(defaults);
+    })();
+    return Object.freeze({
+        create,
+        new: create,
+        defaults: () => Object.freeze(defaults()) as Partial<ReactionSenderData>,
+    });
+})();
+
+const FfiConverterTypeReactionSenderData = (() => {
+    type TypeName = ReactionSenderData;
+    class FFIConverter extends AbstractFfiConverterByteArray<TypeName> {
+        readFromCursor(c: Cursor): TypeName {
+            return {
+                senderId: FfiConverterString.readFromCursor(c), 
+                timestamp: FfiConverterTypeTimestamp.readFromCursor(c), 
+                sendState: FfiConverterOptionalTypeEventSendState.readFromCursor(c)
+            };
+        }
+        writeIntoCursor(value: TypeName, c: Cursor): void {
+            FfiConverterString.writeIntoCursor(value.senderId, c);
+            FfiConverterTypeTimestamp.writeIntoCursor(value.timestamp, c);
+            FfiConverterOptionalTypeEventSendState.writeIntoCursor(value.sendState, c);
+        }
+        allocationSize(value: TypeName): number {
+            return FfiConverterString.allocationSize(value.senderId) +
+             FfiConverterTypeTimestamp.allocationSize(value.timestamp) +
+             FfiConverterOptionalTypeEventSendState.allocationSize(value.sendState);
+            
+        }
+    };
+    return new FFIConverter();
+})();
+
+export type Reaction = {
+    key: string,
+    senders: Array<ReactionSenderData>
+}
+
+/**
+ * Generated factory for {@link Reaction} record objects.
+ */
+export const Reaction = (() => {
+    const defaults = () => ({
+    });
+    const create = (() => {
+        return uniffiCreateRecord<Reaction, ReturnType<typeof defaults>>(defaults);
+    })();
+    return Object.freeze({
+        create,
+        new: create,
+        defaults: () => Object.freeze(defaults()) as Partial<Reaction>,
+    });
+})();
+
+const FfiConverterTypeReaction = (() => {
+    type TypeName = Reaction;
+    class FFIConverter extends AbstractFfiConverterByteArray<TypeName> {
+        readFromCursor(c: Cursor): TypeName {
+            return {
+                key: FfiConverterString.readFromCursor(c), 
+                senders: FfiConverterSequenceTypeReactionSenderData.readFromCursor(c)
+            };
+        }
+        writeIntoCursor(value: TypeName, c: Cursor): void {
+            FfiConverterString.writeIntoCursor(value.key, c);
+            FfiConverterSequenceTypeReactionSenderData.writeIntoCursor(value.senders, c);
+        }
+        allocationSize(value: TypeName): number {
+            return FfiConverterString.allocationSize(value.key) +
+             FfiConverterSequenceTypeReactionSenderData.allocationSize(value.senders);
+            
+        }
+    };
     return new FFIConverter();
 })();
 
@@ -10336,8 +10652,7 @@ inner: {status?: number; body?: string }): BadStatus_ {
      * `M_EXCLUSIVE`
      *
      * The resource being requested is reserved by an application service, or
-     * the application service making the request has not created the
-     * resource.
+     * the application service making the request has not created the resource.
      */
     class Exclusive_ extends UniffiEnum implements Exclusive__interface {
         /**
@@ -10747,9 +11062,9 @@ Readonly<{adminContact: string}>
      * `M_RESOURCE_LIMIT_EXCEEDED`
      *
      * The request cannot be completed because the homeserver has reached a
-     * resource limit imposed on it. For example, a homeserver held in a
-     * shared hosting environment may reach a resource limit if it starts
-     * using too much memory or disk space.
+     * resource limit imposed on it. For example, a homeserver held in a shared
+     * hosting environment may reach a resource limit if it starts using too
+     * much memory or disk space.
      */
     class ResourceLimitExceeded_ extends UniffiEnum implements ResourceLimitExceeded__interface {
         /**
@@ -10878,8 +11193,8 @@ inner: {adminContact: string }): ResourceLimitExceeded_ {
      * `M_THREEPID_DENIED`
      *
      * The server does not permit this [third-party identifier]. This may
-     * happen if the server only permits, for example, email addresses from
-     * a particular domain.
+     * happen if the server only permits, for example, email addresses from a
+     * particular domain.
      *
      * [third-party identifier]: https://spec.matrix.org/latest/client-server-api/#adding-account-administrative-contact-information
      */
@@ -11034,8 +11349,8 @@ inner: {adminContact: string }): ResourceLimitExceeded_ {
      * `M_UNABLE_TO_AUTHORISE_JOIN`
      *
      * The room is [restricted] and none of the conditions can be validated by
-     * the homeserver. This can happen if the homeserver does not know
-     * about any of the rooms listed as conditions, for example.
+     * the homeserver. This can happen if the homeserver does not know about
+     * any of the rooms listed as conditions, for example.
      *
      * [restricted]: https://spec.matrix.org/latest/client-server-api/#restricted-rooms
      */
@@ -11067,10 +11382,9 @@ inner: {adminContact: string }): ResourceLimitExceeded_ {
      * `M_UNABLE_TO_GRANT_JOIN`
      *
      * A different server should be attempted for the join. This is typically
-     * because the resident server can see that the joining user satisfies
-     * one or more conditions, such as in the case of [restricted rooms],
-     * but the resident server would be unable to meet the authorization
-     * rules.
+     * because the resident server can see that the joining user satisfies one
+     * or more conditions, such as in the case of [restricted rooms], but the
+     * resident server would be unable to meet the authorization rules.
      *
      * [restricted rooms]: https://spec.matrix.org/latest/client-server-api/#restricted-rooms
      */
@@ -11200,8 +11514,8 @@ inner: {softLogout: boolean }): UnknownToken_ {
      * The server did not understand the request.
      *
      * This is expected to be returned with a 404 HTTP status code if the
-     * endpoint is not implemented or a 405 HTTP status code if the
-     * endpoint is implemented, but the incorrect HTTP method is used.
+     * endpoint is not implemented or a 405 HTTP status code if the endpoint is
+     * implemented, but the incorrect HTTP method is used.
      */
     class Unrecognized_ extends UniffiEnum implements Unrecognized__interface {
         /**
@@ -12239,8 +12553,8 @@ const FfiConverterTypeClientError = (() => {
 export interface SendHandleLike {
     
 /**
- * Try to abort the sending of the current event, with an optional
- * `reason` applied to the redaction when the event went out anyway.
+ * Try to abort the sending of the current event, with an optional `reason`
+ * applied to the redaction when the event went out anyway.
  *
  * If this returns `true`, then the sending could be aborted, because the
  * event hasn't been sent yet. Otherwise, if this returns `false`, the
@@ -12256,12 +12570,12 @@ export interface SendHandleLike {
  *
  * This is useful for example, when there's a
  * `SessionRecipientCollectionError::VerifiedUserChangedIdentity` error;
- * the user may have re-verified on a different device and would now
- * like to send the failed message that's waiting on this device.
+ * the user may have re-verified on a different device and would now like
+ * to send the failed message that's waiting on this device.
  *
  * # Arguments
  *
- * * `transaction_id` - The send queue transaction identifier of the local
+ * - `transaction_id` - The send queue transaction identifier of the local
  * echo that should be unwedged.
  */
     tryResend(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
@@ -12291,8 +12605,8 @@ private constructor(pointer: UniffiHandle) {
 
     
 /**
- * Try to abort the sending of the current event, with an optional
- * `reason` applied to the redaction when the event went out anyway.
+ * Try to abort the sending of the current event, with an optional `reason`
+ * applied to the redaction when the event went out anyway.
  *
  * If this returns `true`, then the sending could be aborted, because the
  * event hasn't been sent yet. Otherwise, if this returns `false`, the
@@ -12331,12 +12645,12 @@ private constructor(pointer: UniffiHandle) {
  *
  * This is useful for example, when there's a
  * `SessionRecipientCollectionError::VerifiedUserChangedIdentity` error;
- * the user may have re-verified on a different device and would now
- * like to send the failed message that's waiting on this device.
+ * the user may have re-verified on a different device and would now like
+ * to send the failed message that's waiting on this device.
  *
  * # Arguments
  *
- * * `transaction_id` - The send queue transaction identifier of the local
+ * - `transaction_id` - The send queue transaction identifier of the local
  * echo that should be unwedged.
  */
     async tryResend(asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
@@ -12437,195 +12751,6 @@ const uniffiTypeSendHandleObjectFactory: UniffiObjectFactory<SendHandleLike> = (
     },
 }})();
 const FfiConverterTypeSendHandle = new FfiConverterObject(uniffiTypeSendHandleObjectFactory);
-
-
-// Enum: ShieldState
-export enum ShieldState_Tags {
-    Red = "Red",
-    Grey = "Grey",
-    None = "None"
-}
-/**
- * Recommended decorations for decrypted messages, representing the message's
- * authenticity properties.
- */
-export const ShieldState = (() => {
-
-    type Red__interface = {
-        tag: ShieldState_Tags.Red;
-        inner: 
-Readonly<{code: TimelineEventShieldStateCode}>
-    };
-    /**
-     * A red shield with a tooltip containing a message appropriate to the
-     * associated code should be presented.
-     */
-    class Red_ extends UniffiEnum implements Red__interface {
-        /**
-         * @private
-         * This field is private and should not be used, use `tag` instead.
-         */
-        readonly [uniffiTypeNameSymbol] = "ShieldState";
-        readonly tag = ShieldState_Tags.Red;
-        readonly inner: 
-Readonly<{code: TimelineEventShieldStateCode}>;
-        constructor(
-inner: {code: TimelineEventShieldStateCode }) {
-            super("ShieldState", "Red");
-
-            this.inner = Object.freeze(inner);
-        }
-        static new(
-inner: {code: TimelineEventShieldStateCode }): Red_ {
-            return new Red_(inner);
-        }
-
-        static instanceOf(obj: any): obj is Red_ {
-            return obj.tag === ShieldState_Tags.Red;
-        }
-
-    }
-
-    type Grey__interface = {
-        tag: ShieldState_Tags.Grey;
-        inner: 
-Readonly<{code: TimelineEventShieldStateCode}>
-    };
-    /**
-     * A grey shield with a tooltip containing a message appropriate to the
-     * associated code should be presented.
-     */
-    class Grey_ extends UniffiEnum implements Grey__interface {
-        /**
-         * @private
-         * This field is private and should not be used, use `tag` instead.
-         */
-        readonly [uniffiTypeNameSymbol] = "ShieldState";
-        readonly tag = ShieldState_Tags.Grey;
-        readonly inner: 
-Readonly<{code: TimelineEventShieldStateCode}>;
-        constructor(
-inner: {code: TimelineEventShieldStateCode }) {
-            super("ShieldState", "Grey");
-
-            this.inner = Object.freeze(inner);
-        }
-        static new(
-inner: {code: TimelineEventShieldStateCode }): Grey_ {
-            return new Grey_(inner);
-        }
-
-        static instanceOf(obj: any): obj is Grey_ {
-            return obj.tag === ShieldState_Tags.Grey;
-        }
-
-    }
-
-    type None__interface = {
-        tag: ShieldState_Tags.None
-    };
-    /**
-     * No shield should be presented.
-     */
-    class None_ extends UniffiEnum implements None__interface {
-        /**
-         * @private
-         * This field is private and should not be used, use `tag` instead.
-         */
-        readonly [uniffiTypeNameSymbol] = "ShieldState";
-        readonly tag = ShieldState_Tags.None;
-        constructor() {
-            super("ShieldState", "None");
-        }
-
-        static new(): None_ {
-            return new None_();
-        }
-
-        static instanceOf(obj: any): obj is None_ {
-            return obj.tag === ShieldState_Tags.None;
-        }
-
-    }
-
-    function instanceOf(obj: any): obj is ShieldState {
-        return obj[uniffiTypeNameSymbol] === "ShieldState";
-    }
-
-    return Object.freeze({
-        instanceOf,
-  Red: Red_, 
-  Grey: Grey_, 
-  None: None_
-    });
-
-})();
-/**
- * Recommended decorations for decrypted messages, representing the message's
- * authenticity properties.
- */
-export type ShieldState = InstanceType<
-    typeof ShieldState['Red' | 'Grey' | 'None']
->;
-
-// FfiConverter for enum ShieldState
-const FfiConverterTypeShieldState = (() => {
-    type TypeName = ShieldState;
-    class FFIConverter extends AbstractFfiConverterByteArray<TypeName> {
-        readFromCursor(c: Cursor): TypeName {
-            switch (c.readI32()) {
-                case 1: return new ShieldState.Red({code: FfiConverterTypeTimelineEventShieldStateCode.readFromCursor(c) });
-                case 2: return new ShieldState.Grey({code: FfiConverterTypeTimelineEventShieldStateCode.readFromCursor(c) });
-                case 3: return new ShieldState.None();
-                default: throw new UniffiInternalError.UnexpectedEnumCase();
-            }
-        }
-        writeIntoCursor(value: TypeName, c: Cursor): void {
-            switch (value.tag) {
-                case ShieldState_Tags.Red: {
-                    c.writeI32(1);
-                    const inner = value.inner;
-                    FfiConverterTypeTimelineEventShieldStateCode.writeIntoCursor(inner.code, c);
-                    return;
-                }
-                case ShieldState_Tags.Grey: {
-                    c.writeI32(2);
-                    const inner = value.inner;
-                    FfiConverterTypeTimelineEventShieldStateCode.writeIntoCursor(inner.code, c);
-                    return;
-                }
-                case ShieldState_Tags.None: {
-                    c.writeI32(3);
-                    return;
-                }
-                default:
-                    // Throwing from here means that ShieldState_Tags hasn't matched an ordinal.
-                    throw new UniffiInternalError.UnexpectedEnumCase();
-            }
-        }
-        allocationSize(value: TypeName): number {
-            switch (value.tag) {
-                case ShieldState_Tags.Red: {
-                    const inner = value.inner;
-                    let size = 4;
-                    size += FfiConverterTypeTimelineEventShieldStateCode.allocationSize(inner.code);
-                    return size;
-                }
-                case ShieldState_Tags.Grey: {
-                    const inner = value.inner;
-                    let size = 4;
-                    size += FfiConverterTypeTimelineEventShieldStateCode.allocationSize(inner.code);
-                    return size;
-                }
-                case ShieldState_Tags.None: {
-                    return 4;
-                }
-                default: throw new UniffiInternalError.UnexpectedEnumCase();
-            }
-        }
-    }
-    return new FFIConverter();
-})();
 
 /**
  * Wrapper to retrieve some timeline item info lazily.
@@ -12865,6 +12990,7 @@ export type EventTimelineItem = {
      */
     isHighlighted: boolean,
     content: TimelineItemContent,
+    reactions: Array<Reaction>,
     /**
      * The raw Matrix event type string (e.g. `"m.room.message"`), or `None`
      * when the original type is not available (e.g. redacted events).
@@ -12872,6 +12998,19 @@ export type EventTimelineItem = {
     eventTypeRaw?: string,
     timestamp: Timestamp,
     localSendState?: EventSendState,
+    /**
+     * Send state of our pending edit of this event, if any.
+     */
+    editSendState?: EventSendState,
+    /**
+     * Send state of our pending redaction of this event, if any.
+     */
+    redactionSendState?: EventSendState,
+    /**
+     * The reason given with the redaction of this event, if any: from the
+     * server, or from our own redaction while it is still pending.
+     */
+    redactionReason?: string,
     localCreatedAt?: bigint,
     readReceipts: Map<string, Receipt>,
     origin?: EventItemOrigin,
@@ -12910,9 +13049,13 @@ const FfiConverterTypeEventTimelineItem = (() => {
                 isEditable: FfiConverterBool.readFromCursor(c), 
                 isHighlighted: FfiConverterBool.readFromCursor(c), 
                 content: FfiConverterTypeTimelineItemContent.readFromCursor(c), 
+                reactions: FfiConverterSequenceTypeReaction.readFromCursor(c), 
                 eventTypeRaw: FfiConverterOptionalString.readFromCursor(c), 
                 timestamp: FfiConverterTypeTimestamp.readFromCursor(c), 
                 localSendState: FfiConverterOptionalTypeEventSendState.readFromCursor(c), 
+                editSendState: FfiConverterOptionalTypeEventSendState.readFromCursor(c), 
+                redactionSendState: FfiConverterOptionalTypeEventSendState.readFromCursor(c), 
+                redactionReason: FfiConverterOptionalString.readFromCursor(c), 
                 localCreatedAt: FfiConverterOptionalUInt64.readFromCursor(c), 
                 readReceipts: FfiConverterMapStringTypeReceipt.readFromCursor(c), 
                 origin: FfiConverterOptionalTypeEventItemOrigin.readFromCursor(c), 
@@ -12931,9 +13074,13 @@ const FfiConverterTypeEventTimelineItem = (() => {
             FfiConverterBool.writeIntoCursor(value.isEditable, c);
             FfiConverterBool.writeIntoCursor(value.isHighlighted, c);
             FfiConverterTypeTimelineItemContent.writeIntoCursor(value.content, c);
+            FfiConverterSequenceTypeReaction.writeIntoCursor(value.reactions, c);
             FfiConverterOptionalString.writeIntoCursor(value.eventTypeRaw, c);
             FfiConverterTypeTimestamp.writeIntoCursor(value.timestamp, c);
             FfiConverterOptionalTypeEventSendState.writeIntoCursor(value.localSendState, c);
+            FfiConverterOptionalTypeEventSendState.writeIntoCursor(value.editSendState, c);
+            FfiConverterOptionalTypeEventSendState.writeIntoCursor(value.redactionSendState, c);
+            FfiConverterOptionalString.writeIntoCursor(value.redactionReason, c);
             FfiConverterOptionalUInt64.writeIntoCursor(value.localCreatedAt, c);
             FfiConverterMapStringTypeReceipt.writeIntoCursor(value.readReceipts, c);
             FfiConverterOptionalTypeEventItemOrigin.writeIntoCursor(value.origin, c);
@@ -12951,9 +13098,13 @@ const FfiConverterTypeEventTimelineItem = (() => {
              FfiConverterBool.allocationSize(value.isEditable) +
              FfiConverterBool.allocationSize(value.isHighlighted) +
              FfiConverterTypeTimelineItemContent.allocationSize(value.content) +
+             FfiConverterSequenceTypeReaction.allocationSize(value.reactions) +
              FfiConverterOptionalString.allocationSize(value.eventTypeRaw) +
              FfiConverterTypeTimestamp.allocationSize(value.timestamp) +
              FfiConverterOptionalTypeEventSendState.allocationSize(value.localSendState) +
+             FfiConverterOptionalTypeEventSendState.allocationSize(value.editSendState) +
+             FfiConverterOptionalTypeEventSendState.allocationSize(value.redactionSendState) +
+             FfiConverterOptionalString.allocationSize(value.redactionReason) +
              FfiConverterOptionalUInt64.allocationSize(value.localCreatedAt) +
              FfiConverterMapStringTypeReceipt.allocationSize(value.readReceipts) +
              FfiConverterOptionalTypeEventItemOrigin.allocationSize(value.origin) +
@@ -16140,8 +16291,8 @@ const FfiConverterTypeRoomHero = (() => {
 })();
 
 /**
- * Structure representing a room in a space and aggregated information
- * relevant to the UI layer.
+ * Structure representing a room in a space and aggregated information relevant
+ * to the UI layer.
  */
 export type SpaceRoom = {
     /**
@@ -16192,8 +16343,8 @@ export type SpaceRoom = {
     /**
      * Whether this room is a direct room.
      *
-     * Only set if the room is known to the client otherwise we
-     * assume DMs shouldn't be exposed publicly in spaces.
+     * Only set if the room is known to the client otherwise we assume DMs
+     * shouldn't be exposed publicly in spaces.
      */
     isDirect?: boolean,
     /**
@@ -16213,9 +16364,8 @@ export type SpaceRoom = {
      */
     via: Array<string>,
     /**
-     * Whether this room is a DM, if known.
-     * Note this value can be calculated following some assumptions and is not
-     * guaranteed to be accurate.
+     * Whether this room is a DM, if known. Note this value can be calculated
+     * following some assumptions and is not guaranteed to be accurate.
      */
     isDm?: boolean
 }
@@ -16494,8 +16644,8 @@ export type LiveLocationShare = {
      */
     startTs: bigint,
     /**
-     * The duration that the location sharing will be live.
-     * Meaning that the location will stop being shared at ts + timeout.
+     * The duration that the location sharing will be live. Meaning that the
+     * location will stop being shared at ts + timeout.
      */
     timeout: bigint,
     /**
@@ -17152,8 +17302,8 @@ export type NotificationClientTimeouts = {
      * missing room key, i.e. how long the homeserver waits for a to-device
      * message to arrive before answering.
      *
-     * Together with `decryption_deadline`, this determines how many
-     * iterations are run when the homeserver has nothing to return.
+     * Together with `decryption_deadline`, this determines how many iterations
+     * are run when the homeserver has nothing to return.
      */
     encryptionSyncPollTimeout: number,
     /**
@@ -17486,9 +17636,9 @@ export type NotificationItem = {
     senderInfo: NotificationSenderInfo,
     roomInfo: NotificationRoomInfo,
     /**
-     * Is the notification supposed to be at the "noisy" level?
-     * Can be `None` if we couldn't determine this, because we lacked
-     * information to create a push context.
+     * Is the notification supposed to be at the "noisy" level? Can be `None`
+     * if we couldn't determine this, because we lacked information to create a
+     * push context.
      */
     isNoisy?: boolean,
     hasMention?: boolean,
@@ -17697,7 +17847,11 @@ export type OAuthCrossSigningResetInfo = {
     /**
      * The URL where the user can approve the reset of the cross-signing keys.
      */
-    approvalUrl: string
+    approvalUrl: string,
+    /**
+     * The UIAA session token.
+     */
+    session: string
 }
 
 /**
@@ -17713,6 +17867,21 @@ export const OAuthCrossSigningResetInfo = (() => {
         create,
         new: create,
         defaults: () => Object.freeze(defaults()) as Partial<OAuthCrossSigningResetInfo>,
+        asAuthData(self_: OAuthCrossSigningResetInfo): AuthData {
+    const __rb: Uint8Array = uniffiCaller.rustCall(
+            /*caller:*/ (callStatus) => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_oauthcrosssigningresetinfo_as_auth_data(
+                FfiConverterTypeOAuthCrossSigningResetInfo.lower(self_, nativeModule().rustbuffer_alloc),
+                callStatus);
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+    );
+    try {
+        return FfiConverterTypeAuthData.lift(__rb);
+    } finally {
+        nativeModule().rustbuffer_free(__rb);
+    }
+        },
     });
 })();
 
@@ -17721,14 +17890,17 @@ const FfiConverterTypeOAuthCrossSigningResetInfo = (() => {
     class FFIConverter extends AbstractFfiConverterByteArray<TypeName> {
         readFromCursor(c: Cursor): TypeName {
             return {
-                approvalUrl: FfiConverterString.readFromCursor(c)
+                approvalUrl: FfiConverterString.readFromCursor(c), 
+                session: FfiConverterString.readFromCursor(c)
             };
         }
         writeIntoCursor(value: TypeName, c: Cursor): void {
             FfiConverterString.writeIntoCursor(value.approvalUrl, c);
+            FfiConverterString.writeIntoCursor(value.session, c);
         }
         allocationSize(value: TypeName): number {
-            return FfiConverterString.allocationSize(value.approvalUrl);
+            return FfiConverterString.allocationSize(value.approvalUrl) +
+             FfiConverterString.allocationSize(value.session);
             
         }
     };
@@ -18181,14 +18353,14 @@ export type PasswordStrengthEstimate = {
      */
     guesses: bigint,
     /**
-     * A numeric score derived from the order of magnitude of `guesses`
-     * (i.e. log base 10).
+     * A numeric score derived from the order of magnitude of `guesses` (i.e.
+     * log base 10).
      */
     score: number,
     /**
      * A normalized score from 0 to 1.0 derived from `score` and the
-     * estimator's `very_strong` threshold (`score / very_strong`).
-     * Scores above the `VeryStrong` threshold *can* exceed 1.0.
+     * estimator's `very_strong` threshold (`score / very_strong`). Scores
+     * above the `VeryStrong` threshold _can_ exceed 1.0.
      */
     normalScore: number,
     /**
@@ -18606,7 +18778,12 @@ export type RequestConfig = {
     /**
      * Base delay between retries.
      */
-    maxRetryTime?: bigint
+    maxRetryTime?: bigint,
+    /**
+     * Timeout for each read operation in milliseconds, which resets after a
+     * successful read. Defaults to 60 seconds.
+     */
+    readTimeout?: bigint
 }
 
 /**
@@ -18614,6 +18791,7 @@ export type RequestConfig = {
  */
 export const RequestConfig = (() => {
     const defaults = () => ({
+        readTimeout: undefined
     });
     const create = (() => {
         return uniffiCreateRecord<RequestConfig, ReturnType<typeof defaults>>(defaults);
@@ -18633,7 +18811,8 @@ const FfiConverterTypeRequestConfig = (() => {
                 retryLimit: FfiConverterOptionalUInt64.readFromCursor(c), 
                 timeout: FfiConverterOptionalUInt64.readFromCursor(c), 
                 maxConcurrentRequests: FfiConverterOptionalUInt64.readFromCursor(c), 
-                maxRetryTime: FfiConverterOptionalUInt64.readFromCursor(c)
+                maxRetryTime: FfiConverterOptionalUInt64.readFromCursor(c), 
+                readTimeout: FfiConverterOptionalUInt64.readFromCursor(c)
             };
         }
         writeIntoCursor(value: TypeName, c: Cursor): void {
@@ -18641,12 +18820,68 @@ const FfiConverterTypeRequestConfig = (() => {
             FfiConverterOptionalUInt64.writeIntoCursor(value.timeout, c);
             FfiConverterOptionalUInt64.writeIntoCursor(value.maxConcurrentRequests, c);
             FfiConverterOptionalUInt64.writeIntoCursor(value.maxRetryTime, c);
+            FfiConverterOptionalUInt64.writeIntoCursor(value.readTimeout, c);
         }
         allocationSize(value: TypeName): number {
             return FfiConverterOptionalUInt64.allocationSize(value.retryLimit) +
              FfiConverterOptionalUInt64.allocationSize(value.timeout) +
              FfiConverterOptionalUInt64.allocationSize(value.maxConcurrentRequests) +
-             FfiConverterOptionalUInt64.allocationSize(value.maxRetryTime);
+             FfiConverterOptionalUInt64.allocationSize(value.maxRetryTime) +
+             FfiConverterOptionalUInt64.allocationSize(value.readTimeout);
+            
+        }
+    };
+    return new FFIConverter();
+})();
+
+/**
+ * Overrides of the client's request config for a single request.
+ *
+ * Fields that are not set keep the values of the client's request config.
+ */
+export type RequestConfigOverride = {
+    /**
+     * Max number of retries. `0` disables retries.
+     */
+    retryLimit?: bigint,
+    /**
+     * Timeout for a single attempt of the request, in milliseconds.
+     */
+    timeout?: bigint
+}
+
+/**
+ * Generated factory for {@link RequestConfigOverride} record objects.
+ */
+export const RequestConfigOverride = (() => {
+    const defaults = () => ({
+    });
+    const create = (() => {
+        return uniffiCreateRecord<RequestConfigOverride, ReturnType<typeof defaults>>(defaults);
+    })();
+    return Object.freeze({
+        create,
+        new: create,
+        defaults: () => Object.freeze(defaults()) as Partial<RequestConfigOverride>,
+    });
+})();
+
+const FfiConverterTypeRequestConfigOverride = (() => {
+    type TypeName = RequestConfigOverride;
+    class FFIConverter extends AbstractFfiConverterByteArray<TypeName> {
+        readFromCursor(c: Cursor): TypeName {
+            return {
+                retryLimit: FfiConverterOptionalUInt64.readFromCursor(c), 
+                timeout: FfiConverterOptionalUInt64.readFromCursor(c)
+            };
+        }
+        writeIntoCursor(value: TypeName, c: Cursor): void {
+            FfiConverterOptionalUInt64.writeIntoCursor(value.retryLimit, c);
+            FfiConverterOptionalUInt64.writeIntoCursor(value.timeout, c);
+        }
+        allocationSize(value: TypeName): number {
+            return FfiConverterOptionalUInt64.allocationSize(value.retryLimit) +
+             FfiConverterOptionalUInt64.allocationSize(value.timeout);
             
         }
     };
@@ -19511,8 +19746,8 @@ export interface RoomPowerLevelsLike {
  */
     canUserRedactOther(userId: string) /*throws*/: boolean;
 /**
- * Returns true if the user with the given user_id is able to redact
- * their own messages in the room.
+ * Returns true if the user with the given user_id is able to redact their
+ * own messages in the room.
  *
  * The call may fail if there is an error in getting the power levels.
  */
@@ -19797,8 +20032,8 @@ private constructor(pointer: UniffiHandle) {
     }
     
 /**
- * Returns true if the user with the given user_id is able to redact
- * their own messages in the room.
+ * Returns true if the user with the given user_id is able to redact their
+ * own messages in the room.
  *
  * The call may fail if there is an error in getting the power levels.
  */
@@ -20070,8 +20305,8 @@ export type RoomInfo = {
      */
     numUnreadMessages: bigint,
     /**
-     * Events that will notify the user, according to their
-     * notification settings.
+     * Events that will notify the user, according to their notification
+     * settings.
      */
     numUnreadNotifications: bigint,
     /**
@@ -20633,6 +20868,87 @@ const FfiConverterTypeRoomMemberWithSenderInfo = (() => {
 })();
 
 /**
+ * A message-like room event, as exposed over FFI.
+ */
+export type RoomMessageLikeEvent = {
+    /**
+     * The event type, e.g. `m.reaction`.
+     */
+    eventType: MessageLikeEventType,
+    /**
+     * The event id.
+     */
+    eventId: string,
+    /**
+     * The event sender.
+     */
+    sender: string,
+    /**
+     * When the event was sent, in milliseconds since the Unix epoch.
+     */
+    timestamp: bigint,
+    /**
+     * The `content` of the event, as a JSON string, decrypted if the event was
+     * encrypted.
+     */
+    contentJson: string,
+    /**
+     * The encryption info of the event, if it was encrypted.
+     */
+    encryptionInfo?: EventEncryptionInfo
+}
+
+/**
+ * Generated factory for {@link RoomMessageLikeEvent} record objects.
+ */
+export const RoomMessageLikeEvent = (() => {
+    const defaults = () => ({
+    });
+    const create = (() => {
+        return uniffiCreateRecord<RoomMessageLikeEvent, ReturnType<typeof defaults>>(defaults);
+    })();
+    return Object.freeze({
+        create,
+        new: create,
+        defaults: () => Object.freeze(defaults()) as Partial<RoomMessageLikeEvent>,
+    });
+})();
+
+const FfiConverterTypeRoomMessageLikeEvent = (() => {
+    type TypeName = RoomMessageLikeEvent;
+    class FFIConverter extends AbstractFfiConverterByteArray<TypeName> {
+        readFromCursor(c: Cursor): TypeName {
+            return {
+                eventType: FfiConverterTypeMessageLikeEventType.readFromCursor(c), 
+                eventId: FfiConverterString.readFromCursor(c), 
+                sender: FfiConverterString.readFromCursor(c), 
+                timestamp: FfiConverterUInt64.readFromCursor(c), 
+                contentJson: FfiConverterString.readFromCursor(c), 
+                encryptionInfo: FfiConverterOptionalTypeEventEncryptionInfo.readFromCursor(c)
+            };
+        }
+        writeIntoCursor(value: TypeName, c: Cursor): void {
+            FfiConverterTypeMessageLikeEventType.writeIntoCursor(value.eventType, c);
+            FfiConverterString.writeIntoCursor(value.eventId, c);
+            FfiConverterString.writeIntoCursor(value.sender, c);
+            FfiConverterUInt64.writeIntoCursor(value.timestamp, c);
+            FfiConverterString.writeIntoCursor(value.contentJson, c);
+            FfiConverterOptionalTypeEventEncryptionInfo.writeIntoCursor(value.encryptionInfo, c);
+        }
+        allocationSize(value: TypeName): number {
+            return FfiConverterTypeMessageLikeEventType.allocationSize(value.eventType) +
+             FfiConverterString.allocationSize(value.eventId) +
+             FfiConverterString.allocationSize(value.sender) +
+             FfiConverterUInt64.allocationSize(value.timestamp) +
+             FfiConverterString.allocationSize(value.contentJson) +
+             FfiConverterOptionalTypeEventEncryptionInfo.allocationSize(value.encryptionInfo);
+            
+        }
+    };
+    return new FFIConverter();
+})();
+
+/**
  * `RoomNotificationSettings` represents the current settings for a `Room`
  */
 export type RoomNotificationSettings = {
@@ -20814,6 +21130,141 @@ const FfiConverterTypeRoomPreviewInfo = (() => {
 })();
 
 /**
+ * A message retention policy
+ * ([MSC1763](https://github.com/matrix-org/matrix-spec-proposals/pull/1763)).
+ */
+export type RoomRetentionPolicy = {
+    /**
+     * The minimum amount of time messages should be kept, if any.
+     */
+    minLifetime?: number,
+    /**
+     * The maximum amount of time messages should be kept, if any.
+     */
+    maxLifetime?: number
+}
+
+/**
+ * Generated factory for {@link RoomRetentionPolicy} record objects.
+ */
+export const RoomRetentionPolicy = (() => {
+    const defaults = () => ({
+    });
+    const create = (() => {
+        return uniffiCreateRecord<RoomRetentionPolicy, ReturnType<typeof defaults>>(defaults);
+    })();
+    return Object.freeze({
+        create,
+        new: create,
+        defaults: () => Object.freeze(defaults()) as Partial<RoomRetentionPolicy>,
+    });
+})();
+
+const FfiConverterTypeRoomRetentionPolicy = (() => {
+    type TypeName = RoomRetentionPolicy;
+    class FFIConverter extends AbstractFfiConverterByteArray<TypeName> {
+        readFromCursor(c: Cursor): TypeName {
+            return {
+                minLifetime: FfiConverterOptionalDuration.readFromCursor(c), 
+                maxLifetime: FfiConverterOptionalDuration.readFromCursor(c)
+            };
+        }
+        writeIntoCursor(value: TypeName, c: Cursor): void {
+            FfiConverterOptionalDuration.writeIntoCursor(value.minLifetime, c);
+            FfiConverterOptionalDuration.writeIntoCursor(value.maxLifetime, c);
+        }
+        allocationSize(value: TypeName): number {
+            return FfiConverterOptionalDuration.allocationSize(value.minLifetime) +
+             FfiConverterOptionalDuration.allocationSize(value.maxLifetime);
+            
+        }
+    };
+    return new FFIConverter();
+})();
+
+/**
+ * A room state event, as exposed over FFI.
+ */
+export type RoomStateEvent = {
+    /**
+     * The event type, e.g. `m.room.name`.
+     */
+    eventType: StateEventType,
+    /**
+     * The state key this event is stored under.
+     */
+    stateKey: string,
+    /**
+     * The event sender.
+     */
+    sender: string,
+    /**
+     * The `content` of the event, as a JSON string.
+     */
+    contentJson: string,
+    /**
+     * The event id, or `None` for the stripped state of a room we are only
+     * invited to.
+     */
+    eventId?: string,
+    /**
+     * When the event was sent, in milliseconds since the Unix epoch, or `None`
+     * for the stripped state of a room we are only invited to.
+     */
+    timestamp?: bigint
+}
+
+/**
+ * Generated factory for {@link RoomStateEvent} record objects.
+ */
+export const RoomStateEvent = (() => {
+    const defaults = () => ({
+    });
+    const create = (() => {
+        return uniffiCreateRecord<RoomStateEvent, ReturnType<typeof defaults>>(defaults);
+    })();
+    return Object.freeze({
+        create,
+        new: create,
+        defaults: () => Object.freeze(defaults()) as Partial<RoomStateEvent>,
+    });
+})();
+
+const FfiConverterTypeRoomStateEvent = (() => {
+    type TypeName = RoomStateEvent;
+    class FFIConverter extends AbstractFfiConverterByteArray<TypeName> {
+        readFromCursor(c: Cursor): TypeName {
+            return {
+                eventType: FfiConverterTypeStateEventType.readFromCursor(c), 
+                stateKey: FfiConverterString.readFromCursor(c), 
+                sender: FfiConverterString.readFromCursor(c), 
+                contentJson: FfiConverterString.readFromCursor(c), 
+                eventId: FfiConverterOptionalString.readFromCursor(c), 
+                timestamp: FfiConverterOptionalUInt64.readFromCursor(c)
+            };
+        }
+        writeIntoCursor(value: TypeName, c: Cursor): void {
+            FfiConverterTypeStateEventType.writeIntoCursor(value.eventType, c);
+            FfiConverterString.writeIntoCursor(value.stateKey, c);
+            FfiConverterString.writeIntoCursor(value.sender, c);
+            FfiConverterString.writeIntoCursor(value.contentJson, c);
+            FfiConverterOptionalString.writeIntoCursor(value.eventId, c);
+            FfiConverterOptionalUInt64.writeIntoCursor(value.timestamp, c);
+        }
+        allocationSize(value: TypeName): number {
+            return FfiConverterTypeStateEventType.allocationSize(value.eventType) +
+             FfiConverterString.allocationSize(value.stateKey) +
+             FfiConverterString.allocationSize(value.sender) +
+             FfiConverterString.allocationSize(value.contentJson) +
+             FfiConverterOptionalString.allocationSize(value.eventId) +
+             FfiConverterOptionalUInt64.allocationSize(value.timestamp);
+            
+        }
+    };
+    return new FFIConverter();
+})();
+
+/**
  * A push rule is a single rule that states under what conditions an event
  * should be passed onto a push gateway and how the notification should be
  * presented.
@@ -20974,8 +21425,9 @@ export type UserProfile = {
     /**
      * Set when the user is in a call (MSC4426 `m.call` profile field).
      *
-     * `None` means the user is not in a call. `Some(UserCall { call_joined_ts:
-     * None })` means the user is in a call but the join time wasn't recorded.
+     * `None` means the user is not in a call.
+     * `Some(UserCall { call_joined_ts: None })` means the user is in a call
+     * but the join time wasn't recorded.
      */
     call?: UserCall
 }
@@ -21123,6 +21575,56 @@ const FfiConverterTypeSecretStorageV1AesHmacSha2Properties = (() => {
 })();
 
 /**
+ * The outcome of a [`Client::send_encrypted_to_device_message`] call.
+ */
+export type SendToDeviceOutcome = {
+    /**
+     * The devices that did not receive the message, as a
+     * `user id -> device ids` map.
+     *
+     * A device can end up in here because it is unknown to us, or because
+     * encrypting the message for it failed. An empty map means every recipient
+     * was served.
+     */
+    failures: Map<string, Array<string>>
+}
+
+/**
+ * Generated factory for {@link SendToDeviceOutcome} record objects.
+ */
+export const SendToDeviceOutcome = (() => {
+    const defaults = () => ({
+    });
+    const create = (() => {
+        return uniffiCreateRecord<SendToDeviceOutcome, ReturnType<typeof defaults>>(defaults);
+    })();
+    return Object.freeze({
+        create,
+        new: create,
+        defaults: () => Object.freeze(defaults()) as Partial<SendToDeviceOutcome>,
+    });
+})();
+
+const FfiConverterTypeSendToDeviceOutcome = (() => {
+    type TypeName = SendToDeviceOutcome;
+    class FFIConverter extends AbstractFfiConverterByteArray<TypeName> {
+        readFromCursor(c: Cursor): TypeName {
+            return {
+                failures: FfiConverterMapStringSequenceString.readFromCursor(c)
+            };
+        }
+        writeIntoCursor(value: TypeName, c: Cursor): void {
+            FfiConverterMapStringSequenceString.writeIntoCursor(value.failures, c);
+        }
+        allocationSize(value: TypeName): number {
+            return FfiConverterMapStringSequenceString.allocationSize(value.failures);
+            
+        }
+    };
+    return new FFIConverter();
+})();
+
+/**
  * What a homeserver says it supports, at `/_matrix/client/versions`.
  */
 export type ServerVersions = {
@@ -21170,7 +21672,8 @@ const FfiConverterTypeServerVersions = (() => {
 
 export enum SlidingSyncVersion {
     None,
-    Native
+    Unstable,
+    Stable
 }
 
 const FfiConverterTypeSlidingSyncVersion = (() => {
@@ -21179,14 +21682,16 @@ const FfiConverterTypeSlidingSyncVersion = (() => {
         readFromCursor(c: Cursor): TypeName {
             switch (c.readI32()) {
                 case 1: return SlidingSyncVersion.None;
-                case 2: return SlidingSyncVersion.Native;
+                case 2: return SlidingSyncVersion.Unstable;
+                case 3: return SlidingSyncVersion.Stable;
                 default: throw new UniffiInternalError.UnexpectedEnumCase();
             }
         }
         writeIntoCursor(value: TypeName, c: Cursor): void {
             switch (value) {
                 case SlidingSyncVersion.None: return c.writeI32(1);
-                case SlidingSyncVersion.Native: return c.writeI32(2);
+                case SlidingSyncVersion.Unstable: return c.writeI32(2);
+                case SlidingSyncVersion.Stable: return c.writeI32(3);
             }
         }
         allocationSize(value: TypeName): number {
@@ -21284,6 +21789,56 @@ const FfiConverterTypeSession = (() => {
 })();
 
 /**
+ * Information about why a verification was cancelled
+ */
+export type SessionVerificationCancelInfo = {
+    reason: string,
+    cancelCode: string,
+    cancelledByUs: boolean
+}
+
+/**
+ * Generated factory for {@link SessionVerificationCancelInfo} record objects.
+ */
+export const SessionVerificationCancelInfo = (() => {
+    const defaults = () => ({
+    });
+    const create = (() => {
+        return uniffiCreateRecord<SessionVerificationCancelInfo, ReturnType<typeof defaults>>(defaults);
+    })();
+    return Object.freeze({
+        create,
+        new: create,
+        defaults: () => Object.freeze(defaults()) as Partial<SessionVerificationCancelInfo>,
+    });
+})();
+
+const FfiConverterTypeSessionVerificationCancelInfo = (() => {
+    type TypeName = SessionVerificationCancelInfo;
+    class FFIConverter extends AbstractFfiConverterByteArray<TypeName> {
+        readFromCursor(c: Cursor): TypeName {
+            return {
+                reason: FfiConverterString.readFromCursor(c), 
+                cancelCode: FfiConverterString.readFromCursor(c), 
+                cancelledByUs: FfiConverterBool.readFromCursor(c)
+            };
+        }
+        writeIntoCursor(value: TypeName, c: Cursor): void {
+            FfiConverterString.writeIntoCursor(value.reason, c);
+            FfiConverterString.writeIntoCursor(value.cancelCode, c);
+            FfiConverterBool.writeIntoCursor(value.cancelledByUs, c);
+        }
+        allocationSize(value: TypeName): number {
+            return FfiConverterString.allocationSize(value.reason) +
+             FfiConverterString.allocationSize(value.cancelCode) +
+             FfiConverterBool.allocationSize(value.cancelledByUs);
+            
+        }
+    };
+    return new FFIConverter();
+})();
+
+/**
  * Details about the incoming verification request
  */
 export type SessionVerificationRequestDetails = {
@@ -21350,14 +21905,14 @@ export type SpaceFilter = {
      */
     spaceRoom: SpaceRoom,
     /**
-     * The level of the space filter in the tree/hierarchy.
-     * At this point in time the filters are limited to the first 2 levels.
+     * The level of the space filter in the tree/hierarchy. At this point in
+     * time the filters are limited to the first 2 levels.
      */
     level: number,
     /**
-     * The room identifiers of the descendants of this space.
-     * For top level spaces (level 0) these will be direct descendants while
-     * for first level spaces they will be all other descendants, recursively.
+     * The room identifiers of the descendants of this space. For top level
+     * spaces (level 0) these will be direct descendants while for first level
+     * spaces they will be all other descendants, recursively.
      */
     descendants: Array<string>
 }
@@ -21468,13 +22023,13 @@ const FfiConverterTypeSsoIdentityProvider = (() => {
  */
 export type StartDehydratedDevicesSettings = {
     /**
-     * Force generation of a fresh random pickle key on start, replacing
-     * any existing entry in Secret Storage and the local cache.
+     * Force generation of a fresh random pickle key on start, replacing any
+     * existing entry in Secret Storage and the local cache.
      */
     createNewKey: boolean,
     /**
-     * Whether to attempt to rehydrate the existing dehydrated device, if
-     * any, before creating the next one.
+     * Whether to attempt to rehydrate the existing dehydrated device, if any,
+     * before creating the next one.
      */
     rehydrate: boolean,
     /**
@@ -21548,7 +22103,11 @@ export type StoreSizes = {
     /**
      * The size of the MediaStore.
      */
-    mediaStore?: bigint
+    mediaStore?: bigint,
+    /**
+     * The size of the search index.
+     */
+    searchIndex?: bigint
 }
 
 /**
@@ -21575,7 +22134,8 @@ const FfiConverterTypeStoreSizes = (() => {
                 cryptoStore: FfiConverterOptionalUInt64.readFromCursor(c), 
                 stateStore: FfiConverterOptionalUInt64.readFromCursor(c), 
                 eventCacheStore: FfiConverterOptionalUInt64.readFromCursor(c), 
-                mediaStore: FfiConverterOptionalUInt64.readFromCursor(c)
+                mediaStore: FfiConverterOptionalUInt64.readFromCursor(c), 
+                searchIndex: FfiConverterOptionalUInt64.readFromCursor(c)
             };
         }
         writeIntoCursor(value: TypeName, c: Cursor): void {
@@ -21583,12 +22143,14 @@ const FfiConverterTypeStoreSizes = (() => {
             FfiConverterOptionalUInt64.writeIntoCursor(value.stateStore, c);
             FfiConverterOptionalUInt64.writeIntoCursor(value.eventCacheStore, c);
             FfiConverterOptionalUInt64.writeIntoCursor(value.mediaStore, c);
+            FfiConverterOptionalUInt64.writeIntoCursor(value.searchIndex, c);
         }
         allocationSize(value: TypeName): number {
             return FfiConverterOptionalUInt64.allocationSize(value.cryptoStore) +
              FfiConverterOptionalUInt64.allocationSize(value.stateStore) +
              FfiConverterOptionalUInt64.allocationSize(value.eventCacheStore) +
-             FfiConverterOptionalUInt64.allocationSize(value.mediaStore);
+             FfiConverterOptionalUInt64.allocationSize(value.mediaStore) +
+             FfiConverterOptionalUInt64.allocationSize(value.searchIndex);
             
         }
     };
@@ -21719,8 +22281,8 @@ const FfiConverterTypeSyncResponseV2 = (() => {
  */
 export type SyncSettingsV2 = {
     /**
-     * Timeout in milliseconds for the server long-poll.
-     * If not set, defaults to 30 seconds.
+     * Timeout in milliseconds for the server long-poll. If not set, defaults
+     * to 30 seconds.
      */
     timeoutMs?: bigint,
     /**
@@ -21919,15 +22481,15 @@ export type ThreadListItem = {
      * The latest event in the thread (i.e. the most recent reply), if
      * available.
      *
-     * Initially populated from the server's bundled thread summary and
-     * updated in real time as new events arrive via sync or back-pagination.
+     * Initially populated from the server's bundled thread summary and updated
+     * in real time as new events arrive via sync or back-pagination.
      */
     latestEvent?: ThreadListItemEvent,
     /**
      * The number of replies in this thread (excluding the root event).
      *
-     * Initially populated from the server's bundled thread summary and
-     * updated in real time as new events arrive via sync.
+     * Initially populated from the server's bundled thread summary and updated
+     * in real time as new events arrive via sync.
      */
     numReplies: number
 }
@@ -22518,9 +23080,9 @@ export type TimelineConfiguration = {
      */
     filter: TimelineFilter,
     /**
-     * An optional String that will be prepended to
-     * all the timeline item's internal IDs, making it possible to
-     * distinguish different timeline instances from each other.
+     * An optional String that will be prepended to all the timeline item's
+     * internal IDs, making it possible to distinguish different timeline
+     * instances from each other.
      */
     internalIdPrefix?: string,
     /**
@@ -22631,6 +23193,77 @@ const FfiConverterTypeTimelineUniqueId = (() => {
     return new FFIConverter();
 })();
 
+/**
+ * A custom to-device message received by the client.
+ */
+export type ToDeviceMessage = {
+    /**
+     * The type of the message.
+     */
+    eventType: string,
+    /**
+     * The user id that _claims_ to have sent this message.
+     *
+     * This is unauthenticated. For an encrypted message, trust
+     * `encryption_info.sender_id` instead, which is cryptographically
+     * attested.
+     */
+    senderId: string,
+    /**
+     * The message content, as a JSON string.
+     */
+    content: string,
+    /**
+     * The encryption data of this message, or `None` if it arrived in the
+     * clear.
+     */
+    encryptionInfo?: EventEncryptionInfo
+}
+
+/**
+ * Generated factory for {@link ToDeviceMessage} record objects.
+ */
+export const ToDeviceMessage = (() => {
+    const defaults = () => ({
+    });
+    const create = (() => {
+        return uniffiCreateRecord<ToDeviceMessage, ReturnType<typeof defaults>>(defaults);
+    })();
+    return Object.freeze({
+        create,
+        new: create,
+        defaults: () => Object.freeze(defaults()) as Partial<ToDeviceMessage>,
+    });
+})();
+
+const FfiConverterTypeToDeviceMessage = (() => {
+    type TypeName = ToDeviceMessage;
+    class FFIConverter extends AbstractFfiConverterByteArray<TypeName> {
+        readFromCursor(c: Cursor): TypeName {
+            return {
+                eventType: FfiConverterString.readFromCursor(c), 
+                senderId: FfiConverterString.readFromCursor(c), 
+                content: FfiConverterString.readFromCursor(c), 
+                encryptionInfo: FfiConverterOptionalTypeEventEncryptionInfo.readFromCursor(c)
+            };
+        }
+        writeIntoCursor(value: TypeName, c: Cursor): void {
+            FfiConverterString.writeIntoCursor(value.eventType, c);
+            FfiConverterString.writeIntoCursor(value.senderId, c);
+            FfiConverterString.writeIntoCursor(value.content, c);
+            FfiConverterOptionalTypeEventEncryptionInfo.writeIntoCursor(value.encryptionInfo, c);
+        }
+        allocationSize(value: TypeName): number {
+            return FfiConverterString.allocationSize(value.eventType) +
+             FfiConverterString.allocationSize(value.senderId) +
+             FfiConverterString.allocationSize(value.content) +
+             FfiConverterOptionalTypeEventEncryptionInfo.allocationSize(value.encryptionInfo);
+            
+        }
+    };
+    return new FFIConverter();
+})();
+
 export enum LogLevel {
     Error,
     Warn,
@@ -22678,6 +23311,10 @@ export enum TraceLogPacks {
      */
     EventCache,
     /**
+     * Enables all the logs relevant to the back-pagination queue.
+     */
+    BackPagination,
+    /**
      * Enables all the logs relevant to the send queue.
      */
     SendQueue,
@@ -22709,24 +23346,26 @@ const FfiConverterTypeTraceLogPacks = (() => {
         readFromCursor(c: Cursor): TypeName {
             switch (c.readI32()) {
                 case 1: return TraceLogPacks.EventCache;
-                case 2: return TraceLogPacks.SendQueue;
-                case 3: return TraceLogPacks.Timeline;
-                case 4: return TraceLogPacks.NotificationClient;
-                case 5: return TraceLogPacks.SyncProfiling;
-                case 6: return TraceLogPacks.LatestEvents;
-                case 7: return TraceLogPacks.Search;
+                case 2: return TraceLogPacks.BackPagination;
+                case 3: return TraceLogPacks.SendQueue;
+                case 4: return TraceLogPacks.Timeline;
+                case 5: return TraceLogPacks.NotificationClient;
+                case 6: return TraceLogPacks.SyncProfiling;
+                case 7: return TraceLogPacks.LatestEvents;
+                case 8: return TraceLogPacks.Search;
                 default: throw new UniffiInternalError.UnexpectedEnumCase();
             }
         }
         writeIntoCursor(value: TypeName, c: Cursor): void {
             switch (value) {
                 case TraceLogPacks.EventCache: return c.writeI32(1);
-                case TraceLogPacks.SendQueue: return c.writeI32(2);
-                case TraceLogPacks.Timeline: return c.writeI32(3);
-                case TraceLogPacks.NotificationClient: return c.writeI32(4);
-                case TraceLogPacks.SyncProfiling: return c.writeI32(5);
-                case TraceLogPacks.LatestEvents: return c.writeI32(6);
-                case TraceLogPacks.Search: return c.writeI32(7);
+                case TraceLogPacks.BackPagination: return c.writeI32(2);
+                case TraceLogPacks.SendQueue: return c.writeI32(3);
+                case TraceLogPacks.Timeline: return c.writeI32(4);
+                case TraceLogPacks.NotificationClient: return c.writeI32(5);
+                case TraceLogPacks.SyncProfiling: return c.writeI32(6);
+                case TraceLogPacks.LatestEvents: return c.writeI32(7);
+                case TraceLogPacks.Search: return c.writeI32(8);
             }
         }
         allocationSize(value: TypeName): number {
@@ -22758,8 +23397,8 @@ export type TracingFileConfiguration = {
      * Maximum total size of all log files combined in bytes.
      *
      * When the total size of all log files with the configured prefix and
-     * suffix exceeds this limit, the oldest files will be removed until
-     * the total is below the limit.
+     * suffix exceeds this limit, the oldest files will be removed until the
+     * total is below the limit.
      *
      * This is useful to prevent log files from consuming too much disk space
      * over time, even with multiple rotated files.
@@ -22771,8 +23410,8 @@ export type TracingFileConfiguration = {
      * Maximum age of log files in seconds.
      *
      * Log files older than this age will be automatically removed during
-     * cleanup. This is checked when the writer is created and during
-     * rotation operations.
+     * cleanup. This is checked when the writer is created and during rotation
+     * operations.
      *
      * Default: 1 week (7 * 24 * 60 * 60 seconds) if not specified.
      */
@@ -22943,6 +23582,48 @@ const FfiConverterTypeTransmissionProgress = (() => {
     return new FFIConverter();
 })();
 
+export type UiaaCrossSigningResetInfo = {
+    /**
+     * The UIAA session token.
+     */
+    session: string
+}
+
+/**
+ * Generated factory for {@link UiaaCrossSigningResetInfo} record objects.
+ */
+export const UiaaCrossSigningResetInfo = (() => {
+    const defaults = () => ({
+    });
+    const create = (() => {
+        return uniffiCreateRecord<UiaaCrossSigningResetInfo, ReturnType<typeof defaults>>(defaults);
+    })();
+    return Object.freeze({
+        create,
+        new: create,
+        defaults: () => Object.freeze(defaults()) as Partial<UiaaCrossSigningResetInfo>,
+    });
+})();
+
+const FfiConverterTypeUiaaCrossSigningResetInfo = (() => {
+    type TypeName = UiaaCrossSigningResetInfo;
+    class FFIConverter extends AbstractFfiConverterByteArray<TypeName> {
+        readFromCursor(c: Cursor): TypeName {
+            return {
+                session: FfiConverterString.readFromCursor(c)
+            };
+        }
+        writeIntoCursor(value: TypeName, c: Cursor): void {
+            FfiConverterString.writeIntoCursor(value.session, c);
+        }
+        allocationSize(value: TypeName): number {
+            return FfiConverterString.allocationSize(value.session);
+            
+        }
+    };
+    return new FFIConverter();
+})();
+
 export type UnableToDecryptInfo = {
     /**
      * The identifier of the event that couldn't get decrypted.
@@ -22950,9 +23631,9 @@ export type UnableToDecryptInfo = {
     eventId: string,
     /**
      * If the event could be decrypted late (that is, the event was encrypted
-     * at first, but could be decrypted later on), then this indicates the
-     * time it took to decrypt the event. If it is not set, this is
-     * considered a definite UTD.
+     * at first, but could be decrypted later on), then this indicates the time
+     * it took to decrypt the event. If it is not set, this is considered a
+     * definite UTD.
      *
      * If set, this is in milliseconds.
      */
@@ -22965,7 +23646,7 @@ export type UnableToDecryptInfo = {
     /**
      * The difference between the event creation time (`origin_server_ts`) and
      * the time our device was created. If negative, this event was sent
-     * *before* our device was created.
+     * _before_ our device was created.
      */
     eventLocalAgeMillis: bigint,
     /**
@@ -23059,8 +23740,8 @@ export type UploadParameters = {
      */
     inReplyTo?: string,
     /**
-     * Optional additional top-level fields for the media event's content,
-     * as a serialized JSON object.
+     * Optional additional top-level fields for the media event's content, as a
+     * serialized JSON object.
      */
     extraContentJson?: string
 }
@@ -23724,7 +24405,17 @@ export type WidgetCapabilities = {
      * This allows the widget to discover the RTC transports advertised by the
      * homeserver (MSC4515).
      */
-    rtcTransports: boolean
+    rtcTransports: boolean,
+    /**
+     * This allows the widget to obtain a token to authenticate with a LiveKit
+     * SFU from the homeserver (MSC4533).
+     */
+    rtcLivekitGetToken: boolean,
+    /**
+     * This allows the widget to hand the delayed leave event of a MatrixRTC
+     * session over to the homeserver (MSC4533).
+     */
+    rtcLivekitDelegateDelayedLeave: boolean
 }
 
 /**
@@ -23754,7 +24445,9 @@ const FfiConverterTypeWidgetCapabilities = (() => {
                 updateDelayedEvent: FfiConverterBool.readFromCursor(c), 
                 sendDelayedEvent: FfiConverterBool.readFromCursor(c), 
                 downloadFiles: FfiConverterBool.readFromCursor(c), 
-                rtcTransports: FfiConverterBool.readFromCursor(c)
+                rtcTransports: FfiConverterBool.readFromCursor(c), 
+                rtcLivekitGetToken: FfiConverterBool.readFromCursor(c), 
+                rtcLivekitDelegateDelayedLeave: FfiConverterBool.readFromCursor(c)
             };
         }
         writeIntoCursor(value: TypeName, c: Cursor): void {
@@ -23765,6 +24458,8 @@ const FfiConverterTypeWidgetCapabilities = (() => {
             FfiConverterBool.writeIntoCursor(value.sendDelayedEvent, c);
             FfiConverterBool.writeIntoCursor(value.downloadFiles, c);
             FfiConverterBool.writeIntoCursor(value.rtcTransports, c);
+            FfiConverterBool.writeIntoCursor(value.rtcLivekitGetToken, c);
+            FfiConverterBool.writeIntoCursor(value.rtcLivekitDelegateDelayedLeave, c);
         }
         allocationSize(value: TypeName): number {
             return FfiConverterSequenceTypeWidgetEventFilter.allocationSize(value.read) +
@@ -23773,7 +24468,9 @@ const FfiConverterTypeWidgetCapabilities = (() => {
              FfiConverterBool.allocationSize(value.updateDelayedEvent) +
              FfiConverterBool.allocationSize(value.sendDelayedEvent) +
              FfiConverterBool.allocationSize(value.downloadFiles) +
-             FfiConverterBool.allocationSize(value.rtcTransports);
+             FfiConverterBool.allocationSize(value.rtcTransports) +
+             FfiConverterBool.allocationSize(value.rtcLivekitGetToken) +
+             FfiConverterBool.allocationSize(value.rtcLivekitDelegateDelayedLeave);
             
         }
     };
@@ -24678,8 +25375,8 @@ const FfiConverterTypeLiveLocationShareUpdate = (() => {
 export interface LiveLocationsListener {
     
 /**
- * Called with a batch of [`LiveLocationShareUpdate`]s whenever the list
- * of active shares changes.
+ * Called with a batch of [`LiveLocationShareUpdate`]s whenever the list of
+ * active shares changes.
  */
     onUpdate(updates: Array<LiveLocationShareUpdate>): void;
 }
@@ -24749,8 +25446,8 @@ export interface LiveLocationsObserverLike {
  * current snapshot (if non-empty), then calls it again for every
  * subsequent change that arrives from sync.
  *
- * Returns a [`TaskHandle`] that, when dropped, stops the listener.
- * The event handlers remain registered for as long as this
+ * Returns a [`TaskHandle`] that, when dropped, stops the listener. The
+ * event handlers remain registered for as long as this
  * [`LiveLocationsObserver`] object is alive.
  */
     subscribe(listener: LiveLocationsListener): TaskHandleLike;
@@ -24790,8 +25487,8 @@ private constructor(pointer: UniffiHandle) {
  * current snapshot (if non-empty), then calls it again for every
  * subsequent change that arrives from sync.
  *
- * Returns a [`TaskHandle`] that, when dropped, stops the listener.
- * The event handlers remain registered for as long as this
+ * Returns a [`TaskHandle`] that, when dropped, stops the listener. The
+ * event handlers remain registered for as long as this
  * [`LiveLocationsObserver`] object is alive.
  */
     subscribe(listener: LiveLocationsListener): TaskHandleLike {
@@ -25865,6 +26562,61 @@ const uniffiCallbackInterfaceCallDeclineListener: { vtable: any; register: () =>
 const FfiConverterTypeCallDeclineListener = new FfiConverterCallback<CallDeclineListener>();
 
 
+export interface EffectiveRetentionListener {
+    
+    call(retention: RoomRetentionPolicy | undefined): void;
+}
+
+
+
+// Put the implementation in a struct so we don't pollute the top-level namespace
+const uniffiCallbackInterfaceEffectiveRetentionListener: { vtable: any; register: () => void; } = {
+    // Create the VTable using a series of closures.
+    // ts automatically converts these into C callback functions.
+    vtable: {
+        call: (
+            uniffiHandle: bigint,
+            retention: Uint8Array,) => {
+            const uniffiMakeCall = 
+            ()
+            : void => {
+                const jsCallback = FfiConverterTypeEffectiveRetentionListener.lift(uniffiHandle);
+                return jsCallback.call(
+                    FfiConverterOptionalTypeRoomRetentionPolicy.lift(retention)
+                )
+            };
+            const uniffiResult = UniffiResult.ready<void>();
+            const uniffiHandleSuccess = (obj: any) => {};
+            const uniffiHandleError = (code: number, errBuf: UniffiByteArray) => {
+                UniffiResult.writeError(uniffiResult, code, errBuf);
+            };
+            uniffiTraitInterfaceCall(
+                /*makeCall:*/ uniffiMakeCall,
+                /*handleSuccess:*/ uniffiHandleSuccess,
+                /*handleError:*/ uniffiHandleError,
+                /*lowerString:*/ FfiConverterString.lower.bind(FfiConverterString),
+                /*alloc:*/ nativeModule().rustbuffer_alloc,
+            )
+            return uniffiResult;
+        },
+        uniffi_free: (uniffiHandle: UniffiHandle): void => {
+            // this will throw a stale handle error if the handle isn't found.
+            FfiConverterTypeEffectiveRetentionListener.drop(uniffiHandle);
+        },
+        uniffi_clone: (uniffiHandle: UniffiHandle): UniffiHandle => {
+            return FfiConverterTypeEffectiveRetentionListener.clone(uniffiHandle);
+        }
+    },
+    register: () => {nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_init_callback_vtable_effectiveretentionlistener(
+            uniffiCallbackInterfaceEffectiveRetentionListener.vtable
+        );
+    },
+};
+
+// FfiConverter protocol for callback interfaces
+const FfiConverterTypeEffectiveRetentionListener = new FfiConverterCallback<EffectiveRetentionListener>();
+
+
 export interface IdentityStatusChangeListener {
     
     call(identityStatusChange: Array<IdentityStatusChange>): void;
@@ -25976,6 +26728,65 @@ const uniffiCallbackInterfaceKnockRequestsListener: { vtable: any; register: () 
 
 // FfiConverter protocol for callback interfaces
 const FfiConverterTypeKnockRequestsListener = new FfiConverterCallback<KnockRequestsListener>();
+
+
+/**
+ * A listener for the message-like events of a single type, registered with
+ * [`Room::subscribe_to_message_like_events`].
+ */
+export interface RoomMessageLikeEventsListener {
+    
+    onEvent(event: RoomMessageLikeEvent): void;
+}
+
+
+
+// Put the implementation in a struct so we don't pollute the top-level namespace
+const uniffiCallbackInterfaceRoomMessageLikeEventsListener: { vtable: any; register: () => void; } = {
+    // Create the VTable using a series of closures.
+    // ts automatically converts these into C callback functions.
+    vtable: {
+        on_event: (
+            uniffiHandle: bigint,
+            event: Uint8Array,) => {
+            const uniffiMakeCall = 
+            ()
+            : void => {
+                const jsCallback = FfiConverterTypeRoomMessageLikeEventsListener.lift(uniffiHandle);
+                return jsCallback.onEvent(
+                    FfiConverterTypeRoomMessageLikeEvent.lift(event)
+                )
+            };
+            const uniffiResult = UniffiResult.ready<void>();
+            const uniffiHandleSuccess = (obj: any) => {};
+            const uniffiHandleError = (code: number, errBuf: UniffiByteArray) => {
+                UniffiResult.writeError(uniffiResult, code, errBuf);
+            };
+            uniffiTraitInterfaceCall(
+                /*makeCall:*/ uniffiMakeCall,
+                /*handleSuccess:*/ uniffiHandleSuccess,
+                /*handleError:*/ uniffiHandleError,
+                /*lowerString:*/ FfiConverterString.lower.bind(FfiConverterString),
+                /*alloc:*/ nativeModule().rustbuffer_alloc,
+            )
+            return uniffiResult;
+        },
+        uniffi_free: (uniffiHandle: UniffiHandle): void => {
+            // this will throw a stale handle error if the handle isn't found.
+            FfiConverterTypeRoomMessageLikeEventsListener.drop(uniffiHandle);
+        },
+        uniffi_clone: (uniffiHandle: UniffiHandle): UniffiHandle => {
+            return FfiConverterTypeRoomMessageLikeEventsListener.clone(uniffiHandle);
+        }
+    },
+    register: () => {nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_init_callback_vtable_roommessagelikeeventslistener(
+            uniffiCallbackInterfaceRoomMessageLikeEventsListener.vtable
+        );
+    },
+};
+
+// FfiConverter protocol for callback interfaces
+const FfiConverterTypeRoomMessageLikeEventsListener = new FfiConverterCallback<RoomMessageLikeEventsListener>();
 
 
 export interface RoomInfoListener {
@@ -26159,8 +26970,8 @@ Readonly<{transactionId: string; error: QueueWedgeError; isRecoverable: boolean}
     /**
      * An error happened when an event was being sent.
      *
-     * The event has not been removed from the queue. All the send queues
-     * will be disabled after this happens, and must be manually re-enabled.
+     * The event has not been removed from the queue. All the send queues will
+     * be disabled after this happens, and must be manually re-enabled.
      */
     class SendError_ extends UniffiEnum implements SendError__interface {
         /**
@@ -26504,6 +27315,65 @@ const uniffiCallbackInterfaceSendQueueListener: { vtable: any; register: () => v
 
 // FfiConverter protocol for callback interfaces
 const FfiConverterTypeSendQueueListener = new FfiConverterCallback<SendQueueListener>();
+
+
+/**
+ * A listener for the room state events of a single type, registered with
+ * [`Room::subscribe_to_state_events`].
+ */
+export interface RoomStateEventsListener {
+    
+    onUpdate(events: Array<RoomStateEvent>): void;
+}
+
+
+
+// Put the implementation in a struct so we don't pollute the top-level namespace
+const uniffiCallbackInterfaceRoomStateEventsListener: { vtable: any; register: () => void; } = {
+    // Create the VTable using a series of closures.
+    // ts automatically converts these into C callback functions.
+    vtable: {
+        on_update: (
+            uniffiHandle: bigint,
+            events: Uint8Array,) => {
+            const uniffiMakeCall = 
+            ()
+            : void => {
+                const jsCallback = FfiConverterTypeRoomStateEventsListener.lift(uniffiHandle);
+                return jsCallback.onUpdate(
+                    FfiConverterSequenceTypeRoomStateEvent.lift(events)
+                )
+            };
+            const uniffiResult = UniffiResult.ready<void>();
+            const uniffiHandleSuccess = (obj: any) => {};
+            const uniffiHandleError = (code: number, errBuf: UniffiByteArray) => {
+                UniffiResult.writeError(uniffiResult, code, errBuf);
+            };
+            uniffiTraitInterfaceCall(
+                /*makeCall:*/ uniffiMakeCall,
+                /*handleSuccess:*/ uniffiHandleSuccess,
+                /*handleError:*/ uniffiHandleError,
+                /*lowerString:*/ FfiConverterString.lower.bind(FfiConverterString),
+                /*alloc:*/ nativeModule().rustbuffer_alloc,
+            )
+            return uniffiResult;
+        },
+        uniffi_free: (uniffiHandle: UniffiHandle): void => {
+            // this will throw a stale handle error if the handle isn't found.
+            FfiConverterTypeRoomStateEventsListener.drop(uniffiHandle);
+        },
+        uniffi_clone: (uniffiHandle: UniffiHandle): UniffiHandle => {
+            return FfiConverterTypeRoomStateEventsListener.clone(uniffiHandle);
+        }
+    },
+    register: () => {nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_init_callback_vtable_roomstateeventslistener(
+            uniffiCallbackInterfaceRoomStateEventsListener.vtable
+        );
+    },
+};
+
+// FfiConverter protocol for callback interfaces
+const FfiConverterTypeRoomStateEventsListener = new FfiConverterCallback<RoomStateEventsListener>();
 
 
 export interface TypingNotificationsListener {
@@ -27242,9 +28112,9 @@ const FfiConverterTypeThreadListPaginationStateListener = new FfiConverterCallba
  *
  * `ThreadListService` is the FFI-facing wrapper around
  * [`matrix_sdk_ui::timeline::thread_list_service::ThreadListService`]. It
- * maintains an observable list of [`ThreadListItem`]s and exposes a
- * pagination state publisher, making it straightforward to build reactive UIs
- * on top of the thread list.
+ * maintains an observable list of [`ThreadListItem`]s and exposes a pagination
+ * state publisher, making it straightforward to build reactive UIs on top of
+ * the thread list.
  *
  * Obtain an instance via [`Room::thread_list_service`].
  */
@@ -27300,9 +28170,9 @@ export type ThreadListServiceInterface = ThreadListServiceLike;
  *
  * `ThreadListService` is the FFI-facing wrapper around
  * [`matrix_sdk_ui::timeline::thread_list_service::ThreadListService`]. It
- * maintains an observable list of [`ThreadListItem`]s and exposes a
- * pagination state publisher, making it straightforward to build reactive UIs
- * on top of the thread list.
+ * maintains an observable list of [`ThreadListItem`]s and exposes a pagination
+ * state publisher, making it straightforward to build reactive UIs on top of
+ * the thread list.
  *
  * Obtain an instance via [`Room::thread_list_service`].
  */
@@ -27526,6 +28396,221 @@ const uniffiTypeThreadListServiceObjectFactory: UniffiObjectFactory<ThreadListSe
     },
 }})();
 const FfiConverterTypeThreadListService = new FfiConverterObject(uniffiTypeThreadListServiceObjectFactory);
+
+
+// Enum: SendTarget
+export enum SendTarget_Tags {
+    Event = "Event",
+    Edit = "Edit",
+    Redaction = "Redaction",
+    Reaction = "Reaction"
+}
+/**
+ * Which pending send on an item [`Timeline::retry_send`] and
+ * [`Timeline::abort_send`] act on.
+ */
+export const SendTarget = (() => {
+
+    type Event__interface = {
+        tag: SendTarget_Tags.Event
+    };
+    /**
+     * The item itself, while it's a local echo.
+     *
+     * Note that aborting one that's already in flight queues a redaction for
+     * it, without a reason; use `SendHandle::abort` if one is needed.
+     */
+    class Event_ extends UniffiEnum implements Event__interface {
+        /**
+         * @private
+         * This field is private and should not be used, use `tag` instead.
+         */
+        readonly [uniffiTypeNameSymbol] = "SendTarget";
+        readonly tag = SendTarget_Tags.Event;
+        constructor() {
+            super("SendTarget", "Event");
+        }
+
+        static new(): Event_ {
+            return new Event_();
+        }
+
+        static instanceOf(obj: any): obj is Event_ {
+            return obj.tag === SendTarget_Tags.Event;
+        }
+
+    }
+
+    type Edit__interface = {
+        tag: SendTarget_Tags.Edit
+    };
+    /**
+     * Our pending edit of the item.
+     */
+    class Edit_ extends UniffiEnum implements Edit__interface {
+        /**
+         * @private
+         * This field is private and should not be used, use `tag` instead.
+         */
+        readonly [uniffiTypeNameSymbol] = "SendTarget";
+        readonly tag = SendTarget_Tags.Edit;
+        constructor() {
+            super("SendTarget", "Edit");
+        }
+
+        static new(): Edit_ {
+            return new Edit_();
+        }
+
+        static instanceOf(obj: any): obj is Edit_ {
+            return obj.tag === SendTarget_Tags.Edit;
+        }
+
+    }
+
+    type Redaction__interface = {
+        tag: SendTarget_Tags.Redaction
+    };
+    /**
+     * Our pending redaction of the item.
+     */
+    class Redaction_ extends UniffiEnum implements Redaction__interface {
+        /**
+         * @private
+         * This field is private and should not be used, use `tag` instead.
+         */
+        readonly [uniffiTypeNameSymbol] = "SendTarget";
+        readonly tag = SendTarget_Tags.Redaction;
+        constructor() {
+            super("SendTarget", "Redaction");
+        }
+
+        static new(): Redaction_ {
+            return new Redaction_();
+        }
+
+        static instanceOf(obj: any): obj is Redaction_ {
+            return obj.tag === SendTarget_Tags.Redaction;
+        }
+
+    }
+
+    type Reaction__interface = {
+        tag: SendTarget_Tags.Reaction;
+        inner: 
+Readonly<{key: string}>
+    };
+    /**
+     * Our pending reaction to the item with this key.
+     */
+    class Reaction_ extends UniffiEnum implements Reaction__interface {
+        /**
+         * @private
+         * This field is private and should not be used, use `tag` instead.
+         */
+        readonly [uniffiTypeNameSymbol] = "SendTarget";
+        readonly tag = SendTarget_Tags.Reaction;
+        readonly inner: 
+Readonly<{key: string}>;
+        constructor(
+inner: {key: string }) {
+            super("SendTarget", "Reaction");
+
+            this.inner = Object.freeze(inner);
+        }
+        static new(
+inner: {key: string }): Reaction_ {
+            return new Reaction_(inner);
+        }
+
+        static instanceOf(obj: any): obj is Reaction_ {
+            return obj.tag === SendTarget_Tags.Reaction;
+        }
+
+    }
+
+    function instanceOf(obj: any): obj is SendTarget {
+        return obj[uniffiTypeNameSymbol] === "SendTarget";
+    }
+
+    return Object.freeze({
+        instanceOf,
+  Event: Event_, 
+  Edit: Edit_, 
+  Redaction: Redaction_, 
+  Reaction: Reaction_
+    });
+
+})();
+/**
+ * Which pending send on an item [`Timeline::retry_send`] and
+ * [`Timeline::abort_send`] act on.
+ */
+export type SendTarget = InstanceType<
+    typeof SendTarget['Event' | 'Edit' | 'Redaction' | 'Reaction']
+>;
+
+// FfiConverter for enum SendTarget
+const FfiConverterTypeSendTarget = (() => {
+    type TypeName = SendTarget;
+    class FFIConverter extends AbstractFfiConverterByteArray<TypeName> {
+        readFromCursor(c: Cursor): TypeName {
+            switch (c.readI32()) {
+                case 1: return new SendTarget.Event();
+                case 2: return new SendTarget.Edit();
+                case 3: return new SendTarget.Redaction();
+                case 4: return new SendTarget.Reaction({key: FfiConverterString.readFromCursor(c) });
+                default: throw new UniffiInternalError.UnexpectedEnumCase();
+            }
+        }
+        writeIntoCursor(value: TypeName, c: Cursor): void {
+            switch (value.tag) {
+                case SendTarget_Tags.Event: {
+                    c.writeI32(1);
+                    return;
+                }
+                case SendTarget_Tags.Edit: {
+                    c.writeI32(2);
+                    return;
+                }
+                case SendTarget_Tags.Redaction: {
+                    c.writeI32(3);
+                    return;
+                }
+                case SendTarget_Tags.Reaction: {
+                    c.writeI32(4);
+                    const inner = value.inner;
+                    FfiConverterString.writeIntoCursor(inner.key, c);
+                    return;
+                }
+                default:
+                    // Throwing from here means that SendTarget_Tags hasn't matched an ordinal.
+                    throw new UniffiInternalError.UnexpectedEnumCase();
+            }
+        }
+        allocationSize(value: TypeName): number {
+            switch (value.tag) {
+                case SendTarget_Tags.Event: {
+                    return 4;
+                }
+                case SendTarget_Tags.Edit: {
+                    return 4;
+                }
+                case SendTarget_Tags.Redaction: {
+                    return 4;
+                }
+                case SendTarget_Tags.Reaction: {
+                    const inner = value.inner;
+                    let size = 4;
+                    size += FfiConverterString.allocationSize(inner.key);
+                    return size;
+                }
+                default: throw new UniffiInternalError.UnexpectedEnumCase();
+            }
+        }
+    }
+    return new FFIConverter();
+})();
 
 
 // Enum: VirtualTimelineItem
@@ -28639,6 +29724,294 @@ const FfiConverterTypeEditedContent = (() => {
 })();
 
 
+// Enum: AttachmentKind
+export enum AttachmentKind_Tags {
+    Image = "Image",
+    Video = "Video",
+    Audio = "Audio",
+    Voice = "Voice",
+    File = "File"
+}
+/**
+ * What kind of attachment is being sent or edited in, with the metadata that
+ * kind needs.
+ */
+export const AttachmentKind = (() => {
+
+    type Image__interface = {
+        tag: AttachmentKind_Tags.Image;
+        inner: 
+Readonly<{imageInfo: ImageInfo; thumbnailSource?: UploadSource}>
+    };
+    class Image_ extends UniffiEnum implements Image__interface {
+        /**
+         * @private
+         * This field is private and should not be used, use `tag` instead.
+         */
+        readonly [uniffiTypeNameSymbol] = "AttachmentKind";
+        readonly tag = AttachmentKind_Tags.Image;
+        readonly inner: 
+Readonly<{imageInfo: ImageInfo; thumbnailSource?: UploadSource}>;
+        constructor(
+inner: {imageInfo: ImageInfo; thumbnailSource?: UploadSource }) {
+            super("AttachmentKind", "Image");
+
+            this.inner = Object.freeze(inner);
+        }
+        static new(
+inner: {imageInfo: ImageInfo; thumbnailSource?: UploadSource }): Image_ {
+            return new Image_(inner);
+        }
+
+        static instanceOf(obj: any): obj is Image_ {
+            return obj.tag === AttachmentKind_Tags.Image;
+        }
+
+    }
+
+    type Video__interface = {
+        tag: AttachmentKind_Tags.Video;
+        inner: 
+Readonly<{videoInfo: VideoInfo; thumbnailSource?: UploadSource}>
+    };
+    class Video_ extends UniffiEnum implements Video__interface {
+        /**
+         * @private
+         * This field is private and should not be used, use `tag` instead.
+         */
+        readonly [uniffiTypeNameSymbol] = "AttachmentKind";
+        readonly tag = AttachmentKind_Tags.Video;
+        readonly inner: 
+Readonly<{videoInfo: VideoInfo; thumbnailSource?: UploadSource}>;
+        constructor(
+inner: {videoInfo: VideoInfo; thumbnailSource?: UploadSource }) {
+            super("AttachmentKind", "Video");
+
+            this.inner = Object.freeze(inner);
+        }
+        static new(
+inner: {videoInfo: VideoInfo; thumbnailSource?: UploadSource }): Video_ {
+            return new Video_(inner);
+        }
+
+        static instanceOf(obj: any): obj is Video_ {
+            return obj.tag === AttachmentKind_Tags.Video;
+        }
+
+    }
+
+    type Audio__interface = {
+        tag: AttachmentKind_Tags.Audio;
+        inner: 
+Readonly<{audioInfo: AudioInfo}>
+    };
+    class Audio_ extends UniffiEnum implements Audio__interface {
+        /**
+         * @private
+         * This field is private and should not be used, use `tag` instead.
+         */
+        readonly [uniffiTypeNameSymbol] = "AttachmentKind";
+        readonly tag = AttachmentKind_Tags.Audio;
+        readonly inner: 
+Readonly<{audioInfo: AudioInfo}>;
+        constructor(
+inner: {audioInfo: AudioInfo }) {
+            super("AttachmentKind", "Audio");
+
+            this.inner = Object.freeze(inner);
+        }
+        static new(
+inner: {audioInfo: AudioInfo }): Audio_ {
+            return new Audio_(inner);
+        }
+
+        static instanceOf(obj: any): obj is Audio_ {
+            return obj.tag === AttachmentKind_Tags.Audio;
+        }
+
+    }
+
+    type Voice__interface = {
+        tag: AttachmentKind_Tags.Voice;
+        inner: 
+Readonly<{audioInfo: AudioInfo; waveform: Array<number>}>
+    };
+    class Voice_ extends UniffiEnum implements Voice__interface {
+        /**
+         * @private
+         * This field is private and should not be used, use `tag` instead.
+         */
+        readonly [uniffiTypeNameSymbol] = "AttachmentKind";
+        readonly tag = AttachmentKind_Tags.Voice;
+        readonly inner: 
+Readonly<{audioInfo: AudioInfo; waveform: Array<number>}>;
+        constructor(
+inner: {audioInfo: AudioInfo; waveform: Array<number> }) {
+            super("AttachmentKind", "Voice");
+
+            this.inner = Object.freeze(inner);
+        }
+        static new(
+inner: {audioInfo: AudioInfo; waveform: Array<number> }): Voice_ {
+            return new Voice_(inner);
+        }
+
+        static instanceOf(obj: any): obj is Voice_ {
+            return obj.tag === AttachmentKind_Tags.Voice;
+        }
+
+    }
+
+    type File__interface = {
+        tag: AttachmentKind_Tags.File;
+        inner: 
+Readonly<{fileInfo: FileInfo}>
+    };
+    class File_ extends UniffiEnum implements File__interface {
+        /**
+         * @private
+         * This field is private and should not be used, use `tag` instead.
+         */
+        readonly [uniffiTypeNameSymbol] = "AttachmentKind";
+        readonly tag = AttachmentKind_Tags.File;
+        readonly inner: 
+Readonly<{fileInfo: FileInfo}>;
+        constructor(
+inner: {fileInfo: FileInfo }) {
+            super("AttachmentKind", "File");
+
+            this.inner = Object.freeze(inner);
+        }
+        static new(
+inner: {fileInfo: FileInfo }): File_ {
+            return new File_(inner);
+        }
+
+        static instanceOf(obj: any): obj is File_ {
+            return obj.tag === AttachmentKind_Tags.File;
+        }
+
+    }
+
+    function instanceOf(obj: any): obj is AttachmentKind {
+        return obj[uniffiTypeNameSymbol] === "AttachmentKind";
+    }
+
+    return Object.freeze({
+        instanceOf,
+  Image: Image_, 
+  Video: Video_, 
+  Audio: Audio_, 
+  Voice: Voice_, 
+  File: File_
+    });
+
+})();
+/**
+ * What kind of attachment is being sent or edited in, with the metadata that
+ * kind needs.
+ */
+export type AttachmentKind = InstanceType<
+    typeof AttachmentKind['Image' | 'Video' | 'Audio' | 'Voice' | 'File']
+>;
+
+// FfiConverter for enum AttachmentKind
+const FfiConverterTypeAttachmentKind = (() => {
+    type TypeName = AttachmentKind;
+    class FFIConverter extends AbstractFfiConverterByteArray<TypeName> {
+        readFromCursor(c: Cursor): TypeName {
+            switch (c.readI32()) {
+                case 1: return new AttachmentKind.Image({imageInfo: FfiConverterTypeImageInfo.readFromCursor(c), thumbnailSource: FfiConverterOptionalTypeUploadSource.readFromCursor(c) });
+                case 2: return new AttachmentKind.Video({videoInfo: FfiConverterTypeVideoInfo.readFromCursor(c), thumbnailSource: FfiConverterOptionalTypeUploadSource.readFromCursor(c) });
+                case 3: return new AttachmentKind.Audio({audioInfo: FfiConverterTypeAudioInfo.readFromCursor(c) });
+                case 4: return new AttachmentKind.Voice({audioInfo: FfiConverterTypeAudioInfo.readFromCursor(c), waveform: FfiConverterSequenceFloat32.readFromCursor(c) });
+                case 5: return new AttachmentKind.File({fileInfo: FfiConverterTypeFileInfo.readFromCursor(c) });
+                default: throw new UniffiInternalError.UnexpectedEnumCase();
+            }
+        }
+        writeIntoCursor(value: TypeName, c: Cursor): void {
+            switch (value.tag) {
+                case AttachmentKind_Tags.Image: {
+                    c.writeI32(1);
+                    const inner = value.inner;
+                    FfiConverterTypeImageInfo.writeIntoCursor(inner.imageInfo, c);
+                    FfiConverterOptionalTypeUploadSource.writeIntoCursor(inner.thumbnailSource, c);
+                    return;
+                }
+                case AttachmentKind_Tags.Video: {
+                    c.writeI32(2);
+                    const inner = value.inner;
+                    FfiConverterTypeVideoInfo.writeIntoCursor(inner.videoInfo, c);
+                    FfiConverterOptionalTypeUploadSource.writeIntoCursor(inner.thumbnailSource, c);
+                    return;
+                }
+                case AttachmentKind_Tags.Audio: {
+                    c.writeI32(3);
+                    const inner = value.inner;
+                    FfiConverterTypeAudioInfo.writeIntoCursor(inner.audioInfo, c);
+                    return;
+                }
+                case AttachmentKind_Tags.Voice: {
+                    c.writeI32(4);
+                    const inner = value.inner;
+                    FfiConverterTypeAudioInfo.writeIntoCursor(inner.audioInfo, c);
+                    FfiConverterSequenceFloat32.writeIntoCursor(inner.waveform, c);
+                    return;
+                }
+                case AttachmentKind_Tags.File: {
+                    c.writeI32(5);
+                    const inner = value.inner;
+                    FfiConverterTypeFileInfo.writeIntoCursor(inner.fileInfo, c);
+                    return;
+                }
+                default:
+                    // Throwing from here means that AttachmentKind_Tags hasn't matched an ordinal.
+                    throw new UniffiInternalError.UnexpectedEnumCase();
+            }
+        }
+        allocationSize(value: TypeName): number {
+            switch (value.tag) {
+                case AttachmentKind_Tags.Image: {
+                    const inner = value.inner;
+                    let size = 4;
+                    size += FfiConverterTypeImageInfo.allocationSize(inner.imageInfo);
+                    size += FfiConverterOptionalTypeUploadSource.allocationSize(inner.thumbnailSource);
+                    return size;
+                }
+                case AttachmentKind_Tags.Video: {
+                    const inner = value.inner;
+                    let size = 4;
+                    size += FfiConverterTypeVideoInfo.allocationSize(inner.videoInfo);
+                    size += FfiConverterOptionalTypeUploadSource.allocationSize(inner.thumbnailSource);
+                    return size;
+                }
+                case AttachmentKind_Tags.Audio: {
+                    const inner = value.inner;
+                    let size = 4;
+                    size += FfiConverterTypeAudioInfo.allocationSize(inner.audioInfo);
+                    return size;
+                }
+                case AttachmentKind_Tags.Voice: {
+                    const inner = value.inner;
+                    let size = 4;
+                    size += FfiConverterTypeAudioInfo.allocationSize(inner.audioInfo);
+                    size += FfiConverterSequenceFloat32.allocationSize(inner.waveform);
+                    return size;
+                }
+                case AttachmentKind_Tags.File: {
+                    const inner = value.inner;
+                    let size = 4;
+                    size += FfiConverterTypeFileInfo.allocationSize(inner.fileInfo);
+                    return size;
+                }
+                default: throw new UniffiInternalError.UnexpectedEnumCase();
+            }
+        }
+    }
+    return new FFIConverter();
+})();
+
+
 // Flat error type: RoomError
 export enum RoomError_Tags {
     InvalidAttachmentData = "InvalidAttachmentData",
@@ -29099,35 +30472,50 @@ const FfiConverterTypePaginationStatusListener = new FfiConverterCallback<Pagina
 
 export interface TimelineLike {
     
+/**
+ * Abort sending something on this item that hasn't gone out yet, see
+ * [`SendTarget`].
+ *
+ * Returns `false` if there was nothing of that kind left to abort, e.g.
+ * because it went out in the meantime.
+ */
+    abortSend(itemId: EventOrTransactionId, target: SendTarget, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<boolean>;
     addListener(listener: TimelineListener, asyncOpts_?: { signal: AbortSignal }): Promise<TaskHandleLike>;
     createMessageContent(msgType: MessageType): RoomMessageEventContentWithoutRelationLike | undefined;
     createPoll(question: string, answers: Array<string>, maxSelections: number, pollKind: PollKind, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
 /**
  * Edits an event from the timeline.
  *
- * If it was a local event, this will *try* to edit it, if it was not
- * being sent already. If the event was a remote event, then it will be
- * redacted by sending an edit request to the server.
+ * If it was a local event, this will _try_ to edit it, if it was not being
+ * sent already. If the event was a remote event, then it will be redacted
+ * by sending an edit request to the server.
  *
- * Returns whether the edit did happen. It can only return false for
- * local events that are being processed.
+ * Returns whether the edit did happen. It can only return false for local
+ * events that are being processed.
  */
     edit(eventOrTransactionId: EventOrTransactionId, newContent: EditedContent, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
 /**
  * Get the edit history for the given event.
  *
- * Returns all revisions of the event, in chronological order.
- * The first entry is the original event content, followed by each
- * edit in the order they were applied.
+ * Returns all revisions of the event, in chronological order. The first
+ * entry is the original event content, followed by each edit in the order
+ * they were applied.
  */
     editRevisions(eventId: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<Array<EditRevisionRecord>>;
+/**
+ * Edits a message the current user sent into one with the given
+ * attachment, replacing its attachment if it had one. The caption in
+ * `params` is the whole new text: nothing of the original content is
+ * kept, and `in_reply_to` is ignored.
+ */
+    editWithAttachment(eventId: string, params: UploadParameters, attachment: AttachmentKind, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
     endPoll(pollStartEventId: string, text: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
     fetchDetailsForEvent(eventId: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
     fetchMembers(asyncOpts_?: { signal: AbortSignal }): Promise<void>;
 /**
  * Get the current timeline item for the given event ID, if any.
  *
- * Will return a remote event, *or* a local echo that has been sent but not
+ * Will return a remote event, _or_ a local echo that has been sent but not
  * yet replaced by a remote echo.
  *
  * It's preferable to store the timeline items in the model for your UI, if
@@ -29151,13 +30539,13 @@ export interface TimelineLike {
  * latest visible event.
  *
  * The latest visible event is determined from the timeline's focus kind
- * and whether or not it hides threaded events. If no latest event can
- * be determined and the timeline is live, the room's unread marker is
- * unset instead.
+ * and whether or not it hides threaded events. If no latest event can be
+ * determined and the timeline is live, the room's unread marker is unset
+ * instead.
  *
  * # Arguments
  *
- * * `receipt_type` - The type of receipt to send. When using
+ * - `receipt_type` - The type of receipt to send. When using
  * [`ReceiptType::FullyRead`], an unthreaded receipt will be sent. This
  * works even if the latest event belongs to a thread, as a threaded
  * reply also belongs to the unthreaded timeline. Otherwise the receipt
@@ -29189,7 +30577,7 @@ export interface TimelineLike {
  *
  * Only works for events that exist as timeline items.
  *
- * If it was a local event, this will *try* to cancel it, if it was not
+ * If it was a local event, this will _try_ to cancel it, if it was not
  * being sent already. If the event was a remote event, then it will be
  * redacted by sending a redaction request to the server.
  *
@@ -29198,15 +30586,39 @@ export interface TimelineLike {
     redactEvent(eventOrTransactionId: EventOrTransactionId, reason: string | undefined, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
     retryDecryption(sessionIds: Array<string>): void;
 /**
- * Queues an event in the room's send queue so it's processed for
- * sending later.
+ * Retry sending something on this item that failed, see [`SendTarget`].
+ *
+ * Only needed after an unrecoverable failure, which parks the request
+ * until it's retried or aborted; a recoverable one goes out again when the
+ * room's send queue is re-enabled.
+ *
+ * Returns `false` if there was nothing of that kind left to retry, e.g.
+ * because it went out in the meantime.
+ */
+    retrySend(itemId: EventOrTransactionId, target: SendTarget, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<boolean>;
+/**
+ * Queues an event in the room's send queue so it's processed for sending
+ * later.
  *
  * Returns an abort handle that allows to abort sending, if it hasn't
  * happened yet.
  */
     send(msg: RoomMessageEventContentWithoutRelationLike, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<SendHandleLike>;
+/**
+ * Sends an attachment, uploaded through the send queue.
+ */
+    sendAttachment(params: UploadParameters, attachment: AttachmentKind) /*throws*/: SendAttachmentJoinHandleLike;
+/**
+ * Deprecated: use [`Self::send_attachment`] with `AttachmentKind::Audio`.
+ */
     sendAudio(params: UploadParameters, audioInfo: AudioInfo) /*throws*/: SendAttachmentJoinHandleLike;
+/**
+ * Deprecated: use [`Self::send_attachment`] with `AttachmentKind::File`.
+ */
     sendFile(params: UploadParameters, fileInfo: FileInfo) /*throws*/: SendAttachmentJoinHandleLike;
+/**
+ * Deprecated: use [`Self::send_attachment`] with `AttachmentKind::Image`.
+ */
     sendImage(params: UploadParameters, thumbnailSource: UploadSource | undefined, imageInfo: ImageInfo) /*throws*/: SendAttachmentJoinHandleLike;
     sendLocation(body: string, geoUri: string, description: string | undefined, zoomLevel: number | undefined, assetType: AssetType | undefined, repliedToEventId: string | undefined, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
     sendPollResponse(pollStartEventId: string, answers: Array<string>, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
@@ -29215,15 +30627,21 @@ export interface TimelineLike {
  * Send a reply.
  *
  * If the replied to event has a thread relation, it is forwarded on the
- * reply so that clients that support threads can render the reply
- * inside the thread. Returns a handle to abort the pending send.
+ * reply so that clients that support threads can render the reply inside
+ * the thread. Returns a handle to abort the pending send.
  */
     sendReply(msg: RoomMessageEventContentWithoutRelationLike, eventId: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<SendHandleLike>;
+/**
+ * Deprecated: use [`Self::send_attachment`] with `AttachmentKind::Video`.
+ */
     sendVideo(params: UploadParameters, thumbnailSource: UploadSource | undefined, videoInfo: VideoInfo) /*throws*/: SendAttachmentJoinHandleLike;
+/**
+ * Deprecated: use [`Self::send_attachment`] with `AttachmentKind::Voice`.
+ */
     sendVoiceMessage(params: UploadParameters, audioInfo: AudioInfo, waveform: Array<number>) /*throws*/: SendAttachmentJoinHandleLike;
 /**
- * Like [`Self::send`], but merges the given additional top-level fields
- * (a JSON object, encoded as a string) into the outgoing event's content.
+ * Like [`Self::send`], but merges the given additional top-level fields (a
+ * JSON object, encoded as a string) into the outgoing event's content.
  */
     sendWithExtraContent(msg: RoomMessageEventContentWithoutRelationLike, extraContentJson: string | undefined, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<SendHandleLike>;
     subscribeToBackPaginationStatus(listener: PaginationStatusListener, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<TaskHandleLike>;
@@ -29281,6 +30699,37 @@ private constructor(pointer: UniffiHandle) {
 
     
 
+    
+/**
+ * Abort sending something on this item that hasn't gone out yet, see
+ * [`SendTarget`].
+ *
+ * Returns `false` if there was nothing of that kind left to abort, e.g.
+ * because it went out in the meantime.
+ */
+    async abortSend(itemId: EventOrTransactionId, target: SendTarget, asyncOpts_?: { signal: AbortSignal }): Promise<boolean> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_timeline_abort_send(
+                    uniffiTypeTimelineObjectFactory.clonePointer(this),FfiConverterTypeEventOrTransactionId.lower(itemId, nativeModule().rustbuffer_alloc),FfiConverterTypeSendTarget.lower(target, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_i8,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_i8,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_i8,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_i8,
+            // Async returns always go through the JS-side converter: the
+            // FFI symbol returns the future handle (u64), and the user-level
+            // RustBuffer comes back via the shared `rust_future_complete_*`
+            // export. The bytes the runtime hands back must be deserialized
+            // here using the per-callable return-type converter.
+            /*liftFunc:*/ FfiConverterBool.lift.bind(FfiConverterBool),
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
     
     async addListener(listener: TimelineListener, asyncOpts_?: { signal: AbortSignal }): Promise<TaskHandleLike> {
     return await uniffiRustCallAsync(
@@ -29345,12 +30794,12 @@ private constructor(pointer: UniffiHandle) {
 /**
  * Edits an event from the timeline.
  *
- * If it was a local event, this will *try* to edit it, if it was not
- * being sent already. If the event was a remote event, then it will be
- * redacted by sending an edit request to the server.
+ * If it was a local event, this will _try_ to edit it, if it was not being
+ * sent already. If the event was a remote event, then it will be redacted
+ * by sending an edit request to the server.
  *
- * Returns whether the edit did happen. It can only return false for
- * local events that are being processed.
+ * Returns whether the edit did happen. It can only return false for local
+ * events that are being processed.
  */
     async edit(eventOrTransactionId: EventOrTransactionId, newContent: EditedContent, asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
     return await uniffiRustCallAsync(
@@ -29374,9 +30823,9 @@ private constructor(pointer: UniffiHandle) {
 /**
  * Get the edit history for the given event.
  *
- * Returns all revisions of the event, in chronological order.
- * The first entry is the original event content, followed by each
- * edit in the order they were applied.
+ * Returns all revisions of the event, in chronological order. The first
+ * entry is the original event content, followed by each edit in the order
+ * they were applied.
  */
     async editRevisions(eventId: string, asyncOpts_?: { signal: AbortSignal }): Promise<Array<EditRevisionRecord>> /*throws*/ {
     return await uniffiRustCallAsync(
@@ -29405,6 +30854,31 @@ private constructor(pointer: UniffiHandle) {
                     nativeModule().rustbuffer_free(__rb);
                 }
             },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
+ * Edits a message the current user sent into one with the given
+ * attachment, replacing its attachment if it had one. The caption in
+ * `params` is the whole new text: nothing of the original content is
+ * kept, and `in_reply_to` is ignored.
+ */
+    async editWithAttachment(eventId: string, params: UploadParameters, attachment: AttachmentKind, asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_timeline_edit_with_attachment(
+                    uniffiTypeTimelineObjectFactory.clonePointer(this),FfiConverterString.lower(eventId, nativeModule().rustbuffer_alloc),FfiConverterTypeUploadParameters.lower(params, nativeModule().rustbuffer_alloc),FfiConverterTypeAttachmentKind.lower(attachment, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_void,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_void,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_void,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_void,
+            /*liftFunc:*/ (_v) => {},
             /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
             /*asyncOpts:*/ asyncOpts_,
             /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
@@ -29471,7 +30945,7 @@ private constructor(pointer: UniffiHandle) {
 /**
  * Get the current timeline item for the given event ID, if any.
  *
- * Will return a remote event, *or* a local echo that has been sent but not
+ * Will return a remote event, _or_ a local echo that has been sent but not
  * yet replaced by a remote echo.
  *
  * It's preferable to store the timeline items in the model for your UI, if
@@ -29582,13 +31056,13 @@ private constructor(pointer: UniffiHandle) {
  * latest visible event.
  *
  * The latest visible event is determined from the timeline's focus kind
- * and whether or not it hides threaded events. If no latest event can
- * be determined and the timeline is live, the room's unread marker is
- * unset instead.
+ * and whether or not it hides threaded events. If no latest event can be
+ * determined and the timeline is live, the room's unread marker is unset
+ * instead.
  *
  * # Arguments
  *
- * * `receipt_type` - The type of receipt to send. When using
+ * - `receipt_type` - The type of receipt to send. When using
  * [`ReceiptType::FullyRead`], an unthreaded receipt will be sent. This
  * works even if the latest event belongs to a thread, as a threaded
  * reply also belongs to the unthreaded timeline. Otherwise the receipt
@@ -29707,7 +31181,7 @@ private constructor(pointer: UniffiHandle) {
  *
  * Only works for events that exist as timeline items.
  *
- * If it was a local event, this will *try* to cancel it, if it was not
+ * If it was a local event, this will _try_ to cancel it, if it was not
  * being sent already. If the event was a remote event, then it will be
  * redacted by sending a redaction request to the server.
  *
@@ -29743,8 +31217,42 @@ private constructor(pointer: UniffiHandle) {
     }
     
 /**
- * Queues an event in the room's send queue so it's processed for
- * sending later.
+ * Retry sending something on this item that failed, see [`SendTarget`].
+ *
+ * Only needed after an unrecoverable failure, which parks the request
+ * until it's retried or aborted; a recoverable one goes out again when the
+ * room's send queue is re-enabled.
+ *
+ * Returns `false` if there was nothing of that kind left to retry, e.g.
+ * because it went out in the meantime.
+ */
+    async retrySend(itemId: EventOrTransactionId, target: SendTarget, asyncOpts_?: { signal: AbortSignal }): Promise<boolean> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_timeline_retry_send(
+                    uniffiTypeTimelineObjectFactory.clonePointer(this),FfiConverterTypeEventOrTransactionId.lower(itemId, nativeModule().rustbuffer_alloc),FfiConverterTypeSendTarget.lower(target, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_i8,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_i8,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_i8,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_i8,
+            // Async returns always go through the JS-side converter: the
+            // FFI symbol returns the future handle (u64), and the user-level
+            // RustBuffer comes back via the shared `rust_future_complete_*`
+            // export. The bytes the runtime hands back must be deserialized
+            // here using the per-callable return-type converter.
+            /*liftFunc:*/ FfiConverterBool.lift.bind(FfiConverterBool),
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
+ * Queues an event in the room's send queue so it's processed for sending
+ * later.
  *
  * Returns an abort handle that allows to abort sending, if it hasn't
  * happened yet.
@@ -29773,6 +31281,26 @@ private constructor(pointer: UniffiHandle) {
         );
     }
     
+/**
+ * Sends an attachment, uploaded through the send queue.
+ */
+    sendAttachment(params: UploadParameters, attachment: AttachmentKind): SendAttachmentJoinHandleLike /*throws*/ {
+    return FfiConverterTypeSendAttachmentJoinHandle.lift(uniffiCaller.rustCallWithError(
+            /*liftError:*/ FfiConverterTypeRoomError.lift.bind(FfiConverterTypeRoomError),
+            /*caller:*/ (callStatus) => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_timeline_send_attachment(
+                uniffiTypeTimelineObjectFactory.clonePointer(this),
+        FfiConverterTypeUploadParameters.lower(params, nativeModule().rustbuffer_alloc),
+        FfiConverterTypeAttachmentKind.lower(attachment, nativeModule().rustbuffer_alloc),
+                callStatus);
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+    ));
+    }
+    
+/**
+ * Deprecated: use [`Self::send_attachment`] with `AttachmentKind::Audio`.
+ */
     sendAudio(params: UploadParameters, audioInfo: AudioInfo): SendAttachmentJoinHandleLike /*throws*/ {
     return FfiConverterTypeSendAttachmentJoinHandle.lift(uniffiCaller.rustCallWithError(
             /*liftError:*/ FfiConverterTypeRoomError.lift.bind(FfiConverterTypeRoomError),
@@ -29787,6 +31315,9 @@ private constructor(pointer: UniffiHandle) {
     ));
     }
     
+/**
+ * Deprecated: use [`Self::send_attachment`] with `AttachmentKind::File`.
+ */
     sendFile(params: UploadParameters, fileInfo: FileInfo): SendAttachmentJoinHandleLike /*throws*/ {
     return FfiConverterTypeSendAttachmentJoinHandle.lift(uniffiCaller.rustCallWithError(
             /*liftError:*/ FfiConverterTypeRoomError.lift.bind(FfiConverterTypeRoomError),
@@ -29801,6 +31332,9 @@ private constructor(pointer: UniffiHandle) {
     ));
     }
     
+/**
+ * Deprecated: use [`Self::send_attachment`] with `AttachmentKind::Image`.
+ */
     sendImage(params: UploadParameters, thumbnailSource: UploadSource | undefined, imageInfo: ImageInfo): SendAttachmentJoinHandleLike /*throws*/ {
     return FfiConverterTypeSendAttachmentJoinHandle.lift(uniffiCaller.rustCallWithError(
             /*liftError:*/ FfiConverterTypeRoomError.lift.bind(FfiConverterTypeRoomError),
@@ -29877,8 +31411,8 @@ private constructor(pointer: UniffiHandle) {
  * Send a reply.
  *
  * If the replied to event has a thread relation, it is forwarded on the
- * reply so that clients that support threads can render the reply
- * inside the thread. Returns a handle to abort the pending send.
+ * reply so that clients that support threads can render the reply inside
+ * the thread. Returns a handle to abort the pending send.
  */
     async sendReply(msg: RoomMessageEventContentWithoutRelationLike, eventId: string, asyncOpts_?: { signal: AbortSignal }): Promise<SendHandleLike> /*throws*/ {
     return await uniffiRustCallAsync(
@@ -29904,6 +31438,9 @@ private constructor(pointer: UniffiHandle) {
         );
     }
     
+/**
+ * Deprecated: use [`Self::send_attachment`] with `AttachmentKind::Video`.
+ */
     sendVideo(params: UploadParameters, thumbnailSource: UploadSource | undefined, videoInfo: VideoInfo): SendAttachmentJoinHandleLike /*throws*/ {
     return FfiConverterTypeSendAttachmentJoinHandle.lift(uniffiCaller.rustCallWithError(
             /*liftError:*/ FfiConverterTypeRoomError.lift.bind(FfiConverterTypeRoomError),
@@ -29919,6 +31456,9 @@ private constructor(pointer: UniffiHandle) {
     ));
     }
     
+/**
+ * Deprecated: use [`Self::send_attachment`] with `AttachmentKind::Voice`.
+ */
     sendVoiceMessage(params: UploadParameters, audioInfo: AudioInfo, waveform: Array<number>): SendAttachmentJoinHandleLike /*throws*/ {
     return FfiConverterTypeSendAttachmentJoinHandle.lift(uniffiCaller.rustCallWithError(
             /*liftError:*/ FfiConverterTypeRoomError.lift.bind(FfiConverterTypeRoomError),
@@ -29935,8 +31475,8 @@ private constructor(pointer: UniffiHandle) {
     }
     
 /**
- * Like [`Self::send`], but merges the given additional top-level fields
- * (a JSON object, encoded as a string) into the outgoing event's content.
+ * Like [`Self::send`], but merges the given additional top-level fields (a
+ * JSON object, encoded as a string) into the outgoing event's content.
  */
     async sendWithExtraContent(msg: RoomMessageEventContentWithoutRelationLike, extraContentJson: string | undefined, asyncOpts_?: { signal: AbortSignal }): Promise<SendHandleLike> /*throws*/ {
     return await uniffiRustCallAsync(
@@ -30214,7 +31754,7 @@ export interface RoomLike {
  *
  * # Arguments
  *
- * * `rtc_notification_event_id` - the event id of the m.rtc.notification
+ * - `rtc_notification_event_id` - the event id of the m.rtc.notification
  * event.
  */
     declineCall(rtcNotificationEventId: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
@@ -30307,15 +31847,16 @@ export interface RoomLike {
     heroes(asyncOpts_?: { signal: AbortSignal }): Promise<Array<RoomHero>>;
     id(): string;
 /**
- * Set the local trust for the given devices to `LocalTrust::Ignored`
- * and resend messages that failed to send because said devices are
- * unverified (in response to
+ * Set the local trust for the given devices to `LocalTrust::Ignored` and
+ * resend messages that failed to send because said devices are unverified
+ * (in response to
  * `SessionRecipientCollectionError::VerifiedUserHasUnsignedDevice`).
+ *
  * # Arguments
  *
- * * `devices` - The map of users identifiers to device identifiers
+ * - `devices` - The map of users identifiers to device identifiers
  * received in the error
- * * `transaction_id` - The send queue transaction identifier of the local
+ * - `transaction_id` - The send queue transaction identifier of the local
  * echo the send error applies to
  */
     ignoreDeviceTrustAndResend(devices: Map<string, Array<string>>, sendHandle: SendHandleLike, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
@@ -30407,11 +31948,11 @@ export interface RoomLike {
  * optionally scoped to a thread.
  *
  * The receipt is read from the local store, which is fed by sync, so it
- * also reflects receipts sent by the user's other devices. Returns
- * `None` if the user has no matching receipt in this room.
+ * also reflects receipts sent by the user's other devices. Returns `None`
+ * if the user has no matching receipt in this room.
  *
- * Note: [`ReceiptType::FullyRead`] is a marker, not an event receipt,
- * and is rejected.
+ * Note: [`ReceiptType::FullyRead`] is a marker, not an event receipt, and
+ * is rejected.
  */
     loadUserReceipt(receiptType: ReceiptType, thread: ReceiptThread, userId: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<UserReceipt | undefined>;
 /**
@@ -30425,9 +31966,8 @@ export interface RoomLike {
  * **Warning:** using this method is **NOT** recommended, as providing the
  * latest event id can cause incorrect read receipts. This method won't
  * check if sending the read receipt is necessary or valid. It should
- * *only* be used when some constraint prevents you from instantiating a
- * [`Timeline`]. For any other case use [`Timeline::mark_as_read`]
- * instead.
+ * _only_ be used when some constraint prevents you from instantiating a
+ * [`Timeline`]. For any other case use [`Timeline::mark_as_read`] instead.
  */
     markAsFullyReadUnchecked(eventId: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
 /**
@@ -30495,6 +32035,7 @@ export interface RoomLike {
  * Publish a new room alias for this room in the room directory.
  *
  * Returns:
+ *
  * - `true` if the room alias didn't exist and it's now published.
  * - `false` if the room alias was already present so it couldn't be
  * published.
@@ -30509,9 +32050,8 @@ export interface RoomLike {
  *
  * # Arguments
  *
- * * `event_id` - The ID of the event to redact
- *
- * * `reason` - The reason for the event being redacted (optional). its
+ * - `event_id` - The ID of the event to redact
+ * - `reason` - The reason for the event being redacted (optional). its
  * transaction ID (optional). If not given one is created.
  */
     redact(eventId: string, reason: string | undefined, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
@@ -30535,6 +32075,7 @@ export interface RoomLike {
  * Remove an existing room alias for this room in the room directory.
  *
  * Returns:
+ *
  * - `true` if the room alias was present and it's now removed from the
  * room directory.
  * - `false` if the room alias didn't exist so it couldn't be removed.
@@ -30549,21 +32090,19 @@ export interface RoomLike {
  *
  * # Arguments
  *
- * * `event_id` - The ID of the event to report
- *
- * * `reason` - The reason for the event being reported (optional).
- *
- * * `score` - The score to rate this content as where -100 is most
+ * - `event_id` - The ID of the event to report
+ * - `reason` - The reason for the event being reported (optional).
+ * - `score` - The score to rate this content as where -100 is most
  * offensive and 0 is inoffensive (optional).
  */
     reportContent(eventId: string, reason: string | undefined, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
 /**
- * Reports a room as inappropriate to the server.
- * The caller is not required to be joined to the room to report it.
+ * Reports a room as inappropriate to the server. The caller is not
+ * required to be joined to the room to report it.
  *
  * # Arguments
  *
- * * `reason` - The reason the room is being reported.
+ * - `reason` - The reason the room is being reported.
  *
  * # Errors
  *
@@ -30571,11 +32110,6 @@ export interface RoomLike {
  */
     reportRoom(reason: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
     resetPowerLevels(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<RoomPowerLevelsLike>;
-/**
- * Return a debug representation for the internal room events data
- * structure, one line per entry in the resulting vector.
- */
-    roomEventsDebugString(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<Array<string>>;
     roomInfo(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<RoomInfo>;
 /**
  * The type of the room from its creation event (`m.space`, say), if it
@@ -30588,6 +32122,61 @@ export interface RoomLike {
  */
     saveComposerDraft(draft: ComposerDraft, threadRoot: string | undefined, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
 /**
+ * Send a delayed message-like event to the room ([MSC4140]).
+ *
+ * The homeserver holds on to the event and only distributes it to the room
+ * once `delay_ms` has elapsed, unless the delayed event is updated
+ * beforehand with [`Client::update_delayed_event`].
+ *
+ * If the room is encrypted, the content is encrypted when the event is
+ * scheduled, like [`Room::send_raw`] does. A member joining the room
+ * before the delay elapses won't be able to decrypt it.
+ *
+ * # Arguments
+ *
+ * * `event_type` - The type of the event to send.
+ *
+ * * `content` - The content of the event to send encoded as a JSON string.
+ *
+ * * `delay_ms` - How long, in milliseconds, the homeserver should hold on
+ * to the event.
+ *
+ * * `request_config_override` - Overrides the client's request config for
+ * this request. Fields that are not set keep the client's values.
+ *
+ * Returns the `delay_id` identifying the scheduled event.
+ *
+ * [MSC4140]: https://github.com/matrix-org/matrix-spec-proposals/pull/4140
+ * [`Client::update_delayed_event`]: crate::client::Client::update_delayed_event
+ */
+    sendDelayedEvent(eventType: string, content: string, delayMs: bigint, requestConfigOverride: RequestConfigOverride | undefined, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<string>;
+/**
+ * Send a delayed state event to the room ([MSC4140]).
+ *
+ * See [`Room::send_delayed_event`] for the semantics of delayed events.
+ * Unlike message-like events, state events can't be sticky.
+ *
+ * # Arguments
+ *
+ * * `event_type` - The type of the state event to send.
+ *
+ * * `state_key` - A unique key which defines the overwriting semantics for
+ * this piece of room state. This is often an empty string.
+ *
+ * * `content` - The content of the event to send encoded as a JSON string.
+ *
+ * * `delay_ms` - How long, in milliseconds, the homeserver should hold on
+ * to the event.
+ *
+ * * `request_config_override` - Overrides the client's request config for
+ * this request. Fields that are not set keep the client's values.
+ *
+ * Returns the `delay_id` identifying the scheduled event.
+ *
+ * [MSC4140]: https://github.com/matrix-org/matrix-spec-proposals/pull/4140
+ */
+    sendDelayedStateEvent(eventType: string, stateKey: string, content: string, delayMs: bigint, requestConfigOverride: RequestConfigOverride | undefined, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<string>;
+/**
  * Send the current users live location beacon in the room.
  */
     sendLiveLocation(geoUri: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
@@ -30599,18 +32188,22 @@ export interface RoomLike {
  * * `event_type` - The type of the event to send.
  *
  * * `content` - The content of the event to send encoded as JSON string.
+ *
+ * * `request_config_override` - Overrides the client's request config for
+ * this request. Fields that are not set keep the client's values.
+ *
+ * Returns the event ID of the newly sent event.
  */
-    sendRaw(eventType: string, content: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
+    sendRaw(eventType: string, content: string, requestConfigOverride: RequestConfigOverride | undefined, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<string>;
 /**
  * Send a single receipt of the given type for the given event, optionally
  * scoped to a thread.
  *
  * This allows sending receipts for events without instantiating the
- * [`Timeline`] they belong to, e.g. marking a thread as read from its
- * root and latest event ids. Note that this won't check whether sending
- * the receipt is necessary or valid (i.e. it can move a receipt
- * backwards); prefer [`Timeline::send_single_receipt`] when a timeline
- * is available.
+ * [`Timeline`] they belong to, e.g. marking a thread as read from its root
+ * and latest event ids. Note that this won't check whether sending the
+ * receipt is necessary or valid (i.e. it can move a receipt backwards);
+ * prefer [`Timeline::send_single_receipt`] when a timeline is available.
  */
     sendSingleReceipt(receiptType: ReceiptType, thread: ReceiptThread, eventId: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
 /**
@@ -30618,17 +32211,20 @@ export interface RoomLike {
  *
  * # Arguments
  *
- * * `event_type` - The type of the state event to send (e.g.
+ * - `event_type` - The type of the state event to send (e.g.
  * `"m.room.name"` or a custom type).
  *
- * * `state_key` - A unique key which defines the overwriting semantics for
+ * - `state_key` - A unique key which defines the overwriting semantics for
  * this piece of room state. This is often an empty string.
  *
- * * `content` - The content of the state event encoded as a JSON string.
+ * - `content` - The content of the state event encoded as a JSON string.
+ *
+ * - `request_config_override` - Overrides the client's request config for
+ * this request. Fields that are not set keep the client's values.
  *
  * Returns the event ID of the newly created state event.
  */
-    sendStateEventRaw(eventType: string, stateKey: string, content: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<string>;
+    sendStateEventRaw(eventType: string, stateKey: string, content: string, requestConfigOverride: RequestConfigOverride | undefined, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<string>;
 /**
  * Set the given account data content for the given event type, for this
  * room.
@@ -30653,8 +32249,8 @@ export interface RoomLike {
  * root event id.
  *
  * If `subscribed` is `true`, it will subscribe to the thread, with a
- * precision that the subscription was manually requested by the user
- * (i.e. not automatic).
+ * precision that the subscription was manually requested by the user (i.e.
+ * not automatic).
  *
  * If the thread was already subscribed to (resp. unsubscribed from), while
  * trying to subscribe to it (resp. unsubscribe from it), it will do
@@ -30676,6 +32272,20 @@ export interface RoomLike {
  */
     startLiveLocationShare(durationMillis: bigint, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<string>;
 /**
+ * The current room state events of the given type, one per state key.
+ *
+ * # Arguments
+ *
+ * - `event_type` - The type of the state events to read. For a type that
+ * has no variant of its own, build one from its string representation
+ * with `stateEventTypeFromString("com.example.custom")`.
+ *
+ * Only the state the sync asked for is stored locally, so for a custom
+ * event type this is empty unless that type is part of the sliding sync
+ * `required_state`.
+ */
+    stateEvents(eventType: StateEventType, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<Array<RoomStateEvent>>;
+/**
  * Stop the current users live location share in the room.
  */
     stopLiveLocationShare(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
@@ -30683,29 +32293,78 @@ export interface RoomLike {
  * Subscribes to call decline for a currently ringing call, using a
  * `listener` to be notified when someone declines.
  *
- * Will error if `rtc_notification_event_id` is not a valid event id.
- * Use the [`TaskHandle`] to cancel the subscription.
+ * Will error if `rtc_notification_event_id` is not a valid event id. Use
+ * the [`TaskHandle`] to cancel the subscription.
  */
     subscribeToCallDeclineEvents(rtcNotificationEventId: string, listener: CallDeclineListener) /*throws*/: TaskHandleLike;
+/**
+ * Subscribe to changes of the effective message retention policy of this
+ * room ([MSC1763](https://github.com/matrix-org/matrix-spec-proposals/pull/1763)).
+ *
+ * The listener is first called with the current effective retention
+ * policy, then whenever it changes, either because the cached homeserver
+ * retention configuration was updated or because the room's
+ * `m.room.retention` state event changed.
+ *
+ * This never makes a request to the homeserver. The policy is `None` while
+ * the homeserver's retention configuration was never fetched.
+ */
+    subscribeToEffectiveRetention(listener: EffectiveRetentionListener): TaskHandleLike;
     subscribeToIdentityStatusChanges(listener: IdentityStatusChangeListener, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<TaskHandleLike>;
 /**
  * Subscribes to requests to join this room (knock member events), using a
  * `listener` to be notified of the changes.
  *
- * The current requests to join the room will be emitted immediately
- * when subscribing, along with a [`TaskHandle`] to cancel the
- * subscription.
+ * The current requests to join the room will be emitted immediately when
+ * subscribing, along with a [`TaskHandle`] to cancel the subscription.
  */
     subscribeToKnockRequests(listener: KnockRequestsListener, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<TaskHandleLike>;
+/**
+ * Subscribe to the message-like events of the given type in this room.
+ *
+ * The listener is called with every event of that type that a sync brings
+ * into the room's timeline from now on, decrypted if it was encrypted.
+ *
+ * This is built on the SDK's sync event handlers, so events come from sync
+ * only (not from pagination).
+ * An event that couldn't be decrypted during sync will not be reported
+ * even if it gets decrypted later.
+ *
+ * Use the returned [`TaskHandle`] to cancel the subscription.
+ *
+ * # Arguments
+ *
+ * - `event_type` - The type of the events to listen to. Build one from its
+ * string representation with
+ * `messageLikeEventTypeFromString("org.example.type")`.
+ */
+    subscribeToMessageLikeEvents(eventType: MessageLikeEventType, listener: RoomMessageLikeEventsListener): TaskHandleLike;
     subscribeToRoomInfoUpdates(listener: RoomInfoListener): TaskHandleLike;
 /**
  * Subscribe to all send queue updates in this room.
  *
  * The given listener will be immediately called with
- * `RoomSendQueueUpdate::NewLocalEvent` for each local echo existing in
- * the queue.
+ * `RoomSendQueueUpdate::NewLocalEvent` for each local echo existing in the
+ * queue.
  */
     subscribeToSendQueueUpdates(listener: SendQueueListener, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<TaskHandleLike>;
+/**
+ * Subscribe to the room state events of the given type.
+ *
+ * The listener is called with the full current list of state events of
+ * that type, one per state key, immediately and then after every sync that
+ * changed any of them. All the changes of one sync are reported as a
+ * single snapshot.
+ *
+ * Use the returned [`TaskHandle`] to cancel the subscription.
+ *
+ * # Arguments
+ *
+ * - `event_type` - The type of the state events to listen to. For a type
+ * that has no variant of its own, build one from its string
+ * representation with `stateEventTypeFromString("com.example.custom")`.
+ */
+    subscribeToStateEvents(eventType: StateEventType, listener: RoomStateEventsListener): TaskHandleLike;
     subscribeToTypingNotifications(listener: TypingNotificationsListener): TaskHandleLike;
 /**
  * If this room is tombstoned, return the “reference” to the successor room
@@ -30779,23 +32438,23 @@ export interface RoomLike {
  *
  * # Arguments
  *
- * * `mime_type` - The mime description of the avatar, for example
+ * - `mime_type` - The mime description of the avatar, for example
  * image/jpeg
- * * `data` - The raw data that will be uploaded to the homeserver's
+ * - `data` - The raw data that will be uploaded to the homeserver's
  * content repository
- * * `media_info` - The media info used as avatar image info.
+ * - `media_info` - The media info used as avatar image info.
  */
     uploadAvatar(mimeType: string, data: ArrayBuffer, mediaInfo: ImageInfo | undefined, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
 /**
- * Remove verification requirements for the given users and
- * resend messages that failed to send because their identities were no
- * longer verified (in response to
+ * Remove verification requirements for the given users and resend messages
+ * that failed to send because their identities were no longer verified (in
+ * response to
  * `SessionRecipientCollectionError::VerifiedUserChangedIdentity`)
  *
  * # Arguments
  *
- * * `user_ids` - The list of users identifiers received in the error
- * * `transaction_id` - The send queue transaction identifier of the local
+ * - `user_ids` - The list of users identifiers received in the error
+ * - `transaction_id` - The send queue transaction identifier of the local
  * echo the send error applies to
  */
     withdrawVerificationAndResend(userIds: Array<string>, sendHandle: SendHandleLike, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
@@ -31085,7 +32744,7 @@ private constructor(pointer: UniffiHandle) {
  *
  * # Arguments
  *
- * * `rtc_notification_event_id` - the event id of the m.rtc.notification
+ * - `rtc_notification_event_id` - the event id of the m.rtc.notification
  * event.
  */
     async declineCall(rtcNotificationEventId: string, asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
@@ -31579,15 +33238,16 @@ private constructor(pointer: UniffiHandle) {
     }
     
 /**
- * Set the local trust for the given devices to `LocalTrust::Ignored`
- * and resend messages that failed to send because said devices are
- * unverified (in response to
+ * Set the local trust for the given devices to `LocalTrust::Ignored` and
+ * resend messages that failed to send because said devices are unverified
+ * (in response to
  * `SessionRecipientCollectionError::VerifiedUserHasUnsignedDevice`).
+ *
  * # Arguments
  *
- * * `devices` - The map of users identifiers to device identifiers
+ * - `devices` - The map of users identifiers to device identifiers
  * received in the error
- * * `transaction_id` - The send queue transaction identifier of the local
+ * - `transaction_id` - The send queue transaction identifier of the local
  * echo the send error applies to
  */
     async ignoreDeviceTrustAndResend(devices: Map<string, Array<string>>, sendHandle: SendHandleLike, asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
@@ -32112,11 +33772,11 @@ private constructor(pointer: UniffiHandle) {
  * optionally scoped to a thread.
  *
  * The receipt is read from the local store, which is fed by sync, so it
- * also reflects receipts sent by the user's other devices. Returns
- * `None` if the user has no matching receipt in this room.
+ * also reflects receipts sent by the user's other devices. Returns `None`
+ * if the user has no matching receipt in this room.
  *
- * Note: [`ReceiptType::FullyRead`] is a marker, not an event receipt,
- * and is rejected.
+ * Note: [`ReceiptType::FullyRead`] is a marker, not an event receipt, and
+ * is rejected.
  */
     async loadUserReceipt(receiptType: ReceiptType, thread: ReceiptThread, userId: string, asyncOpts_?: { signal: AbortSignal }): Promise<UserReceipt | undefined> /*throws*/ {
     return await uniffiRustCallAsync(
@@ -32194,9 +33854,8 @@ private constructor(pointer: UniffiHandle) {
  * **Warning:** using this method is **NOT** recommended, as providing the
  * latest event id can cause incorrect read receipts. This method won't
  * check if sending the read receipt is necessary or valid. It should
- * *only* be used when some constraint prevents you from instantiating a
- * [`Timeline`]. For any other case use [`Timeline::mark_as_read`]
- * instead.
+ * _only_ be used when some constraint prevents you from instantiating a
+ * [`Timeline`]. For any other case use [`Timeline::mark_as_read`] instead.
  */
     async markAsFullyReadUnchecked(eventId: string, asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
     return await uniffiRustCallAsync(
@@ -32670,6 +34329,7 @@ private constructor(pointer: UniffiHandle) {
  * Publish a new room alias for this room in the room directory.
  *
  * Returns:
+ *
  * - `true` if the room alias didn't exist and it's now published.
  * - `false` if the room alias was already present so it couldn't be
  * published.
@@ -32722,9 +34382,8 @@ private constructor(pointer: UniffiHandle) {
  *
  * # Arguments
  *
- * * `event_id` - The ID of the event to redact
- *
- * * `reason` - The reason for the event being redacted (optional). its
+ * - `event_id` - The ID of the event to redact
+ * - `reason` - The reason for the event being redacted (optional). its
  * transaction ID (optional). If not given one is created.
  */
     async redact(eventId: string, reason: string | undefined, asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
@@ -32848,6 +34507,7 @@ private constructor(pointer: UniffiHandle) {
  * Remove an existing room alias for this room in the room directory.
  *
  * Returns:
+ *
  * - `true` if the room alias was present and it's now removed from the
  * room directory.
  * - `false` if the room alias didn't exist so it couldn't be removed.
@@ -32903,11 +34563,9 @@ private constructor(pointer: UniffiHandle) {
  *
  * # Arguments
  *
- * * `event_id` - The ID of the event to report
- *
- * * `reason` - The reason for the event being reported (optional).
- *
- * * `score` - The score to rate this content as where -100 is most
+ * - `event_id` - The ID of the event to report
+ * - `reason` - The reason for the event being reported (optional).
+ * - `score` - The score to rate this content as where -100 is most
  * offensive and 0 is inoffensive (optional).
  */
     async reportContent(eventId: string, reason: string | undefined, asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
@@ -32930,12 +34588,12 @@ private constructor(pointer: UniffiHandle) {
     }
     
 /**
- * Reports a room as inappropriate to the server.
- * The caller is not required to be joined to the room to report it.
+ * Reports a room as inappropriate to the server. The caller is not
+ * required to be joined to the room to report it.
  *
  * # Arguments
  *
- * * `reason` - The reason the room is being reported.
+ * - `reason` - The reason the room is being reported.
  *
  * # Errors
  *
@@ -32978,43 +34636,6 @@ private constructor(pointer: UniffiHandle) {
             // export. The bytes the runtime hands back must be deserialized
             // here using the per-callable return-type converter.
             /*liftFunc:*/ FfiConverterTypeRoomPowerLevels.lift.bind(FfiConverterTypeRoomPowerLevels),
-            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
-            /*asyncOpts:*/ asyncOpts_,
-            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
-        );
-    }
-    
-/**
- * Return a debug representation for the internal room events data
- * structure, one line per entry in the resulting vector.
- */
-    async roomEventsDebugString(asyncOpts_?: { signal: AbortSignal }): Promise<Array<string>> /*throws*/ {
-    return await uniffiRustCallAsync(
-            /*rustCaller:*/ uniffiCaller,
-            /*rustFutureFunc:*/ () => {
-                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_room_room_events_debug_string(
-                    uniffiTypeRoomObjectFactory.clonePointer(this)
-                );
-            },
-            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_rust_buffer,
-            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_rust_buffer,
-            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_rust_buffer,
-            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_rust_buffer,
-            // Async returns always go through the JS-side converter: the
-            // FFI symbol returns the future handle (u64), and the user-level
-            // RustBuffer comes back via the shared `rust_future_complete_*`
-            // export. The bytes the runtime hands back must be deserialized
-            // here using the per-callable return-type converter.
-            // Borrowed view over foreign memory: the call site owns the free,
-            // as on the sync paths. Unconditional — a no-op where buffers are
-            // already JS-owned.
-            /*liftFunc:*/ (__rb) => {
-                try {
-                    return FfiConverterSequenceString.lift(__rb);
-                } finally {
-                    nativeModule().rustbuffer_free(__rb);
-                }
-            },
             /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
             /*asyncOpts:*/ asyncOpts_,
             /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
@@ -33098,6 +34719,125 @@ private constructor(pointer: UniffiHandle) {
     }
     
 /**
+ * Send a delayed message-like event to the room ([MSC4140]).
+ *
+ * The homeserver holds on to the event and only distributes it to the room
+ * once `delay_ms` has elapsed, unless the delayed event is updated
+ * beforehand with [`Client::update_delayed_event`].
+ *
+ * If the room is encrypted, the content is encrypted when the event is
+ * scheduled, like [`Room::send_raw`] does. A member joining the room
+ * before the delay elapses won't be able to decrypt it.
+ *
+ * # Arguments
+ *
+ * * `event_type` - The type of the event to send.
+ *
+ * * `content` - The content of the event to send encoded as a JSON string.
+ *
+ * * `delay_ms` - How long, in milliseconds, the homeserver should hold on
+ * to the event.
+ *
+ * * `request_config_override` - Overrides the client's request config for
+ * this request. Fields that are not set keep the client's values.
+ *
+ * Returns the `delay_id` identifying the scheduled event.
+ *
+ * [MSC4140]: https://github.com/matrix-org/matrix-spec-proposals/pull/4140
+ * [`Client::update_delayed_event`]: crate::client::Client::update_delayed_event
+ */
+    async sendDelayedEvent(eventType: string, content: string, delayMs: bigint, requestConfigOverride: RequestConfigOverride | undefined = undefined, asyncOpts_?: { signal: AbortSignal }): Promise<string> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_room_send_delayed_event(
+                    uniffiTypeRoomObjectFactory.clonePointer(this),FfiConverterString.lower(eventType, nativeModule().rustbuffer_alloc),FfiConverterString.lower(content, nativeModule().rustbuffer_alloc),FfiConverterUInt64.lower(delayMs, nativeModule().rustbuffer_alloc),FfiConverterOptionalTypeRequestConfigOverride.lower(requestConfigOverride, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_rust_buffer,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_rust_buffer,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_rust_buffer,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_rust_buffer,
+            // Async returns always go through the JS-side converter: the
+            // FFI symbol returns the future handle (u64), and the user-level
+            // RustBuffer comes back via the shared `rust_future_complete_*`
+            // export. The bytes the runtime hands back must be deserialized
+            // here using the per-callable return-type converter.
+            // Borrowed view over foreign memory: the call site owns the free,
+            // as on the sync paths. Unconditional — a no-op where buffers are
+            // already JS-owned.
+            /*liftFunc:*/ (__rb) => {
+                try {
+                    return FfiConverterString.lift(__rb);
+                } finally {
+                    nativeModule().rustbuffer_free(__rb);
+                }
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
+ * Send a delayed state event to the room ([MSC4140]).
+ *
+ * See [`Room::send_delayed_event`] for the semantics of delayed events.
+ * Unlike message-like events, state events can't be sticky.
+ *
+ * # Arguments
+ *
+ * * `event_type` - The type of the state event to send.
+ *
+ * * `state_key` - A unique key which defines the overwriting semantics for
+ * this piece of room state. This is often an empty string.
+ *
+ * * `content` - The content of the event to send encoded as a JSON string.
+ *
+ * * `delay_ms` - How long, in milliseconds, the homeserver should hold on
+ * to the event.
+ *
+ * * `request_config_override` - Overrides the client's request config for
+ * this request. Fields that are not set keep the client's values.
+ *
+ * Returns the `delay_id` identifying the scheduled event.
+ *
+ * [MSC4140]: https://github.com/matrix-org/matrix-spec-proposals/pull/4140
+ */
+    async sendDelayedStateEvent(eventType: string, stateKey: string, content: string, delayMs: bigint, requestConfigOverride: RequestConfigOverride | undefined = undefined, asyncOpts_?: { signal: AbortSignal }): Promise<string> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_room_send_delayed_state_event(
+                    uniffiTypeRoomObjectFactory.clonePointer(this),FfiConverterString.lower(eventType, nativeModule().rustbuffer_alloc),FfiConverterString.lower(stateKey, nativeModule().rustbuffer_alloc),FfiConverterString.lower(content, nativeModule().rustbuffer_alloc),FfiConverterUInt64.lower(delayMs, nativeModule().rustbuffer_alloc),FfiConverterOptionalTypeRequestConfigOverride.lower(requestConfigOverride, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_rust_buffer,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_rust_buffer,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_rust_buffer,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_rust_buffer,
+            // Async returns always go through the JS-side converter: the
+            // FFI symbol returns the future handle (u64), and the user-level
+            // RustBuffer comes back via the shared `rust_future_complete_*`
+            // export. The bytes the runtime hands back must be deserialized
+            // here using the per-callable return-type converter.
+            // Borrowed view over foreign memory: the call site owns the free,
+            // as on the sync paths. Unconditional — a no-op where buffers are
+            // already JS-owned.
+            /*liftFunc:*/ (__rb) => {
+                try {
+                    return FfiConverterString.lift(__rb);
+                } finally {
+                    nativeModule().rustbuffer_free(__rb);
+                }
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
  * Send the current users live location beacon in the room.
  */
     async sendLiveLocation(geoUri: string, asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
@@ -33127,20 +34867,39 @@ private constructor(pointer: UniffiHandle) {
  * * `event_type` - The type of the event to send.
  *
  * * `content` - The content of the event to send encoded as JSON string.
+ *
+ * * `request_config_override` - Overrides the client's request config for
+ * this request. Fields that are not set keep the client's values.
+ *
+ * Returns the event ID of the newly sent event.
  */
-    async sendRaw(eventType: string, content: string, asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
+    async sendRaw(eventType: string, content: string, requestConfigOverride: RequestConfigOverride | undefined = undefined, asyncOpts_?: { signal: AbortSignal }): Promise<string> /*throws*/ {
     return await uniffiRustCallAsync(
             /*rustCaller:*/ uniffiCaller,
             /*rustFutureFunc:*/ () => {
                 return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_room_send_raw(
-                    uniffiTypeRoomObjectFactory.clonePointer(this),FfiConverterString.lower(eventType, nativeModule().rustbuffer_alloc),FfiConverterString.lower(content, nativeModule().rustbuffer_alloc)
+                    uniffiTypeRoomObjectFactory.clonePointer(this),FfiConverterString.lower(eventType, nativeModule().rustbuffer_alloc),FfiConverterString.lower(content, nativeModule().rustbuffer_alloc),FfiConverterOptionalTypeRequestConfigOverride.lower(requestConfigOverride, nativeModule().rustbuffer_alloc)
                 );
             },
-            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_void,
-            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_void,
-            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_void,
-            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_void,
-            /*liftFunc:*/ (_v) => {},
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_rust_buffer,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_rust_buffer,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_rust_buffer,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_rust_buffer,
+            // Async returns always go through the JS-side converter: the
+            // FFI symbol returns the future handle (u64), and the user-level
+            // RustBuffer comes back via the shared `rust_future_complete_*`
+            // export. The bytes the runtime hands back must be deserialized
+            // here using the per-callable return-type converter.
+            // Borrowed view over foreign memory: the call site owns the free,
+            // as on the sync paths. Unconditional — a no-op where buffers are
+            // already JS-owned.
+            /*liftFunc:*/ (__rb) => {
+                try {
+                    return FfiConverterString.lift(__rb);
+                } finally {
+                    nativeModule().rustbuffer_free(__rb);
+                }
+            },
             /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
             /*asyncOpts:*/ asyncOpts_,
             /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
@@ -33152,11 +34911,10 @@ private constructor(pointer: UniffiHandle) {
  * scoped to a thread.
  *
  * This allows sending receipts for events without instantiating the
- * [`Timeline`] they belong to, e.g. marking a thread as read from its
- * root and latest event ids. Note that this won't check whether sending
- * the receipt is necessary or valid (i.e. it can move a receipt
- * backwards); prefer [`Timeline::send_single_receipt`] when a timeline
- * is available.
+ * [`Timeline`] they belong to, e.g. marking a thread as read from its root
+ * and latest event ids. Note that this won't check whether sending the
+ * receipt is necessary or valid (i.e. it can move a receipt backwards);
+ * prefer [`Timeline::send_single_receipt`] when a timeline is available.
  */
     async sendSingleReceipt(receiptType: ReceiptType, thread: ReceiptThread, eventId: string, asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
     return await uniffiRustCallAsync(
@@ -33182,22 +34940,25 @@ private constructor(pointer: UniffiHandle) {
  *
  * # Arguments
  *
- * * `event_type` - The type of the state event to send (e.g.
+ * - `event_type` - The type of the state event to send (e.g.
  * `"m.room.name"` or a custom type).
  *
- * * `state_key` - A unique key which defines the overwriting semantics for
+ * - `state_key` - A unique key which defines the overwriting semantics for
  * this piece of room state. This is often an empty string.
  *
- * * `content` - The content of the state event encoded as a JSON string.
+ * - `content` - The content of the state event encoded as a JSON string.
+ *
+ * - `request_config_override` - Overrides the client's request config for
+ * this request. Fields that are not set keep the client's values.
  *
  * Returns the event ID of the newly created state event.
  */
-    async sendStateEventRaw(eventType: string, stateKey: string, content: string, asyncOpts_?: { signal: AbortSignal }): Promise<string> /*throws*/ {
+    async sendStateEventRaw(eventType: string, stateKey: string, content: string, requestConfigOverride: RequestConfigOverride | undefined = undefined, asyncOpts_?: { signal: AbortSignal }): Promise<string> /*throws*/ {
     return await uniffiRustCallAsync(
             /*rustCaller:*/ uniffiCaller,
             /*rustFutureFunc:*/ () => {
                 return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_room_send_state_event_raw(
-                    uniffiTypeRoomObjectFactory.clonePointer(this),FfiConverterString.lower(eventType, nativeModule().rustbuffer_alloc),FfiConverterString.lower(stateKey, nativeModule().rustbuffer_alloc),FfiConverterString.lower(content, nativeModule().rustbuffer_alloc)
+                    uniffiTypeRoomObjectFactory.clonePointer(this),FfiConverterString.lower(eventType, nativeModule().rustbuffer_alloc),FfiConverterString.lower(stateKey, nativeModule().rustbuffer_alloc),FfiConverterString.lower(content, nativeModule().rustbuffer_alloc),FfiConverterOptionalTypeRequestConfigOverride.lower(requestConfigOverride, nativeModule().rustbuffer_alloc)
                 );
             },
             /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_rust_buffer,
@@ -33357,8 +35118,8 @@ private constructor(pointer: UniffiHandle) {
  * root event id.
  *
  * If `subscribed` is `true`, it will subscribe to the thread, with a
- * precision that the subscription was manually requested by the user
- * (i.e. not automatic).
+ * precision that the subscription was manually requested by the user (i.e.
+ * not automatic).
  *
  * If the thread was already subscribed to (resp. unsubscribed from), while
  * trying to subscribe to it (resp. unsubscribe from it), it will do
@@ -33466,6 +35227,52 @@ private constructor(pointer: UniffiHandle) {
     }
     
 /**
+ * The current room state events of the given type, one per state key.
+ *
+ * # Arguments
+ *
+ * - `event_type` - The type of the state events to read. For a type that
+ * has no variant of its own, build one from its string representation
+ * with `stateEventTypeFromString("com.example.custom")`.
+ *
+ * Only the state the sync asked for is stored locally, so for a custom
+ * event type this is empty unless that type is part of the sliding sync
+ * `required_state`.
+ */
+    async stateEvents(eventType: StateEventType, asyncOpts_?: { signal: AbortSignal }): Promise<Array<RoomStateEvent>> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_room_state_events(
+                    uniffiTypeRoomObjectFactory.clonePointer(this),FfiConverterTypeStateEventType.lower(eventType, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_rust_buffer,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_rust_buffer,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_rust_buffer,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_rust_buffer,
+            // Async returns always go through the JS-side converter: the
+            // FFI symbol returns the future handle (u64), and the user-level
+            // RustBuffer comes back via the shared `rust_future_complete_*`
+            // export. The bytes the runtime hands back must be deserialized
+            // here using the per-callable return-type converter.
+            // Borrowed view over foreign memory: the call site owns the free,
+            // as on the sync paths. Unconditional — a no-op where buffers are
+            // already JS-owned.
+            /*liftFunc:*/ (__rb) => {
+                try {
+                    return FfiConverterSequenceTypeRoomStateEvent.lift(__rb);
+                } finally {
+                    nativeModule().rustbuffer_free(__rb);
+                }
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
  * Stop the current users live location share in the room.
  */
     async stopLiveLocationShare(asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
@@ -33491,8 +35298,8 @@ private constructor(pointer: UniffiHandle) {
  * Subscribes to call decline for a currently ringing call, using a
  * `listener` to be notified when someone declines.
  *
- * Will error if `rtc_notification_event_id` is not a valid event id.
- * Use the [`TaskHandle`] to cancel the subscription.
+ * Will error if `rtc_notification_event_id` is not a valid event id. Use
+ * the [`TaskHandle`] to cancel the subscription.
  */
     subscribeToCallDeclineEvents(rtcNotificationEventId: string, listener: CallDeclineListener): TaskHandleLike /*throws*/ {
     return FfiConverterTypeTaskHandle.lift(uniffiCaller.rustCallWithError(
@@ -33502,6 +35309,30 @@ private constructor(pointer: UniffiHandle) {
                 uniffiTypeRoomObjectFactory.clonePointer(this),
         FfiConverterString.lower(rtcNotificationEventId, nativeModule().rustbuffer_alloc),
         FfiConverterTypeCallDeclineListener.lower(listener, nativeModule().rustbuffer_alloc),
+                callStatus);
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+    ));
+    }
+    
+/**
+ * Subscribe to changes of the effective message retention policy of this
+ * room ([MSC1763](https://github.com/matrix-org/matrix-spec-proposals/pull/1763)).
+ *
+ * The listener is first called with the current effective retention
+ * policy, then whenever it changes, either because the cached homeserver
+ * retention configuration was updated or because the room's
+ * `m.room.retention` state event changed.
+ *
+ * This never makes a request to the homeserver. The policy is `None` while
+ * the homeserver's retention configuration was never fetched.
+ */
+    subscribeToEffectiveRetention(listener: EffectiveRetentionListener): TaskHandleLike {
+    return FfiConverterTypeTaskHandle.lift(uniffiCaller.rustCall(
+            /*caller:*/ (callStatus) => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_room_subscribe_to_effective_retention(
+                uniffiTypeRoomObjectFactory.clonePointer(this),
+        FfiConverterTypeEffectiveRetentionListener.lower(listener, nativeModule().rustbuffer_alloc),
                 callStatus);
             },
             /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
@@ -33536,9 +35367,8 @@ private constructor(pointer: UniffiHandle) {
  * Subscribes to requests to join this room (knock member events), using a
  * `listener` to be notified of the changes.
  *
- * The current requests to join the room will be emitted immediately
- * when subscribing, along with a [`TaskHandle`] to cancel the
- * subscription.
+ * The current requests to join the room will be emitted immediately when
+ * subscribing, along with a [`TaskHandle`] to cancel the subscription.
  */
     async subscribeToKnockRequests(listener: KnockRequestsListener, asyncOpts_?: { signal: AbortSignal }): Promise<TaskHandleLike> /*throws*/ {
     return await uniffiRustCallAsync(
@@ -33564,6 +35394,38 @@ private constructor(pointer: UniffiHandle) {
         );
     }
     
+/**
+ * Subscribe to the message-like events of the given type in this room.
+ *
+ * The listener is called with every event of that type that a sync brings
+ * into the room's timeline from now on, decrypted if it was encrypted.
+ *
+ * This is built on the SDK's sync event handlers, so events come from sync
+ * only (not from pagination).
+ * An event that couldn't be decrypted during sync will not be reported
+ * even if it gets decrypted later.
+ *
+ * Use the returned [`TaskHandle`] to cancel the subscription.
+ *
+ * # Arguments
+ *
+ * - `event_type` - The type of the events to listen to. Build one from its
+ * string representation with
+ * `messageLikeEventTypeFromString("org.example.type")`.
+ */
+    subscribeToMessageLikeEvents(eventType: MessageLikeEventType, listener: RoomMessageLikeEventsListener): TaskHandleLike {
+    return FfiConverterTypeTaskHandle.lift(uniffiCaller.rustCall(
+            /*caller:*/ (callStatus) => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_room_subscribe_to_message_like_events(
+                uniffiTypeRoomObjectFactory.clonePointer(this),
+        FfiConverterTypeMessageLikeEventType.lower(eventType, nativeModule().rustbuffer_alloc),
+        FfiConverterTypeRoomMessageLikeEventsListener.lower(listener, nativeModule().rustbuffer_alloc),
+                callStatus);
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+    ));
+    }
+    
     subscribeToRoomInfoUpdates(listener: RoomInfoListener): TaskHandleLike {
     return FfiConverterTypeTaskHandle.lift(uniffiCaller.rustCall(
             /*caller:*/ (callStatus) => {
@@ -33580,8 +35442,8 @@ private constructor(pointer: UniffiHandle) {
  * Subscribe to all send queue updates in this room.
  *
  * The given listener will be immediately called with
- * `RoomSendQueueUpdate::NewLocalEvent` for each local echo existing in
- * the queue.
+ * `RoomSendQueueUpdate::NewLocalEvent` for each local echo existing in the
+ * queue.
  */
     async subscribeToSendQueueUpdates(listener: SendQueueListener, asyncOpts_?: { signal: AbortSignal }): Promise<TaskHandleLike> /*throws*/ {
     return await uniffiRustCallAsync(
@@ -33605,6 +35467,35 @@ private constructor(pointer: UniffiHandle) {
             /*asyncOpts:*/ asyncOpts_,
             /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
         );
+    }
+    
+/**
+ * Subscribe to the room state events of the given type.
+ *
+ * The listener is called with the full current list of state events of
+ * that type, one per state key, immediately and then after every sync that
+ * changed any of them. All the changes of one sync are reported as a
+ * single snapshot.
+ *
+ * Use the returned [`TaskHandle`] to cancel the subscription.
+ *
+ * # Arguments
+ *
+ * - `event_type` - The type of the state events to listen to. For a type
+ * that has no variant of its own, build one from its string
+ * representation with `stateEventTypeFromString("com.example.custom")`.
+ */
+    subscribeToStateEvents(eventType: StateEventType, listener: RoomStateEventsListener): TaskHandleLike {
+    return FfiConverterTypeTaskHandle.lift(uniffiCaller.rustCall(
+            /*caller:*/ (callStatus) => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_room_subscribe_to_state_events(
+                uniffiTypeRoomObjectFactory.clonePointer(this),
+        FfiConverterTypeStateEventType.lower(eventType, nativeModule().rustbuffer_alloc),
+        FfiConverterTypeRoomStateEventsListener.lower(listener, nativeModule().rustbuffer_alloc),
+                callStatus);
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+    ));
     }
     
     subscribeToTypingNotifications(listener: TypingNotificationsListener): TaskHandleLike {
@@ -33999,11 +35890,11 @@ private constructor(pointer: UniffiHandle) {
  *
  * # Arguments
  *
- * * `mime_type` - The mime description of the avatar, for example
+ * - `mime_type` - The mime description of the avatar, for example
  * image/jpeg
- * * `data` - The raw data that will be uploaded to the homeserver's
+ * - `data` - The raw data that will be uploaded to the homeserver's
  * content repository
- * * `media_info` - The media info used as avatar image info.
+ * - `media_info` - The media info used as avatar image info.
  */
     async uploadAvatar(mimeType: string, data: ArrayBuffer, mediaInfo: ImageInfo | undefined, asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
     return await uniffiRustCallAsync(
@@ -34025,15 +35916,15 @@ private constructor(pointer: UniffiHandle) {
     }
     
 /**
- * Remove verification requirements for the given users and
- * resend messages that failed to send because their identities were no
- * longer verified (in response to
+ * Remove verification requirements for the given users and resend messages
+ * that failed to send because their identities were no longer verified (in
+ * response to
  * `SessionRecipientCollectionError::VerifiedUserChangedIdentity`)
  *
  * # Arguments
  *
- * * `user_ids` - The list of users identifiers received in the error
- * * `transaction_id` - The send queue transaction identifier of the local
+ * - `user_ids` - The list of users identifiers received in the error
+ * - `transaction_id` - The send queue transaction identifier of the local
  * echo the send error applies to
  */
     async withdrawVerificationAndResend(userIds: Array<string>, sendHandle: SendHandleLike, asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
@@ -34576,20 +36467,20 @@ export type WidgetSettings = {
     widgetId: string,
     /**
      * Whether or not the widget should be initialized on load message
-     * (`ContentLoad` message), or upon creation/attaching of the widget to
-     * the SDK's state machine that drives the API.
+     * (`ContentLoad` message), or upon creation/attaching of the widget to the
+     * SDK's state machine that drives the API.
      */
     initAfterContentLoad: boolean,
     /**
-     * This contains the url from the widget state event.
-     * In this url placeholders can be used to pass information from the client
-     * to the widget. Possible values are: `$widgetId`, `$parentUrl`,
-     * `$userId`, `$lang`, `$fontScale`, `$analyticsID`.
+     * This contains the url from the widget state event. In this url
+     * placeholders can be used to pass information from the client to the
+     * widget. Possible values are: `$widgetId`, `$parentUrl`, `$userId`,
+     * `$lang`, `$fontScale`, `$analyticsID`.
      *
      * # Examples
      *
-     * e.g `http://widget.domain?username=$userId`
-     * will become: `http://widget.domain?username=@user_matrix_id:server.domain`.
+     * e.g `http://widget.domain?username=$userId` will become:
+     * `http://widget.domain?username=@user_matrix_id:server.domain`.
      */
     rawUrl: string
 }
@@ -35646,7 +37537,8 @@ const FfiConverterTypeAccountManagementAction = (() => {
 
 // Enum: AuthData
 export enum AuthData_Tags {
-    Password = "Password"
+    Password = "Password",
+    OAuth = "OAuth"
 }
 export const AuthData = (() => {
 
@@ -35684,18 +37576,53 @@ inner: {passwordDetails: AuthDataPasswordDetails }): Password_ {
 
     }
 
+    type OAuth__interface = {
+        tag: AuthData_Tags.OAuth;
+        inner: 
+Readonly<{session: string}>
+    };
+    /**
+     * OAuth authentication (`m.oauth`).
+     */
+    class OAuth_ extends UniffiEnum implements OAuth__interface {
+        /**
+         * @private
+         * This field is private and should not be used, use `tag` instead.
+         */
+        readonly [uniffiTypeNameSymbol] = "AuthData";
+        readonly tag = AuthData_Tags.OAuth;
+        readonly inner: 
+Readonly<{session: string}>;
+        constructor(
+inner: {session: string }) {
+            super("AuthData", "OAuth");
+
+            this.inner = Object.freeze(inner);
+        }
+        static new(
+inner: {session: string }): OAuth_ {
+            return new OAuth_(inner);
+        }
+
+        static instanceOf(obj: any): obj is OAuth_ {
+            return obj.tag === AuthData_Tags.OAuth;
+        }
+
+    }
+
     function instanceOf(obj: any): obj is AuthData {
         return obj[uniffiTypeNameSymbol] === "AuthData";
     }
 
     return Object.freeze({
         instanceOf,
-  Password: Password_
+  Password: Password_, 
+  OAuth: OAuth_
     });
 
 })();
 export type AuthData = InstanceType<
-    typeof AuthData['Password']
+    typeof AuthData['Password' | 'OAuth']
 >;
 
 // FfiConverter for enum AuthData
@@ -35705,6 +37632,7 @@ const FfiConverterTypeAuthData = (() => {
         readFromCursor(c: Cursor): TypeName {
             switch (c.readI32()) {
                 case 1: return new AuthData.Password({passwordDetails: FfiConverterTypeAuthDataPasswordDetails.readFromCursor(c) });
+                case 2: return new AuthData.OAuth({session: FfiConverterString.readFromCursor(c) });
                 default: throw new UniffiInternalError.UnexpectedEnumCase();
             }
         }
@@ -35714,6 +37642,12 @@ const FfiConverterTypeAuthData = (() => {
                     c.writeI32(1);
                     const inner = value.inner;
                     FfiConverterTypeAuthDataPasswordDetails.writeIntoCursor(inner.passwordDetails, c);
+                    return;
+                }
+                case AuthData_Tags.OAuth: {
+                    c.writeI32(2);
+                    const inner = value.inner;
+                    FfiConverterString.writeIntoCursor(inner.session, c);
                     return;
                 }
                 default:
@@ -35727,6 +37661,12 @@ const FfiConverterTypeAuthData = (() => {
                     const inner = value.inner;
                     let size = 4;
                     size += FfiConverterTypeAuthDataPasswordDetails.allocationSize(inner.passwordDetails);
+                    return size;
+                }
+                case AuthData_Tags.OAuth: {
+                    const inner = value.inner;
+                    let size = 4;
+                    size += FfiConverterString.allocationSize(inner.session);
                     return size;
                 }
                 default: throw new UniffiInternalError.UnexpectedEnumCase();
@@ -36049,8 +37989,8 @@ inner: {item: NotificationItem }): Event_ {
     };
     /**
      * The event has been filtered out, either because of the user's push
-     * rules, or because the user which triggered it is ignored by the
-     * current user.
+     * rules, or because the user which triggered it is ignored by the current
+     * user.
      */
     class EventFilteredOut_ extends UniffiEnum implements EventFilteredOut__interface {
         /**
@@ -37171,7 +39111,9 @@ export enum CrossSigningResetAuthType_Tags {
 export const CrossSigningResetAuthType = (() => {
 
     type Uiaa__interface = {
-        tag: CrossSigningResetAuthType_Tags.Uiaa
+        tag: CrossSigningResetAuthType_Tags.Uiaa;
+        inner: 
+Readonly<{info: UiaaCrossSigningResetInfo}>
     };
     /**
      * The homeserver requires user-interactive authentication.
@@ -37183,12 +39125,17 @@ export const CrossSigningResetAuthType = (() => {
          */
         readonly [uniffiTypeNameSymbol] = "CrossSigningResetAuthType";
         readonly tag = CrossSigningResetAuthType_Tags.Uiaa;
-        constructor() {
+        readonly inner: 
+Readonly<{info: UiaaCrossSigningResetInfo}>;
+        constructor(
+inner: {info: UiaaCrossSigningResetInfo }) {
             super("CrossSigningResetAuthType", "Uiaa");
-        }
 
-        static new(): Uiaa_ {
-            return new Uiaa_();
+            this.inner = Object.freeze(inner);
+        }
+        static new(
+inner: {info: UiaaCrossSigningResetInfo }): Uiaa_ {
+            return new Uiaa_(inner);
         }
 
         static instanceOf(obj: any): obj is Uiaa_ {
@@ -37253,7 +39200,7 @@ const FfiConverterTypeCrossSigningResetAuthType = (() => {
     class FFIConverter extends AbstractFfiConverterByteArray<TypeName> {
         readFromCursor(c: Cursor): TypeName {
             switch (c.readI32()) {
-                case 1: return new CrossSigningResetAuthType.Uiaa();
+                case 1: return new CrossSigningResetAuthType.Uiaa({info: FfiConverterTypeUiaaCrossSigningResetInfo.readFromCursor(c) });
                 case 2: return new CrossSigningResetAuthType.OAuth({info: FfiConverterTypeOAuthCrossSigningResetInfo.readFromCursor(c) });
                 default: throw new UniffiInternalError.UnexpectedEnumCase();
             }
@@ -37262,6 +39209,8 @@ const FfiConverterTypeCrossSigningResetAuthType = (() => {
             switch (value.tag) {
                 case CrossSigningResetAuthType_Tags.Uiaa: {
                     c.writeI32(1);
+                    const inner = value.inner;
+                    FfiConverterTypeUiaaCrossSigningResetInfo.writeIntoCursor(inner.info, c);
                     return;
                 }
                 case CrossSigningResetAuthType_Tags.OAuth: {
@@ -37278,7 +39227,10 @@ const FfiConverterTypeCrossSigningResetAuthType = (() => {
         allocationSize(value: TypeName): number {
             switch (value.tag) {
                 case CrossSigningResetAuthType_Tags.Uiaa: {
-                    return 4;
+                    const inner = value.inner;
+                    let size = 4;
+                    size += FfiConverterTypeUiaaCrossSigningResetInfo.allocationSize(inner.info);
+                    return size;
                 }
                 case CrossSigningResetAuthType_Tags.OAuth: {
                     const inner = value.inner;
@@ -37952,6 +39904,52 @@ const FfiConverterTypeDehydratedDeviceEvent = (() => {
 })();
 
 /**
+ * What to do with a delayed event that hasn't been distributed to the room
+ * yet ([MSC4140]).
+ *
+ * [MSC4140]: https://github.com/matrix-org/matrix-spec-proposals/pull/4140
+ */
+export enum DelayedEventUpdateAction {
+    /**
+     * Cancel the delayed event: it will never be sent to the room.
+     */
+    Cancel,
+    /**
+     * Restart the delay timeout, keeping the event scheduled.
+     */
+    Restart,
+    /**
+     * Send the event to the room right away.
+     */
+    Send
+}
+
+const FfiConverterTypeDelayedEventUpdateAction = (() => {
+    type TypeName = DelayedEventUpdateAction;
+    class FFIConverter extends AbstractFfiConverterByteArray<TypeName> {
+        readFromCursor(c: Cursor): TypeName {
+            switch (c.readI32()) {
+                case 1: return DelayedEventUpdateAction.Cancel;
+                case 2: return DelayedEventUpdateAction.Restart;
+                case 3: return DelayedEventUpdateAction.Send;
+                default: throw new UniffiInternalError.UnexpectedEnumCase();
+            }
+        }
+        writeIntoCursor(value: TypeName, c: Cursor): void {
+            switch (value) {
+                case DelayedEventUpdateAction.Cancel: return c.writeI32(1);
+                case DelayedEventUpdateAction.Restart: return c.writeI32(2);
+                case DelayedEventUpdateAction.Send: return c.writeI32(3);
+            }
+        }
+        allocationSize(value: TypeName): number {
+            return 4;
+        }
+    }
+    return new FFIConverter();
+})();
+
+/**
  * Result for the check if a store has a valid secrets bundle.
  */
 export enum DetectedSecretsBundle {
@@ -38544,10 +40542,15 @@ export interface QrCodeDataLike {
  * The server name contained within the scanned QR code data.
  *
  * Note: This value is only present when scanning a QR code that belongs to
- * a logged in client. The mode where the new client shows the QR code
- * will return `None`.
+ * a logged in client. The mode where the new client shows the QR code will
+ * return `None`.
  */
     serverName(): string | undefined;
+/**
+ * Serialize the [`QrCodeData`] into a base64 encoded string for encoding
+ * as a QR code.
+ */
+    toBase64(): string;
 /**
  * Serialize the [`QrCodeData`] into a byte vector for encoding as a QR
  * code.
@@ -38647,8 +40650,8 @@ private constructor(pointer: UniffiHandle) {
  * The server name contained within the scanned QR code data.
  *
  * Note: This value is only present when scanning a QR code that belongs to
- * a logged in client. The mode where the new client shows the QR code
- * will return `None`.
+ * a logged in client. The mode where the new client shows the QR code will
+ * return `None`.
  */
     serverName(): string | undefined {
     const __rb: Uint8Array = uniffiCaller.rustCall(
@@ -38661,6 +40664,26 @@ private constructor(pointer: UniffiHandle) {
     );
     try {
         return FfiConverterOptionalString.lift(__rb);
+    } finally {
+        nativeModule().rustbuffer_free(__rb);
+    }
+    }
+    
+/**
+ * Serialize the [`QrCodeData`] into a base64 encoded string for encoding
+ * as a QR code.
+ */
+    toBase64(): string {
+    const __rb: Uint8Array = uniffiCaller.rustCall(
+            /*caller:*/ (callStatus) => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_qrcodedata_to_base64(
+                uniffiTypeQrCodeDataObjectFactory.clonePointer(this),
+                callStatus);
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+    );
+    try {
+        return FfiConverterString.lift(__rb);
     } finally {
         nativeModule().rustbuffer_free(__rb);
     }
@@ -39564,8 +41587,8 @@ export const GeneratedQrLoginProgress = (() => {
 Readonly<{qrCode: QrCodeDataLike}>
     };
     /**
-     * We have established the secure channel and now need to display the
-     * QR code so that the existing device can scan it.
+     * We have established the secure channel and now need to display the QR
+     * code so that the existing device can scan it.
      */
     class QrReady_ extends UniffiEnum implements QrReady__interface {
         /**
@@ -39600,8 +41623,8 @@ Readonly<{checkCodeSender: CheckCodeSenderLike}>
     };
     /**
      * The existing device has scanned the QR code and is displaying the
-     * checkcode. We now need to ask the user to enter the checkcode so that
-     * we can verify that the channel is indeed secure.
+     * checkcode. We now need to ask the user to enter the checkcode so that we
+     * can verify that the channel is indeed secure.
      */
     class QrScanned_ extends UniffiEnum implements QrScanned__interface {
         /**
@@ -40006,8 +42029,8 @@ export enum GrantGeneratedQrLoginProgress_Tags {
     Done = "Done"
 }
 /**
- * Enum describing the progress of granting login by generating a QR code to
- * be scanned on the new device.
+ * Enum describing the progress of granting login by generating a QR code to be
+ * scanned on the new device.
  */
 export const GrantGeneratedQrLoginProgress = (() => {
 
@@ -40044,8 +42067,8 @@ export const GrantGeneratedQrLoginProgress = (() => {
 Readonly<{qrCode: QrCodeDataLike}>
     };
     /**
-     * We have established the secure channel and now need to display the
-     * QR code so that the existing device can scan it.
+     * We have established the secure channel and now need to display the QR
+     * code so that the existing device can scan it.
      */
     class QrReady_ extends UniffiEnum implements QrReady__interface {
         /**
@@ -40080,8 +42103,8 @@ Readonly<{checkCodeSender: CheckCodeSenderLike}>
     };
     /**
      * The existing device has scanned the QR code and is displaying the
-     * checkcode. We now need to ask the user to enter the checkcode so that
-     * we can verify that the channel is indeed secure.
+     * checkcode. We now need to ask the user to enter the checkcode so that we
+     * can verify that the channel is indeed secure.
      */
     class QrScanned_ extends UniffiEnum implements QrScanned__interface {
         /**
@@ -40214,8 +42237,8 @@ inner: {verificationUri: string; continuationSender: ContinuationMessageSenderLi
 
 })();
 /**
- * Enum describing the progress of granting login by generating a QR code to
- * be scanned on the new device.
+ * Enum describing the progress of granting login by generating a QR code to be
+ * scanned on the new device.
  */
 export type GrantGeneratedQrLoginProgress = InstanceType<
     typeof GrantGeneratedQrLoginProgress['Starting' | 'QrReady' | 'QrScanned' | 'WaitingForAuth' | 'SyncingSecrets' | 'Done']
@@ -41012,6 +43035,86 @@ const FfiConverterTypeHumanQrGrantLoginError = (() => {
         }
     }
     return new FfiConverter();
+})();
+
+/**
+ * The room invite permissions that can be set.
+ */
+export enum InvitePermissionAction {
+    /**
+     * Allow room invitations.
+     */
+    Allow,
+    /**
+     * Block all room invitations.
+     */
+    Block
+}
+
+const FfiConverterTypeInvitePermissionAction = (() => {
+    type TypeName = InvitePermissionAction;
+    class FFIConverter extends AbstractFfiConverterByteArray<TypeName> {
+        readFromCursor(c: Cursor): TypeName {
+            switch (c.readI32()) {
+                case 1: return InvitePermissionAction.Allow;
+                case 2: return InvitePermissionAction.Block;
+                default: throw new UniffiInternalError.UnexpectedEnumCase();
+            }
+        }
+        writeIntoCursor(value: TypeName, c: Cursor): void {
+            switch (value) {
+                case InvitePermissionAction.Allow: return c.writeI32(1);
+                case InvitePermissionAction.Block: return c.writeI32(2);
+            }
+        }
+        allocationSize(value: TypeName): number {
+            return 4;
+        }
+    }
+    return new FFIConverter();
+})();
+
+/**
+ * The current room invite permission state.
+ */
+export enum InvitePermissionState {
+    /**
+     * No default restriction on room invitations.
+     */
+    Unrestricted,
+    /**
+     * All room invitations are blocked.
+     */
+    Block,
+    /**
+     * An invite permission not supported by the SDK.
+     */
+    Unsupported
+}
+
+const FfiConverterTypeInvitePermissionState = (() => {
+    type TypeName = InvitePermissionState;
+    class FFIConverter extends AbstractFfiConverterByteArray<TypeName> {
+        readFromCursor(c: Cursor): TypeName {
+            switch (c.readI32()) {
+                case 1: return InvitePermissionState.Unrestricted;
+                case 2: return InvitePermissionState.Block;
+                case 3: return InvitePermissionState.Unsupported;
+                default: throw new UniffiInternalError.UnexpectedEnumCase();
+            }
+        }
+        writeIntoCursor(value: TypeName, c: Cursor): void {
+            switch (value) {
+                case InvitePermissionState.Unrestricted: return c.writeI32(1);
+                case InvitePermissionState.Block: return c.writeI32(2);
+                case InvitePermissionState.Unsupported: return c.writeI32(3);
+            }
+        }
+        allocationSize(value: TypeName): number {
+            return 4;
+        }
+    }
+    return new FFIConverter();
 })();
 
 
@@ -43804,8 +45907,8 @@ export interface SyncServiceLike {
  * Force expiring both sliding sync sessions.
  *
  * This ensures that the sync service is stopped before expiring both
- * sessions. It should be used sparingly, as it will cause a restart of
- * the sessions on the server as well.
+ * sessions. It should be used sparingly, as it will cause a restart of the
+ * sessions on the server as well.
  */
     expireSessions(asyncOpts_?: { signal: AbortSignal }): Promise<void>;
     roomListService(): RoomListServiceLike;
@@ -43838,8 +45941,8 @@ private constructor(pointer: UniffiHandle) {
  * Force expiring both sliding sync sessions.
  *
  * This ensures that the sync service is stopped before expiring both
- * sessions. It should be used sparingly, as it will cause a restart of
- * the sessions on the server as well.
+ * sessions. It should be used sparingly, as it will cause a restart of the
+ * sessions on the server as well.
  */
     async expireSessions(asyncOpts_?: { signal: AbortSignal }): Promise<void> {
     return await uniffiRustCallAsync(
@@ -44761,7 +46864,8 @@ export const OAuthPrompt = (() => {
      * The Authorization Server should prompt the End-User to create a user
      * account.
      *
-     * Defined in [Initiating User Registration via OpenID Connect](https://openid.net/specs/openid-connect-prompt-create-1_0.html).
+     * Defined in
+     * [Initiating User Registration via OpenID Connect](https://openid.net/specs/openid-connect-prompt-create-1_0.html).
      */
     class Create_ extends UniffiEnum implements Create__interface {
         /**
@@ -47225,8 +49329,8 @@ export const RoomLoadSettings = (() => {
 Readonly<{roomId: string}>
     };
     /**
-     * Load a single room from the `StateStore` into the in-memory state
-     * store `BaseStateStore`.
+     * Load a single room from the `StateStore` into the in-memory state store
+     * `BaseStateStore`.
      *
      * Please, be careful with this option. Read the documentation of
      * [`RoomLoadSettings`].
@@ -47316,6 +49420,212 @@ const FfiConverterTypeRoomLoadSettings = (() => {
                     const inner = value.inner;
                     let size = 4;
                     size += FfiConverterString.allocationSize(inner.roomId);
+                    return size;
+                }
+                default: throw new UniffiInternalError.UnexpectedEnumCase();
+            }
+        }
+    }
+    return new FFIConverter();
+})();
+
+
+// Enum: RtcTransport
+export enum RtcTransport_Tags {
+    LiveKit = "LiveKit",
+    LegacyLiveKit = "LegacyLiveKit",
+    Custom = "Custom"
+}
+/**
+ * Information about a MatrixRTC transport advertised by the homeserver.
+ */
+export const RtcTransport = (() => {
+
+    type LiveKit__interface = {
+        tag: RtcTransport_Tags.LiveKit;
+        inner: 
+Readonly<{url: string; serviceUrl?: string}>
+    };
+    /**
+     * A LiveKit RTC transport with the `m.livekit` type, as defined in the
+     * merged state of MSC4195.
+     */
+    class LiveKit_ extends UniffiEnum implements LiveKit__interface {
+        /**
+         * @private
+         * This field is private and should not be used, use `tag` instead.
+         */
+        readonly [uniffiTypeNameSymbol] = "RtcTransport";
+        readonly tag = RtcTransport_Tags.LiveKit;
+        readonly inner: 
+Readonly<{url: string; serviceUrl?: string}>;
+        constructor(
+inner: {url: string; serviceUrl?: string }) {
+            super("RtcTransport", "LiveKit");
+
+            this.inner = Object.freeze(inner);
+        }
+        static new(
+inner: {url: string; serviceUrl?: string }): LiveKit_ {
+            return new LiveKit_(inner);
+        }
+
+        static instanceOf(obj: any): obj is LiveKit_ {
+            return obj.tag === RtcTransport_Tags.LiveKit;
+        }
+
+    }
+
+    type LegacyLiveKit__interface = {
+        tag: RtcTransport_Tags.LegacyLiveKit;
+        inner: 
+Readonly<{url?: string; serviceUrl?: string}>
+    };
+    /**
+     * A LiveKit RTC transport with the legacy `livekit` type, used by
+     * implementations of earlier versions of MSC4195.
+     */
+    class LegacyLiveKit_ extends UniffiEnum implements LegacyLiveKit__interface {
+        /**
+         * @private
+         * This field is private and should not be used, use `tag` instead.
+         */
+        readonly [uniffiTypeNameSymbol] = "RtcTransport";
+        readonly tag = RtcTransport_Tags.LegacyLiveKit;
+        readonly inner: 
+Readonly<{url?: string; serviceUrl?: string}>;
+        constructor(
+inner: {url?: string; serviceUrl?: string }) {
+            super("RtcTransport", "LegacyLiveKit");
+
+            this.inner = Object.freeze(inner);
+        }
+        static new(
+inner: {url?: string; serviceUrl?: string }): LegacyLiveKit_ {
+            return new LegacyLiveKit_(inner);
+        }
+
+        static instanceOf(obj: any): obj is LegacyLiveKit_ {
+            return obj.tag === RtcTransport_Tags.LegacyLiveKit;
+        }
+
+    }
+
+    type Custom__interface = {
+        tag: RtcTransport_Tags.Custom;
+        inner: 
+Readonly<{transportType: string; data: string}>
+    };
+    /**
+     * A transport type the SDK doesn't know about, up for interpretation by
+     * the consumer.
+     */
+    class Custom_ extends UniffiEnum implements Custom__interface {
+        /**
+         * @private
+         * This field is private and should not be used, use `tag` instead.
+         */
+        readonly [uniffiTypeNameSymbol] = "RtcTransport";
+        readonly tag = RtcTransport_Tags.Custom;
+        readonly inner: 
+Readonly<{transportType: string; data: string}>;
+        constructor(
+inner: {transportType: string; data: string }) {
+            super("RtcTransport", "Custom");
+
+            this.inner = Object.freeze(inner);
+        }
+        static new(
+inner: {transportType: string; data: string }): Custom_ {
+            return new Custom_(inner);
+        }
+
+        static instanceOf(obj: any): obj is Custom_ {
+            return obj.tag === RtcTransport_Tags.Custom;
+        }
+
+    }
+
+    function instanceOf(obj: any): obj is RtcTransport {
+        return obj[uniffiTypeNameSymbol] === "RtcTransport";
+    }
+
+    return Object.freeze({
+        instanceOf,
+  LiveKit: LiveKit_, 
+  LegacyLiveKit: LegacyLiveKit_, 
+  Custom: Custom_
+    });
+
+})();
+/**
+ * Information about a MatrixRTC transport advertised by the homeserver.
+ */
+export type RtcTransport = InstanceType<
+    typeof RtcTransport['LiveKit' | 'LegacyLiveKit' | 'Custom']
+>;
+
+// FfiConverter for enum RtcTransport
+const FfiConverterTypeRtcTransport = (() => {
+    type TypeName = RtcTransport;
+    class FFIConverter extends AbstractFfiConverterByteArray<TypeName> {
+        readFromCursor(c: Cursor): TypeName {
+            switch (c.readI32()) {
+                case 1: return new RtcTransport.LiveKit({url: FfiConverterString.readFromCursor(c), serviceUrl: FfiConverterOptionalString.readFromCursor(c) });
+                case 2: return new RtcTransport.LegacyLiveKit({url: FfiConverterOptionalString.readFromCursor(c), serviceUrl: FfiConverterOptionalString.readFromCursor(c) });
+                case 3: return new RtcTransport.Custom({transportType: FfiConverterString.readFromCursor(c), data: FfiConverterString.readFromCursor(c) });
+                default: throw new UniffiInternalError.UnexpectedEnumCase();
+            }
+        }
+        writeIntoCursor(value: TypeName, c: Cursor): void {
+            switch (value.tag) {
+                case RtcTransport_Tags.LiveKit: {
+                    c.writeI32(1);
+                    const inner = value.inner;
+                    FfiConverterString.writeIntoCursor(inner.url, c);
+                    FfiConverterOptionalString.writeIntoCursor(inner.serviceUrl, c);
+                    return;
+                }
+                case RtcTransport_Tags.LegacyLiveKit: {
+                    c.writeI32(2);
+                    const inner = value.inner;
+                    FfiConverterOptionalString.writeIntoCursor(inner.url, c);
+                    FfiConverterOptionalString.writeIntoCursor(inner.serviceUrl, c);
+                    return;
+                }
+                case RtcTransport_Tags.Custom: {
+                    c.writeI32(3);
+                    const inner = value.inner;
+                    FfiConverterString.writeIntoCursor(inner.transportType, c);
+                    FfiConverterString.writeIntoCursor(inner.data, c);
+                    return;
+                }
+                default:
+                    // Throwing from here means that RtcTransport_Tags hasn't matched an ordinal.
+                    throw new UniffiInternalError.UnexpectedEnumCase();
+            }
+        }
+        allocationSize(value: TypeName): number {
+            switch (value.tag) {
+                case RtcTransport_Tags.LiveKit: {
+                    const inner = value.inner;
+                    let size = 4;
+                    size += FfiConverterString.allocationSize(inner.url);
+                    size += FfiConverterOptionalString.allocationSize(inner.serviceUrl);
+                    return size;
+                }
+                case RtcTransport_Tags.LegacyLiveKit: {
+                    const inner = value.inner;
+                    let size = 4;
+                    size += FfiConverterOptionalString.allocationSize(inner.url);
+                    size += FfiConverterOptionalString.allocationSize(inner.serviceUrl);
+                    return size;
+                }
+                case RtcTransport_Tags.Custom: {
+                    const inner = value.inner;
+                    let size = 4;
+                    size += FfiConverterString.allocationSize(inner.transportType);
+                    size += FfiConverterString.allocationSize(inner.data);
                     return size;
                 }
                 default: throw new UniffiInternalError.UnexpectedEnumCase();
@@ -47878,8 +50188,11 @@ const FfiConverterTypeSessionVerificationData = (() => {
 
 export enum SlidingSyncVersionBuilder {
     None,
-    Native,
-    DiscoverNative
+    Unstable,
+    Stable,
+    DiscoverUnstable,
+    DiscoverStable,
+    Discover
 }
 
 const FfiConverterTypeSlidingSyncVersionBuilder = (() => {
@@ -47888,16 +50201,22 @@ const FfiConverterTypeSlidingSyncVersionBuilder = (() => {
         readFromCursor(c: Cursor): TypeName {
             switch (c.readI32()) {
                 case 1: return SlidingSyncVersionBuilder.None;
-                case 2: return SlidingSyncVersionBuilder.Native;
-                case 3: return SlidingSyncVersionBuilder.DiscoverNative;
+                case 2: return SlidingSyncVersionBuilder.Unstable;
+                case 3: return SlidingSyncVersionBuilder.Stable;
+                case 4: return SlidingSyncVersionBuilder.DiscoverUnstable;
+                case 5: return SlidingSyncVersionBuilder.DiscoverStable;
+                case 6: return SlidingSyncVersionBuilder.Discover;
                 default: throw new UniffiInternalError.UnexpectedEnumCase();
             }
         }
         writeIntoCursor(value: TypeName, c: Cursor): void {
             switch (value) {
                 case SlidingSyncVersionBuilder.None: return c.writeI32(1);
-                case SlidingSyncVersionBuilder.Native: return c.writeI32(2);
-                case SlidingSyncVersionBuilder.DiscoverNative: return c.writeI32(3);
+                case SlidingSyncVersionBuilder.Unstable: return c.writeI32(2);
+                case SlidingSyncVersionBuilder.Stable: return c.writeI32(3);
+                case SlidingSyncVersionBuilder.DiscoverUnstable: return c.writeI32(4);
+                case SlidingSyncVersionBuilder.DiscoverStable: return c.writeI32(5);
+                case SlidingSyncVersionBuilder.Discover: return c.writeI32(6);
             }
         }
         allocationSize(value: TypeName): number {
@@ -49704,6 +52023,171 @@ const uniffiCallbackInterfaceDevicesUpdatesListener: { vtable: any; register: ()
 // FfiConverter protocol for callback interfaces
 const FfiConverterTypeDevicesUpdatesListener = new FfiConverterCallback<DevicesUpdatesListener>();
 
+/**
+ * A secret storage key.
+ */
+export interface SecretStorageKeyLike {
+    
+/**
+ * The base-58 representation of the key to present to the user.
+ *
+ * _Note_: This returns a copy of the private key material of the
+ * [`SecretStorageKey`] as a string. The caller needs to ensure that this
+ * string is zeroized.
+ */
+    toBase58(): string;
+}
+/**
+ * @deprecated Use `SecretStorageKeyLike` instead.
+ */
+export type SecretStorageKeyInterface = SecretStorageKeyLike;
+
+
+/**
+ * A secret storage key.
+ */
+export class SecretStorageKey extends UniffiAbstractObject implements SecretStorageKeyLike {
+
+    readonly [uniffiTypeNameSymbol] = "SecretStorageKey";
+    readonly [destructorGuardSymbol]: UniffiGcObject;
+    readonly [pointerLiteralSymbol]: UniffiHandle;
+/**
+ * Create a new random secret storage key.
+ */
+    constructor() {
+        super();
+        const pointer =
+            uniffiCaller.rustCall(
+            /*caller:*/ (callStatus) => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_constructor_secretstoragekey_new(
+                callStatus);
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+    );
+        this[pointerLiteralSymbol] = pointer;
+        this[destructorGuardSymbol] = uniffiTypeSecretStorageKeyObjectFactory.bless(pointer);
+    }
+
+    
+/**
+ * Create a new secret storage key from a passphrase.
+ */
+    static newFromPassphrase(passphrase: string): SecretStorageKeyLike {
+    return FfiConverterTypeSecretStorageKey.lift(uniffiCaller.rustCall(
+            /*caller:*/ (callStatus) => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_constructor_secretstoragekey_new_from_passphrase(
+        FfiConverterString.lower(passphrase, nativeModule().rustbuffer_alloc),
+                callStatus);
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+    ));
+    }
+    
+
+    
+/**
+ * The base-58 representation of the key to present to the user.
+ *
+ * _Note_: This returns a copy of the private key material of the
+ * [`SecretStorageKey`] as a string. The caller needs to ensure that this
+ * string is zeroized.
+ */
+    toBase58(): string {
+    const __rb: Uint8Array = uniffiCaller.rustCall(
+            /*caller:*/ (callStatus) => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_secretstoragekey_to_base58(
+                uniffiTypeSecretStorageKeyObjectFactory.clonePointer(this),
+                callStatus);
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+    );
+    try {
+        return FfiConverterString.lift(__rb);
+    } finally {
+        nativeModule().rustbuffer_free(__rb);
+    }
+    }
+    
+
+    uniffiDestroy(): void {
+        const ptr = (this as any)[destructorGuardSymbol];
+        if (ptr !== undefined) {
+            const pointer = uniffiTypeSecretStorageKeyObjectFactory.pointer(this);
+            uniffiTypeSecretStorageKeyObjectFactory.freePointer(pointer);
+            uniffiTypeSecretStorageKeyObjectFactory.unbless(ptr);
+            delete (this as any)[destructorGuardSymbol];
+        }
+    }
+
+    static instanceOf(obj_: any): obj_ is SecretStorageKey {
+        return uniffiTypeSecretStorageKeyObjectFactory.isConcreteType(obj_);
+    }
+
+    
+}
+
+const uniffiTypeSecretStorageKeyObjectFactory: UniffiObjectFactory<SecretStorageKeyLike> = (() => {
+    
+    /// <reference lib="es2021" />
+    const registry = typeof FinalizationRegistry !== 'undefined' ? new FinalizationRegistry<UniffiHandle>((heldValue: UniffiHandle) => {
+        uniffiTypeSecretStorageKeyObjectFactory.freePointer(heldValue);
+    }) : null;
+    
+    return {
+    create(pointer: UniffiHandle): SecretStorageKeyLike {
+        const instance = Object.create(SecretStorageKey.prototype);
+        instance[pointerLiteralSymbol] = pointer;
+        instance[destructorGuardSymbol] = this.bless(pointer);
+        instance[uniffiTypeNameSymbol] = "SecretStorageKey";
+        return instance;
+    },
+
+    
+    bless(p: UniffiHandle): UniffiGcObject {
+        const ptr = {
+            p, // make sure this object doesn't get optimized away.
+            markDestroyed: () => undefined,
+        };
+        if (registry) {
+            registry.register(ptr, p, ptr);
+        }
+        return ptr;
+    },
+
+    unbless(ptr_: UniffiGcObject) {
+        if (registry) {
+            registry.unregister(ptr_);
+        }
+    },
+
+    pointer(obj_: SecretStorageKeyLike): UniffiHandle {
+        if ((obj_ as any)[destructorGuardSymbol] === undefined) {
+            throw new UniffiInternalError.UnexpectedNullPointer();
+        }
+        return (obj_ as any)[pointerLiteralSymbol];
+    },
+
+    clonePointer(obj_: SecretStorageKeyLike): UniffiHandle {
+        const pointer = this.pointer(obj_);
+        return uniffiCaller.rustCall(
+            /*caller:*/ (callStatus) => nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_clone_secretstoragekey(pointer, callStatus),
+            /*liftString:*/ FfiConverterString.lift
+        );
+    },
+
+    freePointer(pointer: UniffiHandle): void {
+        uniffiCaller.rustCall(
+            /*caller:*/ (callStatus) => nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_free_secretstoragekey(pointer, callStatus),
+            /*liftString:*/ FfiConverterString.lift
+        );
+    },
+
+    isConcreteType(obj_: any): obj_ is SecretStorageKeyLike {
+        return obj_[destructorGuardSymbol] && obj_[uniffiTypeNameSymbol] === "SecretStorageKey";
+    },
+}})();
+const FfiConverterTypeSecretStorageKey = new FfiConverterObject(uniffiTypeSecretStorageKeyObjectFactory);
+
 
 export interface EnableRecoveryProgressListener {
     
@@ -49769,8 +52253,8 @@ export interface SecretsBundleWithUserIdLike {
  * Does the bundle contain a backup key.
  *
  * Since enabling a backup is optional, the backup key might be missing
- * from the bundle. Returns `false` if the backup key is missing,
- * otherwise `true`.
+ * from the bundle. Returns `false` if the backup key is missing, otherwise
+ * `true`.
  */
     containsBackupKey(): boolean;
 }
@@ -49821,8 +52305,8 @@ private constructor(pointer: UniffiHandle) {
  * Does the bundle contain a backup key.
  *
  * Since enabling a backup is optional, the backup key might be missing
- * from the bundle. Returns `false` if the backup key is missing,
- * otherwise `true`.
+ * from the bundle. Returns `false` if the backup key is missing, otherwise
+ * `true`.
  */
     containsBackupKey(): boolean {
     return FfiConverterBool.lift(uniffiCaller.rustCall(
@@ -49979,15 +52463,15 @@ export interface IdentityResetHandleLike {
     authType(): CrossSigningResetAuthType;
     cancel(asyncOpts_?: { signal: AbortSignal }): Promise<void>;
 /**
- * This method starts the identity reset process and
- * will go through the following steps:
+ * This method starts the identity reset process and will go through the
+ * following steps:
  *
  * 1. Disable backing up room keys and delete the active backup
  * 2. Disable recovery and delete secret storage
  * 3. Go through the cross-signing key reset flow
  * 4. Finally, re-enable key backups only if they were enabled before
  */
-    reset(auth: AuthData | undefined, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
+    reset(auth: AuthData, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
 }
 /**
  * @deprecated Use `IdentityResetHandleLike` instead.
@@ -50050,20 +52534,20 @@ private constructor(pointer: UniffiHandle) {
     }
     
 /**
- * This method starts the identity reset process and
- * will go through the following steps:
+ * This method starts the identity reset process and will go through the
+ * following steps:
  *
  * 1. Disable backing up room keys and delete the active backup
  * 2. Disable recovery and delete secret storage
  * 3. Go through the cross-signing key reset flow
  * 4. Finally, re-enable key backups only if they were enabled before
  */
-    async reset(auth: AuthData | undefined, asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
+    async reset(auth: AuthData, asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
     return await uniffiRustCallAsync(
             /*rustCaller:*/ uniffiCaller,
             /*rustFutureFunc:*/ () => {
                 return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_identityresethandle_reset(
-                    uniffiTypeIdentityResetHandleObjectFactory.clonePointer(this),FfiConverterOptionalTypeAuthData.lower(auth, nativeModule().rustbuffer_alloc)
+                    uniffiTypeIdentityResetHandleObjectFactory.clonePointer(this),FfiConverterTypeAuthData.lower(auth, nativeModule().rustbuffer_alloc)
                 );
             },
             /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_void,
@@ -50191,9 +52675,9 @@ export interface UserIdentityLike {
  * action "pinning".
  *
  * If the identity presented for the user changes later on, the newly
- * presented identity is considered to be in "pin violation". This
- * method explicitly accepts the new identity, allowing it to replace
- * the previously pinned one and bringing it out of pin violation.
+ * presented identity is considered to be in "pin violation". This method
+ * explicitly accepts the new identity, allowing it to replace the
+ * previously pinned one and bringing it out of pin violation.
  *
  * UIs should display a warning to the user when encountering an identity
  * which is not verified and is in pin violation.
@@ -50303,9 +52787,9 @@ private constructor(pointer: UniffiHandle) {
  * action "pinning".
  *
  * If the identity presented for the user changes later on, the newly
- * presented identity is considered to be in "pin violation". This
- * method explicitly accepts the new identity, allowing it to replace
- * the previously pinned one and bringing it out of pin violation.
+ * presented identity is considered to be in "pin violation". This method
+ * explicitly accepts the new identity, allowing it to replace the
+ * previously pinned one and bringing it out of pin violation.
  *
  * UIs should display a warning to the user when encountering an identity
  * which is not verified and is in pin violation.
@@ -50568,9 +53052,9 @@ export interface EncryptionLike {
  * Does a backup exist on the server?
  *
  * Because the homeserver doesn't notify us about changes to the backup
- * version, the [`BackupState`] and its listener are a bit crippled.
- * The `BackupState::Unknown` state might mean there is no backup at all or
- * a backup exists but we don't have access to it.
+ * version, the [`BackupState`] and its listener are a bit crippled. The
+ * `BackupState::Unknown` state might mean there is no backup at all or a
+ * backup exists but we don't have access to it.
  *
  * Therefore it is necessary to poll the server for an answer every time
  * you want to differentiate between those two states.
@@ -50593,14 +53077,14 @@ export interface EncryptionLike {
  */
     curve25519Key(asyncOpts_?: { signal: AbortSignal }): Promise<string | undefined>;
 /**
- * Subscribe to lifecycle events emitted by the dehydrated-device
- * manager. The returned [`TaskHandle`] keeps the listener alive; drop
- * it to unsubscribe.
+ * Subscribe to lifecycle events emitted by the dehydrated-device manager.
+ * The returned [`TaskHandle`] keeps the listener alive; drop it to
+ * unsubscribe.
  */
     dehydratedDeviceEventListener(listener: DehydratedDeviceEventListener): TaskHandleLike;
 /**
- * Delete the current dehydrated device, if one exists. Silent if no
- * device is on the server or the server does not implement MSC3814.
+ * Delete the current dehydrated device, if one exists. Silent if no device
+ * is on the server or the server does not implement MSC3814.
  */
     deleteDehydratedDevice(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
 /**
@@ -50615,18 +53099,34 @@ export interface EncryptionLike {
  */
     ed25519Key(asyncOpts_?: { signal: AbortSignal }): Promise<string | undefined>;
     enableBackups(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
-    enableRecovery(waitForBackupsToUpload: boolean, passphrase: string | undefined, progressListener: EnableRecoveryProgressListener, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<string>;
 /**
- * Does the user have other devices that the current device can verify
- * against?
+ * Enable recovery on the account.
  *
- * The device must be signed by the user's cross-signing key, must have an
- * identity, and must not be a dehydrated device.
+ * # Arguments
+ *
+ * - `wait_for_backups_to_upload` - Should the enabling of the recovery
+ * also wait for _all_ room keys to be uploaded to the server-side key
+ * backup?
+ * - `key` - The key to use to encrypt secret storage.  If `None`, a new
+ * key will be randomly generated.  A key can be generated from a
+ * passphrase by using [`SecretStorageKey::new_from_passphrase`].
+ * - `progress_listener` - A listener to track the progress of enabling
+ * recovery.
+ *
+ * Returns the base58-representation of the secret storage key.
+ */
+    enableRecovery(waitForBackupsToUpload: boolean, key: SecretStorageKeyLike | undefined, progressListener: EnableRecoveryProgressListener, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<string>;
+/**
+ * Does the user have devices, other than the current one, that the
+ * current device can verify against?
+ *
+ * The device must be signed by the user's cross-signing key, must support
+ * Olm (have a Curve25519 key), and must not be a dehydrated device.
  */
     hasDevicesToVerifyAgainst(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<boolean>;
 /**
- * This method will import all the private cross-signing keys and
- * the private part of a backup key and its accompanying version into the
+ * This method will import all the private cross-signing keys and the
+ * private part of a backup key and its accompanying version into the
  * store.
  *
  * Importing all the secrets will mark the device as verified and enable
@@ -50640,8 +53140,8 @@ export interface EncryptionLike {
  */
     importSecretsBundle(secretsBundle: SecretsBundleWithUserIdLike, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
 /**
- * Return whether the homeserver advertises support for MSC3814
- * dehydrated devices.
+ * Return whether the homeserver advertises support for MSC3814 dehydrated
+ * devices.
  */
     isDehydratedDeviceSupported(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<boolean>;
     isLastDevice(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<boolean>;
@@ -50655,9 +53155,9 @@ export interface EncryptionLike {
  *
  * This will create a new key backup if:
  *
- * * Key backup is enabled and the backup decryption key is missing from
+ * - Key backup is enabled and the backup decryption key is missing from
  * Recovery, or
- * * Key backup is enabled and the backup decryption key does not match the
+ * - Key backup is enabled and the backup decryption key does not match the
  * public key
  */
     recoverAndFixBackup(recoveryKey: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
@@ -50678,19 +53178,19 @@ export interface EncryptionLike {
     resetIdentity(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<IdentityResetHandleLike | undefined>;
     resetRecoveryKey(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<string>;
 /**
- * Start using dehydrated devices for this client, resolving the pickle
- * key through Secret Storage and scheduling weekly rotation.
+ * Start using dehydrated devices for this client, resolving the pickle key
+ * through Secret Storage and scheduling weekly rotation.
  *
- * The Rust-side copy of the recovery key is zeroized after Secret
- * Storage has been unlocked; the caller keeps responsibility for the
- * string it passed in.
+ * The Rust-side copy of the recovery key is zeroized after Secret Storage
+ * has been unlocked; the caller keeps responsibility for the string it
+ * passed in.
  */
     startDehydratedDevices(recoveryKey: string, settings: StartDehydratedDevicesSettings, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
 /**
  * Stop the scheduled dehydrated-device rotation.
  *
- * Has no effect when no rotation is scheduled. Existing dehydrated
- * devices on the server are left in place; pair with
+ * Has no effect when no rotation is scheduled. Existing dehydrated devices
+ * on the server are left in place; pair with
  * [`Encryption::delete_dehydrated_device`] to remove them.
  */
     stopDehydratedDevices(): void;
@@ -50698,19 +53198,18 @@ export interface EncryptionLike {
  * Get the E2EE identity of a user.
  *
  * This method always tries to fetch the identity from the store, which we
- * only have if the user is tracked, meaning that we are both members
- * of the same encrypted room. If no user is found locally, a request will
- * be made to the homeserver unless `fallback_to_server` is set to `false`.
+ * only have if the user is tracked, meaning that we are both members of
+ * the same encrypted room. If no user is found locally, a request will be
+ * made to the homeserver unless `fallback_to_server` is set to `false`.
  *
  * # Arguments
  *
- * * `user_id` - The ID of the user that the identity belongs to.
- * * `fallback_to_server` - Should we request the user identity from the
+ * - `user_id` - The ID of the user that the identity belongs to.
+ * - `fallback_to_server` - Should we request the user identity from the
  * homeserver if one isn't found locally.
  *
- * Returns a `UserIdentity` if one is found. Returns an error if there
- * was an issue with the crypto store or with the request to the
- * homeserver.
+ * Returns a `UserIdentity` if one is found. Returns an error if there was
+ * an issue with the crypto store or with the request to the homeserver.
  *
  * This will always return `None` if the client hasn't been logged in.
  */
@@ -50749,9 +53248,9 @@ private constructor(pointer: UniffiHandle) {
  * Does a backup exist on the server?
  *
  * Because the homeserver doesn't notify us about changes to the backup
- * version, the [`BackupState`] and its listener are a bit crippled.
- * The `BackupState::Unknown` state might mean there is no backup at all or
- * a backup exists but we don't have access to it.
+ * version, the [`BackupState`] and its listener are a bit crippled. The
+ * `BackupState::Unknown` state might mean there is no backup at all or a
+ * backup exists but we don't have access to it.
  *
  * Therefore it is necessary to poll the server for an answer every time
  * you want to differentiate between those two states.
@@ -50887,9 +53386,9 @@ private constructor(pointer: UniffiHandle) {
     }
     
 /**
- * Subscribe to lifecycle events emitted by the dehydrated-device
- * manager. The returned [`TaskHandle`] keeps the listener alive; drop
- * it to unsubscribe.
+ * Subscribe to lifecycle events emitted by the dehydrated-device manager.
+ * The returned [`TaskHandle`] keeps the listener alive; drop it to
+ * unsubscribe.
  */
     dehydratedDeviceEventListener(listener: DehydratedDeviceEventListener): TaskHandleLike {
     return FfiConverterTypeTaskHandle.lift(uniffiCaller.rustCall(
@@ -50904,8 +53403,8 @@ private constructor(pointer: UniffiHandle) {
     }
     
 /**
- * Delete the current dehydrated device, if one exists. Silent if no
- * device is on the server or the server does not implement MSC3814.
+ * Delete the current dehydrated device, if one exists. Silent if no device
+ * is on the server or the server does not implement MSC3814.
  */
     async deleteDehydratedDevice(asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
     return await uniffiRustCallAsync(
@@ -51017,12 +53516,28 @@ private constructor(pointer: UniffiHandle) {
         );
     }
     
-    async enableRecovery(waitForBackupsToUpload: boolean, passphrase: string | undefined, progressListener: EnableRecoveryProgressListener, asyncOpts_?: { signal: AbortSignal }): Promise<string> /*throws*/ {
+/**
+ * Enable recovery on the account.
+ *
+ * # Arguments
+ *
+ * - `wait_for_backups_to_upload` - Should the enabling of the recovery
+ * also wait for _all_ room keys to be uploaded to the server-side key
+ * backup?
+ * - `key` - The key to use to encrypt secret storage.  If `None`, a new
+ * key will be randomly generated.  A key can be generated from a
+ * passphrase by using [`SecretStorageKey::new_from_passphrase`].
+ * - `progress_listener` - A listener to track the progress of enabling
+ * recovery.
+ *
+ * Returns the base58-representation of the secret storage key.
+ */
+    async enableRecovery(waitForBackupsToUpload: boolean, key: SecretStorageKeyLike | undefined, progressListener: EnableRecoveryProgressListener, asyncOpts_?: { signal: AbortSignal }): Promise<string> /*throws*/ {
     return await uniffiRustCallAsync(
             /*rustCaller:*/ uniffiCaller,
             /*rustFutureFunc:*/ () => {
                 return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_encryption_enable_recovery(
-                    uniffiTypeEncryptionObjectFactory.clonePointer(this),FfiConverterBool.lower(waitForBackupsToUpload, nativeModule().rustbuffer_alloc),FfiConverterOptionalString.lower(passphrase, nativeModule().rustbuffer_alloc),FfiConverterTypeEnableRecoveryProgressListener.lower(progressListener, nativeModule().rustbuffer_alloc)
+                    uniffiTypeEncryptionObjectFactory.clonePointer(this),FfiConverterBool.lower(waitForBackupsToUpload, nativeModule().rustbuffer_alloc),FfiConverterOptionalTypeSecretStorageKey.lower(key, nativeModule().rustbuffer_alloc),FfiConverterTypeEnableRecoveryProgressListener.lower(progressListener, nativeModule().rustbuffer_alloc)
                 );
             },
             /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_rust_buffer,
@@ -51051,11 +53566,11 @@ private constructor(pointer: UniffiHandle) {
     }
     
 /**
- * Does the user have other devices that the current device can verify
- * against?
+ * Does the user have devices, other than the current one, that the
+ * current device can verify against?
  *
- * The device must be signed by the user's cross-signing key, must have an
- * identity, and must not be a dehydrated device.
+ * The device must be signed by the user's cross-signing key, must support
+ * Olm (have a Curve25519 key), and must not be a dehydrated device.
  */
     async hasDevicesToVerifyAgainst(asyncOpts_?: { signal: AbortSignal }): Promise<boolean> /*throws*/ {
     return await uniffiRustCallAsync(
@@ -51082,8 +53597,8 @@ private constructor(pointer: UniffiHandle) {
     }
     
 /**
- * This method will import all the private cross-signing keys and
- * the private part of a backup key and its accompanying version into the
+ * This method will import all the private cross-signing keys and the
+ * private part of a backup key and its accompanying version into the
  * store.
  *
  * Importing all the secrets will mark the device as verified and enable
@@ -51115,8 +53630,8 @@ private constructor(pointer: UniffiHandle) {
     }
     
 /**
- * Return whether the homeserver advertises support for MSC3814
- * dehydrated devices.
+ * Return whether the homeserver advertises support for MSC3814 dehydrated
+ * devices.
  */
     async isDehydratedDeviceSupported(asyncOpts_?: { signal: AbortSignal }): Promise<boolean> /*throws*/ {
     return await uniffiRustCallAsync(
@@ -51194,9 +53709,9 @@ private constructor(pointer: UniffiHandle) {
  *
  * This will create a new key backup if:
  *
- * * Key backup is enabled and the backup decryption key is missing from
+ * - Key backup is enabled and the backup decryption key is missing from
  * Recovery, or
- * * Key backup is enabled and the backup decryption key does not match the
+ * - Key backup is enabled and the backup decryption key does not match the
  * public key
  */
     async recoverAndFixBackup(recoveryKey: string, asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
@@ -51380,12 +53895,12 @@ private constructor(pointer: UniffiHandle) {
     }
     
 /**
- * Start using dehydrated devices for this client, resolving the pickle
- * key through Secret Storage and scheduling weekly rotation.
+ * Start using dehydrated devices for this client, resolving the pickle key
+ * through Secret Storage and scheduling weekly rotation.
  *
- * The Rust-side copy of the recovery key is zeroized after Secret
- * Storage has been unlocked; the caller keeps responsibility for the
- * string it passed in.
+ * The Rust-side copy of the recovery key is zeroized after Secret Storage
+ * has been unlocked; the caller keeps responsibility for the string it
+ * passed in.
  */
     async startDehydratedDevices(recoveryKey: string, settings: StartDehydratedDevicesSettings, asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
     return await uniffiRustCallAsync(
@@ -51409,8 +53924,8 @@ private constructor(pointer: UniffiHandle) {
 /**
  * Stop the scheduled dehydrated-device rotation.
  *
- * Has no effect when no rotation is scheduled. Existing dehydrated
- * devices on the server are left in place; pair with
+ * Has no effect when no rotation is scheduled. Existing dehydrated devices
+ * on the server are left in place; pair with
  * [`Encryption::delete_dehydrated_device`] to remove them.
  */
     stopDehydratedDevices(): void {uniffiCaller.rustCall(
@@ -51426,19 +53941,18 @@ private constructor(pointer: UniffiHandle) {
  * Get the E2EE identity of a user.
  *
  * This method always tries to fetch the identity from the store, which we
- * only have if the user is tracked, meaning that we are both members
- * of the same encrypted room. If no user is found locally, a request will
- * be made to the homeserver unless `fallback_to_server` is set to `false`.
+ * only have if the user is tracked, meaning that we are both members of
+ * the same encrypted room. If no user is found locally, a request will be
+ * made to the homeserver unless `fallback_to_server` is set to `false`.
  *
  * # Arguments
  *
- * * `user_id` - The ID of the user that the identity belongs to.
- * * `fallback_to_server` - Should we request the user identity from the
+ * - `user_id` - The ID of the user that the identity belongs to.
+ * - `fallback_to_server` - Should we request the user identity from the
  * homeserver if one isn't found locally.
  *
- * Returns a `UserIdentity` if one is found. Returns an error if there
- * was an issue with the crypto store or with the request to the
- * homeserver.
+ * Returns a `UserIdentity` if one is found. Returns an error if there was
+ * an issue with the crypto store or with the request to the homeserver.
  *
  * This will always return `None` if the client hasn't been logged in.
  */
@@ -51857,8 +54371,8 @@ export interface NotificationSettingsLike {
  *
  * # Arguments
  *
- * * `is_encrypted` - whether the room is encrypted
- * * `is_one_to_one` - whether the room is a direct chats involving two
+ * - `is_encrypted` - whether the room is encrypted
+ * - `is_one_to_one` - whether the room is a direct chats involving two
  * people
  */
     getDefaultRoomNotificationMode(isEncrypted: boolean, isOneToOne: boolean, asyncOpts_?: { signal: AbortSignal }): Promise<RoomNotificationMode>;
@@ -51871,9 +54385,9 @@ export interface NotificationSettingsLike {
  *
  * # Arguments
  *
- * * `room_id` - the room ID
- * * `is_encrypted` - whether the room is encrypted
- * * `is_one_to_one` - whether the room is a direct chat involving two
+ * - `room_id` - the room ID
+ * - `is_encrypted` - whether the room is encrypted
+ * - `is_one_to_one` - whether the room is a direct chat involving two
  * people
  */
     getRoomNotificationSettings(roomId: string, isEncrypted: boolean, isOneToOne: boolean, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<RoomNotificationSettings>;
@@ -51918,10 +54432,10 @@ export interface NotificationSettingsLike {
  *
  * # Arguments
  *
- * * `is_encrypted` - whether the mode is for encrypted rooms
- * * `is_one_to_one` - whether the mode is for direct chats involving two
+ * - `is_encrypted` - whether the mode is for encrypted rooms
+ * - `is_one_to_one` - whether the mode is for direct chats involving two
  * people
- * * `mode` - the new default mode
+ * - `mode` - the new default mode
  */
     setDefaultRoomNotificationMode(isEncrypted: boolean, isOneToOne: boolean, mode: RoomNotificationMode, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
     setDelegate(delegate: NotificationSettingsDelegate | undefined): void;
@@ -51946,9 +54460,9 @@ export interface NotificationSettingsLike {
  *
  * # Arguments
  *
- * * `room_id` - the room to unmute
- * * `is_encrypted` - whether the room is encrypted
- * * `is_one_to_one` - whether the room is a direct chat involving two
+ * - `room_id` - the room to unmute
+ * - `is_encrypted` - whether the room is encrypted
+ * - `is_one_to_one` - whether the room is a direct chat involving two
  * people
  */
     unmuteRoom(roomId: string, isEncrypted: boolean, isOneToOne: boolean, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
@@ -52067,8 +54581,8 @@ private constructor(pointer: UniffiHandle) {
  *
  * # Arguments
  *
- * * `is_encrypted` - whether the room is encrypted
- * * `is_one_to_one` - whether the room is a direct chats involving two
+ * - `is_encrypted` - whether the room is encrypted
+ * - `is_one_to_one` - whether the room is a direct chats involving two
  * people
  */
     async getDefaultRoomNotificationMode(isEncrypted: boolean, isOneToOne: boolean, asyncOpts_?: { signal: AbortSignal }): Promise<RoomNotificationMode> {
@@ -52145,9 +54659,9 @@ private constructor(pointer: UniffiHandle) {
  *
  * # Arguments
  *
- * * `room_id` - the room ID
- * * `is_encrypted` - whether the room is encrypted
- * * `is_one_to_one` - whether the room is a direct chat involving two
+ * - `room_id` - the room ID
+ * - `is_encrypted` - whether the room is encrypted
+ * - `is_one_to_one` - whether the room is a direct chat involving two
  * people
  */
     async getRoomNotificationSettings(roomId: string, isEncrypted: boolean, isOneToOne: boolean, asyncOpts_?: { signal: AbortSignal }): Promise<RoomNotificationSettings> /*throws*/ {
@@ -52434,10 +54948,10 @@ private constructor(pointer: UniffiHandle) {
  *
  * # Arguments
  *
- * * `is_encrypted` - whether the mode is for encrypted rooms
- * * `is_one_to_one` - whether the mode is for direct chats involving two
+ * - `is_encrypted` - whether the mode is for encrypted rooms
+ * - `is_one_to_one` - whether the mode is for direct chats involving two
  * people
- * * `mode` - the new default mode
+ * - `mode` - the new default mode
  */
     async setDefaultRoomNotificationMode(isEncrypted: boolean, isOneToOne: boolean, mode: RoomNotificationMode, asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
     return await uniffiRustCallAsync(
@@ -52561,9 +55075,9 @@ private constructor(pointer: UniffiHandle) {
  *
  * # Arguments
  *
- * * `room_id` - the room to unmute
- * * `is_encrypted` - whether the room is encrypted
- * * `is_one_to_one` - whether the room is a direct chat involving two
+ * - `room_id` - the room to unmute
+ * - `is_encrypted` - whether the room is encrypted
+ * - `is_one_to_one` - whether the room is a direct chat involving two
  * people
  */
     async unmuteRoom(roomId: string, isEncrypted: boolean, isOneToOne: boolean, asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
@@ -52669,6 +55183,9 @@ const FfiConverterTypeNotificationSettings = new FfiConverterObject(uniffiTypeNo
 export interface SessionVerificationControllerDelegate {
     
     didReceiveVerificationRequest(details: SessionVerificationRequestDetails): void;
+/**
+ * The other side accepted a verification request we sent.
+ */
     didAcceptVerificationRequest(): void;
     didStartSasVerification(): void;
     didReceiveVerificationData(data: SessionVerificationData): void;
@@ -52875,8 +55392,9 @@ export interface SessionVerificationControllerLike {
 /**
  * Set this particular request as the currently active one and register for
  * events pertaining it.
- * * `sender_id` - The user requesting verification.
- * * `flow_id` - - The ID that uniquely identifies the verification flow.
+ *
+ * - `sender_id` - The user requesting verification.
+ * - `flow_id` - - The ID that uniquely identifies the verification flow.
  */
     acknowledgeVerificationRequest(senderId: string, flowId: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
 /**
@@ -52892,6 +55410,10 @@ export interface SessionVerificationControllerLike {
  */
     declineVerification(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
 /**
+ * Get the cancel info for the verification request, if it was cancelled
+ */
+    requestCancelInfo(): SessionVerificationCancelInfo | undefined;
+/**
  * Request verification for the current device
  */
     requestDeviceVerification(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
@@ -52899,6 +55421,10 @@ export interface SessionVerificationControllerLike {
  * Request verification for the given user
  */
     requestUserVerification(userId: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
+/**
+ * Get the cancel info for the SAS verification, if it was cancelled
+ */
+    sasCancelInfo(): SessionVerificationCancelInfo | undefined;
     setDelegate(delegate: SessionVerificationControllerDelegate | undefined): void;
 /**
  * Transition the current verification request into a SAS verification
@@ -52952,8 +55478,9 @@ private constructor(pointer: UniffiHandle) {
 /**
  * Set this particular request as the currently active one and register for
  * events pertaining it.
- * * `sender_id` - The user requesting verification.
- * * `flow_id` - - The ID that uniquely identifies the verification flow.
+ *
+ * - `sender_id` - The user requesting verification.
+ * - `flow_id` - - The ID that uniquely identifies the verification flow.
  */
     async acknowledgeVerificationRequest(senderId: string, flowId: string, asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
     return await uniffiRustCallAsync(
@@ -53041,6 +55568,25 @@ private constructor(pointer: UniffiHandle) {
     }
     
 /**
+ * Get the cancel info for the verification request, if it was cancelled
+ */
+    requestCancelInfo(): SessionVerificationCancelInfo | undefined {
+    const __rb: Uint8Array = uniffiCaller.rustCall(
+            /*caller:*/ (callStatus) => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_sessionverificationcontroller_request_cancel_info(
+                uniffiTypeSessionVerificationControllerObjectFactory.clonePointer(this),
+                callStatus);
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+    );
+    try {
+        return FfiConverterOptionalTypeSessionVerificationCancelInfo.lift(__rb);
+    } finally {
+        nativeModule().rustbuffer_free(__rb);
+    }
+    }
+    
+/**
  * Request verification for the current device
  */
     async requestDeviceVerification(asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
@@ -53082,6 +55628,25 @@ private constructor(pointer: UniffiHandle) {
             /*asyncOpts:*/ asyncOpts_,
             /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
         );
+    }
+    
+/**
+ * Get the cancel info for the SAS verification, if it was cancelled
+ */
+    sasCancelInfo(): SessionVerificationCancelInfo | undefined {
+    const __rb: Uint8Array = uniffiCaller.rustCall(
+            /*caller:*/ (callStatus) => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_sessionverificationcontroller_sas_cancel_info(
+                uniffiTypeSessionVerificationControllerObjectFactory.clonePointer(this),
+                callStatus);
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+    );
+    try {
+        return FfiConverterOptionalTypeSessionVerificationCancelInfo.lift(__rb);
+    } finally {
+        nativeModule().rustbuffer_free(__rb);
+    }
     }
     
     setDelegate(delegate: SessionVerificationControllerDelegate | undefined): void {uniffiCaller.rustCall(
@@ -53816,6 +56381,190 @@ const uniffiCallbackInterfaceGrantGeneratedQrLoginProgressListener: { vtable: an
 // FfiConverter protocol for callback interfaces
 const FfiConverterTypeGrantGeneratedQrLoginProgressListener = new FfiConverterCallback<GrantGeneratedQrLoginProgressListener>();
 
+/**
+ * A handle to a single login grant attempt started by
+ * [`GrantLoginWithQrCodeHandler::scan`] or
+ * [`GrantLoginWithQrCodeHandler::generate`].
+ *
+ * Use [`Self::wait`] to wait for the attempt to finish and obtain its
+ * result, and [`Self::cancel`] to request that it be aborted cooperatively.
+ */
+export interface GrantLoginWithQrCodeTaskLike {
+    
+/**
+ * Request this login grant attempt to abort cooperatively. This will
+ * make the task tear down its running work and then return the
+ * `Cancelled` error from [`Self::wait`].
+ *
+ * Cancelling is idempotent: if the attempt hasn't started running yet, it
+ * won't be started and [`Self::wait`] returns `Cancelled` right away.
+ * Calling this more than once, or after the attempt has already finished,
+ * has no effect.
+ */
+    cancel(): void;
+/**
+ * Wait for the login grant attempt to finish and return its result.
+ *
+ * If [`Self::cancel`] has been called, this returns
+ * [`HumanQrGrantLoginError::Cancelled`] once the attempt has finished
+ * tearing down its running task.
+ */
+    wait(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
+}
+/**
+ * @deprecated Use `GrantLoginWithQrCodeTaskLike` instead.
+ */
+export type GrantLoginWithQrCodeTaskInterface = GrantLoginWithQrCodeTaskLike;
+
+
+/**
+ * A handle to a single login grant attempt started by
+ * [`GrantLoginWithQrCodeHandler::scan`] or
+ * [`GrantLoginWithQrCodeHandler::generate`].
+ *
+ * Use [`Self::wait`] to wait for the attempt to finish and obtain its
+ * result, and [`Self::cancel`] to request that it be aborted cooperatively.
+ */
+export class GrantLoginWithQrCodeTask extends UniffiAbstractObject implements GrantLoginWithQrCodeTaskLike {
+
+    readonly [uniffiTypeNameSymbol] = "GrantLoginWithQrCodeTask";
+    readonly [destructorGuardSymbol]: UniffiGcObject;
+    readonly [pointerLiteralSymbol]: UniffiHandle;
+    // No primary constructor declared for this class.
+private constructor(pointer: UniffiHandle) {
+    super();
+    this[pointerLiteralSymbol] = pointer;
+    this[destructorGuardSymbol] = uniffiTypeGrantLoginWithQrCodeTaskObjectFactory.bless(pointer);
+}
+
+    
+
+    
+/**
+ * Request this login grant attempt to abort cooperatively. This will
+ * make the task tear down its running work and then return the
+ * `Cancelled` error from [`Self::wait`].
+ *
+ * Cancelling is idempotent: if the attempt hasn't started running yet, it
+ * won't be started and [`Self::wait`] returns `Cancelled` right away.
+ * Calling this more than once, or after the attempt has already finished,
+ * has no effect.
+ */
+    cancel(): void {uniffiCaller.rustCall(
+            /*caller:*/ (callStatus) => { nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_grantloginwithqrcodetask_cancel(
+                uniffiTypeGrantLoginWithQrCodeTaskObjectFactory.clonePointer(this),
+                callStatus);
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+    );
+    }
+    
+/**
+ * Wait for the login grant attempt to finish and return its result.
+ *
+ * If [`Self::cancel`] has been called, this returns
+ * [`HumanQrGrantLoginError::Cancelled`] once the attempt has finished
+ * tearing down its running task.
+ */
+    async wait(asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_grantloginwithqrcodetask_wait(
+                    uniffiTypeGrantLoginWithQrCodeTaskObjectFactory.clonePointer(this)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_void,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_void,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_void,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_void,
+            /*liftFunc:*/ (_v) => {},
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeHumanQrGrantLoginError.lift.bind(FfiConverterTypeHumanQrGrantLoginError)
+        );
+    }
+    
+
+    uniffiDestroy(): void {
+        const ptr = (this as any)[destructorGuardSymbol];
+        if (ptr !== undefined) {
+            const pointer = uniffiTypeGrantLoginWithQrCodeTaskObjectFactory.pointer(this);
+            uniffiTypeGrantLoginWithQrCodeTaskObjectFactory.freePointer(pointer);
+            uniffiTypeGrantLoginWithQrCodeTaskObjectFactory.unbless(ptr);
+            delete (this as any)[destructorGuardSymbol];
+        }
+    }
+
+    static instanceOf(obj_: any): obj_ is GrantLoginWithQrCodeTask {
+        return uniffiTypeGrantLoginWithQrCodeTaskObjectFactory.isConcreteType(obj_);
+    }
+
+    
+}
+
+const uniffiTypeGrantLoginWithQrCodeTaskObjectFactory: UniffiObjectFactory<GrantLoginWithQrCodeTaskLike> = (() => {
+    
+    /// <reference lib="es2021" />
+    const registry = typeof FinalizationRegistry !== 'undefined' ? new FinalizationRegistry<UniffiHandle>((heldValue: UniffiHandle) => {
+        uniffiTypeGrantLoginWithQrCodeTaskObjectFactory.freePointer(heldValue);
+    }) : null;
+    
+    return {
+    create(pointer: UniffiHandle): GrantLoginWithQrCodeTaskLike {
+        const instance = Object.create(GrantLoginWithQrCodeTask.prototype);
+        instance[pointerLiteralSymbol] = pointer;
+        instance[destructorGuardSymbol] = this.bless(pointer);
+        instance[uniffiTypeNameSymbol] = "GrantLoginWithQrCodeTask";
+        return instance;
+    },
+
+    
+    bless(p: UniffiHandle): UniffiGcObject {
+        const ptr = {
+            p, // make sure this object doesn't get optimized away.
+            markDestroyed: () => undefined,
+        };
+        if (registry) {
+            registry.register(ptr, p, ptr);
+        }
+        return ptr;
+    },
+
+    unbless(ptr_: UniffiGcObject) {
+        if (registry) {
+            registry.unregister(ptr_);
+        }
+    },
+
+    pointer(obj_: GrantLoginWithQrCodeTaskLike): UniffiHandle {
+        if ((obj_ as any)[destructorGuardSymbol] === undefined) {
+            throw new UniffiInternalError.UnexpectedNullPointer();
+        }
+        return (obj_ as any)[pointerLiteralSymbol];
+    },
+
+    clonePointer(obj_: GrantLoginWithQrCodeTaskLike): UniffiHandle {
+        const pointer = this.pointer(obj_);
+        return uniffiCaller.rustCall(
+            /*caller:*/ (callStatus) => nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_clone_grantloginwithqrcodetask(pointer, callStatus),
+            /*liftString:*/ FfiConverterString.lift
+        );
+    },
+
+    freePointer(pointer: UniffiHandle): void {
+        uniffiCaller.rustCall(
+            /*caller:*/ (callStatus) => nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_free_grantloginwithqrcodetask(pointer, callStatus),
+            /*liftString:*/ FfiConverterString.lift
+        );
+    },
+
+    isConcreteType(obj_: any): obj_ is GrantLoginWithQrCodeTaskLike {
+        return obj_[destructorGuardSymbol] && obj_[uniffiTypeNameSymbol] === "GrantLoginWithQrCodeTask";
+    },
+}})();
+const FfiConverterTypeGrantLoginWithQrCodeTask = new FfiConverterObject(uniffiTypeGrantLoginWithQrCodeTaskObjectFactory);
+
 
 export interface GrantQrLoginProgressListener {
     
@@ -53879,45 +56628,54 @@ export interface GrantLoginWithQrCodeHandlerLike {
 /**
  * This method allows you to grant login by generating a QR code.
  *
- * This device needs to call this method and handle its progress updates to
- * generate a QR code which the new device can scan to log in.
+ * This device needs to call this method and handle the returned
+ * [`GrantLoginWithQrCodeTask`]'s progress updates to generate a QR code
+ * which the new device can scan to log in.
  *
- * This method uses the login mechanism described in [MSC4108]. As such,
- * it requires OAuth 2.0 support.
+ * This spawns the login process in the background and returns
+ * immediately with a [`GrantLoginWithQrCodeTask`] that can be used to
+ * wait for the login to finish, or to cancel it.
  *
- * For the reverse flow where the existing device generates the QR code
- * for this device to scan, use [`GrantLoginWithQrCodeHandler::scan`].
+ * This method uses the login mechanism described in [MSC4108]. As such, it
+ * requires OAuth 2.0 support.
+ *
+ * For the reverse flow where the existing device generates the QR code for
+ * this device to scan, use [`GrantLoginWithQrCodeHandler::scan`].
  *
  * # Arguments
  *
- * * `progress_listener` - A progress listener that must also be used to
+ * - `progress_listener` - A progress listener that must also be used to
  * obtain the [`QrCodeData`] and collect the [`CheckCode`] from the user.
  *
  * [MSC4108]: https://github.com/matrix-org/matrix-spec-proposals/pull/4108
  */
-    generate(progressListener: GrantGeneratedQrLoginProgressListener, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
+    generate(progressListener: GrantGeneratedQrLoginProgressListener) /*throws*/: GrantLoginWithQrCodeTaskLike;
 /**
  * This method allows you to grant login with a scanned QR code.
  *
  * The new device needs to display the QR code which this device can
- * scan, call this method and handle its progress updates to grant the
- * login.
+ * scan, call this method and handle the returned
+ * [`GrantLoginWithQrCodeTask`]'s progress updates to grant the login.
  *
- * This method uses the login mechanism described in [MSC4108]. As such,
- * it requires OAuth 2.0 support.
+ * This spawns the login process in the background and returns
+ * immediately with a [`GrantLoginWithQrCodeTask`] that can be used to
+ * wait for the login to finish, or to cancel it.
+ *
+ * This method uses the login mechanism described in [MSC4108]. As such, it
+ * requires OAuth 2.0 support.
  *
  * For the reverse flow where this device generates the QR code for the
  * existing device to scan, use [`GrantLoginWithQrCodeHandler::generate`].
  *
  * # Arguments
  *
- * * `qr_code_data` - The [`QrCodeData`] scanned from the QR code.
- * * `progress_listener` - A progress listener that must also be used to
+ * - `qr_code_data` - The [`QrCodeData`] scanned from the QR code.
+ * - `progress_listener` - A progress listener that must also be used to
  * transfer the [`CheckCode`] to the new device.
  *
  * [MSC4108]: https://github.com/matrix-org/matrix-spec-proposals/pull/4108
  */
-    scan(qrCodeData: QrCodeDataLike, progressListener: GrantQrLoginProgressListener, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
+    scan(qrCodeData: QrCodeDataLike, progressListener: GrantQrLoginProgressListener) /*throws*/: GrantLoginWithQrCodeTaskLike;
 }
 /**
  * @deprecated Use `GrantLoginWithQrCodeHandlerLike` instead.
@@ -53946,79 +56704,77 @@ private constructor(pointer: UniffiHandle) {
 /**
  * This method allows you to grant login by generating a QR code.
  *
- * This device needs to call this method and handle its progress updates to
- * generate a QR code which the new device can scan to log in.
+ * This device needs to call this method and handle the returned
+ * [`GrantLoginWithQrCodeTask`]'s progress updates to generate a QR code
+ * which the new device can scan to log in.
  *
- * This method uses the login mechanism described in [MSC4108]. As such,
- * it requires OAuth 2.0 support.
+ * This spawns the login process in the background and returns
+ * immediately with a [`GrantLoginWithQrCodeTask`] that can be used to
+ * wait for the login to finish, or to cancel it.
  *
- * For the reverse flow where the existing device generates the QR code
- * for this device to scan, use [`GrantLoginWithQrCodeHandler::scan`].
+ * This method uses the login mechanism described in [MSC4108]. As such, it
+ * requires OAuth 2.0 support.
+ *
+ * For the reverse flow where the existing device generates the QR code for
+ * this device to scan, use [`GrantLoginWithQrCodeHandler::scan`].
  *
  * # Arguments
  *
- * * `progress_listener` - A progress listener that must also be used to
+ * - `progress_listener` - A progress listener that must also be used to
  * obtain the [`QrCodeData`] and collect the [`CheckCode`] from the user.
  *
  * [MSC4108]: https://github.com/matrix-org/matrix-spec-proposals/pull/4108
  */
-    async generate(progressListener: GrantGeneratedQrLoginProgressListener, asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
-    return await uniffiRustCallAsync(
-            /*rustCaller:*/ uniffiCaller,
-            /*rustFutureFunc:*/ () => {
+    generate(progressListener: GrantGeneratedQrLoginProgressListener): GrantLoginWithQrCodeTaskLike /*throws*/ {
+    return FfiConverterTypeGrantLoginWithQrCodeTask.lift(uniffiCaller.rustCallWithError(
+            /*liftError:*/ FfiConverterTypeHumanQrGrantLoginError.lift.bind(FfiConverterTypeHumanQrGrantLoginError),
+            /*caller:*/ (callStatus) => {
                 return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_grantloginwithqrcodehandler_generate(
-                    uniffiTypeGrantLoginWithQrCodeHandlerObjectFactory.clonePointer(this),FfiConverterTypeGrantGeneratedQrLoginProgressListener.lower(progressListener, nativeModule().rustbuffer_alloc)
-                );
+                uniffiTypeGrantLoginWithQrCodeHandlerObjectFactory.clonePointer(this),
+        FfiConverterTypeGrantGeneratedQrLoginProgressListener.lower(progressListener, nativeModule().rustbuffer_alloc),
+                callStatus);
             },
-            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_void,
-            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_void,
-            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_void,
-            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_void,
-            /*liftFunc:*/ (_v) => {},
             /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
-            /*asyncOpts:*/ asyncOpts_,
-            /*errorHandler:*/ FfiConverterTypeHumanQrGrantLoginError.lift.bind(FfiConverterTypeHumanQrGrantLoginError)
-        );
+    ));
     }
     
 /**
  * This method allows you to grant login with a scanned QR code.
  *
  * The new device needs to display the QR code which this device can
- * scan, call this method and handle its progress updates to grant the
- * login.
+ * scan, call this method and handle the returned
+ * [`GrantLoginWithQrCodeTask`]'s progress updates to grant the login.
  *
- * This method uses the login mechanism described in [MSC4108]. As such,
- * it requires OAuth 2.0 support.
+ * This spawns the login process in the background and returns
+ * immediately with a [`GrantLoginWithQrCodeTask`] that can be used to
+ * wait for the login to finish, or to cancel it.
+ *
+ * This method uses the login mechanism described in [MSC4108]. As such, it
+ * requires OAuth 2.0 support.
  *
  * For the reverse flow where this device generates the QR code for the
  * existing device to scan, use [`GrantLoginWithQrCodeHandler::generate`].
  *
  * # Arguments
  *
- * * `qr_code_data` - The [`QrCodeData`] scanned from the QR code.
- * * `progress_listener` - A progress listener that must also be used to
+ * - `qr_code_data` - The [`QrCodeData`] scanned from the QR code.
+ * - `progress_listener` - A progress listener that must also be used to
  * transfer the [`CheckCode`] to the new device.
  *
  * [MSC4108]: https://github.com/matrix-org/matrix-spec-proposals/pull/4108
  */
-    async scan(qrCodeData: QrCodeDataLike, progressListener: GrantQrLoginProgressListener, asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
-    return await uniffiRustCallAsync(
-            /*rustCaller:*/ uniffiCaller,
-            /*rustFutureFunc:*/ () => {
+    scan(qrCodeData: QrCodeDataLike, progressListener: GrantQrLoginProgressListener): GrantLoginWithQrCodeTaskLike /*throws*/ {
+    return FfiConverterTypeGrantLoginWithQrCodeTask.lift(uniffiCaller.rustCallWithError(
+            /*liftError:*/ FfiConverterTypeHumanQrGrantLoginError.lift.bind(FfiConverterTypeHumanQrGrantLoginError),
+            /*caller:*/ (callStatus) => {
                 return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_grantloginwithqrcodehandler_scan(
-                    uniffiTypeGrantLoginWithQrCodeHandlerObjectFactory.clonePointer(this),FfiConverterTypeQrCodeData.lower(qrCodeData, nativeModule().rustbuffer_alloc),FfiConverterTypeGrantQrLoginProgressListener.lower(progressListener, nativeModule().rustbuffer_alloc)
-                );
+                uniffiTypeGrantLoginWithQrCodeHandlerObjectFactory.clonePointer(this),
+        FfiConverterTypeQrCodeData.lower(qrCodeData, nativeModule().rustbuffer_alloc),
+        FfiConverterTypeGrantQrLoginProgressListener.lower(progressListener, nativeModule().rustbuffer_alloc),
+                callStatus);
             },
-            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_void,
-            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_void,
-            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_void,
-            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_void,
-            /*liftFunc:*/ (_v) => {},
             /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
-            /*asyncOpts:*/ asyncOpts_,
-            /*errorHandler:*/ FfiConverterTypeHumanQrGrantLoginError.lift.bind(FfiConverterTypeHumanQrGrantLoginError)
-        );
+    ));
     }
     
 
@@ -54156,6 +56912,188 @@ const uniffiCallbackInterfaceGeneratedQrLoginProgressListener: { vtable: any; re
 // FfiConverter protocol for callback interfaces
 const FfiConverterTypeGeneratedQrLoginProgressListener = new FfiConverterCallback<GeneratedQrLoginProgressListener>();
 
+/**
+ * A handle to a single login attempt started by
+ * [`LoginWithQrCodeHandler::scan`] or [`LoginWithQrCodeHandler::generate`].
+ *
+ * Use [`Self::wait`] to wait for the attempt to finish and obtain its
+ * result, and [`Self::cancel`] to request that it be aborted cooperatively.
+ */
+export interface LoginWithQrCodeTaskLike {
+    
+/**
+ * Request this login attempt to abort cooperatively. This will make the
+ * task tear down its running work and then return the `Cancelled` error
+ * from [`Self::wait`].
+ *
+ * Cancelling is idempotent: if the attempt hasn't started running yet, it
+ * won't be started and [`Self::wait`] returns `Cancelled` right away.
+ * Calling this more than once, or after the attempt has already finished,
+ * has no effect.
+ */
+    cancel(): void;
+/**
+ * Wait for the login attempt to finish and return its result.
+ *
+ * If [`Self::cancel`] has been called, this returns
+ * [`HumanQrLoginError::Cancelled`] once the attempt has finished tearing
+ * down its running task.
+ */
+    wait(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
+}
+/**
+ * @deprecated Use `LoginWithQrCodeTaskLike` instead.
+ */
+export type LoginWithQrCodeTaskInterface = LoginWithQrCodeTaskLike;
+
+
+/**
+ * A handle to a single login attempt started by
+ * [`LoginWithQrCodeHandler::scan`] or [`LoginWithQrCodeHandler::generate`].
+ *
+ * Use [`Self::wait`] to wait for the attempt to finish and obtain its
+ * result, and [`Self::cancel`] to request that it be aborted cooperatively.
+ */
+export class LoginWithQrCodeTask extends UniffiAbstractObject implements LoginWithQrCodeTaskLike {
+
+    readonly [uniffiTypeNameSymbol] = "LoginWithQrCodeTask";
+    readonly [destructorGuardSymbol]: UniffiGcObject;
+    readonly [pointerLiteralSymbol]: UniffiHandle;
+    // No primary constructor declared for this class.
+private constructor(pointer: UniffiHandle) {
+    super();
+    this[pointerLiteralSymbol] = pointer;
+    this[destructorGuardSymbol] = uniffiTypeLoginWithQrCodeTaskObjectFactory.bless(pointer);
+}
+
+    
+
+    
+/**
+ * Request this login attempt to abort cooperatively. This will make the
+ * task tear down its running work and then return the `Cancelled` error
+ * from [`Self::wait`].
+ *
+ * Cancelling is idempotent: if the attempt hasn't started running yet, it
+ * won't be started and [`Self::wait`] returns `Cancelled` right away.
+ * Calling this more than once, or after the attempt has already finished,
+ * has no effect.
+ */
+    cancel(): void {uniffiCaller.rustCall(
+            /*caller:*/ (callStatus) => { nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_loginwithqrcodetask_cancel(
+                uniffiTypeLoginWithQrCodeTaskObjectFactory.clonePointer(this),
+                callStatus);
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+    );
+    }
+    
+/**
+ * Wait for the login attempt to finish and return its result.
+ *
+ * If [`Self::cancel`] has been called, this returns
+ * [`HumanQrLoginError::Cancelled`] once the attempt has finished tearing
+ * down its running task.
+ */
+    async wait(asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_loginwithqrcodetask_wait(
+                    uniffiTypeLoginWithQrCodeTaskObjectFactory.clonePointer(this)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_void,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_void,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_void,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_void,
+            /*liftFunc:*/ (_v) => {},
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeHumanQrLoginError.lift.bind(FfiConverterTypeHumanQrLoginError)
+        );
+    }
+    
+
+    uniffiDestroy(): void {
+        const ptr = (this as any)[destructorGuardSymbol];
+        if (ptr !== undefined) {
+            const pointer = uniffiTypeLoginWithQrCodeTaskObjectFactory.pointer(this);
+            uniffiTypeLoginWithQrCodeTaskObjectFactory.freePointer(pointer);
+            uniffiTypeLoginWithQrCodeTaskObjectFactory.unbless(ptr);
+            delete (this as any)[destructorGuardSymbol];
+        }
+    }
+
+    static instanceOf(obj_: any): obj_ is LoginWithQrCodeTask {
+        return uniffiTypeLoginWithQrCodeTaskObjectFactory.isConcreteType(obj_);
+    }
+
+    
+}
+
+const uniffiTypeLoginWithQrCodeTaskObjectFactory: UniffiObjectFactory<LoginWithQrCodeTaskLike> = (() => {
+    
+    /// <reference lib="es2021" />
+    const registry = typeof FinalizationRegistry !== 'undefined' ? new FinalizationRegistry<UniffiHandle>((heldValue: UniffiHandle) => {
+        uniffiTypeLoginWithQrCodeTaskObjectFactory.freePointer(heldValue);
+    }) : null;
+    
+    return {
+    create(pointer: UniffiHandle): LoginWithQrCodeTaskLike {
+        const instance = Object.create(LoginWithQrCodeTask.prototype);
+        instance[pointerLiteralSymbol] = pointer;
+        instance[destructorGuardSymbol] = this.bless(pointer);
+        instance[uniffiTypeNameSymbol] = "LoginWithQrCodeTask";
+        return instance;
+    },
+
+    
+    bless(p: UniffiHandle): UniffiGcObject {
+        const ptr = {
+            p, // make sure this object doesn't get optimized away.
+            markDestroyed: () => undefined,
+        };
+        if (registry) {
+            registry.register(ptr, p, ptr);
+        }
+        return ptr;
+    },
+
+    unbless(ptr_: UniffiGcObject) {
+        if (registry) {
+            registry.unregister(ptr_);
+        }
+    },
+
+    pointer(obj_: LoginWithQrCodeTaskLike): UniffiHandle {
+        if ((obj_ as any)[destructorGuardSymbol] === undefined) {
+            throw new UniffiInternalError.UnexpectedNullPointer();
+        }
+        return (obj_ as any)[pointerLiteralSymbol];
+    },
+
+    clonePointer(obj_: LoginWithQrCodeTaskLike): UniffiHandle {
+        const pointer = this.pointer(obj_);
+        return uniffiCaller.rustCall(
+            /*caller:*/ (callStatus) => nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_clone_loginwithqrcodetask(pointer, callStatus),
+            /*liftString:*/ FfiConverterString.lift
+        );
+    },
+
+    freePointer(pointer: UniffiHandle): void {
+        uniffiCaller.rustCall(
+            /*caller:*/ (callStatus) => nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_free_loginwithqrcodetask(pointer, callStatus),
+            /*liftString:*/ FfiConverterString.lift
+        );
+    },
+
+    isConcreteType(obj_: any): obj_ is LoginWithQrCodeTaskLike {
+        return obj_[destructorGuardSymbol] && obj_[uniffiTypeNameSymbol] === "LoginWithQrCodeTask";
+    },
+}})();
+const FfiConverterTypeLoginWithQrCodeTask = new FfiConverterObject(uniffiTypeLoginWithQrCodeTaskObjectFactory);
+
 
 export interface QrLoginProgressListener {
     
@@ -54219,49 +57157,58 @@ export interface LoginWithQrCodeHandlerLike {
 /**
  * This method allows you to log in by generating a QR code.
  *
- * This device needs to call this method and handle its progress updates to
- * generate a QR code which the existing device can scan and grant the
- * log in.
+ * This device needs to call this method and handle the returned
+ * [`LoginWithQrCodeTask`]'s progress updates to generate a QR code which
+ * the existing device can scan and grant the log in.
  *
- * This method uses the login mechanism described in [MSC4108]. As such,
- * it requires OAuth 2.0 support.
+ * This spawns the login process in the background and returns
+ * immediately with a [`LoginWithQrCodeTask`] that can be used to wait
+ * for the login to finish, or to cancel it.
  *
- * For the reverse flow where the existing device generates the QR code
- * for this device to scan, use [`LoginWithQrCodeHandler::scan`].
+ * This method uses the login mechanism described in [MSC4108]. As such, it
+ * requires OAuth 2.0 support.
+ *
+ * For the reverse flow where the existing device generates the QR code for
+ * this device to scan, use [`LoginWithQrCodeHandler::scan`].
  *
  * # Arguments
  *
- * * `progress_listener` - A progress listener that must also be used to
+ * - `progress_listener` - A progress listener that must also be used to
  * obtain the [`QrCodeData`] and collect the [`CheckCode`] from the user.
  *
  * [MSC4108]: https://github.com/matrix-org/matrix-spec-proposals/pull/4108
  */
-    generate(progressListener: GeneratedQrLoginProgressListener, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
+    generate(progressListener: GeneratedQrLoginProgressListener) /*throws*/: LoginWithQrCodeTaskLike;
 /**
  * This method allows you to log in with a scanned QR code.
  *
  * The existing device needs to display the QR code which this device can
- * scan, call this method and handle its progress updates to log in.
+ * scan, call this method and handle the returned [`LoginWithQrCodeTask`]'s
+ * progress updates to log in.
+ *
+ * This spawns the login process in the background and returns
+ * immediately with a [`LoginWithQrCodeTask`] that can be used to wait
+ * for the login to finish, or to cancel it.
  *
  * For the login to succeed, the [`Client`] associated with the
  * [`LoginWithQrCodeHandler`] must have been built with
  * [`QrCodeData::server_name`] as the server name.
  *
- * This method uses the login mechanism described in [MSC4108]. As such,
- * it requires OAuth 2.0 support.
+ * This method uses the login mechanism described in [MSC4108]. As such, it
+ * requires OAuth 2.0 support.
  *
  * For the reverse flow where this device generates the QR code for the
  * existing device to scan, use [`LoginWithQrCodeHandler::generate`].
  *
  * # Arguments
  *
- * * `qr_code_data` - The [`QrCodeData`] scanned from the QR code.
- * * `progress_listener` - A progress listener that must also be used to
+ * - `qr_code_data` - The [`QrCodeData`] scanned from the QR code.
+ * - `progress_listener` - A progress listener that must also be used to
  * transfer the [`CheckCode`] to the existing device.
  *
  * [MSC4108]: https://github.com/matrix-org/matrix-spec-proposals/pull/4108
  */
-    scan(qrCodeData: QrCodeDataLike, progressListener: QrLoginProgressListener, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
+    scan(qrCodeData: QrCodeDataLike, progressListener: QrLoginProgressListener) /*throws*/: LoginWithQrCodeTaskLike;
 }
 /**
  * @deprecated Use `LoginWithQrCodeHandlerLike` instead.
@@ -54290,83 +57237,81 @@ private constructor(pointer: UniffiHandle) {
 /**
  * This method allows you to log in by generating a QR code.
  *
- * This device needs to call this method and handle its progress updates to
- * generate a QR code which the existing device can scan and grant the
- * log in.
+ * This device needs to call this method and handle the returned
+ * [`LoginWithQrCodeTask`]'s progress updates to generate a QR code which
+ * the existing device can scan and grant the log in.
  *
- * This method uses the login mechanism described in [MSC4108]. As such,
- * it requires OAuth 2.0 support.
+ * This spawns the login process in the background and returns
+ * immediately with a [`LoginWithQrCodeTask`] that can be used to wait
+ * for the login to finish, or to cancel it.
  *
- * For the reverse flow where the existing device generates the QR code
- * for this device to scan, use [`LoginWithQrCodeHandler::scan`].
+ * This method uses the login mechanism described in [MSC4108]. As such, it
+ * requires OAuth 2.0 support.
+ *
+ * For the reverse flow where the existing device generates the QR code for
+ * this device to scan, use [`LoginWithQrCodeHandler::scan`].
  *
  * # Arguments
  *
- * * `progress_listener` - A progress listener that must also be used to
+ * - `progress_listener` - A progress listener that must also be used to
  * obtain the [`QrCodeData`] and collect the [`CheckCode`] from the user.
  *
  * [MSC4108]: https://github.com/matrix-org/matrix-spec-proposals/pull/4108
  */
-    async generate(progressListener: GeneratedQrLoginProgressListener, asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
-    return await uniffiRustCallAsync(
-            /*rustCaller:*/ uniffiCaller,
-            /*rustFutureFunc:*/ () => {
+    generate(progressListener: GeneratedQrLoginProgressListener): LoginWithQrCodeTaskLike /*throws*/ {
+    return FfiConverterTypeLoginWithQrCodeTask.lift(uniffiCaller.rustCallWithError(
+            /*liftError:*/ FfiConverterTypeHumanQrLoginError.lift.bind(FfiConverterTypeHumanQrLoginError),
+            /*caller:*/ (callStatus) => {
                 return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_loginwithqrcodehandler_generate(
-                    uniffiTypeLoginWithQrCodeHandlerObjectFactory.clonePointer(this),FfiConverterTypeGeneratedQrLoginProgressListener.lower(progressListener, nativeModule().rustbuffer_alloc)
-                );
+                uniffiTypeLoginWithQrCodeHandlerObjectFactory.clonePointer(this),
+        FfiConverterTypeGeneratedQrLoginProgressListener.lower(progressListener, nativeModule().rustbuffer_alloc),
+                callStatus);
             },
-            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_void,
-            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_void,
-            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_void,
-            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_void,
-            /*liftFunc:*/ (_v) => {},
             /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
-            /*asyncOpts:*/ asyncOpts_,
-            /*errorHandler:*/ FfiConverterTypeHumanQrLoginError.lift.bind(FfiConverterTypeHumanQrLoginError)
-        );
+    ));
     }
     
 /**
  * This method allows you to log in with a scanned QR code.
  *
  * The existing device needs to display the QR code which this device can
- * scan, call this method and handle its progress updates to log in.
+ * scan, call this method and handle the returned [`LoginWithQrCodeTask`]'s
+ * progress updates to log in.
+ *
+ * This spawns the login process in the background and returns
+ * immediately with a [`LoginWithQrCodeTask`] that can be used to wait
+ * for the login to finish, or to cancel it.
  *
  * For the login to succeed, the [`Client`] associated with the
  * [`LoginWithQrCodeHandler`] must have been built with
  * [`QrCodeData::server_name`] as the server name.
  *
- * This method uses the login mechanism described in [MSC4108]. As such,
- * it requires OAuth 2.0 support.
+ * This method uses the login mechanism described in [MSC4108]. As such, it
+ * requires OAuth 2.0 support.
  *
  * For the reverse flow where this device generates the QR code for the
  * existing device to scan, use [`LoginWithQrCodeHandler::generate`].
  *
  * # Arguments
  *
- * * `qr_code_data` - The [`QrCodeData`] scanned from the QR code.
- * * `progress_listener` - A progress listener that must also be used to
+ * - `qr_code_data` - The [`QrCodeData`] scanned from the QR code.
+ * - `progress_listener` - A progress listener that must also be used to
  * transfer the [`CheckCode`] to the existing device.
  *
  * [MSC4108]: https://github.com/matrix-org/matrix-spec-proposals/pull/4108
  */
-    async scan(qrCodeData: QrCodeDataLike, progressListener: QrLoginProgressListener, asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
-    return await uniffiRustCallAsync(
-            /*rustCaller:*/ uniffiCaller,
-            /*rustFutureFunc:*/ () => {
+    scan(qrCodeData: QrCodeDataLike, progressListener: QrLoginProgressListener): LoginWithQrCodeTaskLike /*throws*/ {
+    return FfiConverterTypeLoginWithQrCodeTask.lift(uniffiCaller.rustCallWithError(
+            /*liftError:*/ FfiConverterTypeHumanQrLoginError.lift.bind(FfiConverterTypeHumanQrLoginError),
+            /*caller:*/ (callStatus) => {
                 return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_loginwithqrcodehandler_scan(
-                    uniffiTypeLoginWithQrCodeHandlerObjectFactory.clonePointer(this),FfiConverterTypeQrCodeData.lower(qrCodeData, nativeModule().rustbuffer_alloc),FfiConverterTypeQrLoginProgressListener.lower(progressListener, nativeModule().rustbuffer_alloc)
-                );
+                uniffiTypeLoginWithQrCodeHandlerObjectFactory.clonePointer(this),
+        FfiConverterTypeQrCodeData.lower(qrCodeData, nativeModule().rustbuffer_alloc),
+        FfiConverterTypeQrLoginProgressListener.lower(progressListener, nativeModule().rustbuffer_alloc),
+                callStatus);
             },
-            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_void,
-            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_void,
-            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_void,
-            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_void,
-            /*liftFunc:*/ (_v) => {},
             /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
-            /*asyncOpts:*/ asyncOpts_,
-            /*errorHandler:*/ FfiConverterTypeHumanQrLoginError.lift.bind(FfiConverterTypeHumanQrLoginError)
-        );
+    ));
     }
     
 
@@ -54969,10 +57914,69 @@ const FfiConverterTypeRoomEventJsonListener = new FfiConverterCallback<RoomEvent
 
 
 /**
+ * A callback interface for receiving updates of the total unread notification
+ * count.
+ */
+export interface TotalUnreadNotificationsListener {
+    
+    onUpdate(count: bigint): void;
+}
+
+
+
+// Put the implementation in a struct so we don't pollute the top-level namespace
+const uniffiCallbackInterfaceTotalUnreadNotificationsListener: { vtable: any; register: () => void; } = {
+    // Create the VTable using a series of closures.
+    // ts automatically converts these into C callback functions.
+    vtable: {
+        on_update: (
+            uniffiHandle: bigint,
+            count: bigint,) => {
+            const uniffiMakeCall = 
+            ()
+            : void => {
+                const jsCallback = FfiConverterTypeTotalUnreadNotificationsListener.lift(uniffiHandle);
+                return jsCallback.onUpdate(
+                    FfiConverterUInt64.lift(count)
+                )
+            };
+            const uniffiResult = UniffiResult.ready<void>();
+            const uniffiHandleSuccess = (obj: any) => {};
+            const uniffiHandleError = (code: number, errBuf: UniffiByteArray) => {
+                UniffiResult.writeError(uniffiResult, code, errBuf);
+            };
+            uniffiTraitInterfaceCall(
+                /*makeCall:*/ uniffiMakeCall,
+                /*handleSuccess:*/ uniffiHandleSuccess,
+                /*handleError:*/ uniffiHandleError,
+                /*lowerString:*/ FfiConverterString.lower.bind(FfiConverterString),
+                /*alloc:*/ nativeModule().rustbuffer_alloc,
+            )
+            return uniffiResult;
+        },
+        uniffi_free: (uniffiHandle: UniffiHandle): void => {
+            // this will throw a stale handle error if the handle isn't found.
+            FfiConverterTypeTotalUnreadNotificationsListener.drop(uniffiHandle);
+        },
+        uniffi_clone: (uniffiHandle: UniffiHandle): UniffiHandle => {
+            return FfiConverterTypeTotalUnreadNotificationsListener.clone(uniffiHandle);
+        }
+    },
+    register: () => {nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_init_callback_vtable_totalunreadnotificationslistener(
+            uniffiCallbackInterfaceTotalUnreadNotificationsListener.vtable
+        );
+    },
+};
+
+// FfiConverter protocol for callback interfaces
+const FfiConverterTypeTotalUnreadNotificationsListener = new FfiConverterCallback<TotalUnreadNotificationsListener>();
+
+
+/**
  * A listener for notifications generated from sync responses.
  *
- * This is called during sync for each event that triggers a notification
- * based on the user's push rules.
+ * This is called during sync for each event that triggers a notification based
+ * on the user's push rules.
  */
 export interface SyncNotificationListener {
     
@@ -55089,8 +58093,8 @@ const uniffiCallbackInterfaceRoomDirectorySearchEntriesListener: { vtable: any; 
 const FfiConverterTypeRoomDirectorySearchEntriesListener = new FfiConverterCallback<RoomDirectorySearchEntriesListener>();
 
 /**
- * A helper for performing room searches in the room directory.
- * The way this is intended to be used is:
+ * A helper for performing room searches in the room directory. The way this is
+ * intended to be used is:
  *
  * 1. Register a callback using [`RoomDirectorySearch::results`].
  * 2. Start the room search with [`RoomDirectorySearch::search`].
@@ -55118,9 +58122,9 @@ export interface RoomDirectorySearchLike {
 /**
  * Starts a filtered search for the server.
  *
- * If the `filter` is not provided it will search for all the rooms.
- * You can specify a `batch_size` to control the number of rooms to fetch
- * per request.
+ * If the `filter` is not provided it will search for all the rooms. You
+ * can specify a `batch_size` to control the number of rooms to fetch per
+ * request.
  *
  * If the `via_server` is not provided it will search in the current
  * homeserver by default.
@@ -55136,8 +58140,8 @@ export type RoomDirectorySearchInterface = RoomDirectorySearchLike;
 
 
 /**
- * A helper for performing room searches in the room directory.
- * The way this is intended to be used is:
+ * A helper for performing room searches in the room directory. The way this is
+ * intended to be used is:
  *
  * 1. Register a callback using [`RoomDirectorySearch::results`].
  * 2. Start the room search with [`RoomDirectorySearch::search`].
@@ -55265,9 +58269,9 @@ private constructor(pointer: UniffiHandle) {
 /**
  * Starts a filtered search for the server.
  *
- * If the `filter` is not provided it will search for all the rooms.
- * You can specify a `batch_size` to control the number of rooms to fetch
- * per request.
+ * If the `filter` is not provided it will search for all the rooms. You
+ * can specify a `batch_size` to control the number of rooms to fetch per
+ * request.
  *
  * If the `via_server` is not provided it will search in the current
  * homeserver by default.
@@ -55858,15 +58862,15 @@ const uniffiCallbackInterfaceSpaceRoomListSpaceListener: { vtable: any; register
 const FfiConverterTypeSpaceRoomListSpaceListener = new FfiConverterCallback<SpaceRoomListSpaceListener>();
 
 /**
- * The `SpaceRoomList` represents a paginated list of direct rooms
- * that belong to a particular space.
+ * The `SpaceRoomList` represents a paginated list of direct rooms that belong
+ * to a particular space.
  *
  * It can be used to paginate through the list (and have live updates on the
  * pagination state) as well as subscribe to changes as rooms are joined or
  * left.
  *
- * The `SpaceRoomList` also automatically subscribes to client room changes
- * and updates the list accordingly as rooms are joined or left.
+ * The `SpaceRoomList` also automatically subscribes to client room changes and
+ * updates the list accordingly as rooms are joined or left.
  */
 export interface SpaceRoomListLike {
     
@@ -55885,9 +58889,9 @@ export interface SpaceRoomListLike {
  * called.
  *
  * This is useful when you've added or removed children from the space as
- * the list is based on a cached state that lives server-side, meaning
- * the /hierarchy request needs to be restarted from scratch to pick up
- * the changes.
+ * the list is based on a cached state that lives server-side, meaning the
+ * /hierarchy request needs to be restarted from scratch to pick up the
+ * changes.
  */
     reset(asyncOpts_?: { signal: AbortSignal }): Promise<void>;
 /**
@@ -55918,15 +58922,15 @@ export type SpaceRoomListInterface = SpaceRoomListLike;
 
 
 /**
- * The `SpaceRoomList` represents a paginated list of direct rooms
- * that belong to a particular space.
+ * The `SpaceRoomList` represents a paginated list of direct rooms that belong
+ * to a particular space.
  *
  * It can be used to paginate through the list (and have live updates on the
  * pagination state) as well as subscribe to changes as rooms are joined or
  * left.
  *
- * The `SpaceRoomList` also automatically subscribes to client room changes
- * and updates the list accordingly as rooms are joined or left.
+ * The `SpaceRoomList` also automatically subscribes to client room changes and
+ * updates the list accordingly as rooms are joined or left.
  */
 export class SpaceRoomList extends UniffiAbstractObject implements SpaceRoomListLike {
 
@@ -55991,9 +58995,9 @@ private constructor(pointer: UniffiHandle) {
  * called.
  *
  * This is useful when you've added or removed children from the space as
- * the list is based on a cached state that lives server-side, meaning
- * the /hierarchy request needs to be restarted from scratch to pick up
- * the changes.
+ * the list is based on a cached state that lives server-side, meaning the
+ * /hierarchy request needs to be restarted from scratch to pick up the
+ * changes.
  */
     async reset(asyncOpts_?: { signal: AbortSignal }): Promise<void> {
     return await uniffiRustCallAsync(
@@ -56344,15 +59348,14 @@ export interface SpaceServiceLike {
  * space or room.
  *
  * This is a much cheaper version of [`Self::joined_parents_of_child()`]
- * that doesn't build any `SpaceRoom` instances, it only reads the
- * existing space graph.
+ * that doesn't build any `SpaceRoom` instances, it only reads the existing
+ * space graph.
  *
  * The returned IDs are always joined spaces, as that's all the space graph
  * includes. Note that an empty result either means that the child is a
  * top-level space (which has no direct parents) or the child isn't part of
- * the space graph at all.
- * See [`Self::top_level_ancestors_of()`] if you need that particular level
- * of detail.
+ * the space graph at all. See [`Self::top_level_ancestors_of()`] if you
+ * need that particular level of detail.
  *
  * Note: Unlike [`Self::top_level_joined_spaces()`], this method does not
  * recompute the space graph nor notify subscribers about changes.
@@ -56375,8 +59378,8 @@ export interface SpaceServiceLike {
     removeChildFromSpace(childId: string, spaceId: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
 /**
  * Space filters provide access to a custom subset of the space graph that
- * can be used in tandem with the [`crate::RoomListService`] to narrow
- * down the presented rooms.
+ * can be used in tandem with the [`crate::RoomListService`] to narrow down
+ * the presented rooms.
  *
  * They are limited to the first 2 levels of the graph, with the first
  * level only containing direct descendants while the second holds the rest
@@ -56416,8 +59419,8 @@ export interface SpaceServiceLike {
     topLevelAncestorsOf(childId: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<Array<string>>;
 /**
  * Returns a list of all the top-level joined spaces. It will eagerly
- * compute the latest version and also notify subscribers if there were
- * any changes.
+ * compute the latest version and also notify subscribers if there were any
+ * changes.
  */
     topLevelJoinedSpaces(asyncOpts_?: { signal: AbortSignal }): Promise<Array<SpaceRoom>>;
 }
@@ -56550,15 +59553,14 @@ private constructor(pointer: UniffiHandle) {
  * space or room.
  *
  * This is a much cheaper version of [`Self::joined_parents_of_child()`]
- * that doesn't build any `SpaceRoom` instances, it only reads the
- * existing space graph.
+ * that doesn't build any `SpaceRoom` instances, it only reads the existing
+ * space graph.
  *
  * The returned IDs are always joined spaces, as that's all the space graph
  * includes. Note that an empty result either means that the child is a
  * top-level space (which has no direct parents) or the child isn't part of
- * the space graph at all.
- * See [`Self::top_level_ancestors_of()`] if you need that particular level
- * of detail.
+ * the space graph at all. See [`Self::top_level_ancestors_of()`] if you
+ * need that particular level of detail.
  *
  * Note: Unlike [`Self::top_level_joined_spaces()`], this method does not
  * recompute the space graph nor notify subscribers about changes.
@@ -56686,8 +59688,8 @@ private constructor(pointer: UniffiHandle) {
     
 /**
  * Space filters provide access to a custom subset of the space graph that
- * can be used in tandem with the [`crate::RoomListService`] to narrow
- * down the presented rooms.
+ * can be used in tandem with the [`crate::RoomListService`] to narrow down
+ * the presented rooms.
  *
  * They are limited to the first 2 levels of the graph, with the first
  * level only containing direct descendants while the second holds the rest
@@ -56860,8 +59862,8 @@ private constructor(pointer: UniffiHandle) {
     
 /**
  * Returns a list of all the top-level joined spaces. It will eagerly
- * compute the latest version and also notify subscribers if there were
- * any changes.
+ * compute the latest version and also notify subscribers if there were any
+ * changes.
  */
     async topLevelJoinedSpaces(asyncOpts_?: { signal: AbortSignal }): Promise<Array<SpaceRoom>> {
     return await uniffiRustCallAsync(
@@ -56987,8 +59989,8 @@ export interface SsoHandlerLike {
     finish(callbackUrl: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
 /**
  * Returns the URL for starting SSO authentication. The URL should be
- * opened in a web view. Once the web view succeeds, call `finish` with
- * the callback URL.
+ * opened in a web view. Once the web view succeeds, call `finish` with the
+ * callback URL.
  */
     url(): string;
 }
@@ -57040,8 +60042,8 @@ private constructor(pointer: UniffiHandle) {
     
 /**
  * Returns the URL for starting SSO authentication. The URL should be
- * opened in a web view. Once the web view succeeds, call `finish` with
- * the callback URL.
+ * opened in a web view. Once the web view succeeds, call `finish` with the
+ * callback URL.
  */
     url(): string {
     const __rb: Uint8Array = uniffiCaller.rustCall(
@@ -57138,6 +60140,65 @@ const uniffiTypeSsoHandlerObjectFactory: UniffiObjectFactory<SsoHandlerLike> = (
     },
 }})();
 const FfiConverterTypeSsoHandler = new FfiConverterObject(uniffiTypeSsoHandlerObjectFactory);
+
+
+/**
+ * A listener for incoming to-device messages, registered with
+ * [`Client::subscribe_to_custom_to_device_messages`].
+ */
+export interface ToDeviceMessageListener {
+    
+    onMessage(message: ToDeviceMessage): void;
+}
+
+
+
+// Put the implementation in a struct so we don't pollute the top-level namespace
+const uniffiCallbackInterfaceToDeviceMessageListener: { vtable: any; register: () => void; } = {
+    // Create the VTable using a series of closures.
+    // ts automatically converts these into C callback functions.
+    vtable: {
+        on_message: (
+            uniffiHandle: bigint,
+            message: Uint8Array,) => {
+            const uniffiMakeCall = 
+            ()
+            : void => {
+                const jsCallback = FfiConverterTypeToDeviceMessageListener.lift(uniffiHandle);
+                return jsCallback.onMessage(
+                    FfiConverterTypeToDeviceMessage.lift(message)
+                )
+            };
+            const uniffiResult = UniffiResult.ready<void>();
+            const uniffiHandleSuccess = (obj: any) => {};
+            const uniffiHandleError = (code: number, errBuf: UniffiByteArray) => {
+                UniffiResult.writeError(uniffiResult, code, errBuf);
+            };
+            uniffiTraitInterfaceCall(
+                /*makeCall:*/ uniffiMakeCall,
+                /*handleSuccess:*/ uniffiHandleSuccess,
+                /*handleError:*/ uniffiHandleError,
+                /*lowerString:*/ FfiConverterString.lower.bind(FfiConverterString),
+                /*alloc:*/ nativeModule().rustbuffer_alloc,
+            )
+            return uniffiResult;
+        },
+        uniffi_free: (uniffiHandle: UniffiHandle): void => {
+            // this will throw a stale handle error if the handle isn't found.
+            FfiConverterTypeToDeviceMessageListener.drop(uniffiHandle);
+        },
+        uniffi_clone: (uniffiHandle: UniffiHandle): UniffiHandle => {
+            return FfiConverterTypeToDeviceMessageListener.clone(uniffiHandle);
+        }
+    },
+    register: () => {nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_init_callback_vtable_todevicemessagelistener(
+            uniffiCallbackInterfaceToDeviceMessageListener.vtable
+        );
+    },
+};
+
+// FfiConverter protocol for callback interfaces
+const FfiConverterTypeToDeviceMessageListener = new FfiConverterCallback<ToDeviceMessageListener>();
 
 
 /**
@@ -57255,6 +60316,61 @@ const uniffiCallbackInterfaceIgnoredUsersListener: { vtable: any; register: () =
 
 // FfiConverter protocol for callback interfaces
 const FfiConverterTypeIgnoredUsersListener = new FfiConverterCallback<IgnoredUsersListener>();
+
+
+export interface InvitePermissionListener {
+    
+    onChange(invitePermission: InvitePermissionState): void;
+}
+
+
+
+// Put the implementation in a struct so we don't pollute the top-level namespace
+const uniffiCallbackInterfaceInvitePermissionListener: { vtable: any; register: () => void; } = {
+    // Create the VTable using a series of closures.
+    // ts automatically converts these into C callback functions.
+    vtable: {
+        on_change: (
+            uniffiHandle: bigint,
+            invitePermission: Uint8Array,) => {
+            const uniffiMakeCall = 
+            ()
+            : void => {
+                const jsCallback = FfiConverterTypeInvitePermissionListener.lift(uniffiHandle);
+                return jsCallback.onChange(
+                    FfiConverterTypeInvitePermissionState.lift(invitePermission)
+                )
+            };
+            const uniffiResult = UniffiResult.ready<void>();
+            const uniffiHandleSuccess = (obj: any) => {};
+            const uniffiHandleError = (code: number, errBuf: UniffiByteArray) => {
+                UniffiResult.writeError(uniffiResult, code, errBuf);
+            };
+            uniffiTraitInterfaceCall(
+                /*makeCall:*/ uniffiMakeCall,
+                /*handleSuccess:*/ uniffiHandleSuccess,
+                /*handleError:*/ uniffiHandleError,
+                /*lowerString:*/ FfiConverterString.lower.bind(FfiConverterString),
+                /*alloc:*/ nativeModule().rustbuffer_alloc,
+            )
+            return uniffiResult;
+        },
+        uniffi_free: (uniffiHandle: UniffiHandle): void => {
+            // this will throw a stale handle error if the handle isn't found.
+            FfiConverterTypeInvitePermissionListener.drop(uniffiHandle);
+        },
+        uniffi_clone: (uniffiHandle: UniffiHandle): UniffiHandle => {
+            return FfiConverterTypeInvitePermissionListener.clone(uniffiHandle);
+        }
+    },
+    register: () => {nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_init_callback_vtable_invitepermissionlistener(
+            uniffiCallbackInterfaceInvitePermissionListener.vtable
+        );
+    },
+};
+
+// FfiConverter protocol for callback interfaces
+const FfiConverterTypeInvitePermissionListener = new FfiConverterCallback<InvitePermissionListener>();
 
 
 export interface MediaPreviewConfigListener {
@@ -57581,11 +60697,11 @@ export class Span extends UniffiAbstractObject implements SpanLike {
  * Create a span originating at the given callsite (file, line and column).
  *
  * The target should be something like a module path, and can be referenced
- * in the filter string given to `setup_tracing`. `level` and `target`
- * for a callsite are fixed at the first creation of a span for that
- * callsite and can not be changed afterwards, i.e. the level and
- * target passed for second and following creation of a span with the same
- * callsite will be ignored.
+ * in the filter string given to `setup_tracing`. `level` and `target` for
+ * a callsite are fixed at the first creation of a span for that callsite
+ * and can not be changed afterwards, i.e. the level and target passed for
+ * second and following creation of a span with the same callsite will be
+ * ignored.
  *
  * This function leaks a little bit of memory for each unique (file +
  * line + level + target + name) it is called with. Please make sure that
@@ -57600,7 +60716,7 @@ export class Span extends UniffiAbstractObject implements SpanLike {
  * work, exiting a span must be done on the same thread where it was
  * entered. It is possible to enter a span on multiple threads, in which
  * case it should also be exited on all of them individually; that is,
- * unless you *want* the span to be attached to all further events created
+ * unless you _want_ the span to be attached to all further events created
  * on that thread.
  */
     constructor(file: string, line: number | undefined, level: LogLevel, target: string, name: string, bridgeTraceId: string | undefined) {
@@ -57636,9 +60752,9 @@ export class Span extends UniffiAbstractObject implements SpanLike {
     
 /**
  * Creates a [`Span`] that acts as a bridge between the client spans and
- * the SDK ones, allowing them to be joined in Sentry. This function
- * will only return a valid span if the `sentry` feature is enabled,
- * otherwise it will return a noop span.
+ * the SDK ones, allowing them to be joined in Sentry. This function will
+ * only return a valid span if the `sentry` feature is enabled, otherwise
+ * it will return a noop span.
  */
     static newBridgeSpan(target: string, parentTraceId: string | undefined): SpanLike {
     return FfiConverterTypeSpan.lift(uniffiCaller.rustCall(
@@ -57778,9 +60894,8 @@ export interface SyncServiceBuilderLike {
  * Set a custom Sliding Sync connection ID for the room list service.
  *
  * By default [`matrix_sdk_ui::room_list_service::DEFAULT_CONNECTION_ID`]
- * is used. Set a different value for secondary processes such as iOS
- * Share Extensions that are not meant to reuse the main app's
- * connection.
+ * is used. Set a different value for secondary processes such as iOS Share
+ * Extensions that are not meant to reuse the main app's connection.
  */
     withRoomListConnectionId(connectionId: string): SyncServiceBuilderLike;
 /**
@@ -57870,9 +60985,8 @@ private constructor(pointer: UniffiHandle) {
  * Set a custom Sliding Sync connection ID for the room list service.
  *
  * By default [`matrix_sdk_ui::room_list_service::DEFAULT_CONNECTION_ID`]
- * is used. Set a different value for secondary processes such as iOS
- * Share Extensions that are not meant to reuse the main app's
- * connection.
+ * is used. Set a different value for secondary processes such as iOS Share
+ * Extensions that are not meant to reuse the main app's connection.
  */
     withRoomListConnectionId(connectionId: string): SyncServiceBuilderLike {
     return FfiConverterTypeSyncServiceBuilder.lift(uniffiCaller.rustCall(
@@ -58168,8 +61282,8 @@ export interface ClientLike {
  */
     cachedAvatarUrl(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<string | undefined>;
 /**
- * Lets the user know whether this is an `m.login.password` based
- * auth and if the account can actually be deactivated
+ * Lets the user know whether this is an `m.login.password` based auth and
+ * if the account can actually be deactivated
  */
     canDeactivateAccount(): boolean;
 /**
@@ -58198,21 +61312,22 @@ export interface ClientLike {
  * calling it.
  *
  * In particular, if a [`SyncService`] is running, it must be passed here
- * as a parameter, or stopped before calling this method. Ideally, the
- * send queues should have been disabled and must all be inactive (i.e.
- * not sending events); this method will disable them, but it might not
- * be enough if the queues are still processing events.
+ * as a parameter, or stopped before calling this method. Ideally, the send
+ * queues should have been disabled and must all be inactive (i.e. not
+ * sending events); this method will disable them, but it might not be
+ * enough if the queues are still processing events.
  *
- * After the method returns, the Client will be in an unstable
- * state, and it is required that the caller reinstantiates a new
- * Client instance, be it via dropping the previous and re-creating it,
- * restarting their application, or any other similar means.
+ * After the method returns, the Client will be in an unstable state, and
+ * it is required that the caller reinstantiates a new Client instance, be
+ * it via dropping the previous and re-creating it, restarting their
+ * application, or any other similar means.
  *
- * - This will get rid of the backing state store file, if provided.
  * - This will empty all the room's persisted event caches, so all rooms
  * will start as if they were empty.
- * - This will empty the media cache according to the current media
- * retention policy.
+ * - This will delete the search index.
+ * - This will close all the stores, then get rid of the backing state
+ * store, event cache store and media store files, if provided. The
+ * crypto store is kept.
  */
     clearCaches(syncService: SyncServiceLike | undefined, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
 /**
@@ -58229,24 +61344,22 @@ export interface ClientLike {
     contentScanner(asyncOpts_?: { signal: AbortSignal }): Promise<ContentScannerLike | undefined>;
     createRoom(request: CreateRoomParameters, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<string>;
 /**
- * Login using JWT
- * This is an implementation of the custom_login https://docs.rs/matrix-sdk/latest/matrix_sdk/matrix_auth/struct.MatrixAuth.html#method.login_custom
- * For more information on logging in with JWT: https://element-hq.github.io/synapse/latest/jwt.html
+ * Login using JWT This is an implementation of the custom_login
+ * https://docs.rs/matrix-sdk/latest/matrix_sdk/matrix_auth/struct.MatrixAuth.html#method.login_custom
+ * For more information on logging in with JWT:
+ * https://element-hq.github.io/synapse/latest/jwt.html
  */
     customLoginWithJwt(jwt: string, initialDeviceName: string | undefined, deviceId: string | undefined, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
 /**
- * Deactivate this account definitively.
- * Similarly to `encryption::reset_identity` this
- * will only work with password-based authentication (`m.login.password`)
+ * Deactivate this account definitively. Similarly to
+ * `encryption::reset_identity` this will only work with password-based
+ * authentication (`m.login.password`)
  *
- * # Arguments
- *
- * * `auth_data` - This request uses the [User-Interactive Authentication
- * API][uiaa]. The first request needs to set this to `None` and will
- * always fail and the same request needs to be made but this time with
- * some `auth_data` provided.
+ * This sends the initial unauthenticated request to retrieve a User-
+ * Interactive Authentication session, then completes it with the given
+ * password.
  */
-    deactivateAccount(authData: AuthData | undefined, eraseData: boolean, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
+    deactivateAccount(password: string, eraseData: boolean, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
 /**
  * Deactivates the account, with whatever authentication the homeserver
  * wants for it.
@@ -58294,6 +61407,21 @@ export interface ClientLike {
  * `m.rtc_foci`, relying only on the MSC4143 discovery endpoint.
  */
     disableWellKnownLookup(disable: boolean): void;
+/**
+ * Discover the RTC transports advertised by the homeserver.
+ *
+ * The transports are first looked up through the authenticated
+ * `GET /_matrix/client/v1/rtc/transports` endpoint (MSC4143). If the
+ * homeserver doesn't implement that endpoint, this falls back to the
+ * `m.rtc_foci` field of the well-known, unless well-known discovery was
+ * disabled with [`ClientBuilder::disable_well_known_lookup`] or
+ * [`Client::disable_well_known_lookup`].
+ *
+ * Returns `None` if neither source could provide transports, which is kept
+ * distinct from an empty list, i.e. a homeserver that advertises no
+ * transports at all.
+ */
+    discoverRtcTransports(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<Array<RtcTransport> | undefined>;
     displayName(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<string>;
 /**
  * Enables or disables all the room send queues at once.
@@ -58340,10 +61468,16 @@ export interface ClientLike {
  */
     getDmRooms(userId: string) /*throws*/: Array<RoomLike>;
 /**
- * Get the invite request avatars display policy
- * currently stored in the cache.
+ * Get the invite request avatars display policy currently stored in the
+ * cache.
  */
     getInviteAvatarsDisplayPolicy(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<InviteAvatars | undefined>;
+/**
+ * Get the room invite permission stored in the cache.
+ *
+ * A missing configuration is treated as unrestricted.
+ */
+    getInvitePermission(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<InvitePermissionState>;
 /**
  * Gets the `max_upload_size` value from the homeserver, which controls the
  * max size a media upload request can have.
@@ -58357,8 +61491,8 @@ export interface ClientLike {
  */
     getMediaFile(mediaSource: MediaSourceLike, filename: string | undefined, mimeType: string, useCache: boolean, tempDir: string | undefined, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<MediaFileHandleLike>;
 /**
- * Get the media previews timeline display policy
- * currently stored in the cache.
+ * Get the media previews timeline display policy currently stored in the
+ * cache.
  */
     getMediaPreviewDisplayPolicy(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<MediaPreviews | undefined>;
     getMediaThumbnail(mediaSource: MediaSourceLike, width: bigint, height: bigint, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<ArrayBuffer>;
@@ -58370,13 +61504,12 @@ export interface ClientLike {
  *
  * # Arguments
  *
- * * `room_id` - The ID of the room to get.
+ * - `room_id` - The ID of the room to get.
  *
  * # Returns
  *
- * A `Result` containing an optional room, or a `ClientError`.
- * This method will not initialize the room's timeline or populate it with
- * events.
+ * A `Result` containing an optional room, or a `ClientError`. This method
+ * will not initialize the room's timeline or populate it with events.
  */
     getRoom(roomId: string) /*throws*/: RoomLike | undefined;
 /**
@@ -58386,9 +61519,9 @@ export interface ClientLike {
 /**
  * Given a room id, get the preview of a room, to interact with it.
  *
- * The list of `via_servers` must be a list of servers that know
- * about the room and can resolve it, and that may appear as a `via`
- * parameter in e.g. a permalink URL. This list can be empty.
+ * The list of `via_servers` must be a list of servers that know about the
+ * room and can resolve it, and that may appear as a `via` parameter in
+ * e.g. a permalink URL. This list can be empty.
  */
     getRoomPreviewFromRoomId(roomId: string, viaServers: Array<string>, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<RoomPreviewLike>;
     getSessionVerificationController(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<SessionVerificationControllerLike>;
@@ -58397,27 +61530,27 @@ export interface ClientLike {
  */
     getStoreSizes(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<StoreSizes>;
 /**
- * Allows generic GET requests to be made through the SDK's internal HTTP
- * client. This is useful when the caller's native HTTP client wouldn't
- * have the same configuration (such as certificates, proxies, etc.) This
- * method returns the raw bytes of the response, so that any kind of
- * resource can be fetched including images, files, etc.
- *
- * Note: When an HTTP error occurs, the error response can be found in the
- * `ClientError::Generic`'s `details` field.
- */
-    getUrl(url: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<ArrayBuffer>;
-/**
  * Get the homeserver-generated preview for a URL, as OpenGraph JSON.
  *
  * # Arguments
  *
- * * `url` - The URL to generate a preview for.
- *
- * * `ts` - The preferred point in time to return a preview for, as a Unix
+ * - `url` - The URL to generate a preview for.
+ * - `ts` - The preferred point in time to return a preview for, as a Unix
  * timestamp in milliseconds. Deprecated since Matrix 1.11; pass `None`.
  */
     getUrlPreview(url: string, ts: bigint | undefined, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<string | undefined>;
+/**
+ * Whether the user has joined at least one encrypted room, spaces
+ * excluded.
+ *
+ * The local cache is consulted first, falling back to asking the
+ * homeserver directly if no encrypted room is known. If the server
+ * does not answer in `timeout_ms` milliseconds, this returns an error.
+ *
+ * Clients should treat errors as "maybe encrypted", not as "not
+ * encrypted".
+ */
+    hasEncryptedRooms(timeout: number, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<boolean>;
 /**
  * The homeserver this client is configured to use.
  */
@@ -58442,6 +61575,9 @@ export interface ClientLike {
  * a fallback, unless well-known discovery was disabled with
  * [`ClientBuilder::disable_well_known_lookup`] or
  * [`Client::disable_well_known_lookup`].
+ *
+ * Both the `m.livekit` and the legacy `livekit` transport types count as
+ * LiveKit support.
  */
     isLivekitRtcSupported(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<boolean>;
 /**
@@ -58460,6 +61596,7 @@ export interface ClientLike {
  * Checks if a room alias is not in use yet.
  *
  * Returns:
+ *
  * - `Ok(true)` if the room alias is available.
  * - `Ok(false)` if it's not (the resolve alias request returned a `404`
  * status code).
@@ -58486,9 +61623,9 @@ export interface ClientLike {
  * Join a room by its ID or alias.
  *
  * When supplying the room's ID, you can also supply a list of server names
- * for the homeserver to find the room. Typically these server names
- * come from a permalink's `via` parameters, or from resolving a room's
- * alias into an ID.
+ * for the homeserver to find the room. Typically these server names come
+ * from a permalink's `via` parameters, or from resolving a room's alias
+ * into an ID.
  */
     joinRoomByIdOrAlias(roomIdOrAlias: string, serverNames: Array<string>, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<RoomLike>;
 /**
@@ -58525,8 +61662,8 @@ export interface ClientLike {
  * receipts on each room's latest event.
  *
  * This is a best-effort operation — per-room errors are logged and
- * skipped. Receipts are sent unthreaded, which per the Matrix spec
- * covers all events in a room including those inside threads.
+ * skipped. Receipts are sent unthreaded, which per the Matrix spec covers
+ * all events in a room including those inside threads.
  *
  * This is useful to mitigate backend led wrong iOS app badges and work
  * around https://github.com/element-hq/element-x-ios/issues/3151
@@ -58543,7 +61680,7 @@ export interface ClientLike {
  *
  * # Arguments
  *
- * * `oauth_configuration` - The data to restore or register the client
+ * - `oauth_configuration` - The data to restore or register the client
  * with the server.
  */
     newLoginWithQrCodeHandler(oauthConfiguration: OAuthConfiguration): LoginWithQrCodeHandlerLike;
@@ -58599,6 +61736,18 @@ export interface ClientLike {
  */
     observeToDeviceEvents(listener: RawEventListener): TaskHandleLike;
 /**
+ * Subscribe to the total unread notification count of this [`Client`].
+ *
+ * The listener is called at most once every `min_interval` when new
+ * [`RoomInfoNotableUpdate`] are received. This interval mode is to avoid
+ * calculating hundreds of new values in a very small amount of time.
+ *
+ * An initial value will be reported as soon as the subscription starts.
+ *
+ * Use the returned [`TaskHandle`] to cancel the subscription.
+ */
+    observeTotalUnreadNotifications(listener: TotalUnreadNotificationsListener, minInterval: number): TaskHandleLike;
+/**
  * Perform database optimizations if any are available, i.e. vacuuming in
  * SQLite.
  */
@@ -58607,6 +61756,7 @@ export interface ClientLike {
  * Pause the client for background suspension.
  *
  * This method:
+ *
  * 1. Disables all send queues (prevents new message sends).
  * 2. Pauses all database stores, waiting for in-flight operations and
  * releasing all connections and file locks.
@@ -58618,7 +61768,7 @@ export interface ClientLike {
  * Call this before the app is suspended to avoid `0xdead10cc` kills.
  * Typically called from
  * [`applicationDidEnterBackground`](https://developer.apple.com/documentation/uikit/uiapplicationdelegate/applicationdidenterbackground(_:))
- * or an equivalent SwiftUI lifecycle event, *after* stopping the
+ * or an equivalent SwiftUI lifecycle event, _after_ stopping the
  * `matrix_sdk_ui::sync_service::SyncService`.
  */
     pause(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
@@ -58654,10 +61804,11 @@ export interface ClientLike {
 /**
  * Register a handler for notifications generated from sync responses.
  *
- * The handler will be called during sync for each event that triggers
- * a notification based on the user's push rules.
+ * The handler will be called during sync for each event that triggers a
+ * notification based on the user's push rules.
  *
  * The handler receives:
+ *
  * - The notification with push actions and event data
  * - The room ID where the notification occurred
  *
@@ -58693,9 +61844,8 @@ export interface ClientLike {
 /**
  * Empty the well-known cache.
  *
- * Since the SDK caches the well-known, it's possible to have a stale
- * entry in the cache. This functions makes it possible to force reset
- * it.
+ * Since the SDK caches the well-known, it's possible to have a stale entry
+ * in the cache. This functions makes it possible to force reset it.
  */
     resetWellKnown(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
 /**
@@ -58735,6 +61885,56 @@ export interface ClientLike {
     roomDirectorySearch(): RoomDirectorySearchLike;
     rooms(): Array<RoomLike>;
 /**
+ * Hand the delayed leave event of a MatrixRTC session over to the
+ * homeserver, through its `/rtc/livekit/delegate_delayed_leave` endpoint
+ * (MSC4195).
+ *
+ * # Arguments
+ *
+ * * `url` - The WebSocket URL of the LiveKit SFU that the user has
+ * connected to.
+ * * `room_id` - The room where the `m.rtc.member` event is present.
+ * * `slot_id` - The slot ID from the `m.rtc.member` event.
+ * * `member_id` - The `member.id` property of the `m.rtc.member` event.
+ * * `delay_id` - The ID of the delayed `m.rtc.member` leave event to
+ * delegate.
+ *
+ * Homeservers that don't implement the endpoint respond with an
+ * `M_UNRECOGNIZED` error.
+ */
+    rtcLivekitDelegateDelayedLeave(url: string, roomId: string, slotId: string, memberId: string, delayId: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
+/**
+ * Obtain a JWT to authenticate with a LiveKit SFU, through the
+ * homeserver's `/rtc/livekit/get_token` endpoint (MSC4195).
+ *
+ * # Arguments
+ *
+ * * `url` - The WebSocket URL of the LiveKit SFU to obtain a token for.
+ * * `room_id` - The room where the `m.rtc.member` event is present.
+ * * `slot_id` - The slot ID from the `m.rtc.member` event.
+ * * `member_id` - The `member.id` property of the user's own
+ * `m.rtc.member` event.
+ * * `server_name` - The server name of the sender of the `m.rtc.member`
+ * event that advertised the SFU. If `None`, the homeserver uses its own
+ * server name.
+ *
+ * Homeservers that don't implement the endpoint respond with an
+ * `M_UNRECOGNIZED` error.
+ */
+    rtcLivekitGetToken(url: string, roomId: string, slotId: string, memberId: string, serverName: string | undefined, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<string>;
+/**
+ * Start a search backfill sweep in the background.
+ *
+ * Back-paginates message history for every room, down to a ~3-month floor,
+ * front-loaded by recency (the last week for all rooms first, then the
+ * previous week, and so on), to populate the search index.
+ *
+ * Requires `ClientBuilder::enable_automatic_back_pagination` and
+ * `ClientBuilder::enable_event_cache` to have been enabled, otherwise
+ * this no-ops.
+ */
+    runSearchBackfill(strategy: SearchBackfillStrategy): TaskHandleLike;
+/**
  * Searches the messages the homeserver can read (so not encrypted ones).
  *
  * Takes the JSON of the `search_categories` to search in, and the batch
@@ -58742,6 +61942,24 @@ export interface ClientLike {
  */
     searchJson(searchCategoriesJson: string, nextBatch: string | undefined, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<string>;
     searchUsers(searchTerm: string, limit: bigint, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<SearchUsersResults>;
+/**
+ * Olm-encrypt a to-device message and send it to a set of recipient
+ * devices.
+ *
+ * # Arguments
+ *
+ * - `event_type` - The type of the to-device event to send.
+ * - `recipients` - The devices to send the message to, as a `user id ->
+ * device ids` map. The special device id `"*"` targets every device of
+ * that user we know about.
+ *
+ * - `content` - The content of the to-device event, as a JSON string,
+ * encrypted for and sent to every recipient.
+ *
+ * The returned value contains details of any recipients that did not
+ * receive the message
+ */
+    sendEncryptedToDeviceMessage(eventType: string, recipients: Map<string, Array<string>>, content: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<SendToDeviceOutcome>;
 /**
  * Sends an unencrypted to-device event of a type: takes the JSON of an
  * object of user IDs to objects of device IDs (or `*`) to the content for
@@ -58751,13 +61969,13 @@ export interface ClientLike {
 /**
  * The URL of the server.
  *
- * Not to be confused with the `Self::homeserver`. `server` is usually
- * the server part in a user ID, e.g. with `@mnt_io:matrix.org`, here
+ * Not to be confused with the `Self::homeserver`. `server` is usually the
+ * server part in a user ID, e.g. with `@mnt_io:matrix.org`, here
  * `matrix.org` is the server, whilst `matrix-client.matrix.org` is the
  * homeserver (at the time of writing — 2024-08-28).
  *
- * This value is optional depending on how the `Client` has been built.
- * If it's been built from a homeserver URL directly, we don't know the
+ * This value is optional depending on how the `Client` has been built. If
+ * it's been built from a homeserver URL directly, we don't know the
  * server. However, if the `Client` has been built from a server URL or
  * name, then the homeserver has been discovered, and we know both.
  */
@@ -58765,8 +61983,8 @@ export interface ClientLike {
 /**
  * Get server vendor information from the federation API.
  *
- * This method retrieves information about the server's name and version
- * by calling the `/_matrix/federation/v1/version` endpoint.
+ * This method retrieves information about the server's name and version by
+ * calling the `/_matrix/federation/v1/version` endpoint.
  */
     serverVendorInfo(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<ServerVendorInfo>;
 /**
@@ -58800,6 +62018,10 @@ export interface ClientLike {
  * Set the invite request avatars display policy
  */
     setInviteAvatarsDisplayPolicy(policy: InviteAvatars, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
+/**
+ * Set the room invite permission for this account.
+ */
+    setInvitePermission(action: InvitePermissionAction, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
 /**
  * Set the media previews timeline display policy
  */
@@ -58838,8 +62060,8 @@ export interface ClientLike {
 /**
  * Set the current user's status (MSC4426 `m.status` profile field).
  *
- * Replaces any existing status. Use [`Self::clear_user_status`] to
- * remove it.
+ * Replaces any existing status. Use [`Self::clear_user_status`] to remove
+ * it.
  */
     setUserStatus(status: UserStatus, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
 /**
@@ -58857,11 +62079,29 @@ export interface ClientLike {
  */
     startSsoLogin(redirectUrl: string, idpId: string | undefined, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<SsoHandlerLike>;
 /**
+ * Subscribe to the custom to-device messages received by this client.
+ *
+ * The listener is called with every to-device message whose type is one of
+ * `event_types`, or with every custom to-device message if `event_types`
+ * is empty. A message that was sent encrypted is delivered decrypted,
+ * along with its encryption info.
+ *
+ * The to-device traffic the SDK uses for its own crypto machinery and the
+ * messages it could not decrypt are never delivered.
+ *
+ * Use the returned [`TaskHandle`] to cancel the subscription.
+ */
+    subscribeToCustomToDeviceMessages(eventTypes: Array<string>, listener: ToDeviceMessageListener): TaskHandleLike;
+/**
  * Subscribe to duplicate key upload errors triggered by requests to
  * /keys/upload.
  */
     subscribeToDuplicateKeyUploadErrors(listener: DuplicateKeyUploadErrorListener): TaskHandleLike;
     subscribeToIgnoredUsers(listener: IgnoredUsersListener): TaskHandleLike;
+/**
+ * Subscribe to changes in the room invite permission configuration.
+ */
+    subscribeToInvitePermission(listener: InvitePermissionListener, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<TaskHandleLike>;
 /**
  * Subscribe to changes in the media preview configuration.
  */
@@ -58891,9 +62131,9 @@ export interface ClientLike {
  * are processed.
  *
  * Note this method should be used sparingly since using callback
- * interfaces is expensive, as well as keeping them alive for a long
- * time. Usages of this method should be short-lived and dropped as
- * soon as possible.
+ * interfaces is expensive, as well as keeping them alive for a long time.
+ * Usages of this method should be short-lived and dropped as soon as
+ * possible.
  */
     subscribeToRoomInfo(roomId: string, listener: RoomInfoListener, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<TaskHandleLike>;
 /**
@@ -58905,19 +62145,19 @@ export interface ClientLike {
  */
     subscribeToSendQueueStatus(listener: SendQueueRoomErrorListener): TaskHandleLike;
 /**
- * Subscribe to the global send queue update reporter, at the
- * client-wide level.
+ * Subscribe to the global send queue update reporter, at the client-wide
+ * level.
  *
  * The given listener will be immediately called with
- * `RoomSendQueueUpdate::NewLocalEvent` for each local echo existing in
- * the queue.
+ * `RoomSendQueueUpdate::NewLocalEvent` for each local echo existing in the
+ * queue.
  */
     subscribeToSendQueueUpdates(listener: SendQueueRoomUpdateListener, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<TaskHandleLike>;
 /**
  * Perform a single sync v2 call.
  *
- * This is useful for performing an initial sync or a one-shot sync
- * without entering a continuous loop.
+ * This is useful for performing an initial sync or a one-shot sync without
+ * entering a continuous loop.
  */
     syncOnceV2(settings: SyncSettingsV2, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<SyncResponseV2>;
     syncService(): SyncServiceBuilderLike;
@@ -58925,11 +62165,11 @@ export interface ClientLike {
  * Start a sync v2 loop.
  *
  * This is an alternative to [`Client::sync_service`] (which uses Sliding
- * Sync / MSC4186). It works with any homeserver, including older
- * Synapse versions that do not support Sliding Sync.
+ * Sync / MSC4186). It works with any homeserver, including older Synapse
+ * versions that do not support Sliding Sync.
  *
- * Returns a `TaskHandle` that can be used to cancel the sync loop.
- * The listener is called after each successful sync response.
+ * Returns a `TaskHandle` that can be used to cancel the sync loop. The
+ * listener is called after each successful sync response.
  */
     syncV2(settings: SyncSettingsV2, listener: SyncListenerV2): TaskHandleLike;
 /**
@@ -58958,6 +62198,25 @@ export interface ClientLike {
  */
     unbindThreepid(medium: string, address: string, idServer: string | undefined, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
     unignoreUser(userId: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
+/**
+ * Cancel, restart or immediately send a previously scheduled delayed
+ * event ([MSC4140]).
+ *
+ * # Arguments
+ *
+ * * `delay_id` - The identifier returned by [`Room::send_delayed_event`]
+ * or [`Room::send_delayed_state_event`].
+ *
+ * * `action` - What should happen to the delayed event.
+ *
+ * * `request_config_override` - Overrides the client's request config for
+ * this request. Fields that are not set keep the client's values.
+ *
+ * [MSC4140]: https://github.com/matrix-org/matrix-spec-proposals/pull/4140
+ * [`Room::send_delayed_event`]: crate::room::Room::send_delayed_event
+ * [`Room::send_delayed_state_event`]: crate::room::Room::send_delayed_state_event
+ */
+    updateDelayedEvent(delayId: string, action: DelayedEventUpdateAction, requestConfigOverride: RequestConfigOverride | undefined, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
     uploadAvatar(mimeType: string, data: ArrayBuffer, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
     uploadMedia(mimeType: string, data: ArrayBuffer, progressWatcher: ProgressWatcher | undefined, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<string>;
 /**
@@ -58968,29 +62227,31 @@ export interface ClientLike {
  *
  * # Arguments
  *
- * * `oauth_configuration` - The configuration used to load the credentials
+ * - `oauth_configuration` - The configuration used to load the credentials
  * of the client if it is already registered with the authorization
  * server, or register the client and store its credentials if it isn't.
  *
- * * `prompt` - The desired user experience in the web UI. No value means
+ * - `prompt` - The desired user experience in the web UI. No value means
  * that the user wishes to login into an existing account, and a value of
  * `Create` means that the user wishes to register a new account.
  *
- * * `login_hint` - A generic login hint that an identity provider can use
+ * - `login_hint` - A generic login hint that an identity provider can use
  * to pre-fill the login form. The format of this hint is not restricted
- * by the spec as external providers all have their own way to handle the hint.
- * However, it should be noted that when providing a user ID as a hint
- * for MAS (with no upstream provider), then the format to use is defined
- * by [MSC4198]: https://github.com/matrix-org/matrix-spec-proposals/pull/4198
+ * by the spec as external providers all have their own way to handle the
+ * hint. However, it should be noted that when providing a user ID as a
+ * hint for MAS (with no upstream provider), then the format to use is
+ * defined by [MSC4198]:
+ * https://github.com/matrix-org/matrix-spec-proposals/pull/4198
  *
- * * `device_id` - The unique ID that will be associated with the session.
+ * - `device_id` - The unique ID that will be associated with the session.
  * If not set, a random one will be generated. It can be an existing
  * device ID from a previous login call. Note that this should be done
  * only if the client also holds the corresponding encryption keys.
  *
- * * `additional_scopes` - Additional scopes to request from the
- * authorization server, e.g. "urn:matrix:client:com.example.msc9999.foo".
- * The scopes for API access and the device ID according to the
+ * - `additional_scopes` - Additional scopes to request from the
+ * authorization server, e.g.
+ * "urn:matrix:client:com.example.msc9999.foo". The scopes for API access
+ * and the device ID according to the
  * [specification](https://spec.matrix.org/v1.15/client-server-api/#allocated-scope-tokens)
  * are always requested.
  */
@@ -59334,8 +62595,8 @@ private constructor(pointer: UniffiHandle) {
     }
     
 /**
- * Lets the user know whether this is an `m.login.password` based
- * auth and if the account can actually be deactivated
+ * Lets the user know whether this is an `m.login.password` based auth and
+ * if the account can actually be deactivated
  */
     canDeactivateAccount(): boolean {
     return FfiConverterBool.lift(uniffiCaller.rustCall(
@@ -59461,21 +62722,22 @@ private constructor(pointer: UniffiHandle) {
  * calling it.
  *
  * In particular, if a [`SyncService`] is running, it must be passed here
- * as a parameter, or stopped before calling this method. Ideally, the
- * send queues should have been disabled and must all be inactive (i.e.
- * not sending events); this method will disable them, but it might not
- * be enough if the queues are still processing events.
+ * as a parameter, or stopped before calling this method. Ideally, the send
+ * queues should have been disabled and must all be inactive (i.e. not
+ * sending events); this method will disable them, but it might not be
+ * enough if the queues are still processing events.
  *
- * After the method returns, the Client will be in an unstable
- * state, and it is required that the caller reinstantiates a new
- * Client instance, be it via dropping the previous and re-creating it,
- * restarting their application, or any other similar means.
+ * After the method returns, the Client will be in an unstable state, and
+ * it is required that the caller reinstantiates a new Client instance, be
+ * it via dropping the previous and re-creating it, restarting their
+ * application, or any other similar means.
  *
- * - This will get rid of the backing state store file, if provided.
  * - This will empty all the room's persisted event caches, so all rooms
  * will start as if they were empty.
- * - This will empty the media cache according to the current media
- * retention policy.
+ * - This will delete the search index.
+ * - This will close all the stores, then get rid of the backing state
+ * store, event cache store and media store files, if provided. The
+ * crypto store is kept.
  */
     async clearCaches(syncService: SyncServiceLike | undefined, asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
     return await uniffiRustCallAsync(
@@ -59592,9 +62854,10 @@ private constructor(pointer: UniffiHandle) {
     }
     
 /**
- * Login using JWT
- * This is an implementation of the custom_login https://docs.rs/matrix-sdk/latest/matrix_sdk/matrix_auth/struct.MatrixAuth.html#method.login_custom
- * For more information on logging in with JWT: https://element-hq.github.io/synapse/latest/jwt.html
+ * Login using JWT This is an implementation of the custom_login
+ * https://docs.rs/matrix-sdk/latest/matrix_sdk/matrix_auth/struct.MatrixAuth.html#method.login_custom
+ * For more information on logging in with JWT:
+ * https://element-hq.github.io/synapse/latest/jwt.html
  */
     async customLoginWithJwt(jwt: string, initialDeviceName: string | undefined, deviceId: string | undefined, asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
     return await uniffiRustCallAsync(
@@ -59616,23 +62879,20 @@ private constructor(pointer: UniffiHandle) {
     }
     
 /**
- * Deactivate this account definitively.
- * Similarly to `encryption::reset_identity` this
- * will only work with password-based authentication (`m.login.password`)
+ * Deactivate this account definitively. Similarly to
+ * `encryption::reset_identity` this will only work with password-based
+ * authentication (`m.login.password`)
  *
- * # Arguments
- *
- * * `auth_data` - This request uses the [User-Interactive Authentication
- * API][uiaa]. The first request needs to set this to `None` and will
- * always fail and the same request needs to be made but this time with
- * some `auth_data` provided.
+ * This sends the initial unauthenticated request to retrieve a User-
+ * Interactive Authentication session, then completes it with the given
+ * password.
  */
-    async deactivateAccount(authData: AuthData | undefined, eraseData: boolean, asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
+    async deactivateAccount(password: string, eraseData: boolean, asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
     return await uniffiRustCallAsync(
             /*rustCaller:*/ uniffiCaller,
             /*rustFutureFunc:*/ () => {
                 return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_deactivate_account(
-                    uniffiTypeClientObjectFactory.clonePointer(this),FfiConverterOptionalTypeAuthData.lower(authData, nativeModule().rustbuffer_alloc),FfiConverterBool.lower(eraseData, nativeModule().rustbuffer_alloc)
+                    uniffiTypeClientObjectFactory.clonePointer(this),FfiConverterString.lower(password, nativeModule().rustbuffer_alloc),FfiConverterBool.lower(eraseData, nativeModule().rustbuffer_alloc)
                 );
             },
             /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_void,
@@ -59891,6 +63151,53 @@ private constructor(pointer: UniffiHandle) {
     );
     }
     
+/**
+ * Discover the RTC transports advertised by the homeserver.
+ *
+ * The transports are first looked up through the authenticated
+ * `GET /_matrix/client/v1/rtc/transports` endpoint (MSC4143). If the
+ * homeserver doesn't implement that endpoint, this falls back to the
+ * `m.rtc_foci` field of the well-known, unless well-known discovery was
+ * disabled with [`ClientBuilder::disable_well_known_lookup`] or
+ * [`Client::disable_well_known_lookup`].
+ *
+ * Returns `None` if neither source could provide transports, which is kept
+ * distinct from an empty list, i.e. a homeserver that advertises no
+ * transports at all.
+ */
+    async discoverRtcTransports(asyncOpts_?: { signal: AbortSignal }): Promise<Array<RtcTransport> | undefined> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_discover_rtc_transports(
+                    uniffiTypeClientObjectFactory.clonePointer(this)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_rust_buffer,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_rust_buffer,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_rust_buffer,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_rust_buffer,
+            // Async returns always go through the JS-side converter: the
+            // FFI symbol returns the future handle (u64), and the user-level
+            // RustBuffer comes back via the shared `rust_future_complete_*`
+            // export. The bytes the runtime hands back must be deserialized
+            // here using the per-callable return-type converter.
+            // Borrowed view over foreign memory: the call site owns the free,
+            // as on the sync paths. Unconditional — a no-op where buffers are
+            // already JS-owned.
+            /*liftFunc:*/ (__rb) => {
+                try {
+                    return FfiConverterOptionalSequenceTypeRtcTransport.lift(__rb);
+                } finally {
+                    nativeModule().rustbuffer_free(__rb);
+                }
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
     async displayName(asyncOpts_?: { signal: AbortSignal }): Promise<string> /*throws*/ {
     return await uniffiRustCallAsync(
             /*rustCaller:*/ uniffiCaller,
@@ -60145,8 +63452,8 @@ private constructor(pointer: UniffiHandle) {
     }
     
 /**
- * Get the invite request avatars display policy
- * currently stored in the cache.
+ * Get the invite request avatars display policy currently stored in the
+ * cache.
  */
     async getInviteAvatarsDisplayPolicy(asyncOpts_?: { signal: AbortSignal }): Promise<InviteAvatars | undefined> /*throws*/ {
     return await uniffiRustCallAsync(
@@ -60171,6 +63478,44 @@ private constructor(pointer: UniffiHandle) {
             /*liftFunc:*/ (__rb) => {
                 try {
                     return FfiConverterOptionalTypeInviteAvatars.lift(__rb);
+                } finally {
+                    nativeModule().rustbuffer_free(__rb);
+                }
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
+ * Get the room invite permission stored in the cache.
+ *
+ * A missing configuration is treated as unrestricted.
+ */
+    async getInvitePermission(asyncOpts_?: { signal: AbortSignal }): Promise<InvitePermissionState> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_get_invite_permission(
+                    uniffiTypeClientObjectFactory.clonePointer(this)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_rust_buffer,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_rust_buffer,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_rust_buffer,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_rust_buffer,
+            // Async returns always go through the JS-side converter: the
+            // FFI symbol returns the future handle (u64), and the user-level
+            // RustBuffer comes back via the shared `rust_future_complete_*`
+            // export. The bytes the runtime hands back must be deserialized
+            // here using the per-callable return-type converter.
+            // Borrowed view over foreign memory: the call site owns the free,
+            // as on the sync paths. Unconditional — a no-op where buffers are
+            // already JS-owned.
+            /*liftFunc:*/ (__rb) => {
+                try {
+                    return FfiConverterTypeInvitePermissionState.lift(__rb);
                 } finally {
                     nativeModule().rustbuffer_free(__rb);
                 }
@@ -60272,8 +63617,8 @@ private constructor(pointer: UniffiHandle) {
     }
     
 /**
- * Get the media previews timeline display policy
- * currently stored in the cache.
+ * Get the media previews timeline display policy currently stored in the
+ * cache.
  */
     async getMediaPreviewDisplayPolicy(asyncOpts_?: { signal: AbortSignal }): Promise<MediaPreviews | undefined> /*throws*/ {
     return await uniffiRustCallAsync(
@@ -60436,13 +63781,12 @@ private constructor(pointer: UniffiHandle) {
  *
  * # Arguments
  *
- * * `room_id` - The ID of the room to get.
+ * - `room_id` - The ID of the room to get.
  *
  * # Returns
  *
- * A `Result` containing an optional room, or a `ClientError`.
- * This method will not initialize the room's timeline or populate it with
- * events.
+ * A `Result` containing an optional room, or a `ClientError`. This method
+ * will not initialize the room's timeline or populate it with events.
  */
     getRoom(roomId: string): RoomLike | undefined /*throws*/ {
     const __rb: Uint8Array = uniffiCaller.rustCallWithError(
@@ -60492,9 +63836,9 @@ private constructor(pointer: UniffiHandle) {
 /**
  * Given a room id, get the preview of a room, to interact with it.
  *
- * The list of `via_servers` must be a list of servers that know
- * about the room and can resolve it, and that may appear as a `via`
- * parameter in e.g. a permalink URL. This list can be empty.
+ * The list of `via_servers` must be a list of servers that know about the
+ * room and can resolve it, and that may appear as a `via` parameter in
+ * e.g. a permalink URL. This list can be empty.
  */
     async getRoomPreviewFromRoomId(roomId: string, viaServers: Array<string>, asyncOpts_?: { signal: AbortSignal }): Promise<RoomPreviewLike> /*throws*/ {
     return await uniffiRustCallAsync(
@@ -60581,56 +63925,12 @@ private constructor(pointer: UniffiHandle) {
     }
     
 /**
- * Allows generic GET requests to be made through the SDK's internal HTTP
- * client. This is useful when the caller's native HTTP client wouldn't
- * have the same configuration (such as certificates, proxies, etc.) This
- * method returns the raw bytes of the response, so that any kind of
- * resource can be fetched including images, files, etc.
- *
- * Note: When an HTTP error occurs, the error response can be found in the
- * `ClientError::Generic`'s `details` field.
- */
-    async getUrl(url: string, asyncOpts_?: { signal: AbortSignal }): Promise<ArrayBuffer> /*throws*/ {
-    return await uniffiRustCallAsync(
-            /*rustCaller:*/ uniffiCaller,
-            /*rustFutureFunc:*/ () => {
-                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_get_url(
-                    uniffiTypeClientObjectFactory.clonePointer(this),FfiConverterString.lower(url, nativeModule().rustbuffer_alloc)
-                );
-            },
-            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_rust_buffer,
-            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_rust_buffer,
-            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_rust_buffer,
-            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_rust_buffer,
-            // Async returns always go through the JS-side converter: the
-            // FFI symbol returns the future handle (u64), and the user-level
-            // RustBuffer comes back via the shared `rust_future_complete_*`
-            // export. The bytes the runtime hands back must be deserialized
-            // here using the per-callable return-type converter.
-            // Borrowed view over foreign memory: the call site owns the free,
-            // as on the sync paths. Unconditional — a no-op where buffers are
-            // already JS-owned.
-            /*liftFunc:*/ (__rb) => {
-                try {
-                    return FfiConverterArrayBuffer.lift(__rb);
-                } finally {
-                    nativeModule().rustbuffer_free(__rb);
-                }
-            },
-            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
-            /*asyncOpts:*/ asyncOpts_,
-            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
-        );
-    }
-    
-/**
  * Get the homeserver-generated preview for a URL, as OpenGraph JSON.
  *
  * # Arguments
  *
- * * `url` - The URL to generate a preview for.
- *
- * * `ts` - The preferred point in time to return a preview for, as a Unix
+ * - `url` - The URL to generate a preview for.
+ * - `ts` - The preferred point in time to return a preview for, as a Unix
  * timestamp in milliseconds. Deprecated since Matrix 1.11; pass `None`.
  */
     async getUrlPreview(url: string, ts: bigint | undefined, asyncOpts_?: { signal: AbortSignal }): Promise<string | undefined> /*throws*/ {
@@ -60660,6 +63960,41 @@ private constructor(pointer: UniffiHandle) {
                     nativeModule().rustbuffer_free(__rb);
                 }
             },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
+ * Whether the user has joined at least one encrypted room, spaces
+ * excluded.
+ *
+ * The local cache is consulted first, falling back to asking the
+ * homeserver directly if no encrypted room is known. If the server
+ * does not answer in `timeout_ms` milliseconds, this returns an error.
+ *
+ * Clients should treat errors as "maybe encrypted", not as "not
+ * encrypted".
+ */
+    async hasEncryptedRooms(timeout: number, asyncOpts_?: { signal: AbortSignal }): Promise<boolean> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_has_encrypted_rooms(
+                    uniffiTypeClientObjectFactory.clonePointer(this),FfiConverterDuration.lower(timeout, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_i8,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_i8,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_i8,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_i8,
+            // Async returns always go through the JS-side converter: the
+            // FFI symbol returns the future handle (u64), and the user-level
+            // RustBuffer comes back via the shared `rust_future_complete_*`
+            // export. The bytes the runtime hands back must be deserialized
+            // here using the per-callable return-type converter.
+            /*liftFunc:*/ FfiConverterBool.lift.bind(FfiConverterBool),
             /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
             /*asyncOpts:*/ asyncOpts_,
             /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
@@ -60811,6 +64146,9 @@ private constructor(pointer: UniffiHandle) {
  * a fallback, unless well-known discovery was disabled with
  * [`ClientBuilder::disable_well_known_lookup`] or
  * [`Client::disable_well_known_lookup`].
+ *
+ * Both the `m.livekit` and the legacy `livekit` transport types count as
+ * LiveKit support.
  */
     async isLivekitRtcSupported(asyncOpts_?: { signal: AbortSignal }): Promise<boolean> /*throws*/ {
     return await uniffiRustCallAsync(
@@ -60921,6 +64259,7 @@ private constructor(pointer: UniffiHandle) {
  * Checks if a room alias is not in use yet.
  *
  * Returns:
+ *
  * - `Ok(true)` if the room alias is available.
  * - `Ok(false)` if it's not (the resolve alias request returned a `404`
  * status code).
@@ -61039,9 +64378,9 @@ private constructor(pointer: UniffiHandle) {
  * Join a room by its ID or alias.
  *
  * When supplying the room's ID, you can also supply a list of server names
- * for the homeserver to find the room. Typically these server names
- * come from a permalink's `via` parameters, or from resolving a room's
- * alias into an ID.
+ * for the homeserver to find the room. Typically these server names come
+ * from a permalink's `via` parameters, or from resolving a room's alias
+ * into an ID.
  */
     async joinRoomByIdOrAlias(roomIdOrAlias: string, serverNames: Array<string>, asyncOpts_?: { signal: AbortSignal }): Promise<RoomLike> /*throws*/ {
     return await uniffiRustCallAsync(
@@ -61246,8 +64585,8 @@ private constructor(pointer: UniffiHandle) {
  * receipts on each room's latest event.
  *
  * This is a best-effort operation — per-room errors are logged and
- * skipped. Receipts are sent unthreaded, which per the Matrix spec
- * covers all events in a room including those inside threads.
+ * skipped. Receipts are sent unthreaded, which per the Matrix spec covers
+ * all events in a room including those inside threads.
  *
  * This is useful to mitigate backend led wrong iOS app badges and work
  * around https://github.com/element-hq/element-x-ios/issues/3151
@@ -61292,7 +64631,7 @@ private constructor(pointer: UniffiHandle) {
  *
  * # Arguments
  *
- * * `oauth_configuration` - The data to restore or register the client
+ * - `oauth_configuration` - The data to restore or register the client
  * with the server.
  */
     newLoginWithQrCodeHandler(oauthConfiguration: OAuthConfiguration): LoginWithQrCodeHandlerLike {
@@ -61496,6 +64835,30 @@ private constructor(pointer: UniffiHandle) {
     }
     
 /**
+ * Subscribe to the total unread notification count of this [`Client`].
+ *
+ * The listener is called at most once every `min_interval` when new
+ * [`RoomInfoNotableUpdate`] are received. This interval mode is to avoid
+ * calculating hundreds of new values in a very small amount of time.
+ *
+ * An initial value will be reported as soon as the subscription starts.
+ *
+ * Use the returned [`TaskHandle`] to cancel the subscription.
+ */
+    observeTotalUnreadNotifications(listener: TotalUnreadNotificationsListener, minInterval: number): TaskHandleLike {
+    return FfiConverterTypeTaskHandle.lift(uniffiCaller.rustCall(
+            /*caller:*/ (callStatus) => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_observe_total_unread_notifications(
+                uniffiTypeClientObjectFactory.clonePointer(this),
+        FfiConverterTypeTotalUnreadNotificationsListener.lower(listener, nativeModule().rustbuffer_alloc),
+        FfiConverterDuration.lower(minInterval, nativeModule().rustbuffer_alloc),
+                callStatus);
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+    ));
+    }
+    
+/**
  * Perform database optimizations if any are available, i.e. vacuuming in
  * SQLite.
  */
@@ -61522,6 +64885,7 @@ private constructor(pointer: UniffiHandle) {
  * Pause the client for background suspension.
  *
  * This method:
+ *
  * 1. Disables all send queues (prevents new message sends).
  * 2. Pauses all database stores, waiting for in-flight operations and
  * releasing all connections and file locks.
@@ -61533,7 +64897,7 @@ private constructor(pointer: UniffiHandle) {
  * Call this before the app is suspended to avoid `0xdead10cc` kills.
  * Typically called from
  * [`applicationDidEnterBackground`](https://developer.apple.com/documentation/uikit/uiapplicationdelegate/applicationdidenterbackground(_:))
- * or an equivalent SwiftUI lifecycle event, *after* stopping the
+ * or an equivalent SwiftUI lifecycle event, _after_ stopping the
  * `matrix_sdk_ui::sync_service::SyncService`.
  */
     async pause(asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
@@ -61779,10 +65143,11 @@ private constructor(pointer: UniffiHandle) {
 /**
  * Register a handler for notifications generated from sync responses.
  *
- * The handler will be called during sync for each event that triggers
- * a notification based on the user's push rules.
+ * The handler will be called during sync for each event that triggers a
+ * notification based on the user's push rules.
  *
  * The handler receives:
+ *
  * - The notification with push actions and event data
  * - The room ID where the notification occurred
  *
@@ -61986,9 +65351,8 @@ private constructor(pointer: UniffiHandle) {
 /**
  * Empty the well-known cache.
  *
- * Since the SDK caches the well-known, it's possible to have a stale
- * entry in the cache. This functions makes it possible to force reset
- * it.
+ * Since the SDK caches the well-known, it's possible to have a stale entry
+ * in the cache. This functions makes it possible to force reset it.
  */
     async resetWellKnown(asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
     return await uniffiRustCallAsync(
@@ -62180,6 +65544,117 @@ private constructor(pointer: UniffiHandle) {
     }
     
 /**
+ * Hand the delayed leave event of a MatrixRTC session over to the
+ * homeserver, through its `/rtc/livekit/delegate_delayed_leave` endpoint
+ * (MSC4195).
+ *
+ * # Arguments
+ *
+ * * `url` - The WebSocket URL of the LiveKit SFU that the user has
+ * connected to.
+ * * `room_id` - The room where the `m.rtc.member` event is present.
+ * * `slot_id` - The slot ID from the `m.rtc.member` event.
+ * * `member_id` - The `member.id` property of the `m.rtc.member` event.
+ * * `delay_id` - The ID of the delayed `m.rtc.member` leave event to
+ * delegate.
+ *
+ * Homeservers that don't implement the endpoint respond with an
+ * `M_UNRECOGNIZED` error.
+ */
+    async rtcLivekitDelegateDelayedLeave(url: string, roomId: string, slotId: string, memberId: string, delayId: string, asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_rtc_livekit_delegate_delayed_leave(
+                    uniffiTypeClientObjectFactory.clonePointer(this),FfiConverterString.lower(url, nativeModule().rustbuffer_alloc),FfiConverterString.lower(roomId, nativeModule().rustbuffer_alloc),FfiConverterString.lower(slotId, nativeModule().rustbuffer_alloc),FfiConverterString.lower(memberId, nativeModule().rustbuffer_alloc),FfiConverterString.lower(delayId, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_void,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_void,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_void,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_void,
+            /*liftFunc:*/ (_v) => {},
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
+ * Obtain a JWT to authenticate with a LiveKit SFU, through the
+ * homeserver's `/rtc/livekit/get_token` endpoint (MSC4195).
+ *
+ * # Arguments
+ *
+ * * `url` - The WebSocket URL of the LiveKit SFU to obtain a token for.
+ * * `room_id` - The room where the `m.rtc.member` event is present.
+ * * `slot_id` - The slot ID from the `m.rtc.member` event.
+ * * `member_id` - The `member.id` property of the user's own
+ * `m.rtc.member` event.
+ * * `server_name` - The server name of the sender of the `m.rtc.member`
+ * event that advertised the SFU. If `None`, the homeserver uses its own
+ * server name.
+ *
+ * Homeservers that don't implement the endpoint respond with an
+ * `M_UNRECOGNIZED` error.
+ */
+    async rtcLivekitGetToken(url: string, roomId: string, slotId: string, memberId: string, serverName: string | undefined, asyncOpts_?: { signal: AbortSignal }): Promise<string> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_rtc_livekit_get_token(
+                    uniffiTypeClientObjectFactory.clonePointer(this),FfiConverterString.lower(url, nativeModule().rustbuffer_alloc),FfiConverterString.lower(roomId, nativeModule().rustbuffer_alloc),FfiConverterString.lower(slotId, nativeModule().rustbuffer_alloc),FfiConverterString.lower(memberId, nativeModule().rustbuffer_alloc),FfiConverterOptionalString.lower(serverName, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_rust_buffer,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_rust_buffer,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_rust_buffer,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_rust_buffer,
+            // Async returns always go through the JS-side converter: the
+            // FFI symbol returns the future handle (u64), and the user-level
+            // RustBuffer comes back via the shared `rust_future_complete_*`
+            // export. The bytes the runtime hands back must be deserialized
+            // here using the per-callable return-type converter.
+            // Borrowed view over foreign memory: the call site owns the free,
+            // as on the sync paths. Unconditional — a no-op where buffers are
+            // already JS-owned.
+            /*liftFunc:*/ (__rb) => {
+                try {
+                    return FfiConverterString.lift(__rb);
+                } finally {
+                    nativeModule().rustbuffer_free(__rb);
+                }
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
+ * Start a search backfill sweep in the background.
+ *
+ * Back-paginates message history for every room, down to a ~3-month floor,
+ * front-loaded by recency (the last week for all rooms first, then the
+ * previous week, and so on), to populate the search index.
+ *
+ * Requires `ClientBuilder::enable_automatic_back_pagination` and
+ * `ClientBuilder::enable_event_cache` to have been enabled, otherwise
+ * this no-ops.
+ */
+    runSearchBackfill(strategy: SearchBackfillStrategy): TaskHandleLike {
+    return FfiConverterTypeTaskHandle.lift(uniffiCaller.rustCall(
+            /*caller:*/ (callStatus) => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_run_search_backfill(
+                uniffiTypeClientObjectFactory.clonePointer(this),
+        FfiConverterTypeSearchBackfillStrategy.lower(strategy, nativeModule().rustbuffer_alloc),
+                callStatus);
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+    ));
+    }
+    
+/**
  * Searches the messages the homeserver can read (so not encrypted ones).
  *
  * Takes the JSON of the `search_categories` to search in, and the batch
@@ -62252,6 +65727,56 @@ private constructor(pointer: UniffiHandle) {
     }
     
 /**
+ * Olm-encrypt a to-device message and send it to a set of recipient
+ * devices.
+ *
+ * # Arguments
+ *
+ * - `event_type` - The type of the to-device event to send.
+ * - `recipients` - The devices to send the message to, as a `user id ->
+ * device ids` map. The special device id `"*"` targets every device of
+ * that user we know about.
+ *
+ * - `content` - The content of the to-device event, as a JSON string,
+ * encrypted for and sent to every recipient.
+ *
+ * The returned value contains details of any recipients that did not
+ * receive the message
+ */
+    async sendEncryptedToDeviceMessage(eventType: string, recipients: Map<string, Array<string>>, content: string, asyncOpts_?: { signal: AbortSignal }): Promise<SendToDeviceOutcome> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_send_encrypted_to_device_message(
+                    uniffiTypeClientObjectFactory.clonePointer(this),FfiConverterString.lower(eventType, nativeModule().rustbuffer_alloc),FfiConverterMapStringSequenceString.lower(recipients, nativeModule().rustbuffer_alloc),FfiConverterString.lower(content, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_rust_buffer,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_rust_buffer,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_rust_buffer,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_rust_buffer,
+            // Async returns always go through the JS-side converter: the
+            // FFI symbol returns the future handle (u64), and the user-level
+            // RustBuffer comes back via the shared `rust_future_complete_*`
+            // export. The bytes the runtime hands back must be deserialized
+            // here using the per-callable return-type converter.
+            // Borrowed view over foreign memory: the call site owns the free,
+            // as on the sync paths. Unconditional — a no-op where buffers are
+            // already JS-owned.
+            /*liftFunc:*/ (__rb) => {
+                try {
+                    return FfiConverterTypeSendToDeviceOutcome.lift(__rb);
+                } finally {
+                    nativeModule().rustbuffer_free(__rb);
+                }
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
  * Sends an unencrypted to-device event of a type: takes the JSON of an
  * object of user IDs to objects of device IDs (or `*`) to the content for
  * each.
@@ -62278,13 +65803,13 @@ private constructor(pointer: UniffiHandle) {
 /**
  * The URL of the server.
  *
- * Not to be confused with the `Self::homeserver`. `server` is usually
- * the server part in a user ID, e.g. with `@mnt_io:matrix.org`, here
+ * Not to be confused with the `Self::homeserver`. `server` is usually the
+ * server part in a user ID, e.g. with `@mnt_io:matrix.org`, here
  * `matrix.org` is the server, whilst `matrix-client.matrix.org` is the
  * homeserver (at the time of writing — 2024-08-28).
  *
- * This value is optional depending on how the `Client` has been built.
- * If it's been built from a homeserver URL directly, we don't know the
+ * This value is optional depending on how the `Client` has been built. If
+ * it's been built from a homeserver URL directly, we don't know the
  * server. However, if the `Client` has been built from a server URL or
  * name, then the homeserver has been discovered, and we know both.
  */
@@ -62307,8 +65832,8 @@ private constructor(pointer: UniffiHandle) {
 /**
  * Get server vendor information from the federation API.
  *
- * This method retrieves information about the server's name and version
- * by calling the `/_matrix/federation/v1/version` endpoint.
+ * This method retrieves information about the server's name and version by
+ * calling the `/_matrix/federation/v1/version` endpoint.
  */
     async serverVendorInfo(asyncOpts_?: { signal: AbortSignal }): Promise<ServerVendorInfo> /*throws*/ {
     return await uniffiRustCallAsync(
@@ -62530,6 +66055,28 @@ private constructor(pointer: UniffiHandle) {
     }
     
 /**
+ * Set the room invite permission for this account.
+ */
+    async setInvitePermission(action: InvitePermissionAction, asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_set_invite_permission(
+                    uniffiTypeClientObjectFactory.clonePointer(this),FfiConverterTypeInvitePermissionAction.lower(action, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_void,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_void,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_void,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_void,
+            /*liftFunc:*/ (_v) => {},
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
  * Set the media previews timeline display policy
  */
     async setMediaPreviewDisplayPolicy(policy: MediaPreviews, asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
@@ -62693,8 +66240,8 @@ private constructor(pointer: UniffiHandle) {
 /**
  * Set the current user's status (MSC4426 `m.status` profile field).
  *
- * Replaces any existing status. Use [`Self::clear_user_status`] to
- * remove it.
+ * Replaces any existing status. Use [`Self::clear_user_status`] to remove
+ * it.
  */
     async setUserStatus(status: UserStatus, asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
     return await uniffiRustCallAsync(
@@ -62809,6 +66356,32 @@ private constructor(pointer: UniffiHandle) {
     }
     
 /**
+ * Subscribe to the custom to-device messages received by this client.
+ *
+ * The listener is called with every to-device message whose type is one of
+ * `event_types`, or with every custom to-device message if `event_types`
+ * is empty. A message that was sent encrypted is delivered decrypted,
+ * along with its encryption info.
+ *
+ * The to-device traffic the SDK uses for its own crypto machinery and the
+ * messages it could not decrypt are never delivered.
+ *
+ * Use the returned [`TaskHandle`] to cancel the subscription.
+ */
+    subscribeToCustomToDeviceMessages(eventTypes: Array<string>, listener: ToDeviceMessageListener): TaskHandleLike {
+    return FfiConverterTypeTaskHandle.lift(uniffiCaller.rustCall(
+            /*caller:*/ (callStatus) => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_subscribe_to_custom_to_device_messages(
+                uniffiTypeClientObjectFactory.clonePointer(this),
+        FfiConverterSequenceString.lower(eventTypes, nativeModule().rustbuffer_alloc),
+        FfiConverterTypeToDeviceMessageListener.lower(listener, nativeModule().rustbuffer_alloc),
+                callStatus);
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+    ));
+    }
+    
+/**
  * Subscribe to duplicate key upload errors triggered by requests to
  * /keys/upload.
  */
@@ -62834,6 +66407,33 @@ private constructor(pointer: UniffiHandle) {
             },
             /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
     ));
+    }
+    
+/**
+ * Subscribe to changes in the room invite permission configuration.
+ */
+    async subscribeToInvitePermission(listener: InvitePermissionListener, asyncOpts_?: { signal: AbortSignal }): Promise<TaskHandleLike> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_subscribe_to_invite_permission(
+                    uniffiTypeClientObjectFactory.clonePointer(this),FfiConverterTypeInvitePermissionListener.lower(listener, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_u64,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_u64,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_u64,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_u64,
+            // Async returns always go through the JS-side converter: the
+            // FFI symbol returns the future handle (u64), and the user-level
+            // RustBuffer comes back via the shared `rust_future_complete_*`
+            // export. The bytes the runtime hands back must be deserialized
+            // here using the per-callable return-type converter.
+            /*liftFunc:*/ FfiConverterTypeTaskHandle.lift.bind(FfiConverterTypeTaskHandle),
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
     }
     
 /**
@@ -62912,9 +66512,9 @@ private constructor(pointer: UniffiHandle) {
  * are processed.
  *
  * Note this method should be used sparingly since using callback
- * interfaces is expensive, as well as keeping them alive for a long
- * time. Usages of this method should be short-lived and dropped as
- * soon as possible.
+ * interfaces is expensive, as well as keeping them alive for a long time.
+ * Usages of this method should be short-lived and dropped as soon as
+ * possible.
  */
     async subscribeToRoomInfo(roomId: string, listener: RoomInfoListener, asyncOpts_?: { signal: AbortSignal }): Promise<TaskHandleLike> /*throws*/ {
     return await uniffiRustCallAsync(
@@ -62960,12 +66560,12 @@ private constructor(pointer: UniffiHandle) {
     }
     
 /**
- * Subscribe to the global send queue update reporter, at the
- * client-wide level.
+ * Subscribe to the global send queue update reporter, at the client-wide
+ * level.
  *
  * The given listener will be immediately called with
- * `RoomSendQueueUpdate::NewLocalEvent` for each local echo existing in
- * the queue.
+ * `RoomSendQueueUpdate::NewLocalEvent` for each local echo existing in the
+ * queue.
  */
     async subscribeToSendQueueUpdates(listener: SendQueueRoomUpdateListener, asyncOpts_?: { signal: AbortSignal }): Promise<TaskHandleLike> /*throws*/ {
     return await uniffiRustCallAsync(
@@ -62994,8 +66594,8 @@ private constructor(pointer: UniffiHandle) {
 /**
  * Perform a single sync v2 call.
  *
- * This is useful for performing an initial sync or a one-shot sync
- * without entering a continuous loop.
+ * This is useful for performing an initial sync or a one-shot sync without
+ * entering a continuous loop.
  */
     async syncOnceV2(settings: SyncSettingsV2, asyncOpts_?: { signal: AbortSignal }): Promise<SyncResponseV2> /*throws*/ {
     return await uniffiRustCallAsync(
@@ -63045,11 +66645,11 @@ private constructor(pointer: UniffiHandle) {
  * Start a sync v2 loop.
  *
  * This is an alternative to [`Client::sync_service`] (which uses Sliding
- * Sync / MSC4186). It works with any homeserver, including older
- * Synapse versions that do not support Sliding Sync.
+ * Sync / MSC4186). It works with any homeserver, including older Synapse
+ * versions that do not support Sliding Sync.
  *
- * Returns a `TaskHandle` that can be used to cancel the sync loop.
- * The listener is called after each successful sync response.
+ * Returns a `TaskHandle` that can be used to cancel the sync loop. The
+ * listener is called after each successful sync response.
  */
     syncV2(settings: SyncSettingsV2, listener: SyncListenerV2): TaskHandleLike {
     return FfiConverterTypeTaskHandle.lift(uniffiCaller.rustCall(
@@ -63218,6 +66818,43 @@ private constructor(pointer: UniffiHandle) {
         );
     }
     
+/**
+ * Cancel, restart or immediately send a previously scheduled delayed
+ * event ([MSC4140]).
+ *
+ * # Arguments
+ *
+ * * `delay_id` - The identifier returned by [`Room::send_delayed_event`]
+ * or [`Room::send_delayed_state_event`].
+ *
+ * * `action` - What should happen to the delayed event.
+ *
+ * * `request_config_override` - Overrides the client's request config for
+ * this request. Fields that are not set keep the client's values.
+ *
+ * [MSC4140]: https://github.com/matrix-org/matrix-spec-proposals/pull/4140
+ * [`Room::send_delayed_event`]: crate::room::Room::send_delayed_event
+ * [`Room::send_delayed_state_event`]: crate::room::Room::send_delayed_state_event
+ */
+    async updateDelayedEvent(delayId: string, action: DelayedEventUpdateAction, requestConfigOverride: RequestConfigOverride | undefined = undefined, asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_update_delayed_event(
+                    uniffiTypeClientObjectFactory.clonePointer(this),FfiConverterString.lower(delayId, nativeModule().rustbuffer_alloc),FfiConverterTypeDelayedEventUpdateAction.lower(action, nativeModule().rustbuffer_alloc),FfiConverterOptionalTypeRequestConfigOverride.lower(requestConfigOverride, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_void,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_void,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_void,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_void,
+            /*liftFunc:*/ (_v) => {},
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
     async uploadAvatar(mimeType: string, data: ArrayBuffer, asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
     return await uniffiRustCallAsync(
             /*rustCaller:*/ uniffiCaller,
@@ -63278,29 +66915,31 @@ private constructor(pointer: UniffiHandle) {
  *
  * # Arguments
  *
- * * `oauth_configuration` - The configuration used to load the credentials
+ * - `oauth_configuration` - The configuration used to load the credentials
  * of the client if it is already registered with the authorization
  * server, or register the client and store its credentials if it isn't.
  *
- * * `prompt` - The desired user experience in the web UI. No value means
+ * - `prompt` - The desired user experience in the web UI. No value means
  * that the user wishes to login into an existing account, and a value of
  * `Create` means that the user wishes to register a new account.
  *
- * * `login_hint` - A generic login hint that an identity provider can use
+ * - `login_hint` - A generic login hint that an identity provider can use
  * to pre-fill the login form. The format of this hint is not restricted
- * by the spec as external providers all have their own way to handle the hint.
- * However, it should be noted that when providing a user ID as a hint
- * for MAS (with no upstream provider), then the format to use is defined
- * by [MSC4198]: https://github.com/matrix-org/matrix-spec-proposals/pull/4198
+ * by the spec as external providers all have their own way to handle the
+ * hint. However, it should be noted that when providing a user ID as a
+ * hint for MAS (with no upstream provider), then the format to use is
+ * defined by [MSC4198]:
+ * https://github.com/matrix-org/matrix-spec-proposals/pull/4198
  *
- * * `device_id` - The unique ID that will be associated with the session.
+ * - `device_id` - The unique ID that will be associated with the session.
  * If not set, a random one will be generated. It can be an existing
  * device ID from a previous login call. Note that this should be done
  * only if the client also holds the corresponding encryption keys.
  *
- * * `additional_scopes` - Additional scopes to request from the
- * authorization server, e.g. "urn:matrix:client:com.example.msc9999.foo".
- * The scopes for API access and the device ID according to the
+ * - `additional_scopes` - Additional scopes to request from the
+ * authorization server, e.g.
+ * "urn:matrix:client:com.example.msc9999.foo". The scopes for API access
+ * and the device ID according to the
  * [specification](https://spec.matrix.org/v1.15/client-server-api/#allocated-scope-tokens)
  * are always requested.
  */
@@ -63723,15 +67362,14 @@ const FfiConverterTypeClientSessionDelegate = new FfiConverterCallback<ClientSes
 
 export interface ClientBuilderLike {
     
-    addRootCertificates(certificates: Array<ArrayBuffer>): ClientBuilderLike;
 /**
  * Automatically create a backup version if no backup exists.
  */
     autoEnableBackups(autoEnableBackups: boolean): ClientBuilderLike;
     autoEnableCrossSigning(autoEnableCrossSigning: boolean): ClientBuilderLike;
 /**
- * Select a strategy to download room keys from the backup. By default
- * we download after a decryption failure.
+ * Select a strategy to download room keys from the backup. By default we
+ * download after a decryption failure.
  *
  * Take a look at the [`BackupDownloadStrategy`] enum for more options.
  */
@@ -63743,13 +67381,6 @@ export interface ClientBuilderLike {
  */
     decryptionSettings(decryptionSettings: DecryptionSettings): ClientBuilderLike;
     disableAutomaticTokenRefresh(): ClientBuilderLike;
-/**
- * Don't trust any system root certificates, only trust the certificates
- * provided through
- * [`add_root_certificates`][ClientBuilder::add_root_certificates].
- */
-    disableBuiltInRootCertificates(): ClientBuilderLike;
-    disableSslVerification(): ClientBuilderLike;
 /**
  * Disable all the `.well-known/matrix/client` lookups, both the one
  * performed by `ClientBuilder::build` to discover the homeserver, and all
@@ -63806,7 +67437,6 @@ export interface ClientBuilderLike {
  * Use IndexedDB as the session storage.
  */
     indexeddbStore(config: IndexedDbStoreBuilderLike): ClientBuilderLike;
-    proxy(url: string): ClientBuilderLike;
 /**
  * Add a default request config to this client.
  */
@@ -63872,10 +67502,8 @@ export interface ClientBuilderLike {
  * Tell the client that the system is memory constrained, like in a push
  * notification process for example.
  *
- * So far, at the time of writing (2025-04-07), it changes the defaults of
- * `matrix_sdk::SqliteStoreConfig` (if the `sqlite` feature is enabled).
- * Please check
- * `matrix_sdk::SqliteStoreConfig::with_low_memory_config`.
+ * It disables the Event Cache and the Latest Events, see
+ * [`matrix_sdk::ClientBuilder::with_event_cache`].
  */
     systemIsMemoryConstrained(): ClientBuilderLike;
 /**
@@ -63883,7 +67511,6 @@ export interface ClientBuilderLike {
  * experimental support for MSC4306 (threads subscriptions) or not.
  */
     threadsEnabled(enabled: boolean, threadSubscriptions: boolean): ClientBuilderLike;
-    userAgent(userAgent: string): ClientBuilderLike;
 }
 /**
  * @deprecated Use `ClientBuilderLike` instead.
@@ -63913,18 +67540,6 @@ export class ClientBuilder extends UniffiAbstractObject implements ClientBuilder
     
 
     
-    addRootCertificates(certificates: Array<ArrayBuffer>): ClientBuilderLike {
-    return FfiConverterTypeClientBuilder.lift(uniffiCaller.rustCall(
-            /*caller:*/ (callStatus) => {
-                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_clientbuilder_add_root_certificates(
-                uniffiTypeClientBuilderObjectFactory.clonePointer(this),
-        FfiConverterSequenceBytes.lower(certificates, nativeModule().rustbuffer_alloc),
-                callStatus);
-            },
-            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
-    ));
-    }
-    
 /**
  * Automatically create a backup version if no backup exists.
  */
@@ -63953,8 +67568,8 @@ export class ClientBuilder extends UniffiAbstractObject implements ClientBuilder
     }
     
 /**
- * Select a strategy to download room keys from the backup. By default
- * we download after a decryption failure.
+ * Select a strategy to download room keys from the backup. By default we
+ * download after a decryption failure.
  *
  * Take a look at the [`BackupDownloadStrategy`] enum for more options.
  */
@@ -64025,33 +67640,6 @@ export class ClientBuilder extends UniffiAbstractObject implements ClientBuilder
     return FfiConverterTypeClientBuilder.lift(uniffiCaller.rustCall(
             /*caller:*/ (callStatus) => {
                 return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_clientbuilder_disable_automatic_token_refresh(
-                uniffiTypeClientBuilderObjectFactory.clonePointer(this),
-                callStatus);
-            },
-            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
-    ));
-    }
-    
-/**
- * Don't trust any system root certificates, only trust the certificates
- * provided through
- * [`add_root_certificates`][ClientBuilder::add_root_certificates].
- */
-    disableBuiltInRootCertificates(): ClientBuilderLike {
-    return FfiConverterTypeClientBuilder.lift(uniffiCaller.rustCall(
-            /*caller:*/ (callStatus) => {
-                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_clientbuilder_disable_built_in_root_certificates(
-                uniffiTypeClientBuilderObjectFactory.clonePointer(this),
-                callStatus);
-            },
-            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
-    ));
-    }
-    
-    disableSslVerification(): ClientBuilderLike {
-    return FfiConverterTypeClientBuilder.lift(uniffiCaller.rustCall(
-            /*caller:*/ (callStatus) => {
-                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_clientbuilder_disable_ssl_verification(
                 uniffiTypeClientBuilderObjectFactory.clonePointer(this),
                 callStatus);
             },
@@ -64185,18 +67773,6 @@ export class ClientBuilder extends UniffiAbstractObject implements ClientBuilder
                 return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_clientbuilder_indexeddb_store(
                 uniffiTypeClientBuilderObjectFactory.clonePointer(this),
         FfiConverterTypeIndexedDbStoreBuilder.lower(config, nativeModule().rustbuffer_alloc),
-                callStatus);
-            },
-            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
-    ));
-    }
-    
-    proxy(url: string): ClientBuilderLike {
-    return FfiConverterTypeClientBuilder.lift(uniffiCaller.rustCall(
-            /*caller:*/ (callStatus) => {
-                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_clientbuilder_proxy(
-                uniffiTypeClientBuilderObjectFactory.clonePointer(this),
-        FfiConverterString.lower(url, nativeModule().rustbuffer_alloc),
                 callStatus);
             },
             /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
@@ -64345,10 +67921,8 @@ export class ClientBuilder extends UniffiAbstractObject implements ClientBuilder
  * Tell the client that the system is memory constrained, like in a push
  * notification process for example.
  *
- * So far, at the time of writing (2025-04-07), it changes the defaults of
- * `matrix_sdk::SqliteStoreConfig` (if the `sqlite` feature is enabled).
- * Please check
- * `matrix_sdk::SqliteStoreConfig::with_low_memory_config`.
+ * It disables the Event Cache and the Latest Events, see
+ * [`matrix_sdk::ClientBuilder::with_event_cache`].
  */
     systemIsMemoryConstrained(): ClientBuilderLike {
     return FfiConverterTypeClientBuilder.lift(uniffiCaller.rustCall(
@@ -64372,18 +67946,6 @@ export class ClientBuilder extends UniffiAbstractObject implements ClientBuilder
                 uniffiTypeClientBuilderObjectFactory.clonePointer(this),
         FfiConverterBool.lower(enabled, nativeModule().rustbuffer_alloc),
         FfiConverterBool.lower(threadSubscriptions, nativeModule().rustbuffer_alloc),
-                callStatus);
-            },
-            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
-    ));
-    }
-    
-    userAgent(userAgent: string): ClientBuilderLike {
-    return FfiConverterTypeClientBuilder.lift(uniffiCaller.rustCall(
-            /*caller:*/ (callStatus) => {
-                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_clientbuilder_user_agent(
-                uniffiTypeClientBuilderObjectFactory.clonePointer(this),
-        FfiConverterString.lower(userAgent, nativeModule().rustbuffer_alloc),
                 callStatus);
             },
             /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
@@ -64530,7 +68092,8 @@ export class PasswordStrengthEstimator extends UniffiAbstractObject implements P
     
 /**
  * Creates an estimator using thresholds tuned for modern hardware (2025).
- * Values derived from determining entropy from the chart at https://www.hivesystems.com/blog/are-your-passwords-in-the-green
+ * Values derived from determining entropy from the chart at
+ * https://www.hivesystems.com/blog/are-your-passwords-in-the-green
  */
     static withModernDefaults2025(): PasswordStrengthEstimatorLike {
     return FfiConverterTypePasswordStrengthEstimator.lift(uniffiCaller.rustCall(
@@ -64924,12 +68487,6 @@ const FfiConverterOptionalTypeTimestamp = new FfiConverterOptional(FfiConverterT
 // FfiConverter for Array<BeaconInfo>
 const FfiConverterSequenceTypeBeaconInfo = new FfiConverterArray(FfiConverterTypeBeaconInfo);
 
-// FfiConverter for Array<ReactionSenderData>
-const FfiConverterSequenceTypeReactionSenderData = new FfiConverterArray(FfiConverterTypeReactionSenderData);
-
-// FfiConverter for Array<Reaction>
-const FfiConverterSequenceTypeReaction = new FfiConverterArray(FfiConverterTypeReaction);
-
 // FfiConverter for UserStatus | undefined
 const FfiConverterOptionalTypeUserStatus = new FfiConverterOptional(FfiConverterTypeUserStatus);
 
@@ -64968,6 +68525,12 @@ const FfiConverterOptionalTypeMediaUploadProgress = new FfiConverterOptional(Ffi
 
 // FfiConverter for EventSendState | undefined
 const FfiConverterOptionalTypeEventSendState = new FfiConverterOptional(FfiConverterTypeEventSendState);
+
+// FfiConverter for Array<ReactionSenderData>
+const FfiConverterSequenceTypeReactionSenderData = new FfiConverterArray(FfiConverterTypeReactionSenderData);
+
+// FfiConverter for Array<Reaction>
+const FfiConverterSequenceTypeReaction = new FfiConverterArray(FfiConverterTypeReaction);
 
 // FfiConverter for Map<string, Receipt>
 const FfiConverterMapStringTypeReceipt = new FfiConverterMap(FfiConverterString, FfiConverterTypeReceipt);
@@ -65041,6 +68604,9 @@ const FfiConverterOptionalTypeRoomPowerLevels = new FfiConverterOptional(FfiConv
 // FfiConverter for number | undefined
 const FfiConverterOptionalUInt32 = new FfiConverterOptional(FfiConverterUInt32);
 
+// FfiConverter for EventEncryptionInfo | undefined
+const FfiConverterOptionalTypeEventEncryptionInfo = new FfiConverterOptional(FfiConverterTypeEventEncryptionInfo);
+
 // FfiConverter for Array<PatternedPushRule>
 const FfiConverterSequenceTypePatternedPushRule = new FfiConverterArray(FfiConverterTypePatternedPushRule);
 
@@ -65110,6 +68676,15 @@ const FfiConverterOptionalTypePredecessorRoom = new FfiConverterOptional(FfiConv
 // FfiConverter for RoomMemberWithSenderInfo | undefined
 const FfiConverterOptionalTypeRoomMemberWithSenderInfo = new FfiConverterOptional(FfiConverterTypeRoomMemberWithSenderInfo);
 
+// FfiConverter for RequestConfigOverride | undefined
+const FfiConverterOptionalTypeRequestConfigOverride = new FfiConverterOptional(FfiConverterTypeRequestConfigOverride);
+
+// FfiConverter for Array<RoomStateEvent>
+const FfiConverterSequenceTypeRoomStateEvent = new FfiConverterArray(FfiConverterTypeRoomStateEvent);
+
+// FfiConverter for RoomRetentionPolicy | undefined
+const FfiConverterOptionalTypeRoomRetentionPolicy = new FfiConverterOptional(FfiConverterTypeRoomRetentionPolicy);
+
 // FfiConverter for Array<IdentityStatusChange>
 const FfiConverterSequenceTypeIdentityStatusChange = new FfiConverterArray(FfiConverterTypeIdentityStatusChange);
 
@@ -65140,11 +68715,11 @@ const FfiConverterOptionalTypeRoomMessageEventContentWithoutRelation = new FfiCo
 // FfiConverter for Array<EditRevisionRecord>
 const FfiConverterSequenceTypeEditRevisionRecord = new FfiConverterArray(FfiConverterTypeEditRevisionRecord);
 
-// FfiConverter for AssetType | undefined
-const FfiConverterOptionalTypeAssetType = new FfiConverterOptional(FfiConverterTypeAssetType);
-
 // FfiConverter for Array<number>
 const FfiConverterSequenceFloat32 = new FfiConverterArray(FfiConverterFloat32);
+
+// FfiConverter for AssetType | undefined
+const FfiConverterOptionalTypeAssetType = new FfiConverterOptional(FfiConverterTypeAssetType);
 
 // FfiConverter for Array<UserPowerLevelUpdate>
 const FfiConverterSequenceTypeUserPowerLevelUpdate = new FfiConverterArray(FfiConverterTypeUserPowerLevelUpdate);
@@ -65194,11 +68769,17 @@ const FfiConverterOptionalTypeSyncService = new FfiConverterOptional(FfiConverte
 // FfiConverter for ContentScannerLike | undefined
 const FfiConverterOptionalTypeContentScanner = new FfiConverterOptional(FfiConverterTypeContentScanner);
 
-// FfiConverter for AuthData | undefined
-const FfiConverterOptionalTypeAuthData = new FfiConverterOptional(FfiConverterTypeAuthData);
-
 // FfiConverter for Array<OwnDevice>
 const FfiConverterSequenceTypeOwnDevice = new FfiConverterArray(FfiConverterTypeOwnDevice);
+
+// FfiConverter for Array<RtcTransport>
+const FfiConverterSequenceTypeRtcTransport = new FfiConverterArray(FfiConverterTypeRtcTransport);
+
+// FfiConverter for Array<RtcTransport> | undefined
+const FfiConverterOptionalSequenceTypeRtcTransport = new FfiConverterOptional(FfiConverterSequenceTypeRtcTransport);
+
+// FfiConverter for SecretStorageKeyLike | undefined
+const FfiConverterOptionalTypeSecretStorageKey = new FfiConverterOptional(FfiConverterTypeSecretStorageKey);
 
 // FfiConverter for IdentityResetHandleLike | undefined
 const FfiConverterOptionalTypeIdentityResetHandle = new FfiConverterOptional(FfiConverterTypeIdentityResetHandle);
@@ -65217,6 +68798,9 @@ const FfiConverterOptionalTypeRoom = new FfiConverterOptional(FfiConverterTypeRo
 
 // FfiConverter for NotificationSettingsDelegate | undefined
 const FfiConverterOptionalTypeNotificationSettingsDelegate = new FfiConverterOptional(FfiConverterTypeNotificationSettingsDelegate);
+
+// FfiConverter for SessionVerificationCancelInfo | undefined
+const FfiConverterOptionalTypeSessionVerificationCancelInfo = new FfiConverterOptional(FfiConverterTypeSessionVerificationCancelInfo);
 
 // FfiConverter for SessionVerificationControllerDelegate | undefined
 const FfiConverterOptionalTypeSessionVerificationControllerDelegate = new FfiConverterOptional(FfiConverterTypeSessionVerificationControllerDelegate);
@@ -65275,9 +68859,6 @@ const FfiConverterOptionalTypeOAuthPrompt = new FfiConverterOptional(FfiConverte
 // FfiConverter for Array<UserDevice>
 const FfiConverterSequenceTypeUserDevice = new FfiConverterArray(FfiConverterTypeUserDevice);
 
-// FfiConverter for Array<ArrayBuffer>
-const FfiConverterSequenceBytes = new FfiConverterArray(FfiConverterArrayBuffer);
-
 // FfiConverter for MatrixEntity | undefined
 const FfiConverterOptionalTypeMatrixEntity = new FfiConverterOptional(FfiConverterTypeMatrixEntity);
 
@@ -65300,1870 +68881,1948 @@ function uniffiEnsureInitialized() {
     if (bindingsContractVersion !== scaffoldingContractVersion) {
         throw new UniffiInternalError.ContractVersionMismatch(scaffoldingContractVersion, bindingsContractVersion);
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_func_content_without_relation_from_message() !== 11794) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_func_content_without_relation_from_message() !== 32988) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_func_content_without_relation_from_message");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_func_create_caption_edit() !== 57776) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_func_create_caption_edit() !== 45966) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_func_create_caption_edit");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_func_gen_transaction_id() !== 50486) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_func_gen_transaction_id() !== 26810) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_func_gen_transaction_id");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_func_generate_webview_url() !== 42271) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_func_generate_webview_url() !== 21892) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_func_generate_webview_url");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_func_get_element_call_required_permissions() !== 40493) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_func_get_element_call_required_permissions() !== 65024) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_func_get_element_call_required_permissions");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_func_init_platform() !== 14462) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_func_init_platform() !== 44640) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_func_init_platform");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_func_is_room_alias_format_valid() !== 32456) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_func_is_room_alias_format_valid() !== 35959) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_func_is_room_alias_format_valid");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_func_json_string_contains_secrets_bundle() !== 52137) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_func_json_string_contains_secrets_bundle() !== 44533) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_func_json_string_contains_secrets_bundle");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_func_log_event() !== 10301) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_func_log_event() !== 12580) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_func_log_event");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_func_make_widget_driver() !== 16495) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_func_make_widget_driver() !== 34266) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_func_make_widget_driver");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_func_matrix_to_room_alias_permalink() !== 4370) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_func_matrix_to_room_alias_permalink() !== 43825) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_func_matrix_to_room_alias_permalink");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_func_matrix_to_user_permalink() !== 8284) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_func_matrix_to_user_permalink() !== 3430) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_func_matrix_to_user_permalink");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_func_message_event_content_from_html() !== 47401) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_func_message_event_content_from_html() !== 35250) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_func_message_event_content_from_html");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_func_message_event_content_from_html_as_emote() !== 56994) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_func_message_event_content_from_html_as_emote() !== 887) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_func_message_event_content_from_html_as_emote");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_func_message_event_content_from_markdown() !== 53788) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_func_message_event_content_from_markdown() !== 2043) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_func_message_event_content_from_markdown");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_func_message_event_content_from_markdown_as_emote() !== 33485) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_func_message_event_content_from_markdown_as_emote() !== 18816) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_func_message_event_content_from_markdown_as_emote");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_func_message_event_content_new() !== 33472) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_func_message_event_content_new() !== 60397) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_func_message_event_content_new");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_func_new_virtual_element_call_widget() !== 6216) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_func_new_virtual_element_call_widget() !== 14288) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_func_new_virtual_element_call_widget");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_func_parse_matrix_entity_from() !== 43356) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_func_parse_matrix_entity_from() !== 41615) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_func_parse_matrix_entity_from");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_func_reload_tracing_file_writer() !== 7613) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_func_reload_tracing_file_writer() !== 13845) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_func_reload_tracing_file_writer");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_func_room_alias_name_from_room_display_name() !== 64531) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_func_room_alias_name_from_room_display_name() !== 29328) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_func_room_alias_name_from_room_display_name");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_func_sdk_git_sha() !== 4038) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_func_sdk_git_sha() !== 43878) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_func_sdk_git_sha");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_func_server_name_from_user_id() !== 32123) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_func_server_name_from_user_id() !== 45296) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_func_server_name_from_user_id");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_func_suggested_power_level_for_role() !== 52982) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_func_suggested_power_level_for_role() !== 18936) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_func_suggested_power_level_for_role");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_func_suggested_role_for_power_level() !== 1141) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_func_suggested_role_for_power_level() !== 34501) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_func_suggested_role_for_power_level");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_checkcodesender_send() !== 2180) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_checkcodesender_send() !== 25521) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_checkcodesender_send");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_abort_oauth_auth() !== 38124) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_abort_oauth_auth() !== 7594) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_abort_oauth_auth");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_account_data() !== 23790) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_account_data() !== 32871) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_account_data");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_account_url() !== 53991) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_account_url() !== 45869) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_account_url");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_add_threepid() !== 27814) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_add_threepid() !== 31448) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_add_threepid");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_available_sliding_sync_versions() !== 46726) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_available_sliding_sync_versions() !== 46489) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_available_sliding_sync_versions");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_avatar_url() !== 26042) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_avatar_url() !== 29009) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_avatar_url");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_await_room_remote_echo() !== 5412) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_await_room_remote_echo() !== 19069) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_await_room_remote_echo");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_bind_threepid() !== 57582) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_bind_threepid() !== 26410) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_bind_threepid");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_cached_avatar_url() !== 30527) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_cached_avatar_url() !== 30350) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_cached_avatar_url");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_can_deactivate_account() !== 27747) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_can_deactivate_account() !== 46985) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_can_deactivate_account");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_capabilities_json() !== 8518) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_capabilities_json() !== 23998) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_capabilities_json");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_change_password() !== 55601) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_change_password() !== 6237) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_change_password");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_change_password_with_auth() !== 6653) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_change_password_with_auth() !== 8609) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_change_password_with_auth");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_clear_caches() !== 61351) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_clear_caches() !== 23784) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_clear_caches");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_clear_user_status() !== 2903) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_clear_user_status() !== 10577) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_clear_user_status");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_content_scanner() !== 52585) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_content_scanner() !== 5909) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_content_scanner");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_create_room() !== 12931) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_create_room() !== 3492) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_create_room");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_custom_login_with_jwt() !== 16219) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_custom_login_with_jwt() !== 58183) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_custom_login_with_jwt");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_deactivate_account() !== 7894) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_deactivate_account() !== 65060) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_deactivate_account");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_deactivate_account_with_auth() !== 26062) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_deactivate_account_with_auth() !== 49511) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_deactivate_account_with_auth");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_delete_devices() !== 44449) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_delete_devices() !== 54076) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_delete_devices");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_delete_devices_with_auth() !== 36438) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_delete_devices_with_auth() !== 23816) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_delete_devices_with_auth");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_delete_push_rule() !== 28188) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_delete_push_rule() !== 11417) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_delete_push_rule");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_delete_pusher() !== 20472) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_delete_pusher() !== 29493) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_delete_pusher");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_delete_threepid() !== 55823) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_delete_threepid() !== 48730) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_delete_threepid");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_device_id() !== 63337) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_device_id() !== 2605) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_device_id");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_devices() !== 56596) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_devices() !== 56047) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_devices");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_disable_well_known_lookup() !== 45272) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_disable_well_known_lookup() !== 38090) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_disable_well_known_lookup");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_display_name() !== 20054) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_discover_rtc_transports() !== 38965) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_discover_rtc_transports");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_display_name() !== 13626) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_display_name");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_enable_all_send_queues() !== 53800) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_enable_all_send_queues() !== 38523) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_enable_all_send_queues");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_enable_automatic_call_status() !== 12950) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_enable_automatic_call_status() !== 4173) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_enable_automatic_call_status");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_enable_send_queue_upload_progress() !== 30956) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_enable_send_queue_upload_progress() !== 64037) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_enable_send_queue_upload_progress");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_encryption() !== 13362) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_encryption() !== 32249) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_encryption");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_export_room_keys() !== 60666) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_export_room_keys() !== 52262) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_export_room_keys");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_fetch_all_account_data() !== 59035) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_fetch_all_account_data() !== 34497) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_fetch_all_account_data");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_fetch_media_preview_config() !== 53942) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_fetch_media_preview_config() !== 4594) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_fetch_media_preview_config");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_get_dm_room() !== 38531) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_get_dm_room() !== 35770) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_get_dm_room");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_get_dm_rooms() !== 40615) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_get_dm_rooms() !== 26367) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_get_dm_rooms");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_get_invite_avatars_display_policy() !== 16387) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_get_invite_avatars_display_policy() !== 15140) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_get_invite_avatars_display_policy");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_get_max_media_upload_size() !== 54634) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_get_invite_permission() !== 51899) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_get_invite_permission");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_get_max_media_upload_size() !== 31461) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_get_max_media_upload_size");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_get_media_content() !== 30321) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_get_media_content() !== 13672) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_get_media_content");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_get_media_file() !== 41198) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_get_media_file() !== 46613) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_get_media_file");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_get_media_preview_display_policy() !== 62158) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_get_media_preview_display_policy() !== 54801) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_get_media_preview_display_policy");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_get_media_thumbnail() !== 23704) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_get_media_thumbnail() !== 29416) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_get_media_thumbnail");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_get_notification_settings() !== 625) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_get_notification_settings() !== 23861) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_get_notification_settings");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_get_profile() !== 3999) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_get_profile() !== 27667) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_get_profile");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_get_recently_visited_rooms() !== 43351) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_get_recently_visited_rooms() !== 31275) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_get_recently_visited_rooms");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_get_room() !== 63699) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_get_room() !== 19167) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_get_room");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_get_room_preview_from_room_alias() !== 48007) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_get_room_preview_from_room_alias() !== 1624) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_get_room_preview_from_room_alias");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_get_room_preview_from_room_id() !== 58119) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_get_room_preview_from_room_id() !== 61718) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_get_room_preview_from_room_id");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_get_session_verification_controller() !== 64657) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_get_session_verification_controller() !== 58138) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_get_session_verification_controller");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_get_store_sizes() !== 47046) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_get_store_sizes() !== 7663) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_get_store_sizes");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_get_url() !== 46254) {
-        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_get_url");
-    }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_get_url_preview() !== 48288) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_get_url_preview() !== 44378) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_get_url_preview");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_homeserver() !== 26707) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_has_encrypted_rooms() !== 34305) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_has_encrypted_rooms");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_homeserver() !== 42423) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_homeserver");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_homeserver_capabilities() !== 31959) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_homeserver_capabilities() !== 6875) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_homeserver_capabilities");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_homeserver_login_details() !== 63281) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_homeserver_login_details() !== 50528) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_homeserver_login_details");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_ignore_user() !== 30519) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_ignore_user() !== 35445) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_ignore_user");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_ignored_users() !== 57288) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_ignored_users() !== 60744) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_ignored_users");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_import_room_keys() !== 39056) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_import_room_keys() !== 15301) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_import_room_keys");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_is_livekit_rtc_supported() !== 26302) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_is_livekit_rtc_supported() !== 60417) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_is_livekit_rtc_supported");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_is_login_with_qr_code_supported() !== 14689) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_is_login_with_qr_code_supported() !== 48668) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_is_login_with_qr_code_supported");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_is_profiles_sliding_sync_extension_supported() !== 59683) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_is_profiles_sliding_sync_extension_supported() !== 2146) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_is_profiles_sliding_sync_extension_supported");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_is_report_room_api_supported() !== 48577) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_is_report_room_api_supported() !== 26132) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_is_report_room_api_supported");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_is_room_alias_available() !== 53090) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_is_room_alias_available() !== 16005) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_is_room_alias_available");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_is_user_status_supported() !== 6029) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_is_user_status_supported() !== 49650) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_is_user_status_supported");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_is_username_available() !== 62353) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_is_username_available() !== 23460) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_is_username_available");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_join_room_by_id() !== 28397) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_join_room_by_id() !== 56087) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_join_room_by_id");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_join_room_by_id_or_alias() !== 16138) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_join_room_by_id_or_alias() !== 36557) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_join_room_by_id_or_alias");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_key_backup_info() !== 49452) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_key_backup_info() !== 16114) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_key_backup_info");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_knock() !== 40592) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_knock() !== 32237) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_knock");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_login() !== 48373) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_login() !== 49150) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_login");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_login_with_email() !== 22630) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_login_with_email() !== 15305) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_login_with_email");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_login_with_oauth_callback() !== 24379) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_login_with_oauth_callback() !== 44635) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_login_with_oauth_callback");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_login_with_token() !== 47790) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_login_with_token() !== 13631) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_login_with_token");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_logout() !== 54411) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_logout() !== 12942) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_logout");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_mark_all_rooms_as_read() !== 23334) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_mark_all_rooms_as_read() !== 2022) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_mark_all_rooms_as_read");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_new_grant_login_with_qr_code_handler() !== 59558) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_new_grant_login_with_qr_code_handler() !== 23786) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_new_grant_login_with_qr_code_handler");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_new_login_with_qr_code_handler() !== 23101) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_new_login_with_qr_code_handler() !== 14560) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_new_login_with_qr_code_handler");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_notification_client() !== 24829) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_notification_client() !== 20149) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_notification_client");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_notification_client_with_timeouts() !== 35848) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_notification_client_with_timeouts() !== 36455) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_notification_client_with_timeouts");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_notifications_json() !== 881) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_notifications_json() !== 9576) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_notifications_json");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_observe_account_data_event() !== 40713) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_observe_account_data_event() !== 33952) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_observe_account_data_event");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_observe_raw_account_data() !== 1173) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_observe_raw_account_data() !== 50125) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_observe_raw_account_data");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_observe_room_account_data_event() !== 22353) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_observe_room_account_data_event() !== 43975) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_observe_room_account_data_event");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_observe_room_timeline_events() !== 27615) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_observe_room_timeline_events() !== 39968) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_observe_room_timeline_events");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_observe_to_device_events() !== 4906) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_observe_to_device_events() !== 51971) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_observe_to_device_events");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_optimize_stores() !== 53467) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_observe_total_unread_notifications() !== 58076) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_observe_total_unread_notifications");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_optimize_stores() !== 24510) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_optimize_stores");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_pause() !== 1344) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_pause() !== 8061) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_pause");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_presence() !== 41060) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_presence() !== 14505) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_presence");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_profile_time_zone() !== 34266) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_profile_time_zone() !== 63908) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_profile_time_zone");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_push_rules_json() !== 53129) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_push_rules_json() !== 31245) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_push_rules_json");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_pushers_json() !== 17507) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_pushers_json() !== 47640) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_pushers_json");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_query_keys_json() !== 18964) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_query_keys_json() !== 15366) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_query_keys_json");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_register() !== 406) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_register() !== 48544) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_register");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_register_notification_handler() !== 46860) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_register_notification_handler() !== 19168) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_register_notification_handler");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_remove_avatar() !== 12536) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_remove_avatar() !== 31550) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_remove_avatar");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_rename_device() !== 26574) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_rename_device() !== 57603) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_rename_device");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_request_email_token() !== 50547) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_request_email_token() !== 6628) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_request_email_token");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_request_msisdn_token() !== 6555) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_request_msisdn_token() !== 3520) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_request_msisdn_token");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_request_openid_token() !== 19654) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_request_openid_token() !== 65329) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_request_openid_token");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_reset_supported_versions() !== 12909) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_reset_supported_versions() !== 61164) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_reset_supported_versions");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_reset_well_known() !== 52054) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_reset_well_known() !== 35371) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_reset_well_known");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_resolve_room_alias() !== 16053) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_resolve_room_alias() !== 40715) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_resolve_room_alias");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_restore_session() !== 56243) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_restore_session() !== 15288) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_restore_session");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_restore_session_with() !== 21462) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_restore_session_with() !== 12975) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_restore_session_with");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_resume() !== 51366) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_resume() !== 61108) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_resume");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_room_alias_exists() !== 5713) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_room_alias_exists() !== 35828) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_room_alias_exists");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_room_directory_search() !== 4257) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_room_directory_search() !== 3333) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_room_directory_search");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_rooms() !== 57092) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_rooms() !== 64941) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_rooms");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_search_json() !== 62743) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_rtc_livekit_delegate_delayed_leave() !== 64232) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_rtc_livekit_delegate_delayed_leave");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_rtc_livekit_get_token() !== 18096) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_rtc_livekit_get_token");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_run_search_backfill() !== 15095) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_run_search_backfill");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_search_json() !== 48250) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_search_json");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_search_users() !== 23484) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_search_users() !== 51156) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_search_users");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_send_to_device_json() !== 54503) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_send_encrypted_to_device_message() !== 23656) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_send_encrypted_to_device_message");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_send_to_device_json() !== 55426) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_send_to_device_json");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_server() !== 11140) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_server() !== 55051) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_server");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_server_vendor_info() !== 25767) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_server_vendor_info() !== 22941) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_server_vendor_info");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_server_versions() !== 27814) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_server_versions() !== 8690) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_server_versions");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_session() !== 47980) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_session() !== 13261) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_session");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_set_account_data() !== 56242) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_set_account_data() !== 60818) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_set_account_data");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_set_avatar_url() !== 58051) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_set_avatar_url() !== 7083) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_set_avatar_url");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_set_content_scanner() !== 2916) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_set_content_scanner() !== 54842) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_set_content_scanner");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_set_delegate() !== 377) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_set_delegate() !== 5412) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_set_delegate");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_set_display_name() !== 47937) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_set_display_name() !== 48372) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_set_display_name");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_set_invite_avatars_display_policy() !== 57486) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_set_invite_avatars_display_policy() !== 45636) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_set_invite_avatars_display_policy");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_set_media_preview_display_policy() !== 27881) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_set_invite_permission() !== 33188) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_set_invite_permission");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_set_media_preview_display_policy() !== 58885) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_set_media_preview_display_policy");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_set_media_retention_policy() !== 45052) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_set_media_retention_policy() !== 25475) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_set_media_retention_policy");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_set_presence() !== 43942) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_set_presence() !== 44523) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_set_presence");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_set_push_rule_actions_json() !== 32745) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_set_push_rule_actions_json() !== 63160) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_set_push_rule_actions_json");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_set_push_rule_enabled() !== 8725) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_set_push_rule_enabled() !== 31714) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_set_push_rule_enabled");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_set_push_rule_json() !== 8896) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_set_push_rule_json() !== 53767) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_set_push_rule_json");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_set_pusher() !== 42931) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_set_pusher() !== 23660) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_set_pusher");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_set_user_status() !== 64952) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_set_user_status() !== 23) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_set_user_status");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_set_utd_delegate() !== 53527) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_set_utd_delegate() !== 58546) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_set_utd_delegate");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_sliding_sync_version() !== 55440) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_sliding_sync_version() !== 65430) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_sliding_sync_version");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_space_service() !== 19054) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_space_service() !== 482) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_space_service");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_start_sso_login() !== 11891) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_start_sso_login() !== 26018) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_start_sso_login");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_subscribe_to_duplicate_key_upload_errors() !== 63604) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_subscribe_to_custom_to_device_messages() !== 50580) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_subscribe_to_custom_to_device_messages");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_subscribe_to_duplicate_key_upload_errors() !== 61081) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_subscribe_to_duplicate_key_upload_errors");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_subscribe_to_ignored_users() !== 10184) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_subscribe_to_ignored_users() !== 43126) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_subscribe_to_ignored_users");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_subscribe_to_media_preview_config() !== 11612) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_subscribe_to_invite_permission() !== 16523) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_subscribe_to_invite_permission");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_subscribe_to_media_preview_config() !== 2320) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_subscribe_to_media_preview_config");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_subscribe_to_own_beacon_info_updates() !== 8373) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_subscribe_to_own_beacon_info_updates() !== 60970) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_subscribe_to_own_beacon_info_updates");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_subscribe_to_own_profile() !== 50951) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_subscribe_to_own_profile() !== 44633) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_subscribe_to_own_profile");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_subscribe_to_room_info() !== 3308) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_subscribe_to_room_info() !== 7474) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_subscribe_to_room_info");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_subscribe_to_send_queue_status() !== 39397) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_subscribe_to_send_queue_status() !== 3015) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_subscribe_to_send_queue_status");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_subscribe_to_send_queue_updates() !== 53470) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_subscribe_to_send_queue_updates() !== 24108) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_subscribe_to_send_queue_updates");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_sync_once_v2() !== 18740) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_sync_once_v2() !== 26789) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_sync_once_v2");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_sync_service() !== 47464) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_sync_service() !== 3217) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_sync_service");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_sync_v2() !== 9900) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_sync_v2() !== 10162) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_sync_v2");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_threepids_json() !== 39758) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_threepids_json() !== 27519) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_threepids_json");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_tile_server() !== 43179) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_tile_server() !== 12042) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_tile_server");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_total_unread_notifications() !== 56252) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_total_unread_notifications() !== 58479) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_total_unread_notifications");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_track_recently_visited_room() !== 40498) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_track_recently_visited_room() !== 59733) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_track_recently_visited_room");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_unbind_threepid() !== 17542) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_unbind_threepid() !== 47286) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_unbind_threepid");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_unignore_user() !== 2582) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_unignore_user() !== 28367) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_unignore_user");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_upload_avatar() !== 14839) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_update_delayed_event() !== 23725) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_update_delayed_event");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_upload_avatar() !== 20638) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_upload_avatar");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_upload_media() !== 19621) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_upload_media() !== 27840) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_upload_media");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_url_for_oauth() !== 38795) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_url_for_oauth() !== 57377) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_url_for_oauth");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_user_devices() !== 28668) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_user_devices() !== 53650) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_user_devices");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_user_id() !== 11375) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_user_id() !== 42220) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_user_id");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_user_id_server_name() !== 52727) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_user_id_server_name() !== 46746) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_user_id_server_name");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_verify_device() !== 56111) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_verify_device() !== 59608) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_verify_device");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_constructor_clientbuilder_new() !== 40475) {
-        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_constructor_clientbuilder_new");
-    }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_add_root_certificates() !== 60910) {
-        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_add_root_certificates");
-    }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_auto_enable_backups() !== 19978) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_auto_enable_backups() !== 3029) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_auto_enable_backups");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_auto_enable_cross_signing() !== 41588) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_auto_enable_cross_signing() !== 30673) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_auto_enable_cross_signing");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_backup_download_strategy() !== 5278) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_backup_download_strategy() !== 20957) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_backup_download_strategy");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_build() !== 21717) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_build() !== 26704) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_build");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_cross_process_lock_config() !== 48946) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_cross_process_lock_config() !== 34445) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_cross_process_lock_config");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_decryption_settings() !== 36533) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_decryption_settings() !== 56141) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_decryption_settings");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_disable_automatic_token_refresh() !== 60164) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_disable_automatic_token_refresh() !== 24815) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_disable_automatic_token_refresh");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_disable_built_in_root_certificates() !== 34380) {
-        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_disable_built_in_root_certificates");
-    }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_disable_ssl_verification() !== 17095) {
-        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_disable_ssl_verification");
-    }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_disable_well_known_lookup() !== 21661) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_disable_well_known_lookup() !== 23377) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_disable_well_known_lookup");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_dm_room_definition() !== 42422) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_dm_room_definition() !== 4261) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_dm_room_definition");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_enable_automatic_back_pagination() !== 12407) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_enable_automatic_back_pagination() !== 2744) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_enable_automatic_back_pagination");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_enable_share_history_on_invite() !== 47743) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_enable_share_history_on_invite() !== 65179) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_enable_share_history_on_invite");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_homeserver_url() !== 20298) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_homeserver_url() !== 12248) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_homeserver_url");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_in_memory_store() !== 7770) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_in_memory_store() !== 16792) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_in_memory_store");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_indexeddb_store() !== 9916) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_indexeddb_store() !== 5760) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_indexeddb_store");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_proxy() !== 56894) {
-        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_proxy");
-    }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_request_config() !== 41133) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_request_config() !== 42730) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_request_config");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_room_key_recipient_strategy() !== 7083) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_room_key_recipient_strategy() !== 27294) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_room_key_recipient_strategy");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_server_name() !== 50969) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_server_name() !== 50140) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_server_name");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_server_name_from_user_id() !== 425) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_server_name_from_user_id() !== 2715) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_server_name_from_user_id");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_server_name_or_homeserver_url() !== 50246) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_server_name_or_homeserver_url() !== 27197) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_server_name_or_homeserver_url");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_set_session_delegate() !== 35713) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_set_session_delegate() !== 12605) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_set_session_delegate");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_sliding_sync_version_builder() !== 39928) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_sliding_sync_version_builder() !== 50057) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_sliding_sync_version_builder");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_system_is_memory_constrained() !== 64472) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_system_is_memory_constrained() !== 25170) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_system_is_memory_constrained");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_threads_enabled() !== 10698) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_threads_enabled() !== 10730) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_threads_enabled");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_user_agent() !== 31638) {
-        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_clientbuilder_user_agent");
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_constructor_clientbuilder_new() !== 40378) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_constructor_clientbuilder_new");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_constructor_contentscanner_new() !== 43408) {
-        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_constructor_contentscanner_new");
-    }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_contentscanner_scan() !== 26180) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_contentscanner_scan() !== 55879) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_contentscanner_scan");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_continuationmessagesender_cancel() !== 39598) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_constructor_contentscanner_new() !== 51327) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_constructor_contentscanner_new");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_continuationmessagesender_cancel() !== 55522) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_continuationmessagesender_cancel");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_continuationmessagesender_confirm() !== 13691) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_continuationmessagesender_confirm() !== 18414) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_continuationmessagesender_confirm");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_backup_exists_on_server() !== 16984) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_backup_exists_on_server() !== 21920) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_encryption_backup_exists_on_server");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_backup_state() !== 60707) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_backup_state() !== 17664) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_encryption_backup_state");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_backup_state_listener() !== 14813) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_backup_state_listener() !== 47643) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_encryption_backup_state_listener");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_create_dehydrated_device() !== 21795) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_create_dehydrated_device() !== 40440) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_encryption_create_dehydrated_device");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_curve25519_key() !== 25462) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_curve25519_key() !== 31520) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_encryption_curve25519_key");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_dehydrated_device_event_listener() !== 8652) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_dehydrated_device_event_listener() !== 32461) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_encryption_dehydrated_device_event_listener");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_delete_dehydrated_device() !== 64344) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_delete_dehydrated_device() !== 50855) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_encryption_delete_dehydrated_device");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_devices_updates_listener() !== 3314) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_devices_updates_listener() !== 45351) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_encryption_devices_updates_listener");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_disable_recovery() !== 43697) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_disable_recovery() !== 40334) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_encryption_disable_recovery");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_ed25519_key() !== 30741) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_ed25519_key() !== 34833) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_encryption_ed25519_key");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_enable_backups() !== 61920) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_enable_backups() !== 38908) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_encryption_enable_backups");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_enable_recovery() !== 2033) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_enable_recovery() !== 48489) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_encryption_enable_recovery");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_has_devices_to_verify_against() !== 50754) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_has_devices_to_verify_against() !== 40096) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_encryption_has_devices_to_verify_against");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_import_secrets_bundle() !== 9110) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_import_secrets_bundle() !== 51946) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_encryption_import_secrets_bundle");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_is_dehydrated_device_supported() !== 29079) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_is_dehydrated_device_supported() !== 45636) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_encryption_is_dehydrated_device_supported");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_is_last_device() !== 54322) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_is_last_device() !== 24421) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_encryption_is_last_device");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_recover() !== 39016) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_recover() !== 50803) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_encryption_recover");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_recover_and_fix_backup() !== 59505) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_recover_and_fix_backup() !== 34956) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_encryption_recover_and_fix_backup");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_recover_and_reset() !== 48062) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_recover_and_reset() !== 2527) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_encryption_recover_and_reset");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_recovery_state() !== 28660) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_recovery_state() !== 7834) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_encryption_recovery_state");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_recovery_state_listener() !== 17926) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_recovery_state_listener() !== 26153) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_encryption_recovery_state_listener");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_rehydrate_dehydrated_device() !== 33307) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_rehydrate_dehydrated_device() !== 52062) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_encryption_rehydrate_dehydrated_device");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_reset_identity() !== 47257) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_reset_identity() !== 15496) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_encryption_reset_identity");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_reset_recovery_key() !== 15954) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_reset_recovery_key() !== 28581) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_encryption_reset_recovery_key");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_start_dehydrated_devices() !== 58581) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_start_dehydrated_devices() !== 2412) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_encryption_start_dehydrated_devices");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_stop_dehydrated_devices() !== 10190) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_stop_dehydrated_devices() !== 55485) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_encryption_stop_dehydrated_devices");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_user_identity() !== 39850) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_user_identity() !== 18228) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_encryption_user_identity");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_verification_state() !== 29580) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_verification_state() !== 53401) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_encryption_verification_state");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_verification_state_listener() !== 30914) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_verification_state_listener() !== 63391) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_encryption_verification_state_listener");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_wait_for_backup_upload_steady_state() !== 28614) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_wait_for_backup_upload_steady_state() !== 22467) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_encryption_wait_for_backup_upload_steady_state");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_wait_for_e2ee_initialization_tasks() !== 23168) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_encryption_wait_for_e2ee_initialization_tasks() !== 51060) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_encryption_wait_for_e2ee_initialization_tasks");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_grantloginwithqrcodehandler_generate() !== 59049) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_grantloginwithqrcodehandler_generate() !== 38241) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_grantloginwithqrcodehandler_generate");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_grantloginwithqrcodehandler_scan() !== 35786) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_grantloginwithqrcodehandler_scan() !== 25900) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_grantloginwithqrcodehandler_scan");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_homeservercapabilities_can_change_avatar() !== 42689) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_grantloginwithqrcodetask_cancel() !== 17878) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_grantloginwithqrcodetask_cancel");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_grantloginwithqrcodetask_wait() !== 50889) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_grantloginwithqrcodetask_wait");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_homeservercapabilities_can_change_avatar() !== 36643) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_homeservercapabilities_can_change_avatar");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_homeservercapabilities_can_change_displayname() !== 39251) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_homeservercapabilities_can_change_displayname() !== 2609) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_homeservercapabilities_can_change_displayname");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_homeservercapabilities_can_change_password() !== 37772) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_homeservercapabilities_can_change_password() !== 24454) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_homeservercapabilities_can_change_password");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_homeservercapabilities_can_change_thirdparty_ids() !== 28706) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_homeservercapabilities_can_change_thirdparty_ids() !== 32830) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_homeservercapabilities_can_change_thirdparty_ids");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_homeservercapabilities_can_get_login_token() !== 8709) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_homeservercapabilities_can_get_login_token() !== 48439) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_homeservercapabilities_can_get_login_token");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_homeservercapabilities_extended_profile_fields() !== 56484) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_homeservercapabilities_extended_profile_fields() !== 42881) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_homeservercapabilities_extended_profile_fields");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_homeservercapabilities_forgets_room_when_leaving() !== 21393) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_homeservercapabilities_forgets_room_when_leaving() !== 5097) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_homeservercapabilities_forgets_room_when_leaving");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_homeservercapabilities_refresh() !== 6414) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_homeservercapabilities_refresh() !== 26943) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_homeservercapabilities_refresh");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_homeserverlogindetails_sliding_sync_version() !== 8075) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_homeserverlogindetails_sliding_sync_version() !== 20692) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_homeserverlogindetails_sliding_sync_version");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_homeserverlogindetails_sso_identity_providers() !== 27585) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_homeserverlogindetails_sso_identity_providers() !== 20048) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_homeserverlogindetails_sso_identity_providers");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_homeserverlogindetails_supported_oauth_prompts() !== 60664) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_homeserverlogindetails_supported_oauth_prompts() !== 14932) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_homeserverlogindetails_supported_oauth_prompts");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_homeserverlogindetails_supports_oauth_login() !== 50920) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_homeserverlogindetails_supports_oauth_login() !== 20923) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_homeserverlogindetails_supports_oauth_login");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_homeserverlogindetails_supports_password_login() !== 1406) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_homeserverlogindetails_supports_password_login() !== 42871) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_homeserverlogindetails_supports_password_login");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_homeserverlogindetails_supports_sso_login() !== 19696) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_homeserverlogindetails_supports_sso_login() !== 43252) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_homeserverlogindetails_supports_sso_login");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_homeserverlogindetails_url() !== 19766) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_homeserverlogindetails_url() !== 34432) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_homeserverlogindetails_url");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_identityresethandle_auth_type() !== 21421) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_identityresethandle_auth_type() !== 18545) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_identityresethandle_auth_type");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_identityresethandle_cancel() !== 14034) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_identityresethandle_cancel() !== 20914) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_identityresethandle_cancel");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_identityresethandle_reset() !== 29457) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_identityresethandle_reset() !== 30627) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_identityresethandle_reset");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_inreplytodetails_event() !== 52000) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_inreplytodetails_event() !== 64767) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_inreplytodetails_event");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_inreplytodetails_event_id() !== 55998) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_inreplytodetails_event_id() !== 17578) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_inreplytodetails_event_id");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_constructor_indexeddbstorebuilder_new() !== 62836) {
-        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_constructor_indexeddbstorebuilder_new");
-    }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_indexeddbstorebuilder_passphrase() !== 14912) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_indexeddbstorebuilder_passphrase() !== 48272) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_indexeddbstorebuilder_passphrase");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_knockrequestactions_accept() !== 60529) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_constructor_indexeddbstorebuilder_new() !== 54465) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_constructor_indexeddbstorebuilder_new");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_knockrequestactions_accept() !== 51860) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_knockrequestactions_accept");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_knockrequestactions_decline() !== 20051) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_knockrequestactions_decline() !== 37997) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_knockrequestactions_decline");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_knockrequestactions_decline_and_ban() !== 23767) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_knockrequestactions_decline_and_ban() !== 41745) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_knockrequestactions_decline_and_ban");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_knockrequestactions_mark_as_seen() !== 20986) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_knockrequestactions_mark_as_seen() !== 45676) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_knockrequestactions_mark_as_seen");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_lazytimelineitemprovider_contains_only_emojis() !== 57596) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_lazytimelineitemprovider_contains_only_emojis() !== 34117) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_lazytimelineitemprovider_contains_only_emojis");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_lazytimelineitemprovider_debug_info() !== 797) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_lazytimelineitemprovider_debug_info() !== 43508) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_lazytimelineitemprovider_debug_info");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_lazytimelineitemprovider_get_send_handle() !== 279) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_lazytimelineitemprovider_get_send_handle() !== 19510) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_lazytimelineitemprovider_get_send_handle");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_lazytimelineitemprovider_get_shields() !== 41889) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_lazytimelineitemprovider_get_shields() !== 29176) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_lazytimelineitemprovider_get_shields");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_lazytimelineitemprovider_latest_json() !== 23678) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_lazytimelineitemprovider_latest_json() !== 31853) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_lazytimelineitemprovider_latest_json");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_leavespacehandle_leave() !== 64951) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_leavespacehandle_leave() !== 36267) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_leavespacehandle_leave");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_leavespacehandle_rooms() !== 40216) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_leavespacehandle_rooms() !== 36304) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_leavespacehandle_rooms");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_livelocationsobserver_subscribe() !== 17465) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_livelocationsobserver_subscribe() !== 22247) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_livelocationsobserver_subscribe");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_loginwithqrcodehandler_generate() !== 27889) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_loginwithqrcodehandler_generate() !== 30286) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_loginwithqrcodehandler_generate");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_loginwithqrcodehandler_scan() !== 55947) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_loginwithqrcodehandler_scan() !== 34217) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_loginwithqrcodehandler_scan");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_mediafilehandle_path() !== 42046) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_loginwithqrcodetask_cancel() !== 1253) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_loginwithqrcodetask_cancel");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_loginwithqrcodetask_wait() !== 31155) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_loginwithqrcodetask_wait");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_mediafilehandle_path() !== 9243) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_mediafilehandle_path");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_mediafilehandle_persist() !== 34214) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_mediafilehandle_persist() !== 65270) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_mediafilehandle_persist");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_constructor_mediasource_from_json() !== 60091) {
-        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_constructor_mediasource_from_json");
-    }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_constructor_mediasource_from_url() !== 37564) {
-        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_constructor_mediasource_from_url");
-    }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_mediasource_to_json() !== 19277) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_mediasource_to_json() !== 35598) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_mediasource_to_json");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_mediasource_url() !== 53516) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_mediasource_url() !== 55979) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_mediasource_url");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_notificationclient_get_notification() !== 47425) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_constructor_mediasource_from_json() !== 60865) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_constructor_mediasource_from_json");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_constructor_mediasource_from_url() !== 52389) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_constructor_mediasource_from_url");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_notificationclient_get_notification() !== 64274) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_notificationclient_get_notification");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_notificationclient_get_notifications() !== 55817) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_notificationclient_get_notifications() !== 16281) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_notificationclient_get_notifications");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_notificationclient_get_room() !== 22250) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_notificationclient_get_room() !== 7775) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_notificationclient_get_room");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_notificationclient_timeouts() !== 4995) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_notificationclient_timeouts() !== 49822) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_notificationclient_timeouts");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_can_homeserver_push_encrypted_event_to_device() !== 46370) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_can_homeserver_push_encrypted_event_to_device() !== 48912) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_can_homeserver_push_encrypted_event_to_device");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_can_push_encrypted_event_to_device() !== 24557) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_can_push_encrypted_event_to_device() !== 6149) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_can_push_encrypted_event_to_device");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_contains_keywords_rules() !== 31603) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_contains_keywords_rules() !== 47887) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_contains_keywords_rules");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_get_default_room_notification_mode() !== 44201) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_get_default_room_notification_mode() !== 33692) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_get_default_room_notification_mode");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_get_raw_push_rules() !== 22761) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_get_raw_push_rules() !== 59675) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_get_raw_push_rules");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_get_room_notification_settings() !== 44589) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_get_room_notification_settings() !== 54808) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_get_room_notification_settings");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_get_rooms_with_user_defined_rules() !== 23908) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_get_rooms_with_user_defined_rules() !== 65190) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_get_rooms_with_user_defined_rules");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_get_user_defined_room_notification_mode() !== 13690) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_get_user_defined_room_notification_mode() !== 34929) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_get_user_defined_room_notification_mode");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_is_call_enabled() !== 42573) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_is_call_enabled() !== 33396) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_is_call_enabled");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_is_invite_for_me_enabled() !== 24945) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_is_invite_for_me_enabled() !== 52762) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_is_invite_for_me_enabled");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_is_room_mention_enabled() !== 4073) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_is_room_mention_enabled() !== 64811) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_is_room_mention_enabled");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_is_user_mention_enabled() !== 17837) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_is_user_mention_enabled() !== 59539) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_is_user_mention_enabled");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_restore_default_room_notification_mode() !== 12358) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_restore_default_room_notification_mode() !== 27960) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_restore_default_room_notification_mode");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_set_call_enabled() !== 17088) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_set_call_enabled() !== 24829) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_set_call_enabled");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_set_custom_push_rule() !== 49373) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_set_custom_push_rule() !== 26829) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_set_custom_push_rule");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_set_default_room_notification_mode() !== 29804) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_set_default_room_notification_mode() !== 8601) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_set_default_room_notification_mode");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_set_delegate() !== 39042) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_set_delegate() !== 25839) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_set_delegate");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_set_invite_for_me_enabled() !== 34082) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_set_invite_for_me_enabled() !== 26453) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_set_invite_for_me_enabled");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_set_room_mention_enabled() !== 63495) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_set_room_mention_enabled() !== 36523) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_set_room_mention_enabled");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_set_room_notification_mode() !== 21942) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_set_room_notification_mode() !== 53682) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_set_room_notification_mode");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_set_user_mention_enabled() !== 22017) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_set_user_mention_enabled() !== 49801) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_set_user_mention_enabled");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_unmute_room() !== 54475) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_unmute_room() !== 59659) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_notificationsettings_unmute_room");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_constructor_passwordstrengthestimator_new() !== 40017) {
-        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_constructor_passwordstrengthestimator_new");
-    }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_constructor_passwordstrengthestimator_with_modern_defaults2025() !== 49633) {
-        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_constructor_passwordstrengthestimator_with_modern_defaults2025");
-    }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_constructor_passwordstrengthestimator_with_zxcvbn_defaults() !== 43669) {
-        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_constructor_passwordstrengthestimator_with_zxcvbn_defaults");
-    }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_passwordstrengthestimator_estimate() !== 1202) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_passwordstrengthestimator_estimate() !== 43415) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_passwordstrengthestimator_estimate");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_passwordstrengthestimator_thresholds() !== 26350) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_passwordstrengthestimator_thresholds() !== 3347) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_passwordstrengthestimator_thresholds");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_constructor_qrcodedata_from_bytes() !== 55735) {
-        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_constructor_qrcodedata_from_bytes");
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_constructor_passwordstrengthestimator_new() !== 13036) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_constructor_passwordstrengthestimator_new");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_qrcodedata_base_url() !== 53645) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_constructor_passwordstrengthestimator_with_modern_defaults2025() !== 63712) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_constructor_passwordstrengthestimator_with_modern_defaults2025");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_constructor_passwordstrengthestimator_with_zxcvbn_defaults() !== 29936) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_constructor_passwordstrengthestimator_with_zxcvbn_defaults");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_qrcodedata_base_url() !== 20926) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_qrcodedata_base_url");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_qrcodedata_intent() !== 17055) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_qrcodedata_intent() !== 42531) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_qrcodedata_intent");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_qrcodedata_server_name() !== 30138) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_qrcodedata_server_name() !== 40553) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_qrcodedata_server_name");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_qrcodedata_to_bytes() !== 22532) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_qrcodedata_to_base64() !== 8752) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_qrcodedata_to_base64");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_qrcodedata_to_bytes() !== 34533) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_qrcodedata_to_bytes");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_account_data() !== 61457) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_constructor_qrcodedata_from_bytes() !== 49339) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_constructor_qrcodedata_from_bytes");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_account_data() !== 49985) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_account_data");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_active_human_member_ids() !== 13215) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_active_human_member_ids() !== 12185) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_active_human_member_ids");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_active_human_member_ids_no_sync() !== 32335) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_active_human_member_ids_no_sync() !== 16908) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_active_human_member_ids_no_sync");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_active_members_count() !== 10052) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_active_members_count() !== 62951) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_active_members_count");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_active_room_call_participants() !== 61411) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_active_room_call_participants() !== 18323) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_active_room_call_participants");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_alternative_aliases() !== 30946) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_alternative_aliases() !== 9907) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_alternative_aliases");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_apply_power_level_changes() !== 56335) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_apply_power_level_changes() !== 10374) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_apply_power_level_changes");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_avatar_url() !== 4697) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_avatar_url() !== 58808) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_avatar_url");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_ban_user() !== 54282) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_ban_user() !== 56871) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_ban_user");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_canonical_alias() !== 5795) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_canonical_alias() !== 20243) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_canonical_alias");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_clear_composer_draft() !== 12270) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_clear_composer_draft() !== 56827) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_clear_composer_draft");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_decline_call() !== 12323) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_decline_call() !== 64142) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_decline_call");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_discard_room_key() !== 57692) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_discard_room_key() !== 26947) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_discard_room_key");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_display_name() !== 45762) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_display_name() !== 44239) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_display_name");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_edit() !== 6689) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_edit() !== 59260) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_edit");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_enable_encryption() !== 16452) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_enable_encryption() !== 12368) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_enable_encryption");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_enable_send_queue() !== 32996) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_enable_send_queue() !== 10158) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_enable_send_queue");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_encryption_state() !== 35766) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_encryption_state() !== 7391) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_encryption_state");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_event_id_at_timestamp() !== 35538) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_event_id_at_timestamp() !== 1411) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_event_id_at_timestamp");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_fetch_event_json() !== 22060) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_fetch_event_json() !== 15027) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_fetch_event_json");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_fetch_state() !== 47464) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_fetch_state() !== 63726) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_fetch_state");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_fetch_state_event_content() !== 38898) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_fetch_state_event_content() !== 37867) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_fetch_state_event_content");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_fetch_thread_subscription() !== 65386) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_fetch_thread_subscription() !== 32369) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_fetch_thread_subscription");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_forget() !== 10622) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_forget() !== 725) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_forget");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_get_power_levels() !== 33125) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_get_power_levels() !== 60659) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_get_power_levels");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_get_room_visibility() !== 49289) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_get_room_visibility() !== 30457) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_get_room_visibility");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_has_active_room_call() !== 1287) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_has_active_room_call() !== 41039) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_has_active_room_call");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_heroes() !== 39470) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_heroes() !== 21840) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_heroes");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_id() !== 34667) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_id() !== 28686) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_id");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_ignore_device_trust_and_resend() !== 24786) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_ignore_device_trust_and_resend() !== 38639) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_ignore_device_trust_and_resend");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_ignore_user() !== 45929) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_ignore_user() !== 10201) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_ignore_user");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_invite_user_by_3pid() !== 31413) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_invite_user_by_3pid() !== 17418) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_invite_user_by_3pid");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_invite_user_by_id() !== 27806) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_invite_user_by_id() !== 29592) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_invite_user_by_id");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_invited_members_count() !== 44865) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_invited_members_count() !== 63396) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_invited_members_count");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_inviter() !== 7247) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_inviter() !== 8013) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_inviter");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_is_direct() !== 61932) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_is_direct() !== 53432) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_is_direct");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_is_encrypted() !== 37204) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_is_encrypted() !== 53552) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_is_encrypted");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_is_public() !== 31529) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_is_public() !== 20659) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_is_public");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_is_send_queue_enabled() !== 5651) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_is_send_queue_enabled() !== 55497) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_is_send_queue_enabled");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_is_space() !== 19377) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_is_space() !== 3282) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_is_space");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_join() !== 65464) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_join() !== 37979) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_join");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_joined_members_count() !== 55525) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_joined_members_count() !== 42210) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_joined_members_count");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_kick_user() !== 64949) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_kick_user() !== 56657) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_kick_user");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_latest_encryption_state() !== 9465) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_latest_encryption_state() !== 49419) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_latest_encryption_state");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_latest_event() !== 37006) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_latest_event() !== 62992) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_latest_event");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_leave() !== 3346) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_leave() !== 25121) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_leave");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_live_locations_observer() !== 34368) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_live_locations_observer() !== 53773) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_live_locations_observer");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_load_composer_draft() !== 61910) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_load_composer_draft() !== 25857) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_load_composer_draft");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_load_or_fetch_event() !== 47103) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_load_or_fetch_event() !== 16576) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_load_or_fetch_event");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_load_or_fetch_event_with_relations() !== 53875) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_load_or_fetch_event_with_relations() !== 5676) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_load_or_fetch_event_with_relations");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_load_user_receipt() !== 16820) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_load_user_receipt() !== 49162) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_load_user_receipt");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_local_aliases() !== 23676) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_local_aliases() !== 12180) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_local_aliases");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_mark_as_fully_read_unchecked() !== 1608) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_mark_as_fully_read_unchecked() !== 59574) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_mark_as_fully_read_unchecked");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_mark_as_read() !== 38075) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_mark_as_read() !== 21259) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_mark_as_read");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_matrix_to_event_permalink() !== 30684) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_matrix_to_event_permalink() !== 63905) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_matrix_to_event_permalink");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_matrix_to_permalink() !== 10281) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_matrix_to_permalink() !== 18133) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_matrix_to_permalink");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_member() !== 58977) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_member() !== 17149) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_member");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_member_avatar_url() !== 44092) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_member_avatar_url() !== 42315) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_member_avatar_url");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_member_display_name() !== 26431) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_member_display_name() !== 29038) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_member_display_name");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_member_with_sender_info() !== 36075) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_member_with_sender_info() !== 12546) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_member_with_sender_info");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_members() !== 13926) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_members() !== 57063) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_members");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_members_no_sync() !== 8950) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_members_no_sync() !== 18379) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_members_no_sync");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_membership() !== 65038) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_membership() !== 60384) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_membership");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_messages_json() !== 49628) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_messages_json() !== 34146) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_messages_json");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_own_user_id() !== 32346) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_own_user_id() !== 47172) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_own_user_id");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_participated_thread_ids() !== 24520) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_participated_thread_ids() !== 56223) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_participated_thread_ids");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_predecessor_room() !== 21931) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_predecessor_room() !== 19410) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_predecessor_room");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_preview_room() !== 20509) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_preview_room() !== 10129) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_preview_room");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_publish_room_alias_in_room_directory() !== 2302) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_publish_room_alias_in_room_directory() !== 227) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_publish_room_alias_in_room_directory");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_raw_name() !== 65346) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_raw_name() !== 61864) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_raw_name");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_redact() !== 56590) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_redact() !== 34543) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_redact");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_relations_json() !== 55234) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_relations_json() !== 50204) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_relations_json");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_relations_page_json() !== 22688) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_relations_page_json() !== 44330) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_relations_page_json");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_remove_avatar() !== 3551) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_remove_avatar() !== 49932) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_remove_avatar");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_remove_room_alias_from_room_directory() !== 26389) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_remove_room_alias_from_room_directory() !== 37712) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_remove_room_alias_from_room_directory");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_remove_tag() !== 63786) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_remove_tag() !== 8822) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_remove_tag");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_report_content() !== 37734) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_report_content() !== 64920) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_report_content");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_report_room() !== 372) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_report_room() !== 57804) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_report_room");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_reset_power_levels() !== 32610) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_reset_power_levels() !== 61300) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_reset_power_levels");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_room_events_debug_string() !== 35772) {
-        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_room_events_debug_string");
-    }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_room_info() !== 62185) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_room_info() !== 11004) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_room_info");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_room_type() !== 29009) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_room_type() !== 22822) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_room_type");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_save_composer_draft() !== 42915) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_save_composer_draft() !== 34609) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_save_composer_draft");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_send_live_location() !== 42045) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_send_delayed_event() !== 7176) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_send_delayed_event");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_send_delayed_state_event() !== 26141) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_send_delayed_state_event");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_send_live_location() !== 29293) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_send_live_location");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_send_raw() !== 63831) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_send_raw() !== 31612) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_send_raw");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_send_single_receipt() !== 34985) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_send_single_receipt() !== 44071) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_send_single_receipt");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_send_state_event_raw() !== 55730) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_send_state_event_raw() !== 50352) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_send_state_event_raw");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_set_account_data() !== 2906) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_set_account_data() !== 29882) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_set_account_data");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_set_is_favourite() !== 1289) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_set_is_favourite() !== 17735) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_set_is_favourite");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_set_is_low_priority() !== 44950) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_set_is_low_priority() !== 19842) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_set_is_low_priority");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_set_name() !== 33828) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_set_name() !== 33512) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_set_name");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_set_own_member_display_name() !== 40370) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_set_own_member_display_name() !== 47962) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_set_own_member_display_name");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_set_tag() !== 61182) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_set_tag() !== 62842) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_set_tag");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_set_thread_subscription() !== 55986) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_set_thread_subscription() !== 32594) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_set_thread_subscription");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_set_topic() !== 40525) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_set_topic() !== 5022) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_set_topic");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_set_unread_flag() !== 38235) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_set_unread_flag() !== 28138) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_set_unread_flag");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_start_live_location_share() !== 55035) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_start_live_location_share() !== 14892) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_start_live_location_share");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_stop_live_location_share() !== 37711) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_state_events() !== 37294) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_state_events");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_stop_live_location_share() !== 49334) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_stop_live_location_share");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_subscribe_to_call_decline_events() !== 21456) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_subscribe_to_call_decline_events() !== 41573) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_subscribe_to_call_decline_events");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_subscribe_to_identity_status_changes() !== 49969) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_subscribe_to_effective_retention() !== 1581) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_subscribe_to_effective_retention");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_subscribe_to_identity_status_changes() !== 7209) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_subscribe_to_identity_status_changes");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_subscribe_to_knock_requests() !== 43535) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_subscribe_to_knock_requests() !== 30200) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_subscribe_to_knock_requests");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_subscribe_to_room_info_updates() !== 32254) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_subscribe_to_message_like_events() !== 31308) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_subscribe_to_message_like_events");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_subscribe_to_room_info_updates() !== 21243) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_subscribe_to_room_info_updates");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_subscribe_to_send_queue_updates() !== 36773) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_subscribe_to_send_queue_updates() !== 56695) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_subscribe_to_send_queue_updates");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_subscribe_to_typing_notifications() !== 12198) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_subscribe_to_state_events() !== 6661) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_subscribe_to_state_events");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_subscribe_to_typing_notifications() !== 60113) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_subscribe_to_typing_notifications");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_successor_room() !== 17951) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_successor_room() !== 21345) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_successor_room");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_suggested_role_for_user() !== 58040) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_suggested_role_for_user() !== 18904) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_suggested_role_for_user");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_tags_json() !== 54119) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_tags_json() !== 24965) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_tags_json");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_thread_list_service() !== 13714) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_thread_list_service() !== 15299) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_thread_list_service");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_timeline() !== 51168) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_timeline() !== 10110) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_timeline");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_timeline_with_configuration() !== 46904) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_timeline_with_configuration() !== 39102) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_timeline_with_configuration");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_topic() !== 33844) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_topic() !== 27901) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_topic");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_typing_notice() !== 26086) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_typing_notice() !== 22181) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_typing_notice");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_unban_user() !== 25834) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_unban_user() !== 18373) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_unban_user");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_update_canonical_alias() !== 35023) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_update_canonical_alias() !== 59566) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_update_canonical_alias");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_update_history_visibility() !== 29249) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_update_history_visibility() !== 27209) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_update_history_visibility");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_update_join_rules() !== 62193) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_update_join_rules() !== 50969) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_update_join_rules");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_update_power_levels_for_users() !== 46007) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_update_power_levels_for_users() !== 60483) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_update_power_levels_for_users");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_update_room_visibility() !== 46267) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_update_room_visibility() !== 27925) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_update_room_visibility");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_upgrade() !== 39644) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_upgrade() !== 12700) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_upgrade");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_upload_avatar() !== 43932) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_upload_avatar() !== 40573) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_upload_avatar");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_withdraw_verification_and_resend() !== 13926) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_withdraw_verification_and_resend() !== 56581) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_withdraw_verification_and_resend");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roomdirectorysearch_is_at_last_page() !== 31168) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roomdirectorysearch_is_at_last_page() !== 43874) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_roomdirectorysearch_is_at_last_page");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roomdirectorysearch_loaded_pages() !== 59827) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roomdirectorysearch_loaded_pages() !== 41934) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_roomdirectorysearch_loaded_pages");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roomdirectorysearch_next_page() !== 14719) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roomdirectorysearch_next_page() !== 2921) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_roomdirectorysearch_next_page");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roomdirectorysearch_results() !== 21645) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roomdirectorysearch_results() !== 42287) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_roomdirectorysearch_results");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roomdirectorysearch_search() !== 38611) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roomdirectorysearch_search() !== 33671) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_roomdirectorysearch_search");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roomlist_entries_with_dynamic_adapters() !== 19021) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roomlist_entries_with_dynamic_adapters() !== 15118) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_roomlist_entries_with_dynamic_adapters");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roomlist_loading_state() !== 2181) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roomlist_loading_state() !== 19590) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_roomlist_loading_state");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roomlist_room() !== 50761) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roomlist_room() !== 39542) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_roomlist_room");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roomlistdynamicentriescontroller_add_one_page() !== 47488) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roomlistdynamicentriescontroller_add_one_page() !== 27631) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_roomlistdynamicentriescontroller_add_one_page");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roomlistdynamicentriescontroller_reset_to_one_page() !== 4391) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roomlistdynamicentriescontroller_reset_to_one_page() !== 57135) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_roomlistdynamicentriescontroller_reset_to_one_page");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roomlistdynamicentriescontroller_set_filter() !== 8696) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roomlistdynamicentriescontroller_set_filter() !== 45381) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_roomlistdynamicentriescontroller_set_filter");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roomlistentrieswithdynamicadaptersresult_controller() !== 21030) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roomlistentrieswithdynamicadaptersresult_controller() !== 58497) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_roomlistentrieswithdynamicadaptersresult_controller");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roomlistentrieswithdynamicadaptersresult_entries_stream() !== 22467) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roomlistentrieswithdynamicadaptersresult_entries_stream() !== 52965) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_roomlistentrieswithdynamicadaptersresult_entries_stream");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roomlistservice_all_rooms() !== 4638) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roomlistservice_all_rooms() !== 47352) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_roomlistservice_all_rooms");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roomlistservice_remove_room_subscriptions() !== 10579) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roomlistservice_remove_room_subscriptions() !== 32088) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_roomlistservice_remove_room_subscriptions");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roomlistservice_reset_and_add_room_subscriptions() !== 61909) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roomlistservice_reset_and_add_room_subscriptions() !== 11809) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_roomlistservice_reset_and_add_room_subscriptions");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roomlistservice_room() !== 40756) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roomlistservice_room() !== 53257) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_roomlistservice_room");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roomlistservice_set_room_subscriptions() !== 27356) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roomlistservice_set_room_subscriptions() !== 24338) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_roomlistservice_set_room_subscriptions");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roomlistservice_state() !== 41751) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roomlistservice_state() !== 33187) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_roomlistservice_state");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roomlistservice_sync_indicator() !== 48386) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roomlistservice_sync_indicator() !== 29793) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_roomlistservice_sync_indicator");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roommembersiterator_len() !== 59145) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roommembersiterator_len() !== 36990) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_roommembersiterator_len");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roommembersiterator_next_chunk() !== 47532) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roommembersiterator_next_chunk() !== 30596) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_roommembersiterator_next_chunk");
     }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roommessageeventcontentwithoutrelation_with_mentions() !== 23475) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_roommessageeventcontentwithoutrelation_with_mentions");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_own_user_ban() !== 52576) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_own_user_ban() !== 58264) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_own_user_ban");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_own_user_invite() !== 55467) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_own_user_invite() !== 3359) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_own_user_invite");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_own_user_kick() !== 8759) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_own_user_kick() !== 27259) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_own_user_kick");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_own_user_pin_unpin() !== 64005) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_own_user_pin_unpin() !== 21674) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_own_user_pin_unpin");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_own_user_redact_other() !== 10630) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_own_user_redact_other() !== 2271) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_own_user_redact_other");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_own_user_redact_own() !== 10164) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_own_user_redact_own() !== 24980) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_own_user_redact_own");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_own_user_send_message() !== 49672) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_own_user_send_message() !== 25997) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_own_user_send_message");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_own_user_send_state() !== 35401) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_own_user_send_state() !== 6693) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_own_user_send_state");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_own_user_trigger_room_notification() !== 59279) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_own_user_trigger_room_notification() !== 23989) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_own_user_trigger_room_notification");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_user_ban() !== 12687) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_user_ban() !== 6597) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_user_ban");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_user_invite() !== 26290) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_user_invite() !== 43405) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_user_invite");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_user_kick() !== 3923) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_user_kick() !== 45394) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_user_kick");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_user_pin_unpin() !== 20659) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_user_pin_unpin() !== 21637) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_user_pin_unpin");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_user_redact_other() !== 54198) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_user_redact_other() !== 42584) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_user_redact_other");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_user_redact_own() !== 59218) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_user_redact_own() !== 60530) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_user_redact_own");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_user_send_message() !== 45176) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_user_send_message() !== 331) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_user_send_message");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_user_send_state() !== 58319) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_user_send_state() !== 56937) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_user_send_state");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_user_trigger_room_notification() !== 35381) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_user_trigger_room_notification() !== 64214) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_can_user_trigger_room_notification");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_events() !== 61055) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_events() !== 19530) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_events");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_user_power_levels() !== 48829) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_user_power_levels() !== 64043) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_user_power_levels");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_values() !== 62886) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_values() !== 42499) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_roompowerlevels_values");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompreview_forget() !== 42918) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompreview_forget() !== 59098) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_roompreview_forget");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompreview_info() !== 16635) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompreview_info() !== 42643) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_roompreview_info");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompreview_inviter() !== 54424) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompreview_inviter() !== 51093) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_roompreview_inviter");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompreview_leave() !== 52262) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompreview_leave() !== 2702) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_roompreview_leave");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompreview_own_membership_details() !== 16335) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_roompreview_own_membership_details() !== 18406) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_roompreview_own_membership_details");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_constructor_secretsbundlewithuserid_from_str() !== 28891) {
-        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_constructor_secretsbundlewithuserid_from_str");
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_secretstoragekey_to_base58() !== 26990) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_secretstoragekey_to_base58");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_secretsbundlewithuserid_contains_backup_key() !== 61271) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_constructor_secretstoragekey_new() !== 59636) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_constructor_secretstoragekey_new");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_constructor_secretstoragekey_new_from_passphrase() !== 43240) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_constructor_secretstoragekey_new_from_passphrase");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_secretsbundlewithuserid_contains_backup_key() !== 13305) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_secretsbundlewithuserid_contains_backup_key");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_sendattachmentjoinhandle_cancel() !== 5666) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_constructor_secretsbundlewithuserid_from_str() !== 25880) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_constructor_secretsbundlewithuserid_from_str");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_sendattachmentjoinhandle_cancel() !== 11522) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_sendattachmentjoinhandle_cancel");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_sendattachmentjoinhandle_join() !== 22211) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_sendattachmentjoinhandle_join() !== 61070) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_sendattachmentjoinhandle_join");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_sendhandle_abort() !== 34502) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_sendhandle_abort() !== 29352) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_sendhandle_abort");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_sendhandle_try_resend() !== 50142) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_sendhandle_try_resend() !== 26565) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_sendhandle_try_resend");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_sessionverificationcontroller_accept_verification_request() !== 56039) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_sessionverificationcontroller_accept_verification_request() !== 63394) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_sessionverificationcontroller_accept_verification_request");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_sessionverificationcontroller_acknowledge_verification_request() !== 22948) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_sessionverificationcontroller_acknowledge_verification_request() !== 28973) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_sessionverificationcontroller_acknowledge_verification_request");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_sessionverificationcontroller_approve_verification() !== 26553) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_sessionverificationcontroller_approve_verification() !== 26159) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_sessionverificationcontroller_approve_verification");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_sessionverificationcontroller_cancel_verification() !== 32557) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_sessionverificationcontroller_cancel_verification() !== 15915) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_sessionverificationcontroller_cancel_verification");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_sessionverificationcontroller_decline_verification() !== 9058) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_sessionverificationcontroller_decline_verification() !== 61574) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_sessionverificationcontroller_decline_verification");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_sessionverificationcontroller_request_device_verification() !== 20402) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_sessionverificationcontroller_request_cancel_info() !== 4040) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_sessionverificationcontroller_request_cancel_info");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_sessionverificationcontroller_request_device_verification() !== 1050) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_sessionverificationcontroller_request_device_verification");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_sessionverificationcontroller_request_user_verification() !== 11869) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_sessionverificationcontroller_request_user_verification() !== 35126) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_sessionverificationcontroller_request_user_verification");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_sessionverificationcontroller_set_delegate() !== 65112) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_sessionverificationcontroller_sas_cancel_info() !== 34680) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_sessionverificationcontroller_sas_cancel_info");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_sessionverificationcontroller_set_delegate() !== 49952) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_sessionverificationcontroller_set_delegate");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_sessionverificationcontroller_start_sas_verification() !== 56151) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_sessionverificationcontroller_start_sas_verification() !== 27771) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_sessionverificationcontroller_start_sas_verification");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_sessionverificationemoji_description() !== 45746) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_sessionverificationemoji_description() !== 22864) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_sessionverificationemoji_description");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_sessionverificationemoji_symbol() !== 54870) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_sessionverificationemoji_symbol() !== 6955) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_sessionverificationemoji_symbol");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_spaceroomlist_paginate() !== 14784) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_spaceroomlist_paginate() !== 55523) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_spaceroomlist_paginate");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_spaceroomlist_pagination_state() !== 6614) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_spaceroomlist_pagination_state() !== 18118) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_spaceroomlist_pagination_state");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_spaceroomlist_reset() !== 60888) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_spaceroomlist_reset() !== 23197) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_spaceroomlist_reset");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_spaceroomlist_rooms() !== 3299) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_spaceroomlist_rooms() !== 44616) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_spaceroomlist_rooms");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_spaceroomlist_space() !== 63772) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_spaceroomlist_space() !== 58114) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_spaceroomlist_space");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_spaceroomlist_subscribe_to_pagination_state_updates() !== 15348) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_spaceroomlist_subscribe_to_pagination_state_updates() !== 54680) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_spaceroomlist_subscribe_to_pagination_state_updates");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_spaceroomlist_subscribe_to_room_update() !== 27260) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_spaceroomlist_subscribe_to_room_update() !== 19721) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_spaceroomlist_subscribe_to_room_update");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_spaceroomlist_subscribe_to_space_updates() !== 31589) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_spaceroomlist_subscribe_to_space_updates() !== 62183) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_spaceroomlist_subscribe_to_space_updates");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_spaceservice_add_child_to_space() !== 64688) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_spaceservice_add_child_to_space() !== 24077) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_spaceservice_add_child_to_space");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_spaceservice_editable_spaces() !== 9178) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_spaceservice_editable_spaces() !== 23552) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_spaceservice_editable_spaces");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_spaceservice_get_space_room() !== 38097) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_spaceservice_get_space_room() !== 27486) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_spaceservice_get_space_room");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_spaceservice_joined_parent_ids_of_child() !== 10161) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_spaceservice_joined_parent_ids_of_child() !== 27836) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_spaceservice_joined_parent_ids_of_child");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_spaceservice_joined_parents_of_child() !== 40037) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_spaceservice_joined_parents_of_child() !== 36617) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_spaceservice_joined_parents_of_child");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_spaceservice_leave_space() !== 57139) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_spaceservice_leave_space() !== 62335) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_spaceservice_leave_space");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_spaceservice_remove_child_from_space() !== 22535) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_spaceservice_remove_child_from_space() !== 20772) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_spaceservice_remove_child_from_space");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_spaceservice_space_filters() !== 30843) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_spaceservice_space_filters() !== 58798) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_spaceservice_space_filters");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_spaceservice_space_room_list() !== 14788) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_spaceservice_space_room_list() !== 21044) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_spaceservice_space_room_list");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_spaceservice_subscribe_to_space_filters() !== 16708) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_spaceservice_subscribe_to_space_filters() !== 51732) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_spaceservice_subscribe_to_space_filters");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_spaceservice_subscribe_to_top_level_joined_spaces() !== 59416) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_spaceservice_subscribe_to_top_level_joined_spaces() !== 15109) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_spaceservice_subscribe_to_top_level_joined_spaces");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_spaceservice_top_level_ancestors_of() !== 51088) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_spaceservice_top_level_ancestors_of() !== 61938) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_spaceservice_top_level_ancestors_of");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_spaceservice_top_level_joined_spaces() !== 19973) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_spaceservice_top_level_joined_spaces() !== 25974) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_spaceservice_top_level_joined_spaces");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_constructor_span_current() !== 3197) {
-        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_constructor_span_current");
-    }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_constructor_span_new() !== 17271) {
-        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_constructor_span_new");
-    }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_constructor_span_new_bridge_span() !== 19695) {
-        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_constructor_span_new_bridge_span");
-    }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_span_enter() !== 10876) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_span_enter() !== 6796) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_span_enter");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_span_exit() !== 53701) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_span_exit() !== 40817) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_span_exit");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_span_is_none() !== 30786) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_span_is_none() !== 30328) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_span_is_none");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_ssohandler_finish() !== 56350) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_constructor_span_current() !== 54655) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_constructor_span_current");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_constructor_span_new() !== 62951) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_constructor_span_new");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_constructor_span_new_bridge_span() !== 56477) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_constructor_span_new_bridge_span");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_ssohandler_finish() !== 52093) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_ssohandler_finish");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_ssohandler_url() !== 633) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_ssohandler_url() !== 9818) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_ssohandler_url");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_syncservice_expire_sessions() !== 5808) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_syncservice_expire_sessions() !== 7864) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_syncservice_expire_sessions");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_syncservice_room_list_service() !== 39986) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_syncservice_room_list_service() !== 1335) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_syncservice_room_list_service");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_syncservice_start() !== 42766) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_syncservice_start() !== 35005) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_syncservice_start");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_syncservice_state() !== 56378) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_syncservice_state() !== 15517) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_syncservice_state");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_syncservice_stop() !== 40415) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_syncservice_stop() !== 51463) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_syncservice_stop");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_syncservicebuilder_finish() !== 29725) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_syncservicebuilder_finish() !== 14129) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_syncservicebuilder_finish");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_syncservicebuilder_with_offline_mode() !== 48885) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_syncservicebuilder_with_offline_mode() !== 41418) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_syncservicebuilder_with_offline_mode");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_syncservicebuilder_with_parent_span() !== 54084) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_syncservicebuilder_with_parent_span() !== 61147) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_syncservicebuilder_with_parent_span");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_syncservicebuilder_with_room_list_connection_id() !== 13768) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_syncservicebuilder_with_room_list_connection_id() !== 16274) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_syncservicebuilder_with_room_list_connection_id");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_syncservicebuilder_with_room_list_timeline_limit() !== 39644) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_syncservicebuilder_with_room_list_timeline_limit() !== 21875) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_syncservicebuilder_with_room_list_timeline_limit");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_syncservicebuilder_with_share_pos() !== 21315) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_syncservicebuilder_with_share_pos() !== 57939) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_syncservicebuilder_with_share_pos");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_taskhandle_cancel() !== 12353) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_taskhandle_cancel() !== 52084) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_taskhandle_cancel");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_taskhandle_is_finished() !== 17040) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_taskhandle_is_finished() !== 35721) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_taskhandle_is_finished");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_threadlistservice_items() !== 55694) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_threadlistservice_items() !== 64108) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_threadlistservice_items");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_threadlistservice_paginate() !== 53406) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_threadlistservice_paginate() !== 24435) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_threadlistservice_paginate");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_threadlistservice_pagination_state() !== 17012) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_threadlistservice_pagination_state() !== 48064) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_threadlistservice_pagination_state");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_threadlistservice_reset() !== 49568) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_threadlistservice_reset() !== 11316) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_threadlistservice_reset");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_threadlistservice_subscribe_to_items_updates() !== 62027) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_threadlistservice_subscribe_to_items_updates() !== 64846) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_threadlistservice_subscribe_to_items_updates");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_threadlistservice_subscribe_to_pagination_state_updates() !== 1253) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_threadlistservice_subscribe_to_pagination_state_updates() !== 15617) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_threadlistservice_subscribe_to_pagination_state_updates");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_threadsummary_latest_event() !== 49553) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_threadsummary_latest_event() !== 35055) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_threadsummary_latest_event");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_threadsummary_num_replies() !== 47977) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_threadsummary_num_replies() !== 2152) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_threadsummary_num_replies");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_add_listener() !== 38550) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_abort_send() !== 54321) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_timeline_abort_send");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_add_listener() !== 65368) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_timeline_add_listener");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_create_message_content() !== 54719) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_create_message_content() !== 25662) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_timeline_create_message_content");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_create_poll() !== 33924) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_create_poll() !== 47147) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_timeline_create_poll");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_edit() !== 46968) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_edit() !== 6714) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_timeline_edit");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_edit_revisions() !== 11010) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_edit_revisions() !== 1208) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_timeline_edit_revisions");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_end_poll() !== 2766) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_edit_with_attachment() !== 28721) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_timeline_edit_with_attachment");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_end_poll() !== 8036) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_timeline_end_poll");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_fetch_details_for_event() !== 22240) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_fetch_details_for_event() !== 22350) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_timeline_fetch_details_for_event");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_fetch_members() !== 22294) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_fetch_members() !== 39770) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_timeline_fetch_members");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_get_event_timeline_item_by_event_id() !== 40008) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_get_event_timeline_item_by_event_id() !== 43047) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_timeline_get_event_timeline_item_by_event_id");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_latest_event_id() !== 31074) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_latest_event_id() !== 55615) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_timeline_latest_event_id");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_load_reply_details() !== 11426) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_load_reply_details() !== 8357) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_timeline_load_reply_details");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_mark_as_read() !== 58804) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_mark_as_read() !== 4509) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_timeline_mark_as_read");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_paginate_backwards() !== 53026) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_paginate_backwards() !== 27830) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_timeline_paginate_backwards");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_paginate_forwards() !== 35094) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_paginate_forwards() !== 22178) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_timeline_paginate_forwards");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_pin_event() !== 40498) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_pin_event() !== 2293) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_timeline_pin_event");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_redact_event() !== 42154) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_redact_event() !== 13285) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_timeline_redact_event");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_retry_decryption() !== 39219) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_retry_decryption() !== 4954) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_timeline_retry_decryption");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_send() !== 24846) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_retry_send() !== 10265) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_timeline_retry_send");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_send() !== 58715) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_timeline_send");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_send_audio() !== 52753) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_send_attachment() !== 21735) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_timeline_send_attachment");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_send_audio() !== 45499) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_timeline_send_audio");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_send_file() !== 19448) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_send_file() !== 44250) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_timeline_send_file");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_send_image() !== 31845) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_send_image() !== 50294) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_timeline_send_image");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_send_location() !== 21302) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_send_location() !== 39599) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_timeline_send_location");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_send_poll_response() !== 41951) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_send_poll_response() !== 16775) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_timeline_send_poll_response");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_send_read_receipt() !== 6077) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_send_read_receipt() !== 10485) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_timeline_send_read_receipt");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_send_reply() !== 40610) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_send_reply() !== 37856) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_timeline_send_reply");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_send_video() !== 21275) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_send_video() !== 46403) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_timeline_send_video");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_send_voice_message() !== 33769) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_send_voice_message() !== 7232) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_timeline_send_voice_message");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_send_with_extra_content() !== 65257) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_send_with_extra_content() !== 5571) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_timeline_send_with_extra_content");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_subscribe_to_back_pagination_status() !== 27990) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_subscribe_to_back_pagination_status() !== 61171) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_timeline_subscribe_to_back_pagination_status");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_toggle_reaction() !== 42673) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_toggle_reaction() !== 3610) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_timeline_toggle_reaction");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_toggle_reaction_with_extra_content() !== 37370) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_toggle_reaction_with_extra_content() !== 31009) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_timeline_toggle_reaction_with_extra_content");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_unpin_event() !== 18514) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timeline_unpin_event() !== 7353) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_timeline_unpin_event");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timelineevent_content() !== 50738) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timelineevent_content() !== 53982) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_timelineevent_content");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timelineevent_event_id() !== 64715) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timelineevent_event_id() !== 11029) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_timelineevent_event_id");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timelineevent_sender_id() !== 16913) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timelineevent_sender_id() !== 60965) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_timelineevent_sender_id");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timelineevent_thread_root_event_id() !== 3965) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timelineevent_thread_root_event_id() !== 13327) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_timelineevent_thread_root_event_id");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timelineevent_timestamp() !== 31754) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timelineevent_timestamp() !== 4201) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_timelineevent_timestamp");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timelineitem_as_event() !== 46788) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timelineitem_as_event() !== 65296) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_timelineitem_as_event");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timelineitem_as_virtual() !== 58215) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timelineitem_as_virtual() !== 12591) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_timelineitem_as_virtual");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timelineitem_fmt_debug() !== 59080) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timelineitem_fmt_debug() !== 47814) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_timelineitem_fmt_debug");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timelineitem_unique_id() !== 32877) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_timelineitem_unique_id() !== 16319) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_timelineitem_unique_id");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_unreadnotificationscount_has_notifications() !== 57541) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_unreadnotificationscount_has_notifications() !== 22019) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_unreadnotificationscount_has_notifications");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_unreadnotificationscount_highlight_count() !== 60202) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_unreadnotificationscount_highlight_count() !== 57182) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_unreadnotificationscount_highlight_count");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_unreadnotificationscount_notification_count() !== 27272) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_unreadnotificationscount_notification_count() !== 4597) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_unreadnotificationscount_notification_count");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_useridentity_has_verification_violation() !== 36877) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_useridentity_has_verification_violation() !== 7724) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_useridentity_has_verification_violation");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_useridentity_is_verified() !== 27675) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_useridentity_is_verified() !== 63527) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_useridentity_is_verified");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_useridentity_master_key() !== 44140) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_useridentity_master_key() !== 30981) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_useridentity_master_key");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_useridentity_pin() !== 64915) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_useridentity_pin() !== 54763) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_useridentity_pin");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_useridentity_was_previously_verified() !== 10595) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_useridentity_was_previously_verified() !== 37423) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_useridentity_was_previously_verified");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_useridentity_withdraw_verification() !== 8452) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_useridentity_withdraw_verification() !== 65004) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_useridentity_withdraw_verification");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_widgetdriver_run() !== 61502) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_widgetdriver_run() !== 44829) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_widgetdriver_run");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_widgetdriverhandle_recv() !== 10867) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_widgetdriverhandle_recv() !== 26873) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_widgetdriverhandle_recv");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_widgetdriverhandle_send() !== 4268) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_widgetdriverhandle_send() !== 616) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_widgetdriverhandle_send");
     }
 
     uniffiCallbackInterfaceLiveLocationsListener.register();
     uniffiCallbackInterfaceCallDeclineListener.register();
+    uniffiCallbackInterfaceEffectiveRetentionListener.register();
     uniffiCallbackInterfaceIdentityStatusChangeListener.register();
     uniffiCallbackInterfaceKnockRequestsListener.register();
+    uniffiCallbackInterfaceRoomMessageLikeEventsListener.register();
     uniffiCallbackInterfaceRoomInfoListener.register();
     uniffiCallbackInterfaceSendQueueListener.register();
+    uniffiCallbackInterfaceRoomStateEventsListener.register();
     uniffiCallbackInterfaceTypingNotificationsListener.register();
     uniffiCallbackInterfaceThreadListEntriesListener.register();
     uniffiCallbackInterfaceThreadListPaginationStateListener.register();
@@ -67192,6 +70851,7 @@ function uniffiEnsureInitialized() {
     uniffiCallbackInterfaceRawEventListener.register();
     uniffiCallbackInterfaceRoomAccountDataListener.register();
     uniffiCallbackInterfaceRoomEventJsonListener.register();
+    uniffiCallbackInterfaceTotalUnreadNotificationsListener.register();
     uniffiCallbackInterfaceSyncNotificationListener.register();
     uniffiCallbackInterfaceRoomDirectorySearchEntriesListener.register();
     uniffiCallbackInterfaceClientDelegate.register();
@@ -67201,8 +70861,10 @@ function uniffiEnsureInitialized() {
     uniffiCallbackInterfaceSpaceRoomListSpaceListener.register();
     uniffiCallbackInterfaceSpaceServiceSpaceFiltersListener.register();
     uniffiCallbackInterfaceSpaceServiceJoinedSpacesListener.register();
+    uniffiCallbackInterfaceToDeviceMessageListener.register();
     uniffiCallbackInterfaceDuplicateKeyUploadErrorListener.register();
     uniffiCallbackInterfaceIgnoredUsersListener.register();
+    uniffiCallbackInterfaceInvitePermissionListener.register();
     uniffiCallbackInterfaceMediaPreviewConfigListener.register();
     uniffiCallbackInterfaceBeaconInfoListener.register();
     uniffiCallbackInterfaceProfileListener.register();
@@ -67224,6 +70886,7 @@ export default Object.freeze({
     FfiConverterTypeAllAccountData,
     FfiConverterTypeAllowRule,
     FfiConverterTypeAssetType,
+    FfiConverterTypeAttachmentKind,
     FfiConverterTypeAudioInfo,
     FfiConverterTypeAudioMessageContent,
     FfiConverterTypeAuthData,
@@ -67252,6 +70915,7 @@ export default Object.freeze({
     FfiConverterTypeDateDividerMode,
     FfiConverterTypeDehydratedDeviceError,
     FfiConverterTypeDehydratedDeviceEvent,
+    FfiConverterTypeDelayedEventUpdateAction,
     FfiConverterTypeDetectedSecretsBundle,
     FfiConverterTypeDraftAttachment,
     FfiConverterTypeDuplicateOneTimeKeyErrorMessage,
@@ -67264,6 +70928,7 @@ export default Object.freeze({
     FfiConverterTypeEncryptedMessage,
     FfiConverterTypeEncryption,
     FfiConverterTypeErrorKind,
+    FfiConverterTypeEventEncryptionInfo,
     FfiConverterTypeEventOrTransactionId,
     FfiConverterTypeEventSendState,
     FfiConverterTypeEventTimelineItem,
@@ -67278,6 +70943,7 @@ export default Object.freeze({
     FfiConverterTypeGeneratedQrLoginProgress,
     FfiConverterTypeGrantGeneratedQrLoginProgress,
     FfiConverterTypeGrantLoginWithQrCodeHandler,
+    FfiConverterTypeGrantLoginWithQrCodeTask,
     FfiConverterTypeGrantQrLoginProgress,
     FfiConverterTypeHistoryVisibility,
     FfiConverterTypeHomeserverCapabilities,
@@ -67294,6 +70960,8 @@ export default Object.freeze({
     FfiConverterTypeIncludeThreads,
     FfiConverterTypeIndexedDbStoreBuilder,
     FfiConverterTypeInviteAvatars,
+    FfiConverterTypeInvitePermissionAction,
+    FfiConverterTypeInvitePermissionState,
     FfiConverterTypeJoinRule,
     FfiConverterTypeJsonValue,
     FfiConverterTypeKeyBackupInfo,
@@ -67314,6 +70982,7 @@ export default Object.freeze({
     FfiConverterTypeLocationContent,
     FfiConverterTypeLogLevel,
     FfiConverterTypeLoginWithQrCodeHandler,
+    FfiConverterTypeLoginWithQrCodeTask,
     FfiConverterTypeMatrixEntity,
     FfiConverterTypeMatrixId,
     FfiConverterTypeMediaFileHandle,
@@ -67392,6 +71061,7 @@ export default Object.freeze({
     FfiConverterTypeRelationType,
     FfiConverterTypeRelationsPage,
     FfiConverterTypeRequestConfig,
+    FfiConverterTypeRequestConfigOverride,
     FfiConverterTypeResolvedRoomAlias,
     FfiConverterTypeRoom,
     FfiConverterTypeRoomAccountDataEvent,
@@ -67419,6 +71089,7 @@ export default Object.freeze({
     FfiConverterTypeRoomMembersIterator,
     FfiConverterTypeRoomMessageEventContentWithoutRelation,
     FfiConverterTypeRoomMessageEventMessageType,
+    FfiConverterTypeRoomMessageLikeEvent,
     FfiConverterTypeRoomNotificationMode,
     FfiConverterTypeRoomNotificationSettings,
     FfiConverterTypeRoomPowerLevels,
@@ -67426,22 +71097,29 @@ export default Object.freeze({
     FfiConverterTypeRoomPreset,
     FfiConverterTypeRoomPreview,
     FfiConverterTypeRoomPreviewInfo,
+    FfiConverterTypeRoomRetentionPolicy,
     FfiConverterTypeRoomSendQueueUpdate,
+    FfiConverterTypeRoomStateEvent,
     FfiConverterTypeRoomType,
     FfiConverterTypeRoomVisibility,
     FfiConverterTypeRtcCallIntent,
     FfiConverterTypeRtcCallIntentConsensus,
     FfiConverterTypeRtcNotificationType,
+    FfiConverterTypeRtcTransport,
     FfiConverterTypeRuleKind,
     FfiConverterTypeRuleset,
     FfiConverterTypeSearchUsersResults,
     FfiConverterTypeSecretStorageEncryptionAlgorithm,
+    FfiConverterTypeSecretStorageKey,
     FfiConverterTypeSecretStorageV1AesHmacSha2Properties,
     FfiConverterTypeSecretsBundleWithUserId,
     FfiConverterTypeSendAttachmentJoinHandle,
     FfiConverterTypeSendHandle,
+    FfiConverterTypeSendTarget,
+    FfiConverterTypeSendToDeviceOutcome,
     FfiConverterTypeServerVersions,
     FfiConverterTypeSession,
+    FfiConverterTypeSessionVerificationCancelInfo,
     FfiConverterTypeSessionVerificationController,
     FfiConverterTypeSessionVerificationData,
     FfiConverterTypeSessionVerificationEmoji,
@@ -67493,11 +71171,13 @@ export default Object.freeze({
     FfiConverterTypeTimelineItemContent,
     FfiConverterTypeTimelineUniqueId,
     FfiConverterTypeTimestamp,
+    FfiConverterTypeToDeviceMessage,
     FfiConverterTypeTraceLogPacks,
     FfiConverterTypeTracingConfiguration,
     FfiConverterTypeTracingFileConfiguration,
     FfiConverterTypeTransmissionProgress,
     FfiConverterTypeTweak,
+    FfiConverterTypeUiaaCrossSigningResetInfo,
     FfiConverterTypeUiaaOutcome,
     FfiConverterTypeUnableToDecryptInfo,
     FfiConverterTypeUnreadNotificationsCount,

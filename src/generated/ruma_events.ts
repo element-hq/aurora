@@ -4,9 +4,7 @@
 /* eslint-disable */
 // @ts-nocheck
 import * as wasmBundle from "./wasm-bindgen/index.js";
-import { type UniffiRustFutureContinuationCallback, type UniffiForeignFutureDroppedCallback, type UniffiForeignFutureDroppedCallbackStruct,
-} from "./ruma_events-ffi";
-import { type FfiConverter, type RustBufferAllocator, type UniffiByteArray, type UniffiGcObject, type UniffiHandle, type UniffiObjectFactory, AbstractFfiConverterByteArray, Cursor, FfiConverterBool, FfiConverterObject, FfiConverterUInt64, FfiConverterUInt8, RustBuffer, UniffiAbstractObject, UniffiEnum, UniffiInternalError, UniffiRustCaller, destructorGuardSymbol, pointerLiteralSymbol, uniffiCreateFfiConverterString, uniffiTypeNameSymbol,
+import { type FfiConverter, type RustBufferAllocator, type UniffiByteArray, type UniffiGcObject, type UniffiHandle, type UniffiObjectFactory, AbstractFfiConverterByteArray, Cursor, FfiConverterBool, FfiConverterObject, FfiConverterUInt64, RustBuffer, UniffiAbstractObject, UniffiEnum, UniffiInternalError, UniffiRustCaller, destructorGuardSymbol, pointerLiteralSymbol, uniffiCreateFfiConverterString, uniffiTypeNameSymbol,
 } from "@ubjs/core";
 // wasm1: wrap the wasm-bindgen namespace once so the codegen call sites can
 // uniformly reference `nativeModule().rustbuffer_alloc` / `.rustbuffer_free`.
@@ -14439,25 +14437,25 @@ function uniffiEnsureInitialized() {
     if (bindingsContractVersion !== scaffoldingContractVersion) {
         throw new UniffiInternalError.ContractVersionMismatch(scaffoldingContractVersion, bindingsContractVersion);
     }
-    if (nativeModule().ubrn_uniffi_ruma_events_checksum_func_ephemeral_room_event_type_from_string() !== 49031) {
+    if (nativeModule().ubrn_uniffi_ruma_events_checksum_func_ephemeral_room_event_type_from_string() !== 51810) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_ruma_events_checksum_func_ephemeral_room_event_type_from_string");
     }
-    if (nativeModule().ubrn_uniffi_ruma_events_checksum_func_global_account_data_event_type_from_string() !== 55409) {
+    if (nativeModule().ubrn_uniffi_ruma_events_checksum_func_global_account_data_event_type_from_string() !== 52367) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_ruma_events_checksum_func_global_account_data_event_type_from_string");
     }
-    if (nativeModule().ubrn_uniffi_ruma_events_checksum_func_message_like_event_type_from_string() !== 19374) {
+    if (nativeModule().ubrn_uniffi_ruma_events_checksum_func_message_like_event_type_from_string() !== 24196) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_ruma_events_checksum_func_message_like_event_type_from_string");
     }
-    if (nativeModule().ubrn_uniffi_ruma_events_checksum_func_room_account_data_event_type_from_string() !== 19617) {
+    if (nativeModule().ubrn_uniffi_ruma_events_checksum_func_room_account_data_event_type_from_string() !== 53674) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_ruma_events_checksum_func_room_account_data_event_type_from_string");
     }
-    if (nativeModule().ubrn_uniffi_ruma_events_checksum_func_state_event_type_from_string() !== 7090) {
+    if (nativeModule().ubrn_uniffi_ruma_events_checksum_func_state_event_type_from_string() !== 63281) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_ruma_events_checksum_func_state_event_type_from_string");
     }
-    if (nativeModule().ubrn_uniffi_ruma_events_checksum_func_timeline_event_type_from_string() !== 64429) {
+    if (nativeModule().ubrn_uniffi_ruma_events_checksum_func_timeline_event_type_from_string() !== 30144) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_ruma_events_checksum_func_timeline_event_type_from_string");
     }
-    if (nativeModule().ubrn_uniffi_ruma_events_checksum_func_to_device_event_type_from_string() !== 65088) {
+    if (nativeModule().ubrn_uniffi_ruma_events_checksum_func_to_device_event_type_from_string() !== 26044) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_ruma_events_checksum_func_to_device_event_type_from_string");
     }
 

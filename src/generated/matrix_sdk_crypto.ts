@@ -4,9 +4,7 @@
 /* eslint-disable */
 // @ts-nocheck
 import * as wasmBundle from "./wasm-bindgen/index.js";
-import { type UniffiRustFutureContinuationCallback, type UniffiForeignFutureDroppedCallback, type UniffiForeignFutureDroppedCallbackStruct,
-} from "./matrix_sdk_crypto-ffi";
-import { type FfiConverter, type UniffiByteArray, type UniffiGcObject, type UniffiHandle, type UniffiObjectFactory, AbstractFfiConverterByteArray, Cursor, FfiConverterObject, FfiConverterUInt64, FfiConverterUInt8, RustBuffer, UniffiAbstractObject, UniffiEnum, UniffiError, UniffiInternalError, UniffiRustCaller, destructorGuardSymbol, pointerLiteralSymbol, uniffiCreateFfiConverterString, uniffiCreateRecord, uniffiTypeNameSymbol, variantOrdinalSymbol,
+import { type FfiConverter, type UniffiByteArray, type UniffiGcObject, type UniffiHandle, type UniffiObjectFactory, AbstractFfiConverterByteArray, Cursor, FfiConverterObject, FfiConverterUInt64, RustBuffer, UniffiAbstractObject, UniffiEnum, UniffiError, UniffiInternalError, UniffiRustCaller, destructorGuardSymbol, pointerLiteralSymbol, uniffiCreateFfiConverterString, uniffiCreateRecord, uniffiTypeNameSymbol, variantOrdinalSymbol,
 } from "@ubjs/core";
 // wasm1: wrap the wasm-bindgen namespace once so the codegen call sites can
 // uniformly reference `nativeModule().rustbuffer_alloc` / `.rustbuffer_free`.
@@ -29,8 +27,7 @@ const uniffiIsDebug =
 // Public interface members begin here.
 
 /**
- * The trust level in the sender's device that is required to decrypt an
- * event.
+ * The trust level in the sender's device that is required to decrypt an event.
  */
 export enum TrustRequirement {
     /**
@@ -141,20 +138,19 @@ export enum CollectStrategy {
      */
     AllDevices,
     /**
-     * Share with all devices, except errors for *verified* users cause sharing
+     * Share with all devices, except errors for _verified_ users cause sharing
      * to fail with an error.
      *
-     * In this strategy, if a verified user has an unsigned device,
-     * key sharing will fail with a
-     * [`SessionRecipientCollectionError::VerifiedUserHasUnsignedDevice`].
-     * If a verified user has replaced their identity, key
-     * sharing will fail with a
+     * In this strategy, if a verified user has an unsigned device, key sharing
+     * will fail with a
+     * [`SessionRecipientCollectionError::VerifiedUserHasUnsignedDevice`]. If a
+     * verified user has replaced their identity, key sharing will fail with a
      * [`SessionRecipientCollectionError::VerifiedUserChangedIdentity`].
      *
      * Otherwise, keys are shared with unsigned devices as normal.
      *
-     * Once the problematic devices are blacklisted or whitelisted the
-     * caller can retry to share a second time.
+     * Once the problematic devices are blacklisted or whitelisted the caller
+     * can retry to share a second time.
      *
      * Not recommended, per the guidance of [MSC4153].
      *
@@ -163,8 +159,8 @@ export enum CollectStrategy {
     ErrorOnVerifiedUserProblem,
     /**
      * Share based on identity. Only distribute to devices signed by their
-     * owner. If a user has no published identity he will not receive
-     * any room keys.
+     * owner. If a user has no published identity he will not receive any room
+     * keys.
      *
      * This is the recommended strategy: it is compliant with the guidance of
      * [MSC4153].
@@ -232,15 +228,15 @@ export enum IdentityState {
     Verified,
     /**
      * Either this is the first identity we have seen for this user, or the
-     * user has acknowledged a change of identity explicitly e.g. by
-     * clicking OK on a notification.
+     * user has acknowledged a change of identity explicitly e.g. by clicking
+     * OK on a notification.
      */
     Pinned,
     /**
      * The user's identity has changed since it was pinned. The user should be
-     * notified about this and given the opportunity to acknowledge the
-     * change, which will make the new identity pinned.
-     * When the user acknowledges the change, the app should call
+     * notified about this and given the opportunity to acknowledge the change,
+     * which will make the new identity pinned. When the user acknowledges the
+     * change, the app should call
      * [`crate::OtherUserIdentity::pin_current_master_key`].
      */
     PinViolation,
@@ -426,8 +422,8 @@ export const LoginQrCodeDecodeError = (() => {
         }
     }
     /**
-     * The QR code data contains an invalid intent, we expect the login
-     * intent or the reciprocate intent.
+     * The QR code data contains an invalid intent, we expect the login intent
+     * or the reciprocate intent.
      */
     class InvalidIntent extends UniffiError {
         /**
@@ -608,6 +604,120 @@ const FfiConverterTypeLoginQrCodeDecodeError = (() => {
     return new FfiConverter();
 })();
 
+
+// Flat error type: QrCodeCreationError
+export enum QrCodeCreationError_Tags {
+    TooLongBaseUrl = "TooLongBaseUrl",
+    TooLongRendezvousId = "TooLongRendezvousId"
+}
+/**
+ * Error type for the creation of a new [`QrCodeData`] struct.
+ */
+export const QrCodeCreationError = (() => {
+    /**
+     * The base URL of the homeserver needs to be at most [`u8::MAX`] bytes
+     * long, otherwise it doesn't fit into the QR code.
+     */
+    class TooLongBaseUrl extends UniffiError {
+        /**
+         * @private
+         * This field is private and should not be used.
+         */
+        readonly [uniffiTypeNameSymbol]: string = "QrCodeCreationError";
+        /**
+         * @private
+         * This field is private and should not be used.
+         */
+        readonly [variantOrdinalSymbol] = 1;
+
+        readonly tag = QrCodeCreationError_Tags.TooLongBaseUrl;
+
+        constructor(message: string) {
+            super("QrCodeCreationError", "TooLongBaseUrl", message);
+        }
+
+        static instanceOf(e: any): e is TooLongBaseUrl {
+            return (
+                instanceOf(e) && (e as any)[variantOrdinalSymbol] === 1
+            );
+        }
+    }
+    /**
+     * The rendezvous ID of the channel needs to be at most [`u8::MAX`] bytes
+     * long, otherwise it doesn't fit into the QR code.
+     */
+    class TooLongRendezvousId extends UniffiError {
+        /**
+         * @private
+         * This field is private and should not be used.
+         */
+        readonly [uniffiTypeNameSymbol]: string = "QrCodeCreationError";
+        /**
+         * @private
+         * This field is private and should not be used.
+         */
+        readonly [variantOrdinalSymbol] = 2;
+
+        readonly tag = QrCodeCreationError_Tags.TooLongRendezvousId;
+
+        constructor(message: string) {
+            super("QrCodeCreationError", "TooLongRendezvousId", message);
+        }
+
+        static instanceOf(e: any): e is TooLongRendezvousId {
+            return (
+                instanceOf(e) && (e as any)[variantOrdinalSymbol] === 2
+            );
+        }
+    }
+
+    // Utility function which does not rely on instanceof.
+    function instanceOf(e: any): e is QrCodeCreationError {
+        return (e as any)[uniffiTypeNameSymbol] === "QrCodeCreationError";
+    }
+    return {
+        TooLongBaseUrl,
+        TooLongRendezvousId,
+        instanceOf,
+    };
+})();
+
+// Union type for QrCodeCreationError error type.
+/**
+ * Error type for the creation of a new [`QrCodeData`] struct.
+ */
+export type QrCodeCreationError = InstanceType<
+    typeof QrCodeCreationError['TooLongBaseUrl' | 'TooLongRendezvousId']
+>;
+
+const FfiConverterTypeQrCodeCreationError = (() => {
+    type TypeName = QrCodeCreationError;
+    class FfiConverter extends AbstractFfiConverterByteArray<TypeName> {
+        readFromCursor(c: Cursor): TypeName {
+            switch (c.readI32()) {
+                case 1: return new QrCodeCreationError.TooLongBaseUrl(
+                    FfiConverterString.readFromCursor(c)
+                );
+            
+                case 2: return new QrCodeCreationError.TooLongRendezvousId(
+                    FfiConverterString.readFromCursor(c)
+                );
+            
+                default: throw new UniffiInternalError.UnexpectedEnumCase();
+            }
+        }
+        writeIntoCursor(value: TypeName, c: Cursor): void {
+            const obj = value as any;
+            const index = obj[variantOrdinalSymbol] as number;
+            c.writeI32(index);
+        }
+        allocationSize(value: TypeName): number {
+            return 4;
+        }
+    }
+    return new FfiConverter();
+})();
+
 /**
  * The intent of the device that generated/displayed the QR code.
  *
@@ -742,9 +852,9 @@ export enum UtdCause {
      * signed by its owner, and we were unable to securely find the device.
      *
      * This could be because the device has since been deleted, because we
-     * haven't yet downloaded it from the server, or because the session
-     * data was obtained from an insecure source (imported from a file,
-     * obtained from a legacy (asymmetric) backup, unsafe key forward, etc.)
+     * haven't yet downloaded it from the server, or because the session data
+     * was obtained from an insecure source (imported from a file, obtained
+     * from a legacy (asymmetric) backup, unsafe key forward, etc.)
      */
     UnknownDevice,
     /**
@@ -754,9 +864,8 @@ export enum UtdCause {
      *
      * Device-historical means that the message was sent before the current
      * device existed (but the current user was probably a member of the room
-     * at the time the message was sent). Not to
-     * be confused with pre-join or pre-invite messages (see
-     * [`UtdCause::SentBeforeWeJoined`] for that).
+     * at the time the message was sent). Not to be confused with pre-join or
+     * pre-invite messages (see [`UtdCause::SentBeforeWeJoined`] for that).
      *
      * Expected message to user: "History is not available on this device".
      */
@@ -770,10 +879,10 @@ export enum UtdCause {
     WithheldForUnverifiedOrInsecureDevice,
     /**
      * The keys for this event are missing, likely because the sender was
-     * unable to share them (e.g., failure to establish an Olm 1:1
-     * channel). Alternatively, the sender may have deliberately excluded
-     * this device by cherry-picking and blocking it, in which case, no action
-     * can be taken on our side.
+     * unable to share them (e.g., failure to establish an Olm 1:1 channel).
+     * Alternatively, the sender may have deliberately excluded this device by
+     * cherry-picking and blocking it, in which case, no action can be taken on
+     * our side.
      */
     WithheldBySender,
     /**
@@ -783,13 +892,16 @@ export enum UtdCause {
      *
      * Device-historical means that the message was sent before the current
      * device existed (but the current user was probably a member of the room
-     * at the time the message was sent). Not to
-     * be confused with pre-join or pre-invite messages (see
-     * [`UtdCause::SentBeforeWeJoined`] for that).
+     * at the time the message was sent). Not to be confused with pre-join or
+     * pre-invite messages (see [`UtdCause::SentBeforeWeJoined`] for that).
      *
      * Expected message to user: "You need to verify this device".
      */
-    HistoricalMessageAndDeviceIsUnverified
+    HistoricalMessageAndDeviceIsUnverified,
+    /**
+     * This event is malformed in some way.
+     */
+    Malformed
 }
 
 const FfiConverterTypeUtdCause = (() => {
@@ -806,6 +918,7 @@ const FfiConverterTypeUtdCause = (() => {
                 case 7: return UtdCause.WithheldForUnverifiedOrInsecureDevice;
                 case 8: return UtdCause.WithheldBySender;
                 case 9: return UtdCause.HistoricalMessageAndDeviceIsUnverified;
+                case 10: return UtdCause.Malformed;
                 default: throw new UniffiInternalError.UnexpectedEnumCase();
             }
         }
@@ -820,6 +933,7 @@ const FfiConverterTypeUtdCause = (() => {
                 case UtdCause.WithheldForUnverifiedOrInsecureDevice: return c.writeI32(7);
                 case UtdCause.WithheldBySender: return c.writeI32(8);
                 case UtdCause.HistoricalMessageAndDeviceIsUnverified: return c.writeI32(9);
+                case UtdCause.Malformed: return c.writeI32(10);
             }
         }
         allocationSize(value: TypeName): number {
@@ -1219,6 +1333,7 @@ export default Object.freeze({
     FfiConverterTypeIdentityState,
     FfiConverterTypeLocalTrust,
     FfiConverterTypeLoginQrCodeDecodeError,
+    FfiConverterTypeQrCodeCreationError,
     FfiConverterTypeQrCodeIntent,
     FfiConverterTypeSecretsBundle,
     FfiConverterTypeSignatureState,

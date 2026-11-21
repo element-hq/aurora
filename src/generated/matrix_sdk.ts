@@ -4,9 +4,7 @@
 /* eslint-disable */
 // @ts-nocheck
 import * as wasmBundle from "./wasm-bindgen/index.js";
-import { type UniffiRustFutureContinuationCallback, type UniffiForeignFutureDroppedCallback, type UniffiForeignFutureDroppedCallbackStruct,
-} from "./matrix_sdk-ffi";
-import { type FfiConverter, type UniffiByteArray, type UniffiGcObject, type UniffiHandle, type UniffiObjectFactory, AbstractFfiConverterByteArray, Cursor, FfiConverterBool, FfiConverterFloat64, FfiConverterInt64, FfiConverterObject, FfiConverterOptional, FfiConverterUInt8, RustBuffer, UniffiAbstractObject, UniffiEnum, UniffiError, UniffiInternalError, UniffiRustCaller, destructorGuardSymbol, pointerLiteralSymbol, uniffiCreateFfiConverterString, uniffiCreateRecord, uniffiTypeNameSymbol, variantOrdinalSymbol,
+import { type FfiConverter, type UniffiByteArray, type UniffiGcObject, type UniffiHandle, type UniffiObjectFactory, AbstractFfiConverterByteArray, Cursor, FfiConverterBool, FfiConverterFloat64, FfiConverterInt64, FfiConverterObject, FfiConverterOptional, RustBuffer, UniffiAbstractObject, UniffiEnum, UniffiError, UniffiInternalError, UniffiRustCaller, destructorGuardSymbol, pointerLiteralSymbol, uniffiCreateFfiConverterString, uniffiCreateRecord, uniffiTypeNameSymbol, variantOrdinalSymbol,
 } from "@ubjs/core";
 // wasm1: wrap the wasm-bindgen namespace once so the codegen call sites can
 // uniformly reference `nativeModule().rustbuffer_alloc` / `.rustbuffer_free`.
@@ -30,8 +28,8 @@ const uniffiIsDebug =
 
 /**
  * A set of common power levels required for various operations within a room,
- * that can be applied as a single operation. When updating these
- * settings, any levels that are `None` will remain unchanged.
+ * that can be applied as a single operation. When updating these settings, any
+ * levels that are `None` will remain unchanged.
  */
 export type RoomPowerLevelChanges = {
     /**
@@ -326,8 +324,8 @@ export enum Intent {
      */
     StartCallDmVoice,
     /**
-     * The user wants to join an existing  voice call that is a "Direct
-     * Message" (DM) room.
+     * The user wants to join an existing voice call that is a "Direct Message"
+     * (DM) room.
      */
     JoinExistingDmVoice
 }
@@ -447,18 +445,18 @@ const FfiConverterTypeNotificationType = (() => {
  * Configuration parameters, to create a new virtual Element Call widget.
  *
  * If `intent` is provided the appropriate default values for all other
- * parameters will be used by element call.
- * In most cases its enough to only set the intent. Use the other properties
- * only if you want to deviate from the `intent` defaults.
+ * parameters will be used by element call. In most cases its enough to only
+ * set the intent. Use the other properties only if you want to deviate from
+ * the `intent` defaults.
  *
- * Set [`docs/url-params.md`](https://github.com/element-hq/element-call/blob/livekit/docs/url-params.md)
+ * Set
+ * [`docs/url-params.md`](https://github.com/element-hq/element-call/blob/livekit/docs/url-params.md)
  * to find out more about the parameters and their defaults.
  */
 export type VirtualElementCallWidgetConfig = {
     /**
-     * The intent of showing the call.
-     * If the user wants to start a call or join an existing one.
-     * Controls if the lobby is skipped or not.
+     * The intent of showing the call. If the user wants to start a call or
+     * join an existing one. Controls if the lobby is skipped or not.
      */
     intent?: Intent,
     /**
@@ -479,8 +477,8 @@ export type VirtualElementCallWidgetConfig = {
      */
     hideHeader?: boolean,
     /**
-     * If set, the lobby will be skipped and the widget will join the
-     * call on the `io.element.join` action.
+     * If set, the lobby will be skipped and the widget will join the call on
+     * the `io.element.join` action.
      *
      * Default: `false`
      */
@@ -631,8 +629,7 @@ export const EncryptionSystem = (() => {
         tag: EncryptionSystem_Tags.PerParticipantKeys
     };
     /**
-     * Equivalent to the element call url parameters:
-     * `perParticipantE2EE=true`
+     * Equivalent to the element call url parameters: `perParticipantE2EE=true`
      */
     class PerParticipantKeys_ extends UniffiEnum implements PerParticipantKeys__interface {
         /**
@@ -661,8 +658,7 @@ export const EncryptionSystem = (() => {
 Readonly<{secret: string}>
     };
     /**
-     * Equivalent to the element call url parameters:
-     * `password={secret}`
+     * Equivalent to the element call url parameters: `password={secret}`
      */
     class SharedSecret_ extends UniffiEnum implements SharedSecret__interface {
         /**
@@ -768,9 +764,9 @@ const FfiConverterTypeEncryptionSystem = (() => {
 /**
  * Properties to create a new virtual Element Call widget.
  *
- * All these are required to start the widget in the first place.
- * This is different from the `VirtualElementCallWidgetConfiguration` which
- * configures the widgets behavior.
+ * All these are required to start the widget in the first place. This is
+ * different from the `VirtualElementCallWidgetConfiguration` which configures
+ * the widgets behavior.
  */
 export type VirtualElementCallWidgetProperties = {
     /**
@@ -784,16 +780,16 @@ export type VirtualElementCallWidgetProperties = {
      */
     widgetId: string,
     /**
-     * The url that is used as the target for the PostMessages sent
-     * by the widget (to the client).
+     * The url that is used as the target for the PostMessages sent by the
+     * widget (to the client).
      *
      * For a web app client this is the client url. In case of using other
-     * platforms the client most likely is setup up to listen to
-     * postmessages in the same webview the widget is hosted. In this case
-     * the `parent_url` is set to the url of the webview with the widget. Be
-     * aware that this means that the widget will receive its own postmessage
-     * messages. The `matrix-widget-api` (js) ignores those so this works but
-     * it might break custom implementations.
+     * platforms the client most likely is setup up to listen to postmessages
+     * in the same webview the widget is hosted. In this case the `parent_url`
+     * is set to the url of the webview with the widget. Be aware that this
+     * means that the widget will receive its own postmessage messages. The
+     * `matrix-widget-api` (js) ignores those so this works but it might break
+     * custom implementations.
      *
      * Defaults to `element_call_url` for the non-iframe (dedicated webview)
      * usecase.
@@ -820,18 +816,18 @@ export type VirtualElementCallWidgetProperties = {
      */
     posthogUserId?: string,
     /**
-     * The host of the posthog api.
-     * This is only used by the embedded package of Element Call.
+     * The host of the posthog api. This is only used by the embedded package
+     * of Element Call.
      */
     posthogApiHost?: string,
     /**
-     * The key for the posthog api.
-     * This is only used by the embedded package of Element Call.
+     * The key for the posthog api. This is only used by the embedded package
+     * of Element Call.
      */
     posthogApiKey?: string,
     /**
-     * The url to use for submitting rageshakes.
-     * This is only used by the embedded package of Element Call.
+     * The url to use for submitting rageshakes. This is only used by the
+     * embedded package of Element Call.
      */
     rageshakeSubmitUrl?: string,
     /**
@@ -840,8 +836,9 @@ export type VirtualElementCallWidgetProperties = {
      */
     sentryDsn?: string,
     /**
-     * Sentry [environment](https://docs.sentry.io/concepts/key-terms/key-terms/)
-     * This is only used by the embedded package of Element Call.
+     * Sentry
+     * [environment](https://docs.sentry.io/concepts/key-terms/key-terms/) This
+     * is only used by the embedded package of Element Call.
      */
     sentryEnvironment?: string
 }
@@ -1640,6 +1637,45 @@ const FfiConverterTypeRoomMemberRole = (() => {
 })();
 
 /**
+ * How aggressively a search backfill runs.
+ */
+export enum SearchBackfillStrategy {
+    /**
+     * The app is in the foreground: pause between paginations so this doesn't
+     * compete with interactive traffic.
+     */
+    Foreground,
+    /**
+     * A time-boxed background task (e.g. iOS `BGAppRefreshTask`) where there's
+     * no interactive traffic to protect.
+     */
+    Background
+}
+
+const FfiConverterTypeSearchBackfillStrategy = (() => {
+    type TypeName = SearchBackfillStrategy;
+    class FFIConverter extends AbstractFfiConverterByteArray<TypeName> {
+        readFromCursor(c: Cursor): TypeName {
+            switch (c.readI32()) {
+                case 1: return SearchBackfillStrategy.Foreground;
+                case 2: return SearchBackfillStrategy.Background;
+                default: throw new UniffiInternalError.UnexpectedEnumCase();
+            }
+        }
+        writeIntoCursor(value: TypeName, c: Cursor): void {
+            switch (value) {
+                case SearchBackfillStrategy.Foreground: return c.writeI32(1);
+                case SearchBackfillStrategy.Background: return c.writeI32(2);
+            }
+        }
+        allocationSize(value: TypeName): number {
+            return 4;
+        }
+    }
+    return new FFIConverter();
+})();
+
+/**
  * The data needed to perform authorization using OAuth 2.0.
  */
 export interface OAuthAuthorizationDataLike {
@@ -1812,7 +1848,7 @@ function uniffiEnsureInitialized() {
     if (bindingsContractVersion !== scaffoldingContractVersion) {
         throw new UniffiInternalError.ContractVersionMismatch(scaffoldingContractVersion, bindingsContractVersion);
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_checksum_method_oauthauthorizationdata_login_url() !== 47865) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_checksum_method_oauthauthorizationdata_login_url() !== 7277) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_checksum_method_oauthauthorizationdata_login_url");
     }
 
@@ -1832,6 +1868,7 @@ export default Object.freeze({
     FfiConverterTypeQRCodeLoginError,
     FfiConverterTypeRoomMemberRole,
     FfiConverterTypeRoomPowerLevelChanges,
+    FfiConverterTypeSearchBackfillStrategy,
     FfiConverterTypeServerVendorInfo,
     FfiConverterTypeTileServerInfo,
     FfiConverterTypeVirtualElementCallWidgetConfig,

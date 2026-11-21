@@ -4,9 +4,7 @@
 /* eslint-disable */
 // @ts-nocheck
 import * as wasmBundle from "./wasm-bindgen/index.js";
-import { type UniffiRustFutureContinuationCallback, type UniffiForeignFutureDroppedCallback, type UniffiForeignFutureDroppedCallbackStruct,
-} from "./matrix_sdk_common-ffi";
-import { type UniffiByteArray, AbstractFfiConverterByteArray, Cursor, FfiConverterOptional, FfiConverterUInt8, RustBuffer, UniffiEnum, UniffiInternalError, UniffiRustCaller, uniffiCreateFfiConverterString, uniffiTypeNameSymbol,
+import { type UniffiByteArray, AbstractFfiConverterByteArray, Cursor, FfiConverterOptional, RustBuffer, UniffiEnum, UniffiInternalError, UniffiRustCaller, uniffiCreateFfiConverterString, uniffiTypeNameSymbol,
 } from "@ubjs/core";
 // wasm1: wrap the wasm-bindgen namespace once so the codegen call sites can
 // uniformly reference `nativeModule().rustbuffer_alloc` / `.rustbuffer_free`.

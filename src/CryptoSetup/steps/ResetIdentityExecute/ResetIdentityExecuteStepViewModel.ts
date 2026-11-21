@@ -98,16 +98,9 @@ export class ResetIdentityExecuteStepViewModel
                 return;
             }
 
-            if (authType?.tag === "Uiaa") {
-                // Password-based: Need to get password
-                this.snapshot.merge({ isResetting: false });
-                this.complete({ outcome: "needsPassword", handle });
-                return;
-            }
-
-            // Unknown auth type - try without auth
-            await handle.reset(undefined);
-            this.complete({ outcome: "resetComplete" });
+            // Password-based: Need to get password
+            this.snapshot.merge({ isResetting: false });
+            this.complete({ outcome: "needsPassword", handle });
         } catch (e) {
             printRustError("Failed to reset identity", e);
             this.snapshot.merge({

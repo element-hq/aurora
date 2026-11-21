@@ -6,12 +6,6 @@
 // @ts-nocheck
 
 // Structs and function types for calling back into Typescript from Rust.
-export type UniffiRustFutureContinuationCallback = (data: bigint, pollResult: number) => void;
-export type UniffiForeignFutureDroppedCallback = (handle: bigint) => void;
-export type UniffiForeignFutureDroppedCallbackStruct = {
-  handle: bigint;
-  free: UniffiForeignFutureDroppedCallback;
-};
 type UniffiCallbackInterfaceMatrixSdkFfiAccountDataListenerMethod0 = (uniffiHandle: bigint, event: Uint8Array) => UniffiResult<void>;
 type UniffiCallbackInterfaceCloneMatrixSdkFfiAccountDataListener = (handle: bigint) => UniffiResult<void>;
 type UniffiCallbackInterfaceFreeMatrixSdkFfiAccountDataListener = (handle: bigint) => void;
@@ -96,6 +90,14 @@ export type UniffiVTableCallbackInterfaceMatrixSdkFfiDuplicateKeyUploadErrorList
   uniffi_clone: UniffiCallbackInterfaceCloneMatrixSdkFfiDuplicateKeyUploadErrorListener;
   on_duplicate_key_upload_error: UniffiCallbackInterfaceMatrixSdkFfiDuplicateKeyUploadErrorListenerMethod0;
 };
+type UniffiCallbackInterfaceMatrixSdkFfiEffectiveRetentionListenerMethod0 = (uniffiHandle: bigint, retention: Uint8Array) => UniffiResult<void>;
+type UniffiCallbackInterfaceCloneMatrixSdkFfiEffectiveRetentionListener = (handle: bigint) => UniffiResult<void>;
+type UniffiCallbackInterfaceFreeMatrixSdkFfiEffectiveRetentionListener = (handle: bigint) => void;
+export type UniffiVTableCallbackInterfaceMatrixSdkFfiEffectiveRetentionListener = {
+  uniffi_free: UniffiCallbackInterfaceFreeMatrixSdkFfiEffectiveRetentionListener;
+  uniffi_clone: UniffiCallbackInterfaceCloneMatrixSdkFfiEffectiveRetentionListener;
+  call: UniffiCallbackInterfaceMatrixSdkFfiEffectiveRetentionListenerMethod0;
+};
 type UniffiCallbackInterfaceMatrixSdkFfiEnableRecoveryProgressListenerMethod0 = (uniffiHandle: bigint, status: Uint8Array) => UniffiResult<void>;
 type UniffiCallbackInterfaceCloneMatrixSdkFfiEnableRecoveryProgressListener = (handle: bigint) => UniffiResult<void>;
 type UniffiCallbackInterfaceFreeMatrixSdkFfiEnableRecoveryProgressListener = (handle: bigint) => void;
@@ -143,6 +145,14 @@ export type UniffiVTableCallbackInterfaceMatrixSdkFfiIgnoredUsersListener = {
   uniffi_free: UniffiCallbackInterfaceFreeMatrixSdkFfiIgnoredUsersListener;
   uniffi_clone: UniffiCallbackInterfaceCloneMatrixSdkFfiIgnoredUsersListener;
   call: UniffiCallbackInterfaceMatrixSdkFfiIgnoredUsersListenerMethod0;
+};
+type UniffiCallbackInterfaceMatrixSdkFfiInvitePermissionListenerMethod0 = (uniffiHandle: bigint, invitePermission: Uint8Array) => UniffiResult<void>;
+type UniffiCallbackInterfaceCloneMatrixSdkFfiInvitePermissionListener = (handle: bigint) => UniffiResult<void>;
+type UniffiCallbackInterfaceFreeMatrixSdkFfiInvitePermissionListener = (handle: bigint) => void;
+export type UniffiVTableCallbackInterfaceMatrixSdkFfiInvitePermissionListener = {
+  uniffi_free: UniffiCallbackInterfaceFreeMatrixSdkFfiInvitePermissionListener;
+  uniffi_clone: UniffiCallbackInterfaceCloneMatrixSdkFfiInvitePermissionListener;
+  on_change: UniffiCallbackInterfaceMatrixSdkFfiInvitePermissionListenerMethod0;
 };
 type UniffiCallbackInterfaceMatrixSdkFfiKnockRequestsListenerMethod0 = (uniffiHandle: bigint, joinRequests: Uint8Array) => UniffiResult<void>;
 type UniffiCallbackInterfaceCloneMatrixSdkFfiKnockRequestsListener = (handle: bigint) => UniffiResult<void>;
@@ -288,6 +298,22 @@ export type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomListServiceSyncIndicato
   uniffi_clone: UniffiCallbackInterfaceCloneMatrixSdkFfiRoomListServiceSyncIndicatorListener;
   on_update: UniffiCallbackInterfaceMatrixSdkFfiRoomListServiceSyncIndicatorListenerMethod0;
 };
+type UniffiCallbackInterfaceMatrixSdkFfiRoomMessageLikeEventsListenerMethod0 = (uniffiHandle: bigint, event: Uint8Array) => UniffiResult<void>;
+type UniffiCallbackInterfaceCloneMatrixSdkFfiRoomMessageLikeEventsListener = (handle: bigint) => UniffiResult<void>;
+type UniffiCallbackInterfaceFreeMatrixSdkFfiRoomMessageLikeEventsListener = (handle: bigint) => void;
+export type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomMessageLikeEventsListener = {
+  uniffi_free: UniffiCallbackInterfaceFreeMatrixSdkFfiRoomMessageLikeEventsListener;
+  uniffi_clone: UniffiCallbackInterfaceCloneMatrixSdkFfiRoomMessageLikeEventsListener;
+  on_event: UniffiCallbackInterfaceMatrixSdkFfiRoomMessageLikeEventsListenerMethod0;
+};
+type UniffiCallbackInterfaceMatrixSdkFfiRoomStateEventsListenerMethod0 = (uniffiHandle: bigint, events: Uint8Array) => UniffiResult<void>;
+type UniffiCallbackInterfaceCloneMatrixSdkFfiRoomStateEventsListener = (handle: bigint) => UniffiResult<void>;
+type UniffiCallbackInterfaceFreeMatrixSdkFfiRoomStateEventsListener = (handle: bigint) => void;
+export type UniffiVTableCallbackInterfaceMatrixSdkFfiRoomStateEventsListener = {
+  uniffi_free: UniffiCallbackInterfaceFreeMatrixSdkFfiRoomStateEventsListener;
+  uniffi_clone: UniffiCallbackInterfaceCloneMatrixSdkFfiRoomStateEventsListener;
+  on_update: UniffiCallbackInterfaceMatrixSdkFfiRoomStateEventsListenerMethod0;
+};
 type UniffiCallbackInterfaceMatrixSdkFfiSendQueueListenerMethod0 = (uniffiHandle: bigint, update: Uint8Array) => UniffiResult<void>;
 type UniffiCallbackInterfaceCloneMatrixSdkFfiSendQueueListener = (handle: bigint) => UniffiResult<void>;
 type UniffiCallbackInterfaceFreeMatrixSdkFfiSendQueueListener = (handle: bigint) => void;
@@ -420,6 +446,22 @@ export type UniffiVTableCallbackInterfaceMatrixSdkFfiTimelineListener = {
   uniffi_clone: UniffiCallbackInterfaceCloneMatrixSdkFfiTimelineListener;
   on_update: UniffiCallbackInterfaceMatrixSdkFfiTimelineListenerMethod0;
 };
+type UniffiCallbackInterfaceMatrixSdkFfiToDeviceMessageListenerMethod0 = (uniffiHandle: bigint, message: Uint8Array) => UniffiResult<void>;
+type UniffiCallbackInterfaceCloneMatrixSdkFfiToDeviceMessageListener = (handle: bigint) => UniffiResult<void>;
+type UniffiCallbackInterfaceFreeMatrixSdkFfiToDeviceMessageListener = (handle: bigint) => void;
+export type UniffiVTableCallbackInterfaceMatrixSdkFfiToDeviceMessageListener = {
+  uniffi_free: UniffiCallbackInterfaceFreeMatrixSdkFfiToDeviceMessageListener;
+  uniffi_clone: UniffiCallbackInterfaceCloneMatrixSdkFfiToDeviceMessageListener;
+  on_message: UniffiCallbackInterfaceMatrixSdkFfiToDeviceMessageListenerMethod0;
+};
+type UniffiCallbackInterfaceMatrixSdkFfiTotalUnreadNotificationsListenerMethod0 = (uniffiHandle: bigint, count: bigint) => UniffiResult<void>;
+type UniffiCallbackInterfaceCloneMatrixSdkFfiTotalUnreadNotificationsListener = (handle: bigint) => UniffiResult<void>;
+type UniffiCallbackInterfaceFreeMatrixSdkFfiTotalUnreadNotificationsListener = (handle: bigint) => void;
+export type UniffiVTableCallbackInterfaceMatrixSdkFfiTotalUnreadNotificationsListener = {
+  uniffi_free: UniffiCallbackInterfaceFreeMatrixSdkFfiTotalUnreadNotificationsListener;
+  uniffi_clone: UniffiCallbackInterfaceCloneMatrixSdkFfiTotalUnreadNotificationsListener;
+  on_update: UniffiCallbackInterfaceMatrixSdkFfiTotalUnreadNotificationsListenerMethod0;
+};
 type UniffiCallbackInterfaceMatrixSdkFfiTypingNotificationsListenerMethod0 = (uniffiHandle: bigint, typingUserIds: Uint8Array) => UniffiResult<void>;
 type UniffiCallbackInterfaceCloneMatrixSdkFfiTypingNotificationsListener = (handle: bigint) => UniffiResult<void>;
 type UniffiCallbackInterfaceFreeMatrixSdkFfiTypingNotificationsListener = (handle: bigint) => void;
@@ -449,6 +491,11 @@ export type UniffiForeignFutureResultRustBuffer = {
   call_status: UniffiRustCallStatus;
 };
 export type UniffiForeignFutureCompleterustBuffer = (callbackData: bigint, result: UniffiForeignFutureResultRustBuffer) => void;
+export type UniffiForeignFutureDroppedCallback = (handle: bigint) => void;
+export type UniffiForeignFutureDroppedCallbackStruct = {
+  handle: bigint;
+  free: UniffiForeignFutureDroppedCallback;
+};
 type UniffiCallbackInterfaceMatrixSdkFfiWidgetCapabilitiesProviderMethod0 = (uniffiHandle: bigint, capabilities: Uint8Array, uniffiFutureCallback: UniffiForeignFutureCompleterustBuffer, uniffiCallbackData: bigint) => UniffiForeignFutureDroppedCallbackStruct;
 type UniffiCallbackInterfaceCloneMatrixSdkFfiWidgetCapabilitiesProvider = (handle: bigint) => UniffiResult<void>;
 type UniffiCallbackInterfaceFreeMatrixSdkFfiWidgetCapabilitiesProvider = (handle: bigint) => void;
@@ -457,3 +504,4 @@ export type UniffiVTableCallbackInterfaceMatrixSdkFfiWidgetCapabilitiesProvider 
   uniffi_clone: UniffiCallbackInterfaceCloneMatrixSdkFfiWidgetCapabilitiesProvider;
   acquire_capabilities: UniffiCallbackInterfaceMatrixSdkFfiWidgetCapabilitiesProviderMethod0;
 };
+export type UniffiRustFutureContinuationCallback = (data: bigint, pollResult: number) => void;

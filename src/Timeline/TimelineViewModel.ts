@@ -368,7 +368,7 @@ export class TimelineViewModel
                 }
             }
             if (TimelineItemContent.MsgLike.instanceOf(event.content)) {
-                for (const reaction of event.content.inner.content.reactions) {
+                for (const reaction of event.reactions) {
                     for (const { senderId } of reaction.senders) {
                         unknown.add(senderId);
                     }

@@ -4,9 +4,7 @@
 /* eslint-disable */
 // @ts-nocheck
 import * as wasmBundle from "./wasm-bindgen/index.js";
-import { type UniffiRustFutureContinuationCallback, type UniffiForeignFutureDroppedCallback, type UniffiForeignFutureDroppedCallbackStruct,
-} from "./matrix_sdk_base-ffi";
-import { type UniffiByteArray, type UniffiDuration, AbstractFfiConverterByteArray, Cursor, FfiConverterDuration, FfiConverterOptional, FfiConverterUInt64, FfiConverterUInt8, RustBuffer, UniffiEnum, UniffiInternalError, UniffiRustCaller, uniffiCreateFfiConverterString, uniffiCreateRecord,
+import { type UniffiByteArray, type UniffiDuration, AbstractFfiConverterByteArray, Cursor, FfiConverterDuration, FfiConverterOptional, FfiConverterUInt64, RustBuffer, UniffiEnum, UniffiInternalError, UniffiRustCaller, uniffiCreateFfiConverterString, uniffiCreateRecord,
 } from "@ubjs/core";
 // wasm1: wrap the wasm-bindgen namespace once so the codegen call sites can
 // uniformly reference `nativeModule().rustbuffer_alloc` / `.rustbuffer_free`.
@@ -63,15 +61,14 @@ export type MediaRetentionPolicy = {
      *
      * If it is set, media content bigger than the maximum size will not be
      * cached. If the maximum size changed after media content that exceeds the
-     * new value was cached, the corresponding content will be removed
-     * during a cleanup.
+     * new value was cached, the corresponding content will be removed during a
+     * cleanup.
      *
      * Defaults to 20 MiB.
      */
     maxFileSize?: bigint,
     /**
-     * The duration after which unaccessed media content is considered
-     * expired.
+     * The duration after which unaccessed media content is considered expired.
      *
      * If this is set, media content whose last access is older than this
      * duration will be removed from the media cache during a cleanup.
@@ -82,8 +79,8 @@ export type MediaRetentionPolicy = {
     /**
      * The duration between two automatic media cache cleanups.
      *
-     * If this is set, a cleanup will be triggered after the given duration
-     * is elapsed, at the next call to the media cache API. If this is set to
+     * If this is set, a cleanup will be triggered after the given duration is
+     * elapsed, at the next call to the media cache API. If this is set to
      * zero, each call to the media cache API will trigger a cleanup. If this
      * is `None`, cleanups will only occur if they are triggered manually.
      *

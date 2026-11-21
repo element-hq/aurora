@@ -4,11 +4,9 @@
 /* eslint-disable */
 // @ts-nocheck
 import * as wasmBundle from "./wasm-bindgen/index.js";
-import { type UniffiRustFutureContinuationCallback, type UniffiForeignFutureDroppedCallback, type UniffiForeignFutureDroppedCallbackStruct,
-} from "./matrix_sdk_ui-ffi";
 import { TimelineEventType,
 } from "./ruma_events";
-import { type UniffiByteArray, AbstractFfiConverterByteArray, Cursor, FfiConverterArray, FfiConverterBool, FfiConverterUInt8, RustBuffer, UniffiEnum, UniffiInternalError, UniffiRustCaller, uniffiCreateFfiConverterString, uniffiTypeNameSymbol,
+import { type UniffiByteArray, AbstractFfiConverterByteArray, Cursor, FfiConverterArray, FfiConverterBool, RustBuffer, UniffiEnum, UniffiInternalError, UniffiRustCaller, uniffiCreateFfiConverterString, uniffiTypeNameSymbol,
 } from "@ubjs/core";
 import uniffiRumaEventsModule from "./ruma_events";
 const { FfiConverterTypeTimelineEventType } = uniffiRumaEventsModule.converters;
@@ -183,8 +181,8 @@ const FfiConverterTypeMembershipChangeFilter = (() => {
  * different for this high-level UI API.
  *
  * This is implemented this way so that it's impossible to filter by “group”
- * and by “people” at the same time: these criteria are mutually
- * exclusive by design per filter.
+ * and by “people” at the same time: these criteria are mutually exclusive by
+ * design per filter.
  */
 export enum RoomListFilterCategory {
     Group,
@@ -661,8 +659,8 @@ Readonly<
         tag: TimelineEventCondition_Tags.ProfileChange
     };
     /**
-     * The event is an `m.room.member` event that represents a profile
-     * change (displayname or avatar URL).
+     * The event is an `m.room.member` event that represents a profile change
+     * (displayname or avatar URL).
      */
     class ProfileChange_ extends UniffiEnum implements ProfileChange__interface {
         /**
@@ -997,8 +995,8 @@ export enum TimelineEventFocusThreadMode_Tags {
     Automatic = "Automatic"
 }
 /**
- * Options for controlling the behaviour of [`TimelineFocus::Event`]
- * for threaded events.
+ * Options for controlling the behaviour of [`TimelineFocus::Event`] for
+ * threaded events.
  */
 export const TimelineEventFocusThreadMode = (() => {
 
@@ -1010,8 +1008,7 @@ export const TimelineEventFocusThreadMode = (() => {
      *
      * When the focused event is part of a thread, the timeline will be focused
      * on that thread's root. Otherwise, the timeline will treat the target
-     * event itself as the thread root. Threaded events will never be
-     * hidden.
+     * event itself as the thread root. Threaded events will never be hidden.
      */
     class ForceThread_ extends UniffiEnum implements ForceThread__interface {
         /**
@@ -1042,8 +1039,8 @@ Readonly<{hideThreadedEvents: boolean}>
     /**
      * Automatically determine if the target event is part of a thread or not.
      *
-     * If the event is part of a thread, the timeline
-     * will be filtered to on-thread events.
+     * If the event is part of a thread, the timeline will be filtered to
+     * on-thread events.
      */
     class Automatic_ extends UniffiEnum implements Automatic__interface {
         /**
@@ -1083,8 +1080,8 @@ inner: {hideThreadedEvents: boolean }): Automatic_ {
 
 })();
 /**
- * Options for controlling the behaviour of [`TimelineFocus::Event`]
- * for threaded events.
+ * Options for controlling the behaviour of [`TimelineFocus::Event`] for
+ * threaded events.
  */
 export type TimelineEventFocusThreadMode = InstanceType<
     typeof TimelineEventFocusThreadMode['ForceThread' | 'Automatic']

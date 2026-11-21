@@ -41,7 +41,7 @@ function createBaseClientBuilder(
     // Add sliding sync configuration
     if (options.slidingSync === "discover") {
         builder = builder.slidingSyncVersionBuilder(
-            SlidingSyncVersionBuilder.DiscoverNative,
+            SlidingSyncVersionBuilder.Discover,
         );
     }
     // Note: for "restored", we don't add slidingSyncVersionBuilder
@@ -134,10 +134,14 @@ export async function restoreClient(
 ): Promise<ClientInterface> {
     console.log("[restoreClient] Starting restoration");
 
-    // Explicitly set the sliding sync version to .native when restoring
+    // Sessions saved before the SDK told stable and unstable sliding sync apart
+    // have no usable version: those were all on the unstable (MSC4186) one
     const sessionWithSlidingSync = {
         ...session,
-        slidingSyncVersion: SlidingSyncVersion.Native,
+        slidingSyncVersion:
+            session.slidingSyncVersion === SlidingSyncVersion.Stable
+                ? SlidingSyncVersion.Stable
+                : SlidingSyncVersion.Unstable,
     };
 
     // Use the same store name that was created during authentication
@@ -167,7 +171,7 @@ export async function restoreClient(
  */
 export function validateNativeSlidingSync(client: ClientInterface): void {
     const version = client.slidingSyncVersion();
-    if (version !== SlidingSyncVersion.Native) {
+    if (version === SlidingSyncVersion.None) {
         throw new Error(
             "This homeserver does not support native sliding sync. Please contact your homeserver administrator.",
         );

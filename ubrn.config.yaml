@@ -1,6 +1,6 @@
 rust:
   repo: https://github.com/matrix-org/matrix-rust-sdk
-  ref: b994f47f1cb5d52b37a15728cbc5ff40286ad5aa
+  ref: f4a94ad6141846f9ddaa8be5117260d1311196b9
   manifestPath: bindings/matrix-sdk-ffi/Cargo.toml
 web:
   workspace: true
