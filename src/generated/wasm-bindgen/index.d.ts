@@ -6682,7 +6682,7 @@ export interface InitOutput {
     readonly ubrn_uniffi_ruma_events_checksum_func_ephemeral_room_event_type_from_string: () => number;
     readonly ubrn_uniffi_ruma_events_checksum_func_global_account_data_event_type_from_string: () => number;
     readonly ubrn_uniffi_ruma_events_checksum_func_message_like_event_type_from_string: () => number;
-    readonly ffi_matrix_sdk_contentscanner_uniffi_contract_version: () => number;
+    readonly ffi_matrix_sdk_ui_uniffi_contract_version: () => number;
     readonly ubrn_uniffi_ruma_events_checksum_func_room_account_data_event_type_from_string: () => number;
     readonly ubrn_uniffi_ruma_events_checksum_func_state_event_type_from_string: () => number;
     readonly ubrn_uniffi_ruma_events_checksum_func_timeline_event_type_from_string: () => number;
@@ -6690,7 +6690,7 @@ export interface InitOutput {
     readonly ubrn_uniffi_ruma_events_fn_clone_privatestring: (a: bigint, b: number) => bigint;
     readonly ubrn_uniffi_ruma_events_fn_free_privatestring: (a: bigint, b: number) => void;
     readonly ubrn_uniffi_ruma_events_fn_func_ephemeral_room_event_type_from_string: (a: number, b: number, c: number) => [number, number];
-    readonly ffi_matrix_sdk_common_uniffi_contract_version: () => number;
+    readonly ffi_matrix_sdk_contentscanner_uniffi_contract_version: () => number;
     readonly ubrn_uniffi_ruma_events_fn_func_global_account_data_event_type_from_string: (a: number, b: number, c: number) => [number, number];
     readonly ubrn_uniffi_ruma_events_fn_func_message_like_event_type_from_string: (a: number, b: number, c: number) => [number, number];
     readonly ubrn_uniffi_ruma_events_fn_func_room_account_data_event_type_from_string: (a: number, b: number, c: number) => [number, number];
@@ -6700,7 +6700,7 @@ export interface InitOutput {
     readonly ubrn_uniffi_ruma_events_fn_method_ephemeralroomeventtype_uniffi_trait_display: (a: number, b: number, c: number) => [number, number];
     readonly ubrn_uniffi_ruma_events_fn_method_ephemeralroomeventtype_uniffi_trait_eq_eq: (a: number, b: number, c: number, d: number, e: number) => number;
     readonly ubrn_uniffi_ruma_events_fn_method_ephemeralroomeventtype_uniffi_trait_eq_ne: (a: number, b: number, c: number, d: number, e: number) => number;
-    readonly ffi_matrix_sdk_ui_uniffi_contract_version: () => number;
+    readonly ffi_matrix_sdk_common_uniffi_contract_version: () => number;
     readonly ubrn_uniffi_ruma_events_fn_method_ephemeralroomeventtype_uniffi_trait_hash: (a: number, b: number, c: number) => bigint;
     readonly ffi_matrix_sdk_base_uniffi_contract_version: () => number;
     readonly ubrn_uniffi_ruma_events_fn_method_globalaccountdataeventtype_uniffi_trait_display: (a: number, b: number, c: number) => [number, number];

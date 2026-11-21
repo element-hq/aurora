@@ -3264,7 +3264,7 @@ export const ubrn_uniffi_matrix_sdk_fn_method_oauthauthorizationdata_login_url: 
 export const ubrn_uniffi_ruma_events_checksum_func_ephemeral_room_event_type_from_string: () => number;
 export const ubrn_uniffi_ruma_events_checksum_func_global_account_data_event_type_from_string: () => number;
 export const ubrn_uniffi_ruma_events_checksum_func_message_like_event_type_from_string: () => number;
-export const ffi_matrix_sdk_contentscanner_uniffi_contract_version: () => number;
+export const ffi_matrix_sdk_ui_uniffi_contract_version: () => number;
 export const ubrn_uniffi_ruma_events_checksum_func_room_account_data_event_type_from_string: () => number;
 export const ubrn_uniffi_ruma_events_checksum_func_state_event_type_from_string: () => number;
 export const ubrn_uniffi_ruma_events_checksum_func_timeline_event_type_from_string: () => number;
@@ -3272,7 +3272,7 @@ export const ubrn_uniffi_ruma_events_checksum_func_to_device_event_type_from_str
 export const ubrn_uniffi_ruma_events_fn_clone_privatestring: (a: bigint, b: number) => bigint;
 export const ubrn_uniffi_ruma_events_fn_free_privatestring: (a: bigint, b: number) => void;
 export const ubrn_uniffi_ruma_events_fn_func_ephemeral_room_event_type_from_string: (a: number, b: number, c: number) => [number, number];
-export const ffi_matrix_sdk_common_uniffi_contract_version: () => number;
+export const ffi_matrix_sdk_contentscanner_uniffi_contract_version: () => number;
 export const ubrn_uniffi_ruma_events_fn_func_global_account_data_event_type_from_string: (a: number, b: number, c: number) => [number, number];
 export const ubrn_uniffi_ruma_events_fn_func_message_like_event_type_from_string: (a: number, b: number, c: number) => [number, number];
 export const ubrn_uniffi_ruma_events_fn_func_room_account_data_event_type_from_string: (a: number, b: number, c: number) => [number, number];
@@ -3282,7 +3282,7 @@ export const ubrn_uniffi_ruma_events_fn_func_to_device_event_type_from_string: (
 export const ubrn_uniffi_ruma_events_fn_method_ephemeralroomeventtype_uniffi_trait_display: (a: number, b: number, c: number) => [number, number];
 export const ubrn_uniffi_ruma_events_fn_method_ephemeralroomeventtype_uniffi_trait_eq_eq: (a: number, b: number, c: number, d: number, e: number) => number;
 export const ubrn_uniffi_ruma_events_fn_method_ephemeralroomeventtype_uniffi_trait_eq_ne: (a: number, b: number, c: number, d: number, e: number) => number;
-export const ffi_matrix_sdk_ui_uniffi_contract_version: () => number;
+export const ffi_matrix_sdk_common_uniffi_contract_version: () => number;
 export const ubrn_uniffi_ruma_events_fn_method_ephemeralroomeventtype_uniffi_trait_hash: (a: number, b: number, c: number) => bigint;
 export const ffi_matrix_sdk_base_uniffi_contract_version: () => number;
 export const ubrn_uniffi_ruma_events_fn_method_globalaccountdataeventtype_uniffi_trait_display: (a: number, b: number, c: number) => [number, number];
