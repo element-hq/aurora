@@ -34,7 +34,7 @@ index 474d3d310..ba58ff7a2 100644
      pub fn supports_password_login(&self) -> bool {
          self.supports_password_login
 diff --git a/bindings/matrix-sdk-ffi/src/client.rs b/bindings/matrix-sdk-ffi/src/client.rs
-index 67d875724..cf8d4d627 100644
+index 67d875724..20a0aa055 100644
 --- a/bindings/matrix-sdk-ffi/src/client.rs
 +++ b/bindings/matrix-sdk-ffi/src/client.rs
 @@ -571,6 +571,21 @@ impl Client {
@@ -67,7 +67,7 @@ index 67d875724..cf8d4d627 100644
              supports_password_login,
          })
      }
-@@ -3732,3 +3748,348 @@ mod tests {
+@@ -3732,3 +3748,693 @@ mod tests {
          assert!(converted.call.is_none());
      }
  }
@@ -416,11 +416,356 @@ index 67d875724..cf8d4d627 100644
 +        })
 +    }
 +}
++
++/// How a request which the homeserver may want interactive authentication for
++/// came out.
++#[derive(uniffi::Enum)]
++pub enum UiaaOutcome {
++    /// It was done.
++    Done,
++    /// The homeserver wants (more) authentication first. This is the JSON of
++    /// what it answered: the flows it accepts, their parameters, the session
++    /// to carry on with, the stages completed so far and, if the last attempt
++    /// at a stage failed, the error.
++    AuthRequired { uiaa_json: String },
++}
++
++/// Authentication data for a stage of interactive authentication, from its
++/// JSON.
++fn parse_auth_data(
++    auth_json: Option<String>,
++) -> Result<Option<ruma::api::client::uiaa::AuthData>, ClientError> {
++    Ok(auth_json.map(|json| serde_json::from_str(&json)).transpose()?)
++}
++
++/// The outcome of a request that failed, if it failed for want of
++/// authentication.
++fn auth_required(info: Option<&ruma::api::client::uiaa::UiaaInfo>) -> Option<UiaaOutcome> {
++    let uiaa_json = serde_json::to_string(info?).ok()?;
++    Some(UiaaOutcome::AuthRequired { uiaa_json })
++}
++
++/// What a token is requested by email for.
++#[derive(uniffi::Enum)]
++pub enum EmailTokenPurpose {
++    Registration,
++    PasswordReset,
++    AddThreepid,
++}
++
++/// A validation session for a phone number.
++#[derive(uniffi::Record)]
++pub struct MsisdnTokenSession {
++    pub sid: String,
++    /// Where to submit the token the user receives, if not to the identity
++    /// server.
++    pub submit_url: Option<String>,
++}
++
++fn rule_kind(kind: String) -> ruma::push::RuleKind {
++    ruma::push::RuleKind::from(kind)
++}
++
++#[matrix_sdk_ffi_macros::export]
++impl Client {
++    /// Registers an account with a password, signing this client in to it
++    /// unless that is inhibited. Call it again with authentication data for
++    /// each stage the homeserver asks for.
++    pub async fn register(
++        &self,
++        username: Option<String>,
++        password: Option<String>,
++        initial_device_name: Option<String>,
++        auth_json: Option<String>,
++        inhibit_login: bool,
++    ) -> Result<UiaaOutcome, ClientError> {
++        let mut request = ruma::api::client::account::register::v3::Request::new();
++        request.username = username;
++        request.password = password;
++        request.initial_device_display_name = initial_device_name;
++        request.auth = parse_auth_data(auth_json)?;
++        request.inhibit_login = inhibit_login;
++        match self.inner.matrix_auth().register(request).await {
++            Ok(_) => Ok(UiaaOutcome::Done),
++            Err(error) => auth_required(error.as_uiaa_response()).ok_or_else(|| error.into()),
++        }
++    }
++
++    /// Whether a username is free to register and allowed by the homeserver.
++    pub async fn is_username_available(&self, username: String) -> Result<bool, ClientError> {
++        let request =
++            ruma::api::client::account::get_username_availability::v3::Request::new(username);
++        Ok(self.inner.send(request).await?.available)
++    }
++
++    /// Has the homeserver email a validation token to an address, for
++    /// registering with it, resetting the password of its account, or adding
++    /// it to this account. Returns the ID of the validation session.
++    pub async fn request_email_token(
++        &self,
++        purpose: EmailTokenPurpose,
++        client_secret: String,
++        email: String,
++        send_attempt: u32,
++        next_link: Option<String>,
++    ) -> Result<String, ClientError> {
++        use ruma::api::client::account::{
++            request_3pid_management_token_via_email, request_password_change_token_via_email,
++            request_registration_token_via_email,
++        };
++
++        let secret = ruma::OwnedClientSecret::try_from(client_secret)?;
++        let attempt = send_attempt.into();
++        let sid = match purpose {
++            EmailTokenPurpose::Registration => {
++                let mut request = request_registration_token_via_email::v3::Request::new(
++                    secret, email, attempt,
++                );
++                request.next_link = next_link;
++                self.inner.send(request).await?.sid
++            }
++            EmailTokenPurpose::PasswordReset => {
++                let mut request = request_password_change_token_via_email::v3::Request::new(
++                    secret, email, attempt,
++                );
++                request.next_link = next_link;
++                self.inner.send(request).await?.sid
++            }
++            EmailTokenPurpose::AddThreepid => {
++                let mut request = request_3pid_management_token_via_email::v3::Request::new(
++                    secret, email, attempt,
++                );
++                request.next_link = next_link;
++                self.inner.send(request).await?.sid
++            }
++        };
++        Ok(sid.to_string())
++    }
++
++    /// Has the homeserver text a validation token to a phone number, for
++    /// adding it to this account.
++    pub async fn request_msisdn_token(
++        &self,
++        client_secret: String,
++        country: String,
++        phone_number: String,
++        send_attempt: u32,
++    ) -> Result<MsisdnTokenSession, ClientError> {
++        let secret = ruma::OwnedClientSecret::try_from(client_secret)?;
++        let response = self
++            .inner
++            .account()
++            .request_3pid_msisdn_token(&secret, &country, &phone_number, send_attempt.into())
++            .await?;
++        Ok(MsisdnTokenSession { sid: response.sid.to_string(), submit_url: response.submit_url })
++    }
++
++    /// Adds a validated email address or phone number to the account.
++    pub async fn add_threepid(
++        &self,
++        client_secret: String,
++        sid: String,
++        auth_json: Option<String>,
++    ) -> Result<UiaaOutcome, ClientError> {
++        let secret = ruma::OwnedClientSecret::try_from(client_secret)?;
++        let sid = ruma::OwnedSessionId::try_from(sid)?;
++        let auth = parse_auth_data(auth_json)?;
++        match self.inner.account().add_3pid(&secret, &sid, auth).await {
++            Ok(_) => Ok(UiaaOutcome::Done),
++            Err(error) => auth_required(error.as_uiaa_response()).ok_or_else(|| error.into()),
++        }
++    }
++
++    /// Removes an email address (medium `email`) or phone number (`msisdn`)
++    /// from the account.
++    pub async fn delete_threepid(&self, medium: String, address: String) -> Result<(), ClientError> {
++        self.inner.account().delete_3pid(&address, medium.into(), None).await?;
++        Ok(())
++    }
++
++    /// Changes the password of an account: this one's, or that of whoever the
++    /// authentication data identifies (by a validated email address, to reset
++    /// a forgotten password).
++    pub async fn change_password_with_auth(
++        &self,
++        new_password: String,
++        auth_json: Option<String>,
++        logout_devices: bool,
++    ) -> Result<UiaaOutcome, ClientError> {
++        let mut request =
++            ruma::api::client::account::change_password::v3::Request::new(new_password);
++        request.auth = parse_auth_data(auth_json)?;
++        request.logout_devices = logout_devices;
++        match self.inner.send(request).await {
++            Ok(_) => Ok(UiaaOutcome::Done),
++            Err(error) => auth_required(error.as_uiaa_response()).ok_or_else(|| error.into()),
++        }
++    }
++
++    /// Deletes some of the user's devices, with whatever authentication the
++    /// homeserver wants for it.
++    pub async fn delete_devices_with_auth(
++        &self,
++        device_ids: Vec<String>,
++        auth_json: Option<String>,
++    ) -> Result<UiaaOutcome, ClientError> {
++        let devices: Vec<OwnedDeviceId> = device_ids.into_iter().map(Into::into).collect();
++        match self.inner.delete_devices(&devices, parse_auth_data(auth_json)?).await {
++            Ok(_) => Ok(UiaaOutcome::Done),
++            Err(error) => auth_required(error.as_uiaa_response()).ok_or_else(|| error.into()),
++        }
++    }
++
++    /// Deactivates the account, with whatever authentication the homeserver
++    /// wants for it.
++    pub async fn deactivate_account_with_auth(
++        &self,
++        auth_json: Option<String>,
++        erase_data: bool,
++    ) -> Result<UiaaOutcome, ClientError> {
++        let auth = parse_auth_data(auth_json)?;
++        match self.inner.account().deactivate(None, auth, erase_data).await {
++            Ok(_) => Ok(UiaaOutcome::Done),
++            Err(error) => auth_required(error.as_uiaa_response()).ok_or_else(|| error.into()),
++        }
++    }
++
++    /// Searches the messages the homeserver can read (so not encrypted ones).
++    ///
++    /// Takes the JSON of the `search_categories` to search in, and the batch
++    /// to carry on from; returns the JSON of the `search_categories` found.
++    pub async fn search_json(
++        &self,
++        search_categories_json: String,
++        next_batch: Option<String>,
++    ) -> Result<String, ClientError> {
++        let categories = serde_json::from_str(&search_categories_json)?;
++        let mut request = ruma::api::client::search::search_events::v3::Request::new(categories);
++        request.next_batch = next_batch;
++        Ok(serde_json::to_string(&self.inner.send(request).await?.search_categories)?)
++    }
++
++    /// Asks the homeserver for the events the user has been notified of, as
++    /// the JSON of a `/notifications` response.
++    pub async fn notifications_json(
++        &self,
++        from: Option<String>,
++        limit: Option<u32>,
++        only: Option<String>,
++    ) -> Result<String, ClientError> {
++        let mut request = ruma::api::client::push::get_notifications::v3::Request::new();
++        request.from = from;
++        request.limit = limit.map(Into::into);
++        request.only = only;
++        let response = self.inner.send(request).await?;
++        Ok(json!({ "next_token": response.next_token, "notifications": response.notifications })
++            .to_string())
++    }
++
++    /// Enables or disables a push rule of a kind (`override`, `content`...).
++    pub async fn set_push_rule_enabled(
++        &self,
++        kind: String,
++        rule_id: String,
++        enabled: bool,
++    ) -> Result<(), ClientError> {
++        let request = ruma::api::client::push::set_pushrule_enabled::v3::Request::new(
++            rule_kind(kind),
++            rule_id,
++            enabled,
++        );
++        self.inner.send(request).await?;
++        Ok(())
++    }
++
++    /// Sets the actions of a push rule, from their JSON array.
++    pub async fn set_push_rule_actions_json(
++        &self,
++        kind: String,
++        rule_id: String,
++        actions_json: String,
++    ) -> Result<(), ClientError> {
++        let request = ruma::api::client::push::set_pushrule_actions::v3::Request::new(
++            rule_kind(kind),
++            rule_id,
++            serde_json::from_str(&actions_json)?,
++        );
++        self.inner.send(request).await?;
++        Ok(())
++    }
++
++    /// Deletes a push rule.
++    pub async fn delete_push_rule(&self, kind: String, rule_id: String) -> Result<(), ClientError> {
++        let request =
++            ruma::api::client::push::delete_pushrule::v3::Request::new(rule_kind(kind), rule_id);
++        self.inner.send(request).await?;
++        Ok(())
++    }
++
++    /// Adds a push rule of a kind, or replaces the one with its ID, from its
++    /// JSON (`rule_id`, `actions` and, as the kind has them, `conditions` or
++    /// `pattern`).
++    pub async fn set_push_rule_json(&self, kind: String, rule_json: String) -> Result<(), ClientError> {
++        use ruma::push::{NewPushRule, RuleKind};
++
++        let rule = match rule_kind(kind) {
++            RuleKind::Override => NewPushRule::Override(serde_json::from_str(&rule_json)?),
++            RuleKind::Underride => NewPushRule::Underride(serde_json::from_str(&rule_json)?),
++            RuleKind::Content => NewPushRule::Content(serde_json::from_str(&rule_json)?),
++            RuleKind::Room => NewPushRule::Room(serde_json::from_str(&rule_json)?),
++            RuleKind::Sender => NewPushRule::Sender(serde_json::from_str(&rule_json)?),
++            kind => {
++                return Err(ClientError::from_str(format!("Unknown kind of push rule: {kind}"), None));
++            }
++        };
++        self.inner.send(ruma::api::client::push::set_pushrule::v3::Request::new(rule)).await?;
++        Ok(())
++    }
++
++    /// Sends an unencrypted to-device event of a type: takes the JSON of an
++    /// object of user IDs to objects of device IDs (or `*`) to the content for
++    /// each.
++    pub async fn send_to_device_json(
++        &self,
++        event_type: String,
++        messages_json: String,
++    ) -> Result<(), ClientError> {
++        let request = ruma::api::client::to_device::send_event_to_device::v3::Request::new_raw(
++            event_type.into(),
++            ruma::TransactionId::new(),
++            serde_json::from_str(&messages_json)?,
++        );
++        self.inner.send(request).await?;
++        Ok(())
++    }
++
++    /// Exports the keys of all the rooms' messages which this device can
++    /// decrypt, encrypted with a passphrase, in the format clients exchange
++    /// them in.
++    pub async fn export_room_keys(&self, passphrase: String) -> Result<String, ClientError> {
++        Ok(self.inner.encryption().export_room_keys_to_string(&passphrase).await?)
++    }
++
++    /// Imports room keys from an export. Returns how many were imported.
++    pub async fn import_room_keys(
++        &self,
++        export: String,
++        passphrase: String,
++    ) -> Result<u64, ClientError> {
++        let imported = self
++            .inner
++            .encryption()
++            .import_room_keys_from_string(&export, &passphrase)
++            .await
++            .map_err(ClientError::from_err)?;
++        Ok(imported as u64)
++    }
++}
 diff --git a/bindings/matrix-sdk-ffi/src/room/mod.rs b/bindings/matrix-sdk-ffi/src/room/mod.rs
-index ee11d99d3..6bd472c15 100644
+index ee11d99d3..a3a76e4b0 100644
 --- a/bindings/matrix-sdk-ffi/src/room/mod.rs
 +++ b/bindings/matrix-sdk-ffi/src/room/mod.rs
-@@ -2181,3 +2181,167 @@ mod tests {
+@@ -2181,3 +2181,176 @@ mod tests {
              .expect("Room::drop panicked on a non-tokio thread");
      }
  }
@@ -532,12 +877,21 @@ index ee11d99d3..6bd472c15 100644
 +#[matrix_sdk_ffi_macros::export]
 +impl Room {
 +    /// Upgrades the room to another version: the homeserver makes a new room
-+    /// which replaces this one, and whose ID is returned.
-+    pub async fn upgrade(&self, new_version: String) -> Result<String, ClientError> {
-+        let request = ruma::api::client::room::upgrade_room::v3::Request::new(
++    /// which replaces this one, and whose ID is returned. In room versions
++    /// which have them, other users can be made creators of the new room too.
++    pub async fn upgrade(
++        &self,
++        new_version: String,
++        additional_creators: Vec<String>,
++    ) -> Result<String, ClientError> {
++        let mut request = ruma::api::client::room::upgrade_room::v3::Request::new(
 +            self.inner.room_id().to_owned(),
 +            ruma::RoomVersionId::try_from(new_version.as_str())?,
 +        );
++        request.additional_creators = additional_creators
++            .into_iter()
++            .map(ruma::UserId::parse)
++            .collect::<Result<_, _>>()?;
 +        Ok(self.inner.client().send(request).await?.replacement_room.to_string())
 +    }
 +
@@ -588,3 +942,59 @@ index ee11d99d3..6bd472c15 100644
 +        Ok(())
 +    }
 +}
+diff --git a/crates/matrix-sdk/src/automatic_call_status.rs b/crates/matrix-sdk/src/automatic_call_status.rs
+index c2e89ca6d..81bd79d83 100644
+--- a/crates/matrix-sdk/src/automatic_call_status.rs
++++ b/crates/matrix-sdk/src/automatic_call_status.rs
+@@ -20,7 +20,6 @@
+ use std::{
+     collections::HashSet,
+     sync::{Arc, Mutex},
+-    time::SystemTime,
+ };
+ 
+ use matrix_sdk_common::executor::spawn;
+@@ -135,7 +134,7 @@ fn on_event(
+     spawn(async move {
+         let in_call = !active_call_rooms.lock().unwrap().is_empty();
+         let result = if in_call {
+-            let joined_ts = SecondsSinceUnixEpoch::from_system_time(SystemTime::now());
++            let joined_ts = Some(SecondsSinceUnixEpoch::now());
+             client.account().set_call(joined_ts).await
+         } else {
+             client.account().clear_call().await
+diff --git a/crates/matrix-sdk/src/encryption/mod.rs b/crates/matrix-sdk/src/encryption/mod.rs
+index 3dd061b30..e5c7c94e2 100644
+--- a/crates/matrix-sdk/src/encryption/mod.rs
++++ b/crates/matrix-sdk/src/encryption/mod.rs
+@@ -1578,6 +1578,30 @@ impl Encryption {
+         Ok(())
+     }
+ 
++    /// Export all the room keys this device has, encrypted with a passphrase,
++    /// as the text of a key export file. Unlike [`Self::export_room_keys`]
++    /// this needs no file system, so it works on wasm.
++    pub async fn export_room_keys_to_string(&self, passphrase: &str) -> Result<String> {
++        let olm = self.client.olm_machine().await;
++        let olm = olm.as_ref().ok_or(Error::NoOlmMachine)?;
++        let keys = olm.store().export_room_keys(|_| true).await?;
++        Ok(matrix_sdk_base::crypto::encrypt_room_key_export(&keys, passphrase, 500_000)?)
++    }
++
++    /// Import room keys from the text of a key export file. Returns how many
++    /// keys were imported.
++    pub async fn import_room_keys_from_string(
++        &self,
++        export: &str,
++        passphrase: &str,
++    ) -> Result<usize, RoomKeyImportError> {
++        let olm = self.client.olm_machine().await;
++        let olm = olm.as_ref().ok_or(RoomKeyImportError::StoreClosed)?;
++        let keys =
++            matrix_sdk_base::crypto::decrypt_room_key_export(export.as_bytes(), passphrase)?;
++        Ok(olm.store().import_exported_room_keys(keys, |_, _| {}).await?.imported_count)
++    }
++
+     /// Export E2EE keys that match the given predicate encrypting them with the
+     /// given passphrase.
+     ///

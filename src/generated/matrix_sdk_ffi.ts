@@ -17011,6 +17011,56 @@ const FfiConverterTypeMediaPreviewConfig = (() => {
 })();
 
 /**
+ * A validation session for a phone number.
+ */
+export type MsisdnTokenSession = {
+    sid: string,
+    /**
+     * Where to submit the token the user receives, if not to the identity
+     * server.
+     */
+    submitUrl?: string
+}
+
+/**
+ * Generated factory for {@link MsisdnTokenSession} record objects.
+ */
+export const MsisdnTokenSession = (() => {
+    const defaults = () => ({
+    });
+    const create = (() => {
+        return uniffiCreateRecord<MsisdnTokenSession, ReturnType<typeof defaults>>(defaults);
+    })();
+    return Object.freeze({
+        create,
+        new: create,
+        defaults: () => Object.freeze(defaults()) as Partial<MsisdnTokenSession>,
+    });
+})();
+
+const FfiConverterTypeMsisdnTokenSession = (() => {
+    type TypeName = MsisdnTokenSession;
+    class FFIConverter extends AbstractFfiConverterByteArray<TypeName> {
+        readFromCursor(c: Cursor): TypeName {
+            return {
+                sid: FfiConverterString.readFromCursor(c), 
+                submitUrl: FfiConverterOptionalString.readFromCursor(c)
+            };
+        }
+        writeIntoCursor(value: TypeName, c: Cursor): void {
+            FfiConverterString.writeIntoCursor(value.sid, c);
+            FfiConverterOptionalString.writeIntoCursor(value.submitUrl, c);
+        }
+        allocationSize(value: TypeName): number {
+            return FfiConverterString.allocationSize(value.sid) +
+             FfiConverterOptionalString.allocationSize(value.submitUrl);
+            
+        }
+    };
+    return new FFIConverter();
+})();
+
+/**
  * Timeouts applied by a `NotificationClient` while fetching the content of
  * notifications.
  */
@@ -30584,9 +30634,10 @@ export interface RoomLike {
     updateRoomVisibility(visibility: RoomVisibility, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
 /**
  * Upgrades the room to another version: the homeserver makes a new room
- * which replaces this one, and whose ID is returned.
+ * which replaces this one, and whose ID is returned. In room versions
+ * which have them, other users can be made creators of the new room too.
  */
-    upgrade(newVersion: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<string>;
+    upgrade(newVersion: string, additionalCreators: Array<string>, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<string>;
 /**
  * Upload and set the room's avatar.
  *
@@ -33653,14 +33704,15 @@ private constructor(pointer: UniffiHandle) {
     
 /**
  * Upgrades the room to another version: the homeserver makes a new room
- * which replaces this one, and whose ID is returned.
+ * which replaces this one, and whose ID is returned. In room versions
+ * which have them, other users can be made creators of the new room too.
  */
-    async upgrade(newVersion: string, asyncOpts_?: { signal: AbortSignal }): Promise<string> /*throws*/ {
+    async upgrade(newVersion: string, additionalCreators: Array<string>, asyncOpts_?: { signal: AbortSignal }): Promise<string> /*throws*/ {
     return await uniffiRustCallAsync(
             /*rustCaller:*/ uniffiCaller,
             /*rustFutureFunc:*/ () => {
                 return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_room_upgrade(
-                    uniffiTypeRoomObjectFactory.clonePointer(this),FfiConverterString.lower(newVersion, nativeModule().rustbuffer_alloc)
+                    uniffiTypeRoomObjectFactory.clonePointer(this),FfiConverterString.lower(newVersion, nativeModule().rustbuffer_alloc),FfiConverterSequenceString.lower(additionalCreators, nativeModule().rustbuffer_alloc)
                 );
             },
             /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_rust_buffer,
@@ -37690,6 +37742,40 @@ const FfiConverterTypeDetectedSecretsBundle = (() => {
                 case DetectedSecretsBundle.WithoutBackup: return c.writeI32(2);
                 case DetectedSecretsBundle.UnusedBackup: return c.writeI32(3);
                 case DetectedSecretsBundle.Complete: return c.writeI32(4);
+            }
+        }
+        allocationSize(value: TypeName): number {
+            return 4;
+        }
+    }
+    return new FFIConverter();
+})();
+
+/**
+ * What a token is requested by email for.
+ */
+export enum EmailTokenPurpose {
+    Registration,
+    PasswordReset,
+    AddThreepid
+}
+
+const FfiConverterTypeEmailTokenPurpose = (() => {
+    type TypeName = EmailTokenPurpose;
+    class FFIConverter extends AbstractFfiConverterByteArray<TypeName> {
+        readFromCursor(c: Cursor): TypeName {
+            switch (c.readI32()) {
+                case 1: return EmailTokenPurpose.Registration;
+                case 2: return EmailTokenPurpose.PasswordReset;
+                case 3: return EmailTokenPurpose.AddThreepid;
+                default: throw new UniffiInternalError.UnexpectedEnumCase();
+            }
+        }
+        writeIntoCursor(value: TypeName, c: Cursor): void {
+            switch (value) {
+                case EmailTokenPurpose.Registration: return c.writeI32(1);
+                case EmailTokenPurpose.PasswordReset: return c.writeI32(2);
+                case EmailTokenPurpose.AddThreepid: return c.writeI32(3);
             }
         }
         allocationSize(value: TypeName): number {
@@ -48867,6 +48953,147 @@ const FfiConverterTypeSteadyStateError = (() => {
     return new FfiConverter();
 })();
 
+
+// Enum: UiaaOutcome
+export enum UiaaOutcome_Tags {
+    Done = "Done",
+    AuthRequired = "AuthRequired"
+}
+/**
+ * How a request which the homeserver may want interactive authentication for
+ * came out.
+ */
+export const UiaaOutcome = (() => {
+
+    type Done__interface = {
+        tag: UiaaOutcome_Tags.Done
+    };
+    /**
+     * It was done.
+     */
+    class Done_ extends UniffiEnum implements Done__interface {
+        /**
+         * @private
+         * This field is private and should not be used, use `tag` instead.
+         */
+        readonly [uniffiTypeNameSymbol] = "UiaaOutcome";
+        readonly tag = UiaaOutcome_Tags.Done;
+        constructor() {
+            super("UiaaOutcome", "Done");
+        }
+
+        static new(): Done_ {
+            return new Done_();
+        }
+
+        static instanceOf(obj: any): obj is Done_ {
+            return obj.tag === UiaaOutcome_Tags.Done;
+        }
+
+    }
+
+    type AuthRequired__interface = {
+        tag: UiaaOutcome_Tags.AuthRequired;
+        inner: 
+Readonly<{uiaaJson: string}>
+    };
+    /**
+     * The homeserver wants (more) authentication first. This is the JSON of
+     * what it answered: the flows it accepts, their parameters, the session
+     * to carry on with, the stages completed so far and, if the last attempt
+     * at a stage failed, the error.
+     */
+    class AuthRequired_ extends UniffiEnum implements AuthRequired__interface {
+        /**
+         * @private
+         * This field is private and should not be used, use `tag` instead.
+         */
+        readonly [uniffiTypeNameSymbol] = "UiaaOutcome";
+        readonly tag = UiaaOutcome_Tags.AuthRequired;
+        readonly inner: 
+Readonly<{uiaaJson: string}>;
+        constructor(
+inner: {uiaaJson: string }) {
+            super("UiaaOutcome", "AuthRequired");
+
+            this.inner = Object.freeze(inner);
+        }
+        static new(
+inner: {uiaaJson: string }): AuthRequired_ {
+            return new AuthRequired_(inner);
+        }
+
+        static instanceOf(obj: any): obj is AuthRequired_ {
+            return obj.tag === UiaaOutcome_Tags.AuthRequired;
+        }
+
+    }
+
+    function instanceOf(obj: any): obj is UiaaOutcome {
+        return obj[uniffiTypeNameSymbol] === "UiaaOutcome";
+    }
+
+    return Object.freeze({
+        instanceOf,
+  Done: Done_, 
+  AuthRequired: AuthRequired_
+    });
+
+})();
+/**
+ * How a request which the homeserver may want interactive authentication for
+ * came out.
+ */
+export type UiaaOutcome = InstanceType<
+    typeof UiaaOutcome['Done' | 'AuthRequired']
+>;
+
+// FfiConverter for enum UiaaOutcome
+const FfiConverterTypeUiaaOutcome = (() => {
+    type TypeName = UiaaOutcome;
+    class FFIConverter extends AbstractFfiConverterByteArray<TypeName> {
+        readFromCursor(c: Cursor): TypeName {
+            switch (c.readI32()) {
+                case 1: return new UiaaOutcome.Done();
+                case 2: return new UiaaOutcome.AuthRequired({uiaaJson: FfiConverterString.readFromCursor(c) });
+                default: throw new UniffiInternalError.UnexpectedEnumCase();
+            }
+        }
+        writeIntoCursor(value: TypeName, c: Cursor): void {
+            switch (value.tag) {
+                case UiaaOutcome_Tags.Done: {
+                    c.writeI32(1);
+                    return;
+                }
+                case UiaaOutcome_Tags.AuthRequired: {
+                    c.writeI32(2);
+                    const inner = value.inner;
+                    FfiConverterString.writeIntoCursor(inner.uiaaJson, c);
+                    return;
+                }
+                default:
+                    // Throwing from here means that UiaaOutcome_Tags hasn't matched an ordinal.
+                    throw new UniffiInternalError.UnexpectedEnumCase();
+            }
+        }
+        allocationSize(value: TypeName): number {
+            switch (value.tag) {
+                case UiaaOutcome_Tags.Done: {
+                    return 4;
+                }
+                case UiaaOutcome_Tags.AuthRequired: {
+                    const inner = value.inner;
+                    let size = 4;
+                    size += FfiConverterString.allocationSize(inner.uiaaJson);
+                    return size;
+                }
+                default: throw new UniffiInternalError.UnexpectedEnumCase();
+            }
+        }
+    }
+    return new FFIConverter();
+})();
+
 export enum VerificationState {
     Unknown,
     Verified,
@@ -57441,6 +57668,10 @@ export interface ClientLike {
     accountData(eventType: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<string | undefined>;
     accountUrl(action: AccountManagementAction | undefined, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<string | undefined>;
 /**
+ * Adds a validated email address or phone number to the account.
+ */
+    addThreepid(clientSecret: string, sid: string, authJson: string | undefined, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<UiaaOutcome>;
+/**
  * Find all sliding sync versions that are available.
  *
  * Be careful: This method may hit the store and will send new requests for
@@ -57484,6 +57715,12 @@ export interface ClientLike {
  * wants some other kind of authentication.
  */
     changePassword(newPassword: string, currentPassword: string | undefined, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<boolean>;
+/**
+ * Changes the password of an account: this one's, or that of whoever the
+ * authentication data identifies (by a validated email address, to reset
+ * a forgotten password).
+ */
+    changePasswordWithAuth(newPassword: string, authJson: string | undefined, logoutDevices: boolean, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<UiaaOutcome>;
 /**
  * Clear all the non-critical caches for this Client instance.
  *
@@ -57542,6 +57779,11 @@ export interface ClientLike {
  */
     deactivateAccount(authData: AuthData | undefined, eraseData: boolean, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
 /**
+ * Deactivates the account, with whatever authentication the homeserver
+ * wants for it.
+ */
+    deactivateAccountWithAuth(authJson: string | undefined, eraseData: boolean, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<UiaaOutcome>;
+/**
  * Deletes some of the user's devices, signing them out.
  *
  * Returns `false`, having deleted nothing, if the homeserver wants the
@@ -57550,9 +57792,23 @@ export interface ClientLike {
  */
     deleteDevices(deviceIds: Array<string>, password: string | undefined, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<boolean>;
 /**
+ * Deletes some of the user's devices, with whatever authentication the
+ * homeserver wants for it.
+ */
+    deleteDevicesWithAuth(deviceIds: Array<string>, authJson: string | undefined, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<UiaaOutcome>;
+/**
+ * Deletes a push rule.
+ */
+    deletePushRule(kind: string, ruleId: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
+/**
  * Deletes a pusher of given pusher ids
  */
     deletePusher(identifiers: PusherIdentifiers, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
+/**
+ * Removes an email address (medium `email`) or phone number (`msisdn`)
+ * from the account.
+ */
+    deleteThreepid(medium: string, address: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
     deviceId() /*throws*/: string;
 /**
  * Lists the user's devices, as the homeserver knows them.
@@ -57591,6 +57847,12 @@ export interface ClientLike {
  */
     enableSendQueueUploadProgress(enable: boolean): void;
     encryption(): EncryptionLike;
+/**
+ * Exports the keys of all the rooms' messages which this device can
+ * decrypt, encrypted with a passphrase, in the format clients exchange
+ * them in.
+ */
+    exportRoomKeys(passphrase: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<string>;
 /**
  * Asks the homeserver for all the user's account data, and all of it for
  * a room if one is given. The store cannot list it.
@@ -57699,6 +57961,10 @@ export interface ClientLike {
     ignoreUser(userId: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
     ignoredUsers(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<Array<string>>;
 /**
+ * Imports room keys from an export. Returns how many were imported.
+ */
+    importRoomKeys(export_: string, passphrase: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<bigint>;
+/**
  * Checks if the server supports the LiveKit RTC focus for placing calls.
  *
  * Transports are discovered through the authenticated
@@ -57735,6 +58001,10 @@ export interface ClientLike {
  * Checks if the server supports user status.
  */
     isUserStatusSupported(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<boolean>;
+/**
+ * Whether a username is free to register and allowed by the homeserver.
+ */
+    isUsernameAvailable(username: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<boolean>;
 /**
  * Join a room by its ID.
  *
@@ -57823,6 +58093,11 @@ export interface ClientLike {
  */
     notificationClientWithTimeouts(processSetup: NotificationProcessSetup, timeouts: NotificationClientTimeouts, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<NotificationClientLike>;
 /**
+ * Asks the homeserver for the events the user has been notified of, as
+ * the JSON of a `/notifications` response.
+ */
+    notificationsJson(from: string | undefined, limit: number | undefined, only: string | undefined, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<string>;
+/**
  * Subscribe to updates of global account data events.
  *
  * Be careful that only the most recent value can be observed. Subscribers
@@ -57876,6 +58151,12 @@ export interface ClientLike {
  */
     queryKeysJson(userId: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<string>;
 /**
+ * Registers an account with a password, signing this client in to it
+ * unless that is inhibited. Call it again with authentication data for
+ * each stage the homeserver asks for.
+ */
+    register(username: string | undefined, password: string | undefined, initialDeviceName: string | undefined, authJson: string | undefined, inhibitLogin: boolean, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<UiaaOutcome>;
+/**
  * Register a handler for notifications generated from sync responses.
  *
  * The handler will be called during sync for each event that triggers
@@ -57894,6 +58175,17 @@ export interface ClientLike {
  * Changes the display name of one of the user's devices.
  */
     renameDevice(deviceId: string, displayName: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
+/**
+ * Has the homeserver email a validation token to an address, for
+ * registering with it, resetting the password of its account, or adding
+ * it to this account. Returns the ID of the validation session.
+ */
+    requestEmailToken(purpose: EmailTokenPurpose, clientSecret: string, email: string, sendAttempt: number, nextLink: string | undefined, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<string>;
+/**
+ * Has the homeserver text a validation token to a phone number, for
+ * adding it to this account.
+ */
+    requestMsisdnToken(clientSecret: string, country: string, phoneNumber: string, sendAttempt: number, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<MsisdnTokenSession>;
     requestOpenidToken(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<OpenIdToken>;
 /**
  * Empty the server version and unstable features cache.
@@ -57947,7 +58239,20 @@ export interface ClientLike {
     roomAliasExists(roomAlias: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<boolean>;
     roomDirectorySearch(): RoomDirectorySearchLike;
     rooms(): Array<RoomLike>;
+/**
+ * Searches the messages the homeserver can read (so not encrypted ones).
+ *
+ * Takes the JSON of the `search_categories` to search in, and the batch
+ * to carry on from; returns the JSON of the `search_categories` found.
+ */
+    searchJson(searchCategoriesJson: string, nextBatch: string | undefined, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<string>;
     searchUsers(searchTerm: string, limit: bigint, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<SearchUsersResults>;
+/**
+ * Sends an unencrypted to-device event of a type: takes the JSON of an
+ * object of user IDs to objects of device IDs (or `*`) to the content for
+ * each.
+ */
+    sendToDeviceJson(eventType: string, messagesJson: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
 /**
  * The URL of the server.
  *
@@ -58017,6 +58322,20 @@ export interface ClientLike {
  * homeserver.
  */
     setPresence(presence: PresenceState, immediate: boolean, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
+/**
+ * Sets the actions of a push rule, from their JSON array.
+ */
+    setPushRuleActionsJson(kind: string, ruleId: string, actionsJson: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
+/**
+ * Enables or disables a push rule of a kind (`override`, `content`...).
+ */
+    setPushRuleEnabled(kind: string, ruleId: string, enabled: boolean, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
+/**
+ * Adds a push rule of a kind, or replaces the one with its ID, from its
+ * JSON (`rule_id`, `actions` and, as the kind has them, `conditions` or
+ * `pattern`).
+ */
+    setPushRuleJson(kind: string, ruleJson: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
 /**
  * Registers a pusher with given parameters
  */
@@ -58309,6 +58628,42 @@ private constructor(pointer: UniffiHandle) {
     }
     
 /**
+ * Adds a validated email address or phone number to the account.
+ */
+    async addThreepid(clientSecret: string, sid: string, authJson: string | undefined, asyncOpts_?: { signal: AbortSignal }): Promise<UiaaOutcome> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_add_threepid(
+                    uniffiTypeClientObjectFactory.clonePointer(this),FfiConverterString.lower(clientSecret, nativeModule().rustbuffer_alloc),FfiConverterString.lower(sid, nativeModule().rustbuffer_alloc),FfiConverterOptionalString.lower(authJson, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_rust_buffer,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_rust_buffer,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_rust_buffer,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_rust_buffer,
+            // Async returns always go through the JS-side converter: the
+            // FFI symbol returns the future handle (u64), and the user-level
+            // RustBuffer comes back via the shared `rust_future_complete_*`
+            // export. The bytes the runtime hands back must be deserialized
+            // here using the per-callable return-type converter.
+            // Borrowed view over foreign memory: the call site owns the free,
+            // as on the sync paths. Unconditional — a no-op where buffers are
+            // already JS-owned.
+            /*liftFunc:*/ (__rb) => {
+                try {
+                    return FfiConverterTypeUiaaOutcome.lift(__rb);
+                } finally {
+                    nativeModule().rustbuffer_free(__rb);
+                }
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
  * Find all sliding sync versions that are available.
  *
  * Be careful: This method may hit the store and will send new requests for
@@ -58537,6 +58892,44 @@ private constructor(pointer: UniffiHandle) {
     }
     
 /**
+ * Changes the password of an account: this one's, or that of whoever the
+ * authentication data identifies (by a validated email address, to reset
+ * a forgotten password).
+ */
+    async changePasswordWithAuth(newPassword: string, authJson: string | undefined, logoutDevices: boolean, asyncOpts_?: { signal: AbortSignal }): Promise<UiaaOutcome> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_change_password_with_auth(
+                    uniffiTypeClientObjectFactory.clonePointer(this),FfiConverterString.lower(newPassword, nativeModule().rustbuffer_alloc),FfiConverterOptionalString.lower(authJson, nativeModule().rustbuffer_alloc),FfiConverterBool.lower(logoutDevices, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_rust_buffer,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_rust_buffer,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_rust_buffer,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_rust_buffer,
+            // Async returns always go through the JS-side converter: the
+            // FFI symbol returns the future handle (u64), and the user-level
+            // RustBuffer comes back via the shared `rust_future_complete_*`
+            // export. The bytes the runtime hands back must be deserialized
+            // here using the per-callable return-type converter.
+            // Borrowed view over foreign memory: the call site owns the free,
+            // as on the sync paths. Unconditional — a no-op where buffers are
+            // already JS-owned.
+            /*liftFunc:*/ (__rb) => {
+                try {
+                    return FfiConverterTypeUiaaOutcome.lift(__rb);
+                } finally {
+                    nativeModule().rustbuffer_free(__rb);
+                }
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
  * Clear all the non-critical caches for this Client instance.
  *
  * WARNING: This will clear all the caches, including the base store (state
@@ -58730,6 +59123,43 @@ private constructor(pointer: UniffiHandle) {
     }
     
 /**
+ * Deactivates the account, with whatever authentication the homeserver
+ * wants for it.
+ */
+    async deactivateAccountWithAuth(authJson: string | undefined, eraseData: boolean, asyncOpts_?: { signal: AbortSignal }): Promise<UiaaOutcome> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_deactivate_account_with_auth(
+                    uniffiTypeClientObjectFactory.clonePointer(this),FfiConverterOptionalString.lower(authJson, nativeModule().rustbuffer_alloc),FfiConverterBool.lower(eraseData, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_rust_buffer,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_rust_buffer,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_rust_buffer,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_rust_buffer,
+            // Async returns always go through the JS-side converter: the
+            // FFI symbol returns the future handle (u64), and the user-level
+            // RustBuffer comes back via the shared `rust_future_complete_*`
+            // export. The bytes the runtime hands back must be deserialized
+            // here using the per-callable return-type converter.
+            // Borrowed view over foreign memory: the call site owns the free,
+            // as on the sync paths. Unconditional — a no-op where buffers are
+            // already JS-owned.
+            /*liftFunc:*/ (__rb) => {
+                try {
+                    return FfiConverterTypeUiaaOutcome.lift(__rb);
+                } finally {
+                    nativeModule().rustbuffer_free(__rb);
+                }
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
  * Deletes some of the user's devices, signing them out.
  *
  * Returns `false`, having deleted nothing, if the homeserver wants the
@@ -58761,6 +59191,65 @@ private constructor(pointer: UniffiHandle) {
     }
     
 /**
+ * Deletes some of the user's devices, with whatever authentication the
+ * homeserver wants for it.
+ */
+    async deleteDevicesWithAuth(deviceIds: Array<string>, authJson: string | undefined, asyncOpts_?: { signal: AbortSignal }): Promise<UiaaOutcome> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_delete_devices_with_auth(
+                    uniffiTypeClientObjectFactory.clonePointer(this),FfiConverterSequenceString.lower(deviceIds, nativeModule().rustbuffer_alloc),FfiConverterOptionalString.lower(authJson, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_rust_buffer,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_rust_buffer,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_rust_buffer,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_rust_buffer,
+            // Async returns always go through the JS-side converter: the
+            // FFI symbol returns the future handle (u64), and the user-level
+            // RustBuffer comes back via the shared `rust_future_complete_*`
+            // export. The bytes the runtime hands back must be deserialized
+            // here using the per-callable return-type converter.
+            // Borrowed view over foreign memory: the call site owns the free,
+            // as on the sync paths. Unconditional — a no-op where buffers are
+            // already JS-owned.
+            /*liftFunc:*/ (__rb) => {
+                try {
+                    return FfiConverterTypeUiaaOutcome.lift(__rb);
+                } finally {
+                    nativeModule().rustbuffer_free(__rb);
+                }
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
+ * Deletes a push rule.
+ */
+    async deletePushRule(kind: string, ruleId: string, asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_delete_push_rule(
+                    uniffiTypeClientObjectFactory.clonePointer(this),FfiConverterString.lower(kind, nativeModule().rustbuffer_alloc),FfiConverterString.lower(ruleId, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_void,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_void,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_void,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_void,
+            /*liftFunc:*/ (_v) => {},
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
  * Deletes a pusher of given pusher ids
  */
     async deletePusher(identifiers: PusherIdentifiers, asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
@@ -58769,6 +59258,29 @@ private constructor(pointer: UniffiHandle) {
             /*rustFutureFunc:*/ () => {
                 return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_delete_pusher(
                     uniffiTypeClientObjectFactory.clonePointer(this),FfiConverterTypePusherIdentifiers.lower(identifiers, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_void,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_void,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_void,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_void,
+            /*liftFunc:*/ (_v) => {},
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
+ * Removes an email address (medium `email`) or phone number (`msisdn`)
+ * from the account.
+ */
+    async deleteThreepid(medium: string, address: string, asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_delete_threepid(
+                    uniffiTypeClientObjectFactory.clonePointer(this),FfiConverterString.lower(medium, nativeModule().rustbuffer_alloc),FfiConverterString.lower(address, nativeModule().rustbuffer_alloc)
                 );
             },
             /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_void,
@@ -58953,6 +59465,44 @@ private constructor(pointer: UniffiHandle) {
             },
             /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
     ));
+    }
+    
+/**
+ * Exports the keys of all the rooms' messages which this device can
+ * decrypt, encrypted with a passphrase, in the format clients exchange
+ * them in.
+ */
+    async exportRoomKeys(passphrase: string, asyncOpts_?: { signal: AbortSignal }): Promise<string> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_export_room_keys(
+                    uniffiTypeClientObjectFactory.clonePointer(this),FfiConverterString.lower(passphrase, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_rust_buffer,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_rust_buffer,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_rust_buffer,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_rust_buffer,
+            // Async returns always go through the JS-side converter: the
+            // FFI symbol returns the future handle (u64), and the user-level
+            // RustBuffer comes back via the shared `rust_future_complete_*`
+            // export. The bytes the runtime hands back must be deserialized
+            // here using the per-callable return-type converter.
+            // Borrowed view over foreign memory: the call site owns the free,
+            // as on the sync paths. Unconditional — a no-op where buffers are
+            // already JS-owned.
+            /*liftFunc:*/ (__rb) => {
+                try {
+                    return FfiConverterString.lift(__rb);
+                } finally {
+                    nativeModule().rustbuffer_free(__rb);
+                }
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
     }
     
 /**
@@ -59702,6 +60252,33 @@ private constructor(pointer: UniffiHandle) {
     }
     
 /**
+ * Imports room keys from an export. Returns how many were imported.
+ */
+    async importRoomKeys(export_: string, passphrase: string, asyncOpts_?: { signal: AbortSignal }): Promise<bigint> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_import_room_keys(
+                    uniffiTypeClientObjectFactory.clonePointer(this),FfiConverterString.lower(export_, nativeModule().rustbuffer_alloc),FfiConverterString.lower(passphrase, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_u64,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_u64,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_u64,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_u64,
+            // Async returns always go through the JS-side converter: the
+            // FFI symbol returns the future handle (u64), and the user-level
+            // RustBuffer comes back via the shared `rust_future_complete_*`
+            // export. The bytes the runtime hands back must be deserialized
+            // here using the per-callable return-type converter.
+            /*liftFunc:*/ FfiConverterUInt64.lift.bind(FfiConverterUInt64),
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
  * Checks if the server supports the LiveKit RTC focus for placing calls.
  *
  * Transports are discovered through the authenticated
@@ -59858,6 +60435,33 @@ private constructor(pointer: UniffiHandle) {
             /*rustFutureFunc:*/ () => {
                 return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_is_user_status_supported(
                     uniffiTypeClientObjectFactory.clonePointer(this)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_i8,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_i8,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_i8,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_i8,
+            // Async returns always go through the JS-side converter: the
+            // FFI symbol returns the future handle (u64), and the user-level
+            // RustBuffer comes back via the shared `rust_future_complete_*`
+            // export. The bytes the runtime hands back must be deserialized
+            // here using the per-callable return-type converter.
+            /*liftFunc:*/ FfiConverterBool.lift.bind(FfiConverterBool),
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
+ * Whether a username is free to register and allowed by the homeserver.
+ */
+    async isUsernameAvailable(username: string, asyncOpts_?: { signal: AbortSignal }): Promise<boolean> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_is_username_available(
+                    uniffiTypeClientObjectFactory.clonePointer(this),FfiConverterString.lower(username, nativeModule().rustbuffer_alloc)
                 );
             },
             /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_i8,
@@ -60240,6 +60844,43 @@ private constructor(pointer: UniffiHandle) {
     }
     
 /**
+ * Asks the homeserver for the events the user has been notified of, as
+ * the JSON of a `/notifications` response.
+ */
+    async notificationsJson(from: string | undefined, limit: number | undefined, only: string | undefined, asyncOpts_?: { signal: AbortSignal }): Promise<string> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_notifications_json(
+                    uniffiTypeClientObjectFactory.clonePointer(this),FfiConverterOptionalString.lower(from, nativeModule().rustbuffer_alloc),FfiConverterOptionalUInt32.lower(limit, nativeModule().rustbuffer_alloc),FfiConverterOptionalString.lower(only, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_rust_buffer,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_rust_buffer,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_rust_buffer,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_rust_buffer,
+            // Async returns always go through the JS-side converter: the
+            // FFI symbol returns the future handle (u64), and the user-level
+            // RustBuffer comes back via the shared `rust_future_complete_*`
+            // export. The bytes the runtime hands back must be deserialized
+            // here using the per-callable return-type converter.
+            // Borrowed view over foreign memory: the call site owns the free,
+            // as on the sync paths. Unconditional — a no-op where buffers are
+            // already JS-owned.
+            /*liftFunc:*/ (__rb) => {
+                try {
+                    return FfiConverterString.lift(__rb);
+                } finally {
+                    nativeModule().rustbuffer_free(__rb);
+                }
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
  * Subscribe to updates of global account data events.
  *
  * Be careful that only the most recent value can be observed. Subscribers
@@ -60451,6 +61092,44 @@ private constructor(pointer: UniffiHandle) {
     }
     
 /**
+ * Registers an account with a password, signing this client in to it
+ * unless that is inhibited. Call it again with authentication data for
+ * each stage the homeserver asks for.
+ */
+    async register(username: string | undefined, password: string | undefined, initialDeviceName: string | undefined, authJson: string | undefined, inhibitLogin: boolean, asyncOpts_?: { signal: AbortSignal }): Promise<UiaaOutcome> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_register(
+                    uniffiTypeClientObjectFactory.clonePointer(this),FfiConverterOptionalString.lower(username, nativeModule().rustbuffer_alloc),FfiConverterOptionalString.lower(password, nativeModule().rustbuffer_alloc),FfiConverterOptionalString.lower(initialDeviceName, nativeModule().rustbuffer_alloc),FfiConverterOptionalString.lower(authJson, nativeModule().rustbuffer_alloc),FfiConverterBool.lower(inhibitLogin, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_rust_buffer,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_rust_buffer,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_rust_buffer,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_rust_buffer,
+            // Async returns always go through the JS-side converter: the
+            // FFI symbol returns the future handle (u64), and the user-level
+            // RustBuffer comes back via the shared `rust_future_complete_*`
+            // export. The bytes the runtime hands back must be deserialized
+            // here using the per-callable return-type converter.
+            // Borrowed view over foreign memory: the call site owns the free,
+            // as on the sync paths. Unconditional — a no-op where buffers are
+            // already JS-owned.
+            /*liftFunc:*/ (__rb) => {
+                try {
+                    return FfiConverterTypeUiaaOutcome.lift(__rb);
+                } finally {
+                    nativeModule().rustbuffer_free(__rb);
+                }
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
  * Register a handler for notifications generated from sync responses.
  *
  * The handler will be called during sync for each event that triggers
@@ -60517,6 +61196,81 @@ private constructor(pointer: UniffiHandle) {
             /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_void,
             /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_void,
             /*liftFunc:*/ (_v) => {},
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
+ * Has the homeserver email a validation token to an address, for
+ * registering with it, resetting the password of its account, or adding
+ * it to this account. Returns the ID of the validation session.
+ */
+    async requestEmailToken(purpose: EmailTokenPurpose, clientSecret: string, email: string, sendAttempt: number, nextLink: string | undefined, asyncOpts_?: { signal: AbortSignal }): Promise<string> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_request_email_token(
+                    uniffiTypeClientObjectFactory.clonePointer(this),FfiConverterTypeEmailTokenPurpose.lower(purpose, nativeModule().rustbuffer_alloc),FfiConverterString.lower(clientSecret, nativeModule().rustbuffer_alloc),FfiConverterString.lower(email, nativeModule().rustbuffer_alloc),FfiConverterUInt32.lower(sendAttempt, nativeModule().rustbuffer_alloc),FfiConverterOptionalString.lower(nextLink, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_rust_buffer,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_rust_buffer,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_rust_buffer,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_rust_buffer,
+            // Async returns always go through the JS-side converter: the
+            // FFI symbol returns the future handle (u64), and the user-level
+            // RustBuffer comes back via the shared `rust_future_complete_*`
+            // export. The bytes the runtime hands back must be deserialized
+            // here using the per-callable return-type converter.
+            // Borrowed view over foreign memory: the call site owns the free,
+            // as on the sync paths. Unconditional — a no-op where buffers are
+            // already JS-owned.
+            /*liftFunc:*/ (__rb) => {
+                try {
+                    return FfiConverterString.lift(__rb);
+                } finally {
+                    nativeModule().rustbuffer_free(__rb);
+                }
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
+ * Has the homeserver text a validation token to a phone number, for
+ * adding it to this account.
+ */
+    async requestMsisdnToken(clientSecret: string, country: string, phoneNumber: string, sendAttempt: number, asyncOpts_?: { signal: AbortSignal }): Promise<MsisdnTokenSession> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_request_msisdn_token(
+                    uniffiTypeClientObjectFactory.clonePointer(this),FfiConverterString.lower(clientSecret, nativeModule().rustbuffer_alloc),FfiConverterString.lower(country, nativeModule().rustbuffer_alloc),FfiConverterString.lower(phoneNumber, nativeModule().rustbuffer_alloc),FfiConverterUInt32.lower(sendAttempt, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_rust_buffer,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_rust_buffer,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_rust_buffer,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_rust_buffer,
+            // Async returns always go through the JS-side converter: the
+            // FFI symbol returns the future handle (u64), and the user-level
+            // RustBuffer comes back via the shared `rust_future_complete_*`
+            // export. The bytes the runtime hands back must be deserialized
+            // here using the per-callable return-type converter.
+            // Borrowed view over foreign memory: the call site owns the free,
+            // as on the sync paths. Unconditional — a no-op where buffers are
+            // already JS-owned.
+            /*liftFunc:*/ (__rb) => {
+                try {
+                    return FfiConverterTypeMsisdnTokenSession.lift(__rb);
+                } finally {
+                    nativeModule().rustbuffer_free(__rb);
+                }
+            },
             /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
             /*asyncOpts:*/ asyncOpts_,
             /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
@@ -60778,6 +61532,45 @@ private constructor(pointer: UniffiHandle) {
     }
     }
     
+/**
+ * Searches the messages the homeserver can read (so not encrypted ones).
+ *
+ * Takes the JSON of the `search_categories` to search in, and the batch
+ * to carry on from; returns the JSON of the `search_categories` found.
+ */
+    async searchJson(searchCategoriesJson: string, nextBatch: string | undefined, asyncOpts_?: { signal: AbortSignal }): Promise<string> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_search_json(
+                    uniffiTypeClientObjectFactory.clonePointer(this),FfiConverterString.lower(searchCategoriesJson, nativeModule().rustbuffer_alloc),FfiConverterOptionalString.lower(nextBatch, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_rust_buffer,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_rust_buffer,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_rust_buffer,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_rust_buffer,
+            // Async returns always go through the JS-side converter: the
+            // FFI symbol returns the future handle (u64), and the user-level
+            // RustBuffer comes back via the shared `rust_future_complete_*`
+            // export. The bytes the runtime hands back must be deserialized
+            // here using the per-callable return-type converter.
+            // Borrowed view over foreign memory: the call site owns the free,
+            // as on the sync paths. Unconditional — a no-op where buffers are
+            // already JS-owned.
+            /*liftFunc:*/ (__rb) => {
+                try {
+                    return FfiConverterString.lift(__rb);
+                } finally {
+                    nativeModule().rustbuffer_free(__rb);
+                }
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
     async searchUsers(searchTerm: string, limit: bigint, asyncOpts_?: { signal: AbortSignal }): Promise<SearchUsersResults> /*throws*/ {
     return await uniffiRustCallAsync(
             /*rustCaller:*/ uniffiCaller,
@@ -60805,6 +61598,30 @@ private constructor(pointer: UniffiHandle) {
                     nativeModule().rustbuffer_free(__rb);
                 }
             },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
+ * Sends an unencrypted to-device event of a type: takes the JSON of an
+ * object of user IDs to objects of device IDs (or `*`) to the content for
+ * each.
+ */
+    async sendToDeviceJson(eventType: string, messagesJson: string, asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_send_to_device_json(
+                    uniffiTypeClientObjectFactory.clonePointer(this),FfiConverterString.lower(eventType, nativeModule().rustbuffer_alloc),FfiConverterString.lower(messagesJson, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_void,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_void,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_void,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_void,
+            /*liftFunc:*/ (_v) => {},
             /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
             /*asyncOpts:*/ asyncOpts_,
             /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
@@ -61123,6 +61940,74 @@ private constructor(pointer: UniffiHandle) {
             /*rustFutureFunc:*/ () => {
                 return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_set_presence(
                     uniffiTypeClientObjectFactory.clonePointer(this),FfiConverterTypePresenceState.lower(presence, nativeModule().rustbuffer_alloc),FfiConverterBool.lower(immediate, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_void,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_void,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_void,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_void,
+            /*liftFunc:*/ (_v) => {},
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
+ * Sets the actions of a push rule, from their JSON array.
+ */
+    async setPushRuleActionsJson(kind: string, ruleId: string, actionsJson: string, asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_set_push_rule_actions_json(
+                    uniffiTypeClientObjectFactory.clonePointer(this),FfiConverterString.lower(kind, nativeModule().rustbuffer_alloc),FfiConverterString.lower(ruleId, nativeModule().rustbuffer_alloc),FfiConverterString.lower(actionsJson, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_void,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_void,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_void,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_void,
+            /*liftFunc:*/ (_v) => {},
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
+ * Enables or disables a push rule of a kind (`override`, `content`...).
+ */
+    async setPushRuleEnabled(kind: string, ruleId: string, enabled: boolean, asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_set_push_rule_enabled(
+                    uniffiTypeClientObjectFactory.clonePointer(this),FfiConverterString.lower(kind, nativeModule().rustbuffer_alloc),FfiConverterString.lower(ruleId, nativeModule().rustbuffer_alloc),FfiConverterBool.lower(enabled, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_void,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_void,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_void,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_void,
+            /*liftFunc:*/ (_v) => {},
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
+ * Adds a push rule of a kind, or replaces the one with its ID, from its
+ * JSON (`rule_id`, `actions` and, as the kind has them, `conditions` or
+ * `pattern`).
+ */
+    async setPushRuleJson(kind: string, ruleJson: string, asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_set_push_rule_json(
+                    uniffiTypeClientObjectFactory.clonePointer(this),FfiConverterString.lower(kind, nativeModule().rustbuffer_alloc),FfiConverterString.lower(ruleJson, nativeModule().rustbuffer_alloc)
                 );
             },
             /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_void,
@@ -63832,6 +64717,9 @@ function uniffiEnsureInitialized() {
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_account_url() !== 53991) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_account_url");
     }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_add_threepid() !== 27814) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_add_threepid");
+    }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_available_sliding_sync_versions() !== 46726) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_available_sliding_sync_versions");
     }
@@ -63853,6 +64741,9 @@ function uniffiEnsureInitialized() {
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_change_password() !== 55601) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_change_password");
     }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_change_password_with_auth() !== 6653) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_change_password_with_auth");
+    }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_clear_caches() !== 61351) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_clear_caches");
     }
@@ -63871,11 +64762,23 @@ function uniffiEnsureInitialized() {
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_deactivate_account() !== 7894) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_deactivate_account");
     }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_deactivate_account_with_auth() !== 26062) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_deactivate_account_with_auth");
+    }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_delete_devices() !== 44449) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_delete_devices");
     }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_delete_devices_with_auth() !== 36438) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_delete_devices_with_auth");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_delete_push_rule() !== 28188) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_delete_push_rule");
+    }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_delete_pusher() !== 20472) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_delete_pusher");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_delete_threepid() !== 55823) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_delete_threepid");
     }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_device_id() !== 63337) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_device_id");
@@ -63900,6 +64803,9 @@ function uniffiEnsureInitialized() {
     }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_encryption() !== 13362) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_encryption");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_export_room_keys() !== 60666) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_export_room_keys");
     }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_fetch_all_account_data() !== 59035) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_fetch_all_account_data");
@@ -63976,6 +64882,9 @@ function uniffiEnsureInitialized() {
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_ignored_users() !== 57288) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_ignored_users");
     }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_import_room_keys() !== 39056) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_import_room_keys");
+    }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_is_livekit_rtc_supported() !== 26302) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_is_livekit_rtc_supported");
     }
@@ -63993,6 +64902,9 @@ function uniffiEnsureInitialized() {
     }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_is_user_status_supported() !== 6029) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_is_user_status_supported");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_is_username_available() !== 62353) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_is_username_available");
     }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_join_room_by_id() !== 28397) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_join_room_by_id");
@@ -64036,6 +64948,9 @@ function uniffiEnsureInitialized() {
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_notification_client_with_timeouts() !== 35848) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_notification_client_with_timeouts");
     }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_notifications_json() !== 881) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_notifications_json");
+    }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_observe_account_data_event() !== 40713) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_observe_account_data_event");
     }
@@ -64057,6 +64972,9 @@ function uniffiEnsureInitialized() {
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_query_keys_json() !== 18964) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_query_keys_json");
     }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_register() !== 406) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_register");
+    }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_register_notification_handler() !== 46860) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_register_notification_handler");
     }
@@ -64065,6 +64983,12 @@ function uniffiEnsureInitialized() {
     }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_rename_device() !== 26574) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_rename_device");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_request_email_token() !== 50547) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_request_email_token");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_request_msisdn_token() !== 6555) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_request_msisdn_token");
     }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_request_openid_token() !== 19654) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_request_openid_token");
@@ -64096,8 +65020,14 @@ function uniffiEnsureInitialized() {
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_rooms() !== 57092) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_rooms");
     }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_search_json() !== 62743) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_search_json");
+    }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_search_users() !== 23484) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_search_users");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_send_to_device_json() !== 54503) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_send_to_device_json");
     }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_server() !== 11140) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_server");
@@ -64137,6 +65067,15 @@ function uniffiEnsureInitialized() {
     }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_set_presence() !== 43942) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_set_presence");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_set_push_rule_actions_json() !== 32745) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_set_push_rule_actions_json");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_set_push_rule_enabled() !== 8725) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_set_push_rule_enabled");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_set_push_rule_json() !== 8896) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_set_push_rule_json");
     }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_set_pusher() !== 42931) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_set_pusher");
@@ -64996,7 +65935,7 @@ function uniffiEnsureInitialized() {
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_update_room_visibility() !== 46267) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_update_room_visibility");
     }
-    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_upgrade() !== 52382) {
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_upgrade() !== 39644) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_upgrade");
     }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_upload_avatar() !== 43932) {
@@ -65609,6 +66548,7 @@ export default Object.freeze({
     FfiConverterTypeDuplicateOneTimeKeyErrorMessage,
     FfiConverterTypeEditRevisionRecord,
     FfiConverterTypeEditedContent,
+    FfiConverterTypeEmailTokenPurpose,
     FfiConverterTypeEmbeddedEventDetails,
     FfiConverterTypeEmoteMessageContent,
     FfiConverterTypeEnableRecoveryProgress,
@@ -65683,6 +66623,7 @@ export default Object.freeze({
     FfiConverterTypeMessageType,
     FfiConverterTypeMsgLikeContent,
     FfiConverterTypeMsgLikeKind,
+    FfiConverterTypeMsisdnTokenSession,
     FfiConverterTypeNoticeMessageContent,
     FfiConverterTypeNotificationClient,
     FfiConverterTypeNotificationClientTimeouts,
@@ -65846,6 +66787,7 @@ export default Object.freeze({
     FfiConverterTypeTracingFileConfiguration,
     FfiConverterTypeTransmissionProgress,
     FfiConverterTypeTweak,
+    FfiConverterTypeUiaaOutcome,
     FfiConverterTypeUnableToDecryptInfo,
     FfiConverterTypeUnreadNotificationsCount,
     FfiConverterTypeUnstableAudioDetailsContent,
