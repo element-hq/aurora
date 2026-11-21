@@ -640,6 +640,55 @@ const stringConverter = (() => {
 })();
 const FfiConverterString = uniffiCreateFfiConverterString(stringConverter);
 
+/**
+ * All the account data the homeserver holds for the user, as JSON events.
+ */
+export type AllAccountData = {
+    global: Array<string>,
+    /**
+     * That of the room which was asked about, if one was.
+     */
+    room: Array<string>
+}
+
+/**
+ * Generated factory for {@link AllAccountData} record objects.
+ */
+export const AllAccountData = (() => {
+    const defaults = () => ({
+    });
+    const create = (() => {
+        return uniffiCreateRecord<AllAccountData, ReturnType<typeof defaults>>(defaults);
+    })();
+    return Object.freeze({
+        create,
+        new: create,
+        defaults: () => Object.freeze(defaults()) as Partial<AllAccountData>,
+    });
+})();
+
+const FfiConverterTypeAllAccountData = (() => {
+    type TypeName = AllAccountData;
+    class FFIConverter extends AbstractFfiConverterByteArray<TypeName> {
+        readFromCursor(c: Cursor): TypeName {
+            return {
+                global: FfiConverterSequenceString.readFromCursor(c), 
+                room: FfiConverterSequenceString.readFromCursor(c)
+            };
+        }
+        writeIntoCursor(value: TypeName, c: Cursor): void {
+            FfiConverterSequenceString.writeIntoCursor(value.global, c);
+            FfiConverterSequenceString.writeIntoCursor(value.room, c);
+        }
+        allocationSize(value: TypeName): number {
+            return FfiConverterSequenceString.allocationSize(value.global) +
+             FfiConverterSequenceString.allocationSize(value.room);
+            
+        }
+    };
+    return new FFIConverter();
+})();
+
 export type AudioInfo = {
     duration?: number,
     size?: bigint,
@@ -15377,6 +15426,52 @@ const FfiConverterTypeIgnoredUser = (() => {
 })();
 
 /**
+ * The key backup the homeserver holds.
+ */
+export type KeyBackupInfo = {
+    version: string,
+    algorithm: string
+}
+
+/**
+ * Generated factory for {@link KeyBackupInfo} record objects.
+ */
+export const KeyBackupInfo = (() => {
+    const defaults = () => ({
+    });
+    const create = (() => {
+        return uniffiCreateRecord<KeyBackupInfo, ReturnType<typeof defaults>>(defaults);
+    })();
+    return Object.freeze({
+        create,
+        new: create,
+        defaults: () => Object.freeze(defaults()) as Partial<KeyBackupInfo>,
+    });
+})();
+
+const FfiConverterTypeKeyBackupInfo = (() => {
+    type TypeName = KeyBackupInfo;
+    class FFIConverter extends AbstractFfiConverterByteArray<TypeName> {
+        readFromCursor(c: Cursor): TypeName {
+            return {
+                version: FfiConverterString.readFromCursor(c), 
+                algorithm: FfiConverterString.readFromCursor(c)
+            };
+        }
+        writeIntoCursor(value: TypeName, c: Cursor): void {
+            FfiConverterString.writeIntoCursor(value.version, c);
+            FfiConverterString.writeIntoCursor(value.algorithm, c);
+        }
+        allocationSize(value: TypeName): number {
+            return FfiConverterString.allocationSize(value.version) +
+             FfiConverterString.allocationSize(value.algorithm);
+            
+        }
+    };
+    return new FFIConverter();
+})();
+
+/**
  * A set of actions to perform for a knock request.
  */
 export interface KnockRequestActionsLike {
@@ -17576,6 +17671,63 @@ const FfiConverterTypeOpenIdToken = (() => {
              FfiConverterString.allocationSize(value.tokenType) +
              FfiConverterString.allocationSize(value.matrixServerName) +
              FfiConverterUInt64.allocationSize(value.expiresInSeconds);
+            
+        }
+    };
+    return new FFIConverter();
+})();
+
+/**
+ * One of the user's devices, as the homeserver lists it.
+ */
+export type OwnDevice = {
+    deviceId: string,
+    displayName?: string,
+    lastSeenIp?: string,
+    /**
+     * When the device was last seen, in milliseconds since the Unix epoch.
+     */
+    lastSeenTs?: bigint
+}
+
+/**
+ * Generated factory for {@link OwnDevice} record objects.
+ */
+export const OwnDevice = (() => {
+    const defaults = () => ({
+    });
+    const create = (() => {
+        return uniffiCreateRecord<OwnDevice, ReturnType<typeof defaults>>(defaults);
+    })();
+    return Object.freeze({
+        create,
+        new: create,
+        defaults: () => Object.freeze(defaults()) as Partial<OwnDevice>,
+    });
+})();
+
+const FfiConverterTypeOwnDevice = (() => {
+    type TypeName = OwnDevice;
+    class FFIConverter extends AbstractFfiConverterByteArray<TypeName> {
+        readFromCursor(c: Cursor): TypeName {
+            return {
+                deviceId: FfiConverterString.readFromCursor(c), 
+                displayName: FfiConverterOptionalString.readFromCursor(c), 
+                lastSeenIp: FfiConverterOptionalString.readFromCursor(c), 
+                lastSeenTs: FfiConverterOptionalUInt64.readFromCursor(c)
+            };
+        }
+        writeIntoCursor(value: TypeName, c: Cursor): void {
+            FfiConverterString.writeIntoCursor(value.deviceId, c);
+            FfiConverterOptionalString.writeIntoCursor(value.displayName, c);
+            FfiConverterOptionalString.writeIntoCursor(value.lastSeenIp, c);
+            FfiConverterOptionalUInt64.writeIntoCursor(value.lastSeenTs, c);
+        }
+        allocationSize(value: TypeName): number {
+            return FfiConverterString.allocationSize(value.deviceId) +
+             FfiConverterOptionalString.allocationSize(value.displayName) +
+             FfiConverterOptionalString.allocationSize(value.lastSeenIp) +
+             FfiConverterOptionalUInt64.allocationSize(value.lastSeenTs);
             
         }
     };
@@ -20809,6 +20961,52 @@ const FfiConverterTypeSecretStorageV1AesHmacSha2Properties = (() => {
     return new FFIConverter();
 })();
 
+/**
+ * What a homeserver says it supports, at `/_matrix/client/versions`.
+ */
+export type ServerVersions = {
+    versions: Array<string>,
+    unstableFeatures: Map<string, boolean>
+}
+
+/**
+ * Generated factory for {@link ServerVersions} record objects.
+ */
+export const ServerVersions = (() => {
+    const defaults = () => ({
+    });
+    const create = (() => {
+        return uniffiCreateRecord<ServerVersions, ReturnType<typeof defaults>>(defaults);
+    })();
+    return Object.freeze({
+        create,
+        new: create,
+        defaults: () => Object.freeze(defaults()) as Partial<ServerVersions>,
+    });
+})();
+
+const FfiConverterTypeServerVersions = (() => {
+    type TypeName = ServerVersions;
+    class FFIConverter extends AbstractFfiConverterByteArray<TypeName> {
+        readFromCursor(c: Cursor): TypeName {
+            return {
+                versions: FfiConverterSequenceString.readFromCursor(c), 
+                unstableFeatures: FfiConverterMapStringBoolean.readFromCursor(c)
+            };
+        }
+        writeIntoCursor(value: TypeName, c: Cursor): void {
+            FfiConverterSequenceString.writeIntoCursor(value.versions, c);
+            FfiConverterMapStringBoolean.writeIntoCursor(value.unstableFeatures, c);
+        }
+        allocationSize(value: TypeName): number {
+            return FfiConverterSequenceString.allocationSize(value.versions) +
+             FfiConverterMapStringBoolean.allocationSize(value.unstableFeatures);
+            
+        }
+    };
+    return new FFIConverter();
+})();
+
 export enum SlidingSyncVersion {
     None,
     Native
@@ -21038,6 +21236,66 @@ const FfiConverterTypeSpaceFilter = (() => {
             return FfiConverterTypeSpaceRoom.allocationSize(value.spaceRoom) +
              FfiConverterUInt8.allocationSize(value.level) +
              FfiConverterSequenceString.allocationSize(value.descendants);
+            
+        }
+    };
+    return new FFIConverter();
+})();
+
+/**
+ * An identity provider a homeserver offers for legacy single sign-on.
+ */
+export type SsoIdentityProvider = {
+    id: string,
+    name: string,
+    /**
+     * The `mxc://` URI of its icon.
+     */
+    icon?: string,
+    /**
+     * The well-known brand it belongs to, such as `google`.
+     */
+    brand?: string
+}
+
+/**
+ * Generated factory for {@link SsoIdentityProvider} record objects.
+ */
+export const SsoIdentityProvider = (() => {
+    const defaults = () => ({
+    });
+    const create = (() => {
+        return uniffiCreateRecord<SsoIdentityProvider, ReturnType<typeof defaults>>(defaults);
+    })();
+    return Object.freeze({
+        create,
+        new: create,
+        defaults: () => Object.freeze(defaults()) as Partial<SsoIdentityProvider>,
+    });
+})();
+
+const FfiConverterTypeSsoIdentityProvider = (() => {
+    type TypeName = SsoIdentityProvider;
+    class FFIConverter extends AbstractFfiConverterByteArray<TypeName> {
+        readFromCursor(c: Cursor): TypeName {
+            return {
+                id: FfiConverterString.readFromCursor(c), 
+                name: FfiConverterString.readFromCursor(c), 
+                icon: FfiConverterOptionalString.readFromCursor(c), 
+                brand: FfiConverterOptionalString.readFromCursor(c)
+            };
+        }
+        writeIntoCursor(value: TypeName, c: Cursor): void {
+            FfiConverterString.writeIntoCursor(value.id, c);
+            FfiConverterString.writeIntoCursor(value.name, c);
+            FfiConverterOptionalString.writeIntoCursor(value.icon, c);
+            FfiConverterOptionalString.writeIntoCursor(value.brand, c);
+        }
+        allocationSize(value: TypeName): number {
+            return FfiConverterString.allocationSize(value.id) +
+             FfiConverterString.allocationSize(value.name) +
+             FfiConverterOptionalString.allocationSize(value.icon) +
+             FfiConverterOptionalString.allocationSize(value.brand);
             
         }
     };
@@ -22698,6 +22956,75 @@ const FfiConverterTypeUploadParameters = (() => {
 })();
 
 /**
+ * A device of a user, as the crypto store knows it.
+ */
+export type UserDevice = {
+    deviceId: string,
+    displayName?: string,
+    ed25519Key?: string,
+    curve25519Key?: string,
+    /**
+     * Whether we trust the device, through cross-signing or having said so
+     * ourselves.
+     */
+    isVerified: boolean,
+    /**
+     * Whether the device is signed by its owner's cross-signing identity.
+     */
+    isCrossSignedByOwner: boolean
+}
+
+/**
+ * Generated factory for {@link UserDevice} record objects.
+ */
+export const UserDevice = (() => {
+    const defaults = () => ({
+    });
+    const create = (() => {
+        return uniffiCreateRecord<UserDevice, ReturnType<typeof defaults>>(defaults);
+    })();
+    return Object.freeze({
+        create,
+        new: create,
+        defaults: () => Object.freeze(defaults()) as Partial<UserDevice>,
+    });
+})();
+
+const FfiConverterTypeUserDevice = (() => {
+    type TypeName = UserDevice;
+    class FFIConverter extends AbstractFfiConverterByteArray<TypeName> {
+        readFromCursor(c: Cursor): TypeName {
+            return {
+                deviceId: FfiConverterString.readFromCursor(c), 
+                displayName: FfiConverterOptionalString.readFromCursor(c), 
+                ed25519Key: FfiConverterOptionalString.readFromCursor(c), 
+                curve25519Key: FfiConverterOptionalString.readFromCursor(c), 
+                isVerified: FfiConverterBool.readFromCursor(c), 
+                isCrossSignedByOwner: FfiConverterBool.readFromCursor(c)
+            };
+        }
+        writeIntoCursor(value: TypeName, c: Cursor): void {
+            FfiConverterString.writeIntoCursor(value.deviceId, c);
+            FfiConverterOptionalString.writeIntoCursor(value.displayName, c);
+            FfiConverterOptionalString.writeIntoCursor(value.ed25519Key, c);
+            FfiConverterOptionalString.writeIntoCursor(value.curve25519Key, c);
+            FfiConverterBool.writeIntoCursor(value.isVerified, c);
+            FfiConverterBool.writeIntoCursor(value.isCrossSignedByOwner, c);
+        }
+        allocationSize(value: TypeName): number {
+            return FfiConverterString.allocationSize(value.deviceId) +
+             FfiConverterOptionalString.allocationSize(value.displayName) +
+             FfiConverterOptionalString.allocationSize(value.ed25519Key) +
+             FfiConverterOptionalString.allocationSize(value.curve25519Key) +
+             FfiConverterBool.allocationSize(value.isVerified) +
+             FfiConverterBool.allocationSize(value.isCrossSignedByOwner);
+            
+        }
+    };
+    return new FFIConverter();
+})();
+
+/**
  * An update for a particular user's power level within the room.
  */
 export type UserPowerLevelUpdate = {
@@ -22743,6 +23070,66 @@ const FfiConverterTypeUserPowerLevelUpdate = (() => {
         allocationSize(value: TypeName): number {
             return FfiConverterString.allocationSize(value.userId) +
              FfiConverterInt64.allocationSize(value.powerLevel);
+            
+        }
+    };
+    return new FFIConverter();
+})();
+
+/**
+ * What the homeserver says of a user's presence.
+ */
+export type UserPresence = {
+    /**
+     * `online`, `offline` or `unavailable`.
+     */
+    presence: string,
+    currentlyActive?: boolean,
+    /**
+     * How long ago the user was last active, in milliseconds.
+     */
+    lastActiveAgo?: bigint,
+    statusMsg?: string
+}
+
+/**
+ * Generated factory for {@link UserPresence} record objects.
+ */
+export const UserPresence = (() => {
+    const defaults = () => ({
+    });
+    const create = (() => {
+        return uniffiCreateRecord<UserPresence, ReturnType<typeof defaults>>(defaults);
+    })();
+    return Object.freeze({
+        create,
+        new: create,
+        defaults: () => Object.freeze(defaults()) as Partial<UserPresence>,
+    });
+})();
+
+const FfiConverterTypeUserPresence = (() => {
+    type TypeName = UserPresence;
+    class FFIConverter extends AbstractFfiConverterByteArray<TypeName> {
+        readFromCursor(c: Cursor): TypeName {
+            return {
+                presence: FfiConverterString.readFromCursor(c), 
+                currentlyActive: FfiConverterOptionalBoolean.readFromCursor(c), 
+                lastActiveAgo: FfiConverterOptionalUInt64.readFromCursor(c), 
+                statusMsg: FfiConverterOptionalString.readFromCursor(c)
+            };
+        }
+        writeIntoCursor(value: TypeName, c: Cursor): void {
+            FfiConverterString.writeIntoCursor(value.presence, c);
+            FfiConverterOptionalBoolean.writeIntoCursor(value.currentlyActive, c);
+            FfiConverterOptionalUInt64.writeIntoCursor(value.lastActiveAgo, c);
+            FfiConverterOptionalString.writeIntoCursor(value.statusMsg, c);
+        }
+        allocationSize(value: TypeName): number {
+            return FfiConverterString.allocationSize(value.presence) +
+             FfiConverterOptionalBoolean.allocationSize(value.currentlyActive) +
+             FfiConverterOptionalUInt64.allocationSize(value.lastActiveAgo) +
+             FfiConverterOptionalString.allocationSize(value.statusMsg);
             
         }
     };
@@ -29623,6 +30010,13 @@ const FfiConverterTypeTimeline = new FfiConverterObject(uniffiTypeTimelineObject
 export interface RoomLike {
     
 /**
+ * Get the content of the event of the given type out of the room's
+ * account data store.
+ *
+ * It will be returned as a JSON string.
+ */
+    accountData(eventType: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<string | undefined>;
+/**
  * Get the user IDs of the joined and invited members, without the service
  * members. The current user is part of the result. Fetches the member list
  * if it is not synced yet.
@@ -29695,6 +30089,27 @@ export interface RoomLike {
  */
     enableSendQueue(enable: boolean): void;
     encryptionState(): EncryptionState;
+/**
+ * Asks the homeserver for the event of the room closest to a time (in
+ * milliseconds since the Unix epoch), looking forwards or backwards from
+ * it.
+ */
+    eventIdAtTimestamp(timestamp: bigint, forward: boolean, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<string>;
+/**
+ * Asks the homeserver for an event of the room, as JSON (decrypted, if it
+ * can be).
+ */
+    fetchEventJson(eventId: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<string>;
+/**
+ * Asks the homeserver for the whole current state of the room, as JSON
+ * events.
+ */
+    fetchState(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<Array<string>>;
+/**
+ * Asks the homeserver for the content of one state event of the room, as
+ * JSON, if the room has such an event.
+ */
+    fetchStateEventContent(eventType: string, stateKey: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<string | undefined>;
 /**
  * Return the current MSC4306 thread subscription for the given thread root
  * in this room.
@@ -29834,6 +30249,10 @@ export interface RoomLike {
  */
     loadUserReceipt(receiptType: ReceiptType, thread: ReceiptThread, userId: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<UserReceipt | undefined>;
 /**
+ * Asks our homeserver for the aliases it has for the room.
+ */
+    localAliases(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<Array<string>>;
+/**
  * Mark a room as fully read, by attaching a read receipt to the provided
  * `event_id`.
  *
@@ -29875,6 +30294,11 @@ export interface RoomLike {
  */
     membership(): Membership;
     ownUserId(): string;
+/**
+ * Asks the homeserver for the roots of the threads of the room which the
+ * user has taken part in, most recently active first.
+ */
+    participatedThreadIds(limit: number | undefined, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<Array<string>>;
 /**
  * If this room is the successor of a tombstoned room, return the
  * “reference” to the predecessor room.
@@ -29920,6 +30344,13 @@ export interface RoomLike {
  */
     redact(eventId: string, reason: string | undefined, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
 /**
+ * Asks the homeserver for the events relating to an event of the room,
+ * oldest first, as JSON (decrypted, if they can be): all of them, or only
+ * those of a relation type (`m.replace`, say), or of a relation type and
+ * an event type.
+ */
+    relationsJson(eventId: string, relationType: string | undefined, eventType: string | undefined, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<Array<string>>;
+/**
  * Removes the current room avatar
  */
     removeAvatar(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
@@ -29932,6 +30363,10 @@ export interface RoomLike {
  * - `false` if the room alias didn't exist so it couldn't be removed.
  */
     removeRoomAliasFromRoomDirectory(alias: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<boolean>;
+/**
+ * Takes a tag off the room.
+ */
+    removeTag(tag: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
 /**
  * Reports an event from the room.
  *
@@ -30012,6 +30447,13 @@ export interface RoomLike {
  * Returns the event ID of the newly created state event.
  */
     sendStateEventRaw(eventType: string, stateKey: string, content: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<string>;
+/**
+ * Set the given account data content for the given event type, for this
+ * room.
+ *
+ * It should be supplied as a JSON string.
+ */
+    setAccountData(eventType: string, content: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
     setIsFavourite(isFavourite: boolean, tagOrder: number | undefined, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
     setIsLowPriority(isLowPriority: boolean, tagOrder: number | undefined, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
 /**
@@ -30019,6 +30461,11 @@ export interface RoomLike {
  */
     setName(name: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
     setOwnMemberDisplayName(displayName: string | undefined, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
+/**
+ * Gives the room a tag, placed among the others with it by an order from
+ * 0 to 1 if one is given.
+ */
+    setTag(tag: string, order: number | undefined, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
 /**
  * Set a MSC4306 subscription to a thread in this room, based on the thread
  * root event id.
@@ -30090,6 +30537,11 @@ export interface RoomLike {
     successorRoom(): SuccessorRoom | undefined;
     suggestedRoleForUser(userId: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<RoomMemberRole>;
 /**
+ * The tags the user has given the room, as the JSON content of its
+ * `m.tag` event: an object of tag names to what is known of each.
+ */
+    tagsJson(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<string>;
+/**
  * Creates a new [`ThreadListService`] for this room.
  *
  * The returned service provides a reactive, paginated list of thread roots
@@ -30130,6 +30582,11 @@ export interface RoomLike {
  * Update the room's visibility in the room directory.
  */
     updateRoomVisibility(visibility: RoomVisibility, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
+/**
+ * Upgrades the room to another version: the homeserver makes a new room
+ * which replaces this one, and whose ID is returned.
+ */
+    upgrade(newVersion: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<string>;
 /**
  * Upload and set the room's avatar.
  *
@@ -30180,6 +30637,45 @@ private constructor(pointer: UniffiHandle) {
 
     
 
+    
+/**
+ * Get the content of the event of the given type out of the room's
+ * account data store.
+ *
+ * It will be returned as a JSON string.
+ */
+    async accountData(eventType: string, asyncOpts_?: { signal: AbortSignal }): Promise<string | undefined> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_room_account_data(
+                    uniffiTypeRoomObjectFactory.clonePointer(this),FfiConverterString.lower(eventType, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_rust_buffer,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_rust_buffer,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_rust_buffer,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_rust_buffer,
+            // Async returns always go through the JS-side converter: the
+            // FFI symbol returns the future handle (u64), and the user-level
+            // RustBuffer comes back via the shared `rust_future_complete_*`
+            // export. The bytes the runtime hands back must be deserialized
+            // here using the per-callable return-type converter.
+            // Borrowed view over foreign memory: the call site owns the free,
+            // as on the sync paths. Unconditional — a no-op where buffers are
+            // already JS-owned.
+            /*liftFunc:*/ (__rb) => {
+                try {
+                    return FfiConverterOptionalString.lift(__rb);
+                } finally {
+                    nativeModule().rustbuffer_free(__rb);
+                }
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
     
 /**
  * Get the user IDs of the joined and invited members, without the service
@@ -30551,6 +31047,155 @@ private constructor(pointer: UniffiHandle) {
     } finally {
         nativeModule().rustbuffer_free(__rb);
     }
+    }
+    
+/**
+ * Asks the homeserver for the event of the room closest to a time (in
+ * milliseconds since the Unix epoch), looking forwards or backwards from
+ * it.
+ */
+    async eventIdAtTimestamp(timestamp: bigint, forward: boolean, asyncOpts_?: { signal: AbortSignal }): Promise<string> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_room_event_id_at_timestamp(
+                    uniffiTypeRoomObjectFactory.clonePointer(this),FfiConverterUInt64.lower(timestamp, nativeModule().rustbuffer_alloc),FfiConverterBool.lower(forward, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_rust_buffer,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_rust_buffer,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_rust_buffer,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_rust_buffer,
+            // Async returns always go through the JS-side converter: the
+            // FFI symbol returns the future handle (u64), and the user-level
+            // RustBuffer comes back via the shared `rust_future_complete_*`
+            // export. The bytes the runtime hands back must be deserialized
+            // here using the per-callable return-type converter.
+            // Borrowed view over foreign memory: the call site owns the free,
+            // as on the sync paths. Unconditional — a no-op where buffers are
+            // already JS-owned.
+            /*liftFunc:*/ (__rb) => {
+                try {
+                    return FfiConverterString.lift(__rb);
+                } finally {
+                    nativeModule().rustbuffer_free(__rb);
+                }
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
+ * Asks the homeserver for an event of the room, as JSON (decrypted, if it
+ * can be).
+ */
+    async fetchEventJson(eventId: string, asyncOpts_?: { signal: AbortSignal }): Promise<string> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_room_fetch_event_json(
+                    uniffiTypeRoomObjectFactory.clonePointer(this),FfiConverterString.lower(eventId, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_rust_buffer,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_rust_buffer,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_rust_buffer,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_rust_buffer,
+            // Async returns always go through the JS-side converter: the
+            // FFI symbol returns the future handle (u64), and the user-level
+            // RustBuffer comes back via the shared `rust_future_complete_*`
+            // export. The bytes the runtime hands back must be deserialized
+            // here using the per-callable return-type converter.
+            // Borrowed view over foreign memory: the call site owns the free,
+            // as on the sync paths. Unconditional — a no-op where buffers are
+            // already JS-owned.
+            /*liftFunc:*/ (__rb) => {
+                try {
+                    return FfiConverterString.lift(__rb);
+                } finally {
+                    nativeModule().rustbuffer_free(__rb);
+                }
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
+ * Asks the homeserver for the whole current state of the room, as JSON
+ * events.
+ */
+    async fetchState(asyncOpts_?: { signal: AbortSignal }): Promise<Array<string>> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_room_fetch_state(
+                    uniffiTypeRoomObjectFactory.clonePointer(this)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_rust_buffer,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_rust_buffer,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_rust_buffer,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_rust_buffer,
+            // Async returns always go through the JS-side converter: the
+            // FFI symbol returns the future handle (u64), and the user-level
+            // RustBuffer comes back via the shared `rust_future_complete_*`
+            // export. The bytes the runtime hands back must be deserialized
+            // here using the per-callable return-type converter.
+            // Borrowed view over foreign memory: the call site owns the free,
+            // as on the sync paths. Unconditional — a no-op where buffers are
+            // already JS-owned.
+            /*liftFunc:*/ (__rb) => {
+                try {
+                    return FfiConverterSequenceString.lift(__rb);
+                } finally {
+                    nativeModule().rustbuffer_free(__rb);
+                }
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
+ * Asks the homeserver for the content of one state event of the room, as
+ * JSON, if the room has such an event.
+ */
+    async fetchStateEventContent(eventType: string, stateKey: string, asyncOpts_?: { signal: AbortSignal }): Promise<string | undefined> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_room_fetch_state_event_content(
+                    uniffiTypeRoomObjectFactory.clonePointer(this),FfiConverterString.lower(eventType, nativeModule().rustbuffer_alloc),FfiConverterString.lower(stateKey, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_rust_buffer,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_rust_buffer,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_rust_buffer,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_rust_buffer,
+            // Async returns always go through the JS-side converter: the
+            // FFI symbol returns the future handle (u64), and the user-level
+            // RustBuffer comes back via the shared `rust_future_complete_*`
+            // export. The bytes the runtime hands back must be deserialized
+            // here using the per-callable return-type converter.
+            // Borrowed view over foreign memory: the call site owns the free,
+            // as on the sync paths. Unconditional — a no-op where buffers are
+            // already JS-owned.
+            /*liftFunc:*/ (__rb) => {
+                try {
+                    return FfiConverterOptionalString.lift(__rb);
+                } finally {
+                    nativeModule().rustbuffer_free(__rb);
+                }
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
     }
     
 /**
@@ -31301,6 +31946,42 @@ private constructor(pointer: UniffiHandle) {
     }
     
 /**
+ * Asks our homeserver for the aliases it has for the room.
+ */
+    async localAliases(asyncOpts_?: { signal: AbortSignal }): Promise<Array<string>> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_room_local_aliases(
+                    uniffiTypeRoomObjectFactory.clonePointer(this)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_rust_buffer,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_rust_buffer,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_rust_buffer,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_rust_buffer,
+            // Async returns always go through the JS-side converter: the
+            // FFI symbol returns the future handle (u64), and the user-level
+            // RustBuffer comes back via the shared `rust_future_complete_*`
+            // export. The bytes the runtime hands back must be deserialized
+            // here using the per-callable return-type converter.
+            // Borrowed view over foreign memory: the call site owns the free,
+            // as on the sync paths. Unconditional — a no-op where buffers are
+            // already JS-owned.
+            /*liftFunc:*/ (__rb) => {
+                try {
+                    return FfiConverterSequenceString.lift(__rb);
+                } finally {
+                    nativeModule().rustbuffer_free(__rb);
+                }
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
  * Mark a room as fully read, by attaching a read receipt to the provided
  * `event_id`.
  *
@@ -31647,6 +32328,43 @@ private constructor(pointer: UniffiHandle) {
     }
     
 /**
+ * Asks the homeserver for the roots of the threads of the room which the
+ * user has taken part in, most recently active first.
+ */
+    async participatedThreadIds(limit: number | undefined, asyncOpts_?: { signal: AbortSignal }): Promise<Array<string>> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_room_participated_thread_ids(
+                    uniffiTypeRoomObjectFactory.clonePointer(this),FfiConverterOptionalUInt32.lower(limit, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_rust_buffer,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_rust_buffer,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_rust_buffer,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_rust_buffer,
+            // Async returns always go through the JS-side converter: the
+            // FFI symbol returns the future handle (u64), and the user-level
+            // RustBuffer comes back via the shared `rust_future_complete_*`
+            // export. The bytes the runtime hands back must be deserialized
+            // here using the per-callable return-type converter.
+            // Borrowed view over foreign memory: the call site owns the free,
+            // as on the sync paths. Unconditional — a no-op where buffers are
+            // already JS-owned.
+            /*liftFunc:*/ (__rb) => {
+                try {
+                    return FfiConverterSequenceString.lift(__rb);
+                } finally {
+                    nativeModule().rustbuffer_free(__rb);
+                }
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
  * If this room is the successor of a tombstoned room, return the
  * “reference” to the predecessor room.
  *
@@ -31785,6 +32503,45 @@ private constructor(pointer: UniffiHandle) {
     }
     
 /**
+ * Asks the homeserver for the events relating to an event of the room,
+ * oldest first, as JSON (decrypted, if they can be): all of them, or only
+ * those of a relation type (`m.replace`, say), or of a relation type and
+ * an event type.
+ */
+    async relationsJson(eventId: string, relationType: string | undefined, eventType: string | undefined, asyncOpts_?: { signal: AbortSignal }): Promise<Array<string>> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_room_relations_json(
+                    uniffiTypeRoomObjectFactory.clonePointer(this),FfiConverterString.lower(eventId, nativeModule().rustbuffer_alloc),FfiConverterOptionalString.lower(relationType, nativeModule().rustbuffer_alloc),FfiConverterOptionalString.lower(eventType, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_rust_buffer,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_rust_buffer,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_rust_buffer,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_rust_buffer,
+            // Async returns always go through the JS-side converter: the
+            // FFI symbol returns the future handle (u64), and the user-level
+            // RustBuffer comes back via the shared `rust_future_complete_*`
+            // export. The bytes the runtime hands back must be deserialized
+            // here using the per-callable return-type converter.
+            // Borrowed view over foreign memory: the call site owns the free,
+            // as on the sync paths. Unconditional — a no-op where buffers are
+            // already JS-owned.
+            /*liftFunc:*/ (__rb) => {
+                try {
+                    return FfiConverterSequenceString.lift(__rb);
+                } finally {
+                    nativeModule().rustbuffer_free(__rb);
+                }
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
  * Removes the current room avatar
  */
     async removeAvatar(asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
@@ -31832,6 +32589,28 @@ private constructor(pointer: UniffiHandle) {
             // export. The bytes the runtime hands back must be deserialized
             // here using the per-callable return-type converter.
             /*liftFunc:*/ FfiConverterBool.lift.bind(FfiConverterBool),
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
+ * Takes a tag off the room.
+ */
+    async removeTag(tag: string, asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_room_remove_tag(
+                    uniffiTypeRoomObjectFactory.clonePointer(this),FfiConverterString.lower(tag, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_void,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_void,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_void,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_void,
+            /*liftFunc:*/ (_v) => {},
             /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
             /*asyncOpts:*/ asyncOpts_,
             /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
@@ -32145,6 +32924,31 @@ private constructor(pointer: UniffiHandle) {
         );
     }
     
+/**
+ * Set the given account data content for the given event type, for this
+ * room.
+ *
+ * It should be supplied as a JSON string.
+ */
+    async setAccountData(eventType: string, content: string, asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_room_set_account_data(
+                    uniffiTypeRoomObjectFactory.clonePointer(this),FfiConverterString.lower(eventType, nativeModule().rustbuffer_alloc),FfiConverterString.lower(content, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_void,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_void,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_void,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_void,
+            /*liftFunc:*/ (_v) => {},
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
     async setIsFavourite(isFavourite: boolean, tagOrder: number | undefined, asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
     return await uniffiRustCallAsync(
             /*rustCaller:*/ uniffiCaller,
@@ -32211,6 +33015,29 @@ private constructor(pointer: UniffiHandle) {
             /*rustFutureFunc:*/ () => {
                 return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_room_set_own_member_display_name(
                     uniffiTypeRoomObjectFactory.clonePointer(this),FfiConverterOptionalString.lower(displayName, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_void,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_void,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_void,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_void,
+            /*liftFunc:*/ (_v) => {},
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
+ * Gives the room a tag, placed among the others with it by an order from
+ * 0 to 1 if one is given.
+ */
+    async setTag(tag: string, order: number | undefined, asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_room_set_tag(
+                    uniffiTypeRoomObjectFactory.clonePointer(this),FfiConverterString.lower(tag, nativeModule().rustbuffer_alloc),FfiConverterOptionalFloat64.lower(order, nativeModule().rustbuffer_alloc)
                 );
             },
             /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_void,
@@ -32550,6 +33377,43 @@ private constructor(pointer: UniffiHandle) {
     }
     
 /**
+ * The tags the user has given the room, as the JSON content of its
+ * `m.tag` event: an object of tag names to what is known of each.
+ */
+    async tagsJson(asyncOpts_?: { signal: AbortSignal }): Promise<string> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_room_tags_json(
+                    uniffiTypeRoomObjectFactory.clonePointer(this)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_rust_buffer,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_rust_buffer,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_rust_buffer,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_rust_buffer,
+            // Async returns always go through the JS-side converter: the
+            // FFI symbol returns the future handle (u64), and the user-level
+            // RustBuffer comes back via the shared `rust_future_complete_*`
+            // export. The bytes the runtime hands back must be deserialized
+            // here using the per-callable return-type converter.
+            // Borrowed view over foreign memory: the call site owns the free,
+            // as on the sync paths. Unconditional — a no-op where buffers are
+            // already JS-owned.
+            /*liftFunc:*/ (__rb) => {
+                try {
+                    return FfiConverterString.lift(__rb);
+                } finally {
+                    nativeModule().rustbuffer_free(__rb);
+                }
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
  * Creates a new [`ThreadListService`] for this room.
  *
  * The returned service provides a reactive, paginated list of thread roots
@@ -32781,6 +33645,43 @@ private constructor(pointer: UniffiHandle) {
             /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_void,
             /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_void,
             /*liftFunc:*/ (_v) => {},
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
+ * Upgrades the room to another version: the homeserver makes a new room
+ * which replaces this one, and whose ID is returned.
+ */
+    async upgrade(newVersion: string, asyncOpts_?: { signal: AbortSignal }): Promise<string> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_room_upgrade(
+                    uniffiTypeRoomObjectFactory.clonePointer(this),FfiConverterString.lower(newVersion, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_rust_buffer,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_rust_buffer,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_rust_buffer,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_rust_buffer,
+            // Async returns always go through the JS-side converter: the
+            // FFI symbol returns the future handle (u64), and the user-level
+            // RustBuffer comes back via the shared `rust_future_complete_*`
+            // export. The bytes the runtime hands back must be deserialized
+            // here using the per-callable return-type converter.
+            // Borrowed view over foreign memory: the call site owns the free,
+            // as on the sync paths. Unconditional — a no-op where buffers are
+            // already JS-owned.
+            /*liftFunc:*/ (__rb) => {
+                try {
+                    return FfiConverterString.lift(__rb);
+                } finally {
+                    nativeModule().rustbuffer_free(__rb);
+                }
+            },
             /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
             /*asyncOpts:*/ asyncOpts_,
             /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
@@ -52051,6 +52952,12 @@ export interface HomeserverLoginDetailsLike {
  */
     slidingSyncVersion(): SlidingSyncVersion;
 /**
+ * The identity providers the homeserver offers for legacy single
+ * sign-on. A homeserver which names none may still have its one, default,
+ * provider.
+ */
+    ssoIdentityProviders(): Array<SsoIdentityProvider>;
+/**
  * The prompts advertised by the authentication issuer for use in the login
  * URL.
  */
@@ -52107,6 +53014,27 @@ private constructor(pointer: UniffiHandle) {
     );
     try {
         return FfiConverterTypeSlidingSyncVersion.lift(__rb);
+    } finally {
+        nativeModule().rustbuffer_free(__rb);
+    }
+    }
+    
+/**
+ * The identity providers the homeserver offers for legacy single
+ * sign-on. A homeserver which names none may still have its one, default,
+ * provider.
+ */
+    ssoIdentityProviders(): Array<SsoIdentityProvider> {
+    const __rb: Uint8Array = uniffiCaller.rustCall(
+            /*caller:*/ (callStatus) => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_homeserverlogindetails_sso_identity_providers(
+                uniffiTypeHomeserverLoginDetailsObjectFactory.clonePointer(this),
+                callStatus);
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+    );
+    try {
+        return FfiConverterSequenceTypeSsoIdentityProvider.lift(__rb);
     } finally {
         nativeModule().rustbuffer_free(__rb);
     }
@@ -56545,6 +57473,18 @@ export interface ClientLike {
  */
     canDeactivateAccount(): boolean;
 /**
+ * Asks the homeserver for its capabilities, as the JSON it sends.
+ */
+    capabilitiesJson(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<string>;
+/**
+ * Changes the password of the account.
+ *
+ * Returns `false`, having changed nothing, if the homeserver wants the
+ * current password for this and none was given. Fails if the homeserver
+ * wants some other kind of authentication.
+ */
+    changePassword(newPassword: string, currentPassword: string | undefined, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<boolean>;
+/**
  * Clear all the non-critical caches for this Client instance.
  *
  * WARNING: This will clear all the caches, including the base store (state
@@ -56602,10 +57542,22 @@ export interface ClientLike {
  */
     deactivateAccount(authData: AuthData | undefined, eraseData: boolean, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
 /**
+ * Deletes some of the user's devices, signing them out.
+ *
+ * Returns `false`, having deleted nothing, if the homeserver wants the
+ * user's password for this and none was given. Fails if the homeserver
+ * wants some other kind of authentication.
+ */
+    deleteDevices(deviceIds: Array<string>, password: string | undefined, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<boolean>;
+/**
  * Deletes a pusher of given pusher ids
  */
     deletePusher(identifiers: PusherIdentifiers, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
     deviceId() /*throws*/: string;
+/**
+ * Lists the user's devices, as the homeserver knows them.
+ */
+    devices(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<Array<OwnDevice>>;
 /**
  * Change whether this client is allowed to look up the homeserver's
  * `/.well-known/matrix/client` file.
@@ -56639,6 +57591,11 @@ export interface ClientLike {
  */
     enableSendQueueUploadProgress(enable: boolean): void;
     encryption(): EncryptionLike;
+/**
+ * Asks the homeserver for all the user's account data, and all of it for
+ * a room if one is given. The store cannot list it.
+ */
+    fetchAllAccountData(roomId: string | undefined, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<AllAccountData>;
 /**
  * Fetch the media preview configuration from the server.
  */
@@ -56796,6 +57753,10 @@ export interface ClientLike {
  */
     joinRoomByIdOrAlias(roomIdOrAlias: string, serverNames: Array<string>, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<RoomLike>;
 /**
+ * The key backup the homeserver holds, if it holds one.
+ */
+    keyBackupInfo(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<KeyBackupInfo | undefined>;
+/**
  * Knock on a room to join it using its ID or alias.
  */
     knock(roomIdOrAlias: string, reason: string | undefined, serverNames: Array<string>, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<RoomLike>;
@@ -56811,6 +57772,11 @@ export interface ClientLike {
  * Completes the OAuth login process.
  */
     loginWithOauthCallback(callbackUrl: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
+/**
+ * Login using a login token, such as the one legacy single sign-on ends
+ * with.
+ */
+    loginWithToken(token: string, initialDeviceName: string | undefined, deviceId: string | undefined, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
 /**
  * Log the current user out.
  */
@@ -56897,6 +57863,19 @@ export interface ClientLike {
  */
     pause(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
 /**
+ * Asks the homeserver for the presence of a user.
+ */
+    presence(userId: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<UserPresence>;
+/**
+ * Asks the homeserver for the user's pushers, as a JSON array.
+ */
+    pushersJson(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<string>;
+/**
+ * Asks the homeserver for the device and cross-signing keys of a user,
+ * as the JSON of a `/keys/query` response.
+ */
+    queryKeysJson(userId: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<string>;
+/**
  * Register a handler for notifications generated from sync responses.
  *
  * The handler will be called during sync for each event that triggers
@@ -56911,6 +57890,10 @@ export interface ClientLike {
  */
     registerNotificationHandler(listener: SyncNotificationListener, asyncOpts_?: { signal: AbortSignal }): Promise<void>;
     removeAvatar(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
+/**
+ * Changes the display name of one of the user's devices.
+ */
+    renameDevice(deviceId: string, displayName: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
     requestOpenidToken(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<OpenIdToken>;
 /**
  * Empty the server version and unstable features cache.
@@ -56986,6 +57969,11 @@ export interface ClientLike {
  * by calling the `/_matrix/federation/v1/version` endpoint.
  */
     serverVendorInfo(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<ServerVendorInfo>;
+/**
+ * Asks the homeserver which versions of the specification and which
+ * unstable features it supports.
+ */
+    serverVersions(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<ServerVersions>;
     session() /*throws*/: Session;
 /**
  * Set the given account data content for the given event type.
@@ -57131,6 +58119,11 @@ export interface ClientLike {
  */
     syncV2(settings: SyncSettingsV2, listener: SyncListenerV2): TaskHandleLike;
 /**
+ * Asks the homeserver for the third party identifiers (email addresses
+ * and phone numbers) of the account, as a JSON array.
+ */
+    threepidsJson(asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<string>;
+/**
  * Get information about the homeserver's advertised map tile server, if
  * any.
  *
@@ -57183,11 +58176,21 @@ export interface ClientLike {
  * are always requested.
  */
     urlForOauth(oauthConfiguration: OAuthConfiguration, prompt: OAuthPrompt | undefined, loginHint: string | undefined, deviceId: string | undefined, additionalScopes: Array<string> | undefined, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<OAuthAuthorizationDataLike>;
+/**
+ * The devices of a user that the crypto store knows of, with whether we
+ * trust them.
+ */
+    userDevices(userId: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<Array<UserDevice>>;
     userId() /*throws*/: string;
 /**
  * The server name part of the current user ID
  */
     userIdServerName() /*throws*/: string;
+/**
+ * Marks a device as trusted, on the user's say-so: by signing it, if it
+ * is one of our own, and locally otherwise.
+ */
+    verifyDevice(userId: string, deviceId: string, asyncOpts_?: { signal: AbortSignal }) /*throws*/: Promise<void>;
 }
 /**
  * @deprecated Use `ClientLike` instead.
@@ -57467,6 +58470,73 @@ private constructor(pointer: UniffiHandle) {
     }
     
 /**
+ * Asks the homeserver for its capabilities, as the JSON it sends.
+ */
+    async capabilitiesJson(asyncOpts_?: { signal: AbortSignal }): Promise<string> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_capabilities_json(
+                    uniffiTypeClientObjectFactory.clonePointer(this)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_rust_buffer,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_rust_buffer,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_rust_buffer,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_rust_buffer,
+            // Async returns always go through the JS-side converter: the
+            // FFI symbol returns the future handle (u64), and the user-level
+            // RustBuffer comes back via the shared `rust_future_complete_*`
+            // export. The bytes the runtime hands back must be deserialized
+            // here using the per-callable return-type converter.
+            // Borrowed view over foreign memory: the call site owns the free,
+            // as on the sync paths. Unconditional — a no-op where buffers are
+            // already JS-owned.
+            /*liftFunc:*/ (__rb) => {
+                try {
+                    return FfiConverterString.lift(__rb);
+                } finally {
+                    nativeModule().rustbuffer_free(__rb);
+                }
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
+ * Changes the password of the account.
+ *
+ * Returns `false`, having changed nothing, if the homeserver wants the
+ * current password for this and none was given. Fails if the homeserver
+ * wants some other kind of authentication.
+ */
+    async changePassword(newPassword: string, currentPassword: string | undefined, asyncOpts_?: { signal: AbortSignal }): Promise<boolean> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_change_password(
+                    uniffiTypeClientObjectFactory.clonePointer(this),FfiConverterString.lower(newPassword, nativeModule().rustbuffer_alloc),FfiConverterOptionalString.lower(currentPassword, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_i8,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_i8,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_i8,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_i8,
+            // Async returns always go through the JS-side converter: the
+            // FFI symbol returns the future handle (u64), and the user-level
+            // RustBuffer comes back via the shared `rust_future_complete_*`
+            // export. The bytes the runtime hands back must be deserialized
+            // here using the per-callable return-type converter.
+            /*liftFunc:*/ FfiConverterBool.lift.bind(FfiConverterBool),
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
  * Clear all the non-critical caches for this Client instance.
  *
  * WARNING: This will clear all the caches, including the base store (state
@@ -57660,6 +58730,37 @@ private constructor(pointer: UniffiHandle) {
     }
     
 /**
+ * Deletes some of the user's devices, signing them out.
+ *
+ * Returns `false`, having deleted nothing, if the homeserver wants the
+ * user's password for this and none was given. Fails if the homeserver
+ * wants some other kind of authentication.
+ */
+    async deleteDevices(deviceIds: Array<string>, password: string | undefined, asyncOpts_?: { signal: AbortSignal }): Promise<boolean> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_delete_devices(
+                    uniffiTypeClientObjectFactory.clonePointer(this),FfiConverterSequenceString.lower(deviceIds, nativeModule().rustbuffer_alloc),FfiConverterOptionalString.lower(password, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_i8,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_i8,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_i8,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_i8,
+            // Async returns always go through the JS-side converter: the
+            // FFI symbol returns the future handle (u64), and the user-level
+            // RustBuffer comes back via the shared `rust_future_complete_*`
+            // export. The bytes the runtime hands back must be deserialized
+            // here using the per-callable return-type converter.
+            /*liftFunc:*/ FfiConverterBool.lift.bind(FfiConverterBool),
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
  * Deletes a pusher of given pusher ids
  */
     async deletePusher(identifiers: PusherIdentifiers, asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
@@ -57696,6 +58797,42 @@ private constructor(pointer: UniffiHandle) {
     } finally {
         nativeModule().rustbuffer_free(__rb);
     }
+    }
+    
+/**
+ * Lists the user's devices, as the homeserver knows them.
+ */
+    async devices(asyncOpts_?: { signal: AbortSignal }): Promise<Array<OwnDevice>> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_devices(
+                    uniffiTypeClientObjectFactory.clonePointer(this)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_rust_buffer,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_rust_buffer,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_rust_buffer,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_rust_buffer,
+            // Async returns always go through the JS-side converter: the
+            // FFI symbol returns the future handle (u64), and the user-level
+            // RustBuffer comes back via the shared `rust_future_complete_*`
+            // export. The bytes the runtime hands back must be deserialized
+            // here using the per-callable return-type converter.
+            // Borrowed view over foreign memory: the call site owns the free,
+            // as on the sync paths. Unconditional — a no-op where buffers are
+            // already JS-owned.
+            /*liftFunc:*/ (__rb) => {
+                try {
+                    return FfiConverterSequenceTypeOwnDevice.lift(__rb);
+                } finally {
+                    nativeModule().rustbuffer_free(__rb);
+                }
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
     }
     
 /**
@@ -57816,6 +58953,43 @@ private constructor(pointer: UniffiHandle) {
             },
             /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
     ));
+    }
+    
+/**
+ * Asks the homeserver for all the user's account data, and all of it for
+ * a room if one is given. The store cannot list it.
+ */
+    async fetchAllAccountData(roomId: string | undefined, asyncOpts_?: { signal: AbortSignal }): Promise<AllAccountData> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_fetch_all_account_data(
+                    uniffiTypeClientObjectFactory.clonePointer(this),FfiConverterOptionalString.lower(roomId, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_rust_buffer,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_rust_buffer,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_rust_buffer,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_rust_buffer,
+            // Async returns always go through the JS-side converter: the
+            // FFI symbol returns the future handle (u64), and the user-level
+            // RustBuffer comes back via the shared `rust_future_complete_*`
+            // export. The bytes the runtime hands back must be deserialized
+            // here using the per-callable return-type converter.
+            // Borrowed view over foreign memory: the call site owns the free,
+            // as on the sync paths. Unconditional — a no-op where buffers are
+            // already JS-owned.
+            /*liftFunc:*/ (__rb) => {
+                try {
+                    return FfiConverterTypeAllAccountData.lift(__rb);
+                } finally {
+                    nativeModule().rustbuffer_free(__rb);
+                }
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
     }
     
 /**
@@ -58766,6 +59940,42 @@ private constructor(pointer: UniffiHandle) {
     }
     
 /**
+ * The key backup the homeserver holds, if it holds one.
+ */
+    async keyBackupInfo(asyncOpts_?: { signal: AbortSignal }): Promise<KeyBackupInfo | undefined> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_key_backup_info(
+                    uniffiTypeClientObjectFactory.clonePointer(this)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_rust_buffer,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_rust_buffer,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_rust_buffer,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_rust_buffer,
+            // Async returns always go through the JS-side converter: the
+            // FFI symbol returns the future handle (u64), and the user-level
+            // RustBuffer comes back via the shared `rust_future_complete_*`
+            // export. The bytes the runtime hands back must be deserialized
+            // here using the per-callable return-type converter.
+            // Borrowed view over foreign memory: the call site owns the free,
+            // as on the sync paths. Unconditional — a no-op where buffers are
+            // already JS-owned.
+            /*liftFunc:*/ (__rb) => {
+                try {
+                    return FfiConverterOptionalTypeKeyBackupInfo.lift(__rb);
+                } finally {
+                    nativeModule().rustbuffer_free(__rb);
+                }
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
  * Knock on a room to join it using its ID or alias.
  */
     async knock(roomIdOrAlias: string, reason: string | undefined, serverNames: Array<string>, asyncOpts_?: { signal: AbortSignal }): Promise<RoomLike> /*throws*/ {
@@ -58855,6 +60065,29 @@ private constructor(pointer: UniffiHandle) {
             /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
             /*asyncOpts:*/ asyncOpts_,
             /*errorHandler:*/ FfiConverterTypeOAuthError.lift.bind(FfiConverterTypeOAuthError)
+        );
+    }
+    
+/**
+ * Login using a login token, such as the one legacy single sign-on ends
+ * with.
+ */
+    async loginWithToken(token: string, initialDeviceName: string | undefined, deviceId: string | undefined, asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_login_with_token(
+                    uniffiTypeClientObjectFactory.clonePointer(this),FfiConverterString.lower(token, nativeModule().rustbuffer_alloc),FfiConverterOptionalString.lower(initialDeviceName, nativeModule().rustbuffer_alloc),FfiConverterOptionalString.lower(deviceId, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_void,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_void,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_void,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_void,
+            /*liftFunc:*/ (_v) => {},
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
         );
     }
     
@@ -59109,6 +60342,115 @@ private constructor(pointer: UniffiHandle) {
     }
     
 /**
+ * Asks the homeserver for the presence of a user.
+ */
+    async presence(userId: string, asyncOpts_?: { signal: AbortSignal }): Promise<UserPresence> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_presence(
+                    uniffiTypeClientObjectFactory.clonePointer(this),FfiConverterString.lower(userId, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_rust_buffer,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_rust_buffer,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_rust_buffer,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_rust_buffer,
+            // Async returns always go through the JS-side converter: the
+            // FFI symbol returns the future handle (u64), and the user-level
+            // RustBuffer comes back via the shared `rust_future_complete_*`
+            // export. The bytes the runtime hands back must be deserialized
+            // here using the per-callable return-type converter.
+            // Borrowed view over foreign memory: the call site owns the free,
+            // as on the sync paths. Unconditional — a no-op where buffers are
+            // already JS-owned.
+            /*liftFunc:*/ (__rb) => {
+                try {
+                    return FfiConverterTypeUserPresence.lift(__rb);
+                } finally {
+                    nativeModule().rustbuffer_free(__rb);
+                }
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
+ * Asks the homeserver for the user's pushers, as a JSON array.
+ */
+    async pushersJson(asyncOpts_?: { signal: AbortSignal }): Promise<string> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_pushers_json(
+                    uniffiTypeClientObjectFactory.clonePointer(this)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_rust_buffer,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_rust_buffer,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_rust_buffer,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_rust_buffer,
+            // Async returns always go through the JS-side converter: the
+            // FFI symbol returns the future handle (u64), and the user-level
+            // RustBuffer comes back via the shared `rust_future_complete_*`
+            // export. The bytes the runtime hands back must be deserialized
+            // here using the per-callable return-type converter.
+            // Borrowed view over foreign memory: the call site owns the free,
+            // as on the sync paths. Unconditional — a no-op where buffers are
+            // already JS-owned.
+            /*liftFunc:*/ (__rb) => {
+                try {
+                    return FfiConverterString.lift(__rb);
+                } finally {
+                    nativeModule().rustbuffer_free(__rb);
+                }
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
+ * Asks the homeserver for the device and cross-signing keys of a user,
+ * as the JSON of a `/keys/query` response.
+ */
+    async queryKeysJson(userId: string, asyncOpts_?: { signal: AbortSignal }): Promise<string> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_query_keys_json(
+                    uniffiTypeClientObjectFactory.clonePointer(this),FfiConverterString.lower(userId, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_rust_buffer,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_rust_buffer,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_rust_buffer,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_rust_buffer,
+            // Async returns always go through the JS-side converter: the
+            // FFI symbol returns the future handle (u64), and the user-level
+            // RustBuffer comes back via the shared `rust_future_complete_*`
+            // export. The bytes the runtime hands back must be deserialized
+            // here using the per-callable return-type converter.
+            // Borrowed view over foreign memory: the call site owns the free,
+            // as on the sync paths. Unconditional — a no-op where buffers are
+            // already JS-owned.
+            /*liftFunc:*/ (__rb) => {
+                try {
+                    return FfiConverterString.lift(__rb);
+                } finally {
+                    nativeModule().rustbuffer_free(__rb);
+                }
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
  * Register a handler for notifications generated from sync responses.
  *
  * The handler will be called during sync for each event that triggers
@@ -59146,6 +60488,28 @@ private constructor(pointer: UniffiHandle) {
             /*rustFutureFunc:*/ () => {
                 return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_remove_avatar(
                     uniffiTypeClientObjectFactory.clonePointer(this)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_void,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_void,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_void,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_void,
+            /*liftFunc:*/ (_v) => {},
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
+ * Changes the display name of one of the user's devices.
+ */
+    async renameDevice(deviceId: string, displayName: string, asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_rename_device(
+                    uniffiTypeClientObjectFactory.clonePointer(this),FfiConverterString.lower(deviceId, nativeModule().rustbuffer_alloc),FfiConverterString.lower(displayName, nativeModule().rustbuffer_alloc)
                 );
             },
             /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_void,
@@ -59505,6 +60869,43 @@ private constructor(pointer: UniffiHandle) {
             /*liftFunc:*/ (__rb) => {
                 try {
                     return FfiConverterTypeServerVendorInfo.lift(__rb);
+                } finally {
+                    nativeModule().rustbuffer_free(__rb);
+                }
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
+ * Asks the homeserver which versions of the specification and which
+ * unstable features it supports.
+ */
+    async serverVersions(asyncOpts_?: { signal: AbortSignal }): Promise<ServerVersions> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_server_versions(
+                    uniffiTypeClientObjectFactory.clonePointer(this)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_rust_buffer,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_rust_buffer,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_rust_buffer,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_rust_buffer,
+            // Async returns always go through the JS-side converter: the
+            // FFI symbol returns the future handle (u64), and the user-level
+            // RustBuffer comes back via the shared `rust_future_complete_*`
+            // export. The bytes the runtime hands back must be deserialized
+            // here using the per-callable return-type converter.
+            // Borrowed view over foreign memory: the call site owns the free,
+            // as on the sync paths. Unconditional — a no-op where buffers are
+            // already JS-owned.
+            /*liftFunc:*/ (__rb) => {
+                try {
+                    return FfiConverterTypeServerVersions.lift(__rb);
                 } finally {
                     nativeModule().rustbuffer_free(__rb);
                 }
@@ -60132,6 +61533,43 @@ private constructor(pointer: UniffiHandle) {
     }
     
 /**
+ * Asks the homeserver for the third party identifiers (email addresses
+ * and phone numbers) of the account, as a JSON array.
+ */
+    async threepidsJson(asyncOpts_?: { signal: AbortSignal }): Promise<string> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_threepids_json(
+                    uniffiTypeClientObjectFactory.clonePointer(this)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_rust_buffer,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_rust_buffer,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_rust_buffer,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_rust_buffer,
+            // Async returns always go through the JS-side converter: the
+            // FFI symbol returns the future handle (u64), and the user-level
+            // RustBuffer comes back via the shared `rust_future_complete_*`
+            // export. The bytes the runtime hands back must be deserialized
+            // here using the per-callable return-type converter.
+            // Borrowed view over foreign memory: the call site owns the free,
+            // as on the sync paths. Unconditional — a no-op where buffers are
+            // already JS-owned.
+            /*liftFunc:*/ (__rb) => {
+                try {
+                    return FfiConverterString.lift(__rb);
+                } finally {
+                    nativeModule().rustbuffer_free(__rb);
+                }
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
+/**
  * Get information about the homeserver's advertised map tile server, if
  * any.
  *
@@ -60335,6 +61773,43 @@ private constructor(pointer: UniffiHandle) {
         );
     }
     
+/**
+ * The devices of a user that the crypto store knows of, with whether we
+ * trust them.
+ */
+    async userDevices(userId: string, asyncOpts_?: { signal: AbortSignal }): Promise<Array<UserDevice>> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_user_devices(
+                    uniffiTypeClientObjectFactory.clonePointer(this),FfiConverterString.lower(userId, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_rust_buffer,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_rust_buffer,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_rust_buffer,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_rust_buffer,
+            // Async returns always go through the JS-side converter: the
+            // FFI symbol returns the future handle (u64), and the user-level
+            // RustBuffer comes back via the shared `rust_future_complete_*`
+            // export. The bytes the runtime hands back must be deserialized
+            // here using the per-callable return-type converter.
+            // Borrowed view over foreign memory: the call site owns the free,
+            // as on the sync paths. Unconditional — a no-op where buffers are
+            // already JS-owned.
+            /*liftFunc:*/ (__rb) => {
+                try {
+                    return FfiConverterSequenceTypeUserDevice.lift(__rb);
+                } finally {
+                    nativeModule().rustbuffer_free(__rb);
+                }
+            },
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
+    }
+    
     userId(): string /*throws*/ {
     const __rb: Uint8Array = uniffiCaller.rustCallWithError(
             /*liftError:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError),
@@ -60370,6 +61845,29 @@ private constructor(pointer: UniffiHandle) {
     } finally {
         nativeModule().rustbuffer_free(__rb);
     }
+    }
+    
+/**
+ * Marks a device as trusted, on the user's say-so: by signing it, if it
+ * is one of our own, and locally otherwise.
+ */
+    async verifyDevice(userId: string, deviceId: string, asyncOpts_?: { signal: AbortSignal }): Promise<void> /*throws*/ {
+    return await uniffiRustCallAsync(
+            /*rustCaller:*/ uniffiCaller,
+            /*rustFutureFunc:*/ () => {
+                return nativeModule().ubrn_uniffi_matrix_sdk_ffi_fn_method_client_verify_device(
+                    uniffiTypeClientObjectFactory.clonePointer(this),FfiConverterString.lower(userId, nativeModule().rustbuffer_alloc),FfiConverterString.lower(deviceId, nativeModule().rustbuffer_alloc)
+                );
+            },
+            /*pollFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_poll_void,
+            /*cancelFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_cancel_void,
+            /*completeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_complete_void,
+            /*freeFunc:*/ nativeModule().ubrn_ffi_matrix_sdk_ffi_rust_future_free_void,
+            /*liftFunc:*/ (_v) => {},
+            /*liftString:*/ FfiConverterString.lift.bind(FfiConverterString),
+            /*asyncOpts:*/ asyncOpts_,
+            /*errorHandler:*/ FfiConverterTypeClientError.lift.bind(FfiConverterTypeClientError)
+        );
     }
     
 
@@ -61772,6 +63270,9 @@ const uniffiTypeUnreadNotificationsCountObjectFactory: UniffiObjectFactory<Unrea
 }})();
 const FfiConverterTypeUnreadNotificationsCount = new FfiConverterObject(uniffiTypeUnreadNotificationsCountObjectFactory);
 
+// FfiConverter for Array<string>
+const FfiConverterSequenceString = new FfiConverterArray(FfiConverterString);
+
 // FfiConverter for number | undefined
 const FfiConverterOptionalDuration = new FfiConverterOptional(FfiConverterDuration);
 
@@ -61816,9 +63317,6 @@ const FfiConverterSequenceTypeAction = new FfiConverterArray(FfiConverterTypeAct
 
 // FfiConverter for Array<PushCondition>
 const FfiConverterSequenceTypePushCondition = new FfiConverterArray(FfiConverterTypePushCondition);
-
-// FfiConverter for Array<string>
-const FfiConverterSequenceString = new FfiConverterArray(FfiConverterString);
 
 // FfiConverter for Array<string> | undefined
 const FfiConverterOptionalSequenceString = new FfiConverterOptional(FfiConverterSequenceString);
@@ -62000,6 +63498,9 @@ const FfiConverterSequenceTypeSimplePushRule = new FfiConverterArray(FfiConverte
 // FfiConverter for Array<UserProfile>
 const FfiConverterSequenceTypeUserProfile = new FfiConverterArray(FfiConverterTypeUserProfile);
 
+// FfiConverter for Map<string, boolean>
+const FfiConverterMapStringBoolean = new FfiConverterMap(FfiConverterString, FfiConverterBool);
+
 // FfiConverter for number | undefined
 const FfiConverterOptionalFloat64 = new FfiConverterOptional(FfiConverterFloat64);
 
@@ -62141,6 +63642,9 @@ const FfiConverterOptionalTypeContentScanner = new FfiConverterOptional(FfiConve
 // FfiConverter for AuthData | undefined
 const FfiConverterOptionalTypeAuthData = new FfiConverterOptional(FfiConverterTypeAuthData);
 
+// FfiConverter for Array<OwnDevice>
+const FfiConverterSequenceTypeOwnDevice = new FfiConverterArray(FfiConverterTypeOwnDevice);
+
 // FfiConverter for IdentityResetHandleLike | undefined
 const FfiConverterOptionalTypeIdentityResetHandle = new FfiConverterOptional(FfiConverterTypeIdentityResetHandle);
 
@@ -62162,8 +63666,14 @@ const FfiConverterOptionalTypeNotificationSettingsDelegate = new FfiConverterOpt
 // FfiConverter for SessionVerificationControllerDelegate | undefined
 const FfiConverterOptionalTypeSessionVerificationControllerDelegate = new FfiConverterOptional(FfiConverterTypeSessionVerificationControllerDelegate);
 
+// FfiConverter for Array<SsoIdentityProvider>
+const FfiConverterSequenceTypeSsoIdentityProvider = new FfiConverterArray(FfiConverterTypeSsoIdentityProvider);
+
 // FfiConverter for Array<OAuthPrompt>
 const FfiConverterSequenceTypeOAuthPrompt = new FfiConverterArray(FfiConverterTypeOAuthPrompt);
+
+// FfiConverter for KeyBackupInfo | undefined
+const FfiConverterOptionalTypeKeyBackupInfo = new FfiConverterOptional(FfiConverterTypeKeyBackupInfo);
 
 // FfiConverter for Array<NotificationItemsRequest>
 const FfiConverterSequenceTypeNotificationItemsRequest = new FfiConverterArray(FfiConverterTypeNotificationItemsRequest);
@@ -62206,6 +63716,9 @@ const FfiConverterOptionalTypeProgressWatcher = new FfiConverterOptional(FfiConv
 
 // FfiConverter for OAuthPrompt | undefined
 const FfiConverterOptionalTypeOAuthPrompt = new FfiConverterOptional(FfiConverterTypeOAuthPrompt);
+
+// FfiConverter for Array<UserDevice>
+const FfiConverterSequenceTypeUserDevice = new FfiConverterArray(FfiConverterTypeUserDevice);
 
 // FfiConverter for Array<ArrayBuffer>
 const FfiConverterSequenceBytes = new FfiConverterArray(FfiConverterArrayBuffer);
@@ -62334,6 +63847,12 @@ function uniffiEnsureInitialized() {
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_can_deactivate_account() !== 27747) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_can_deactivate_account");
     }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_capabilities_json() !== 8518) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_capabilities_json");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_change_password() !== 55601) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_change_password");
+    }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_clear_caches() !== 61351) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_clear_caches");
     }
@@ -62352,11 +63871,17 @@ function uniffiEnsureInitialized() {
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_deactivate_account() !== 7894) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_deactivate_account");
     }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_delete_devices() !== 44449) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_delete_devices");
+    }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_delete_pusher() !== 20472) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_delete_pusher");
     }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_device_id() !== 63337) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_device_id");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_devices() !== 56596) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_devices");
     }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_disable_well_known_lookup() !== 45272) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_disable_well_known_lookup");
@@ -62375,6 +63900,9 @@ function uniffiEnsureInitialized() {
     }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_encryption() !== 13362) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_encryption");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_fetch_all_account_data() !== 59035) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_fetch_all_account_data");
     }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_fetch_media_preview_config() !== 53942) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_fetch_media_preview_config");
@@ -62472,6 +64000,9 @@ function uniffiEnsureInitialized() {
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_join_room_by_id_or_alias() !== 16138) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_join_room_by_id_or_alias");
     }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_key_backup_info() !== 49452) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_key_backup_info");
+    }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_knock() !== 40592) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_knock");
     }
@@ -62483,6 +64014,9 @@ function uniffiEnsureInitialized() {
     }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_login_with_oauth_callback() !== 24379) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_login_with_oauth_callback");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_login_with_token() !== 47790) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_login_with_token");
     }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_logout() !== 54411) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_logout");
@@ -62514,11 +64048,23 @@ function uniffiEnsureInitialized() {
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_pause() !== 1344) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_pause");
     }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_presence() !== 41060) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_presence");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_pushers_json() !== 17507) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_pushers_json");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_query_keys_json() !== 18964) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_query_keys_json");
+    }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_register_notification_handler() !== 46860) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_register_notification_handler");
     }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_remove_avatar() !== 12536) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_remove_avatar");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_rename_device() !== 26574) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_rename_device");
     }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_request_openid_token() !== 19654) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_request_openid_token");
@@ -62558,6 +64104,9 @@ function uniffiEnsureInitialized() {
     }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_server_vendor_info() !== 25767) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_server_vendor_info");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_server_versions() !== 27814) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_server_versions");
     }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_session() !== 47980) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_session");
@@ -62640,6 +64189,9 @@ function uniffiEnsureInitialized() {
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_sync_v2() !== 9900) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_sync_v2");
     }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_threepids_json() !== 39758) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_threepids_json");
+    }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_tile_server() !== 43179) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_tile_server");
     }
@@ -62661,11 +64213,17 @@ function uniffiEnsureInitialized() {
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_url_for_oauth() !== 38795) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_url_for_oauth");
     }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_user_devices() !== 28668) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_user_devices");
+    }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_user_id() !== 11375) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_user_id");
     }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_user_id_server_name() !== 52727) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_user_id_server_name");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_client_verify_device() !== 56111) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_client_verify_device");
     }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_constructor_clientbuilder_new() !== 40475) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_constructor_clientbuilder_new");
@@ -62889,6 +64447,9 @@ function uniffiEnsureInitialized() {
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_homeserverlogindetails_sliding_sync_version() !== 8075) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_homeserverlogindetails_sliding_sync_version");
     }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_homeserverlogindetails_sso_identity_providers() !== 27585) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_homeserverlogindetails_sso_identity_providers");
+    }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_homeserverlogindetails_supported_oauth_prompts() !== 60664) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_homeserverlogindetails_supported_oauth_prompts");
     }
@@ -63093,6 +64654,9 @@ function uniffiEnsureInitialized() {
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_qrcodedata_to_bytes() !== 22532) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_qrcodedata_to_bytes");
     }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_account_data() !== 61457) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_account_data");
+    }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_active_human_member_ids() !== 13215) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_active_human_member_ids");
     }
@@ -63143,6 +64707,18 @@ function uniffiEnsureInitialized() {
     }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_encryption_state() !== 35766) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_encryption_state");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_event_id_at_timestamp() !== 35538) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_event_id_at_timestamp");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_fetch_event_json() !== 22060) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_fetch_event_json");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_fetch_state() !== 47464) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_fetch_state");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_fetch_state_event_content() !== 38898) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_fetch_state_event_content");
     }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_fetch_thread_subscription() !== 65386) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_fetch_thread_subscription");
@@ -63228,6 +64804,9 @@ function uniffiEnsureInitialized() {
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_load_user_receipt() !== 16820) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_load_user_receipt");
     }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_local_aliases() !== 23676) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_local_aliases");
+    }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_mark_as_fully_read_unchecked() !== 1608) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_mark_as_fully_read_unchecked");
     }
@@ -63264,6 +64843,9 @@ function uniffiEnsureInitialized() {
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_own_user_id() !== 32346) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_own_user_id");
     }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_participated_thread_ids() !== 24520) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_participated_thread_ids");
+    }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_predecessor_room() !== 21931) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_predecessor_room");
     }
@@ -63279,11 +64861,17 @@ function uniffiEnsureInitialized() {
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_redact() !== 56590) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_redact");
     }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_relations_json() !== 55234) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_relations_json");
+    }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_remove_avatar() !== 3551) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_remove_avatar");
     }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_remove_room_alias_from_room_directory() !== 26389) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_remove_room_alias_from_room_directory");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_remove_tag() !== 63786) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_remove_tag");
     }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_report_content() !== 37734) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_report_content");
@@ -63315,6 +64903,9 @@ function uniffiEnsureInitialized() {
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_send_state_event_raw() !== 55730) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_send_state_event_raw");
     }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_set_account_data() !== 2906) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_set_account_data");
+    }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_set_is_favourite() !== 1289) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_set_is_favourite");
     }
@@ -63326,6 +64917,9 @@ function uniffiEnsureInitialized() {
     }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_set_own_member_display_name() !== 40370) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_set_own_member_display_name");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_set_tag() !== 61182) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_set_tag");
     }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_set_thread_subscription() !== 55986) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_set_thread_subscription");
@@ -63366,6 +64960,9 @@ function uniffiEnsureInitialized() {
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_suggested_role_for_user() !== 58040) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_suggested_role_for_user");
     }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_tags_json() !== 54119) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_tags_json");
+    }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_thread_list_service() !== 13714) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_thread_list_service");
     }
@@ -63398,6 +64995,9 @@ function uniffiEnsureInitialized() {
     }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_update_room_visibility() !== 46267) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_update_room_visibility");
+    }
+    if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_upgrade() !== 52382) {
+        throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_upgrade");
     }
     if (nativeModule().ubrn_uniffi_matrix_sdk_ffi_checksum_method_room_upload_avatar() !== 43932) {
         throw new UniffiInternalError.ApiChecksumMismatch("uniffi_matrix_sdk_ffi_checksum_method_room_upload_avatar");
@@ -63973,6 +65573,7 @@ export default Object.freeze({
     FfiConverterTypeAccountDataEventType,
     FfiConverterTypeAccountManagementAction,
     FfiConverterTypeAction,
+    FfiConverterTypeAllAccountData,
     FfiConverterTypeAllowRule,
     FfiConverterTypeAssetType,
     FfiConverterTypeAudioInfo,
@@ -64046,6 +65647,7 @@ export default Object.freeze({
     FfiConverterTypeInviteAvatars,
     FfiConverterTypeJoinRule,
     FfiConverterTypeJsonValue,
+    FfiConverterTypeKeyBackupInfo,
     FfiConverterTypeKeyDerivationAlgorithm,
     FfiConverterTypeKnockRequest,
     FfiConverterTypeKnockRequestActions,
@@ -64100,6 +65702,7 @@ export default Object.freeze({
     FfiConverterTypeOAuthPrompt,
     FfiConverterTypeOpenIdToken,
     FfiConverterTypeOtherState,
+    FfiConverterTypeOwnDevice,
     FfiConverterTypeParseError,
     FfiConverterTypePassPhrase,
     FfiConverterTypePasswordStrengthEstimate,
@@ -64185,6 +65788,7 @@ export default Object.freeze({
     FfiConverterTypeSecretsBundleWithUserId,
     FfiConverterTypeSendAttachmentJoinHandle,
     FfiConverterTypeSendHandle,
+    FfiConverterTypeServerVersions,
     FfiConverterTypeSession,
     FfiConverterTypeSessionVerificationController,
     FfiConverterTypeSessionVerificationData,
@@ -64203,6 +65807,7 @@ export default Object.freeze({
     FfiConverterTypeSpan,
     FfiConverterTypeSsoError,
     FfiConverterTypeSsoHandler,
+    FfiConverterTypeSsoIdentityProvider,
     FfiConverterTypeStartDehydratedDevicesSettings,
     FfiConverterTypeStateEventContent,
     FfiConverterTypeSteadyStateError,
@@ -64248,8 +65853,10 @@ export default Object.freeze({
     FfiConverterTypeUploadParameters,
     FfiConverterTypeUploadSource,
     FfiConverterTypeUserCall,
+    FfiConverterTypeUserDevice,
     FfiConverterTypeUserIdentity,
     FfiConverterTypeUserPowerLevelUpdate,
+    FfiConverterTypeUserPresence,
     FfiConverterTypeUserProfile,
     FfiConverterTypeUserReceipt,
     FfiConverterTypeUserStatus,

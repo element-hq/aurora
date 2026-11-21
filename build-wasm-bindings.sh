@@ -2,6 +2,10 @@
 
 set -e
 
+# The wasm-bindgen CLI must be the version of the wasm-bindgen crate in the SDK's Cargo.lock. One installed with
+# `cargo install wasm-bindgen-cli --version <that> --root rust_modules/.tools` is used in preference to any other.
+export PATH="$PWD/rust_modules/.tools/bin:$PATH"
+
 echo "==> Step 1: Cleaning..."
 pnpm ubrn:clean
 
@@ -13,7 +17,8 @@ git -C rust_modules/matrix-rust-sdk reset --hard HEAD
 echo "    ✓ Repository clean"
 
 echo "==> Step 4: Fetching full git history for patch application..."
-git -C rust_modules/matrix-rust-sdk fetch --unshallow
+# `git apply` does not need the history, so carry on if this fails
+git -C rust_modules/matrix-rust-sdk fetch --unshallow || echo "    ⚠ Could not fetch the full history"
 
 echo "==> Step 5: Applying wasm SystemTime fix patch..."
 if git -C rust_modules/matrix-rust-sdk apply ../../patches/0002-Fix-wasm-SystemTime-in-automatic-call-status.patch; then
@@ -22,6 +27,10 @@ else
     echo "    ✗ Patch failed!"
     exit 1
 fi
+
+echo "==> Step 5a: Applying the bindings Element Web needs..."
+git -C rust_modules/matrix-rust-sdk apply ../../patches/0003-Add-bindings-element-web-needs.patch
+echo "    ✓ Patch applied"
 
 echo "==> Step 5b: Removing forced experimental-search from matrix-sdk-ffi..."
 # matrix-sdk-ffi enables matrix-sdk/experimental-search unconditionally, which

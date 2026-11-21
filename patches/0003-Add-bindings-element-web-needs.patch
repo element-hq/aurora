@@ -1,0 +1,590 @@
+diff --git a/bindings/matrix-sdk-ffi/src/authentication.rs b/bindings/matrix-sdk-ffi/src/authentication.rs
+index 474d3d310..ba58ff7a2 100644
+--- a/bindings/matrix-sdk-ffi/src/authentication.rs
++++ b/bindings/matrix-sdk-ffi/src/authentication.rs
+@@ -29,7 +29,7 @@ use matrix_sdk::{
+ use ruma::serde::Raw;
+ use url::Url;
+ 
+-use crate::client::{Client, OAuthPrompt, SlidingSyncVersion};
++use crate::client::{Client, OAuthPrompt, SlidingSyncVersion, SsoIdentityProvider};
+ 
+ #[derive(uniffi::Object)]
+ pub struct HomeserverLoginDetails {
+@@ -38,6 +38,7 @@ pub struct HomeserverLoginDetails {
+     pub(crate) supports_oauth_login: bool,
+     pub(crate) supported_oauth_prompts: Vec<OAuthPrompt>,
+     pub(crate) supports_sso_login: bool,
++    pub(crate) sso_identity_providers: Vec<SsoIdentityProvider>,
+     pub(crate) supports_password_login: bool,
+ }
+ 
+@@ -69,6 +70,13 @@ impl HomeserverLoginDetails {
+         self.supports_sso_login
+     }
+ 
++    /// The identity providers the homeserver offers for legacy single
++    /// sign-on. A homeserver which names none may still have its one, default,
++    /// provider.
++    pub fn sso_identity_providers(&self) -> Vec<SsoIdentityProvider> {
++        self.sso_identity_providers.clone()
++    }
++
+     /// Whether the current homeserver supports the password login flow.
+     pub fn supports_password_login(&self) -> bool {
+         self.supports_password_login
+diff --git a/bindings/matrix-sdk-ffi/src/client.rs b/bindings/matrix-sdk-ffi/src/client.rs
+index 67d875724..cf8d4d627 100644
+--- a/bindings/matrix-sdk-ffi/src/client.rs
++++ b/bindings/matrix-sdk-ffi/src/client.rs
+@@ -571,6 +571,21 @@ impl Client {
+                 })
+             })
+             .unwrap_or(false);
++        let sso_identity_providers = login_types
++            .iter()
++            .flat_map(|login_types| &login_types.flows)
++            .filter_map(|flow| match flow {
++                get_login_types::v3::LoginType::Sso(sso) => Some(&sso.identity_providers),
++                _ => None,
++            })
++            .flatten()
++            .map(|provider| SsoIdentityProvider {
++                id: provider.id.clone(),
++                name: provider.name.clone(),
++                icon: provider.icon.as_ref().map(|icon| icon.to_string()),
++                brand: provider.brand.as_ref().map(|brand| brand.as_str().to_owned()),
++            })
++            .collect();
+         let supports_sso_login = login_types
+             .as_ref()
+             .map(|login_types| {
+@@ -588,6 +603,7 @@ impl Client {
+             supports_oauth_login,
+             supported_oauth_prompts,
+             supports_sso_login,
++            sso_identity_providers,
+             supports_password_login,
+         })
+     }
+@@ -3732,3 +3748,348 @@ mod tests {
+         assert!(converted.call.is_none());
+     }
+ }
++
++/// Whether a request failed because the homeserver has no such thing.
++pub(crate) fn is_not_found(error: &matrix_sdk::HttpError) -> bool {
++    error.as_client_api_error().is_some_and(|e| e.status_code.as_u16() == 404)
++}
++
++/// One of the user's devices, as the homeserver lists it.
++#[derive(uniffi::Record)]
++pub struct OwnDevice {
++    pub device_id: String,
++    pub display_name: Option<String>,
++    pub last_seen_ip: Option<String>,
++    /// When the device was last seen, in milliseconds since the Unix epoch.
++    pub last_seen_ts: Option<u64>,
++}
++
++/// An identity provider a homeserver offers for legacy single sign-on.
++#[derive(Clone, uniffi::Record)]
++pub struct SsoIdentityProvider {
++    pub id: String,
++    pub name: String,
++    /// The `mxc://` URI of its icon.
++    pub icon: Option<String>,
++    /// The well-known brand it belongs to, such as `google`.
++    pub brand: Option<String>,
++}
++
++/// What a homeserver says it supports, at `/_matrix/client/versions`.
++#[derive(uniffi::Record)]
++pub struct ServerVersions {
++    pub versions: Vec<String>,
++    pub unstable_features: HashMap<String, bool>,
++}
++
++/// The key backup the homeserver holds.
++#[derive(uniffi::Record)]
++pub struct KeyBackupInfo {
++    pub version: String,
++    pub algorithm: String,
++}
++
++/// All the account data the homeserver holds for the user, as JSON events.
++#[derive(uniffi::Record)]
++pub struct AllAccountData {
++    pub global: Vec<String>,
++    /// That of the room which was asked about, if one was.
++    pub room: Vec<String>,
++}
++
++#[matrix_sdk_ffi_macros::export]
++impl Client {
++    /// Lists the user's devices, as the homeserver knows them.
++    pub async fn devices(&self) -> Result<Vec<OwnDevice>, ClientError> {
++        let devices = self.inner.devices().await?.devices;
++        Ok(devices
++            .into_iter()
++            .map(|device| OwnDevice {
++                device_id: device.device_id.to_string(),
++                display_name: device.display_name,
++                last_seen_ip: device.last_seen_ip,
++                last_seen_ts: device.last_seen_ts.map(|ts| ts.0.into()),
++            })
++            .collect())
++    }
++
++    /// Changes the display name of one of the user's devices.
++    pub async fn rename_device(
++        &self,
++        device_id: String,
++        display_name: String,
++    ) -> Result<(), ClientError> {
++        self.inner.rename_device(device_id.as_str().into(), &display_name).await?;
++        Ok(())
++    }
++
++    /// Deletes some of the user's devices, signing them out.
++    ///
++    /// Returns `false`, having deleted nothing, if the homeserver wants the
++    /// user's password for this and none was given. Fails if the homeserver
++    /// wants some other kind of authentication.
++    pub async fn delete_devices(
++        &self,
++        device_ids: Vec<String>,
++        password: Option<String>,
++    ) -> Result<bool, ClientError> {
++        use ruma::api::client::uiaa;
++
++        let devices: Vec<OwnedDeviceId> = device_ids.into_iter().map(Into::into).collect();
++        let Err(error) = self.inner.delete_devices(&devices, None).await else {
++            return Ok(true);
++        };
++        let Some(info) = error.as_uiaa_response() else {
++            return Err(error.into());
++        };
++        if !info.flows.iter().any(|flow| flow.stages.first() == Some(&uiaa::AuthType::Password)) {
++            return Err(error.into());
++        }
++        let Some(password) = password else {
++            return Ok(false);
++        };
++
++        let user_id = self.inner.user_id().context("No user is signed in")?.to_owned();
++        let mut auth = uiaa::Password::new(user_id.into(), password);
++        auth.session = info.session.clone();
++        self.inner.delete_devices(&devices, Some(uiaa::AuthData::Password(auth))).await?;
++        Ok(true)
++    }
++
++    /// Login using a login token, such as the one legacy single sign-on ends
++    /// with.
++    pub async fn login_with_token(
++        &self,
++        token: String,
++        initial_device_name: Option<String>,
++        device_id: Option<String>,
++    ) -> Result<(), ClientError> {
++        let mut builder = self.inner.matrix_auth().login_token(&token);
++
++        if let Some(initial_device_name) = initial_device_name.as_ref() {
++            builder = builder.initial_device_display_name(initial_device_name);
++        }
++
++        if let Some(device_id) = device_id.as_ref() {
++            builder = builder.device_id(device_id);
++        }
++
++        builder.send().await?;
++
++        Ok(())
++    }
++
++    /// Asks the homeserver which versions of the specification and which
++    /// unstable features it supports.
++    pub async fn server_versions(&self) -> Result<ServerVersions, ClientError> {
++        let request = ruma::api::client::discovery::get_supported_versions::Request::new();
++        let response = self.inner.send(request).await?;
++        Ok(ServerVersions {
++            versions: response.versions,
++            unstable_features: response.unstable_features.into_iter().collect(),
++        })
++    }
++
++    /// Asks the homeserver for its capabilities, as the JSON it sends.
++    pub async fn capabilities_json(&self) -> Result<String, ClientError> {
++        let request = ruma::api::client::discovery::get_capabilities::v3::Request::new();
++        let response = self.inner.send(request).await?;
++        Ok(serde_json::to_string(&response.capabilities)?)
++    }
++
++    /// Asks the homeserver for the device and cross-signing keys of a user,
++    /// as the JSON of a `/keys/query` response.
++    pub async fn query_keys_json(&self, user_id: String) -> Result<String, ClientError> {
++        let mut request = ruma::api::client::keys::get_keys::v3::Request::new();
++        request.device_keys.insert(ruma::UserId::parse(user_id)?, Vec::new());
++        let response = self.inner.send(request).await?;
++        Ok(json!({
++            "device_keys": response.device_keys,
++            "master_keys": response.master_keys,
++            "self_signing_keys": response.self_signing_keys,
++            "user_signing_keys": response.user_signing_keys,
++        })
++        .to_string())
++    }
++
++    /// The key backup the homeserver holds, if it holds one.
++    pub async fn key_backup_info(&self) -> Result<Option<KeyBackupInfo>, ClientError> {
++        let request = ruma::api::client::backup::get_latest_backup_info::v3::Request::new();
++        match self.inner.send(request).await {
++            Ok(response) => Ok(Some(KeyBackupInfo {
++                version: response.version,
++                algorithm: response
++                    .algorithm
++                    .get_field::<String>("algorithm")
++                    .ok()
++                    .flatten()
++                    .unwrap_or_default(),
++            })),
++            Err(error) if is_not_found(&error) => Ok(None),
++            Err(error) => Err(error.into()),
++        }
++    }
++
++    /// Asks the homeserver for all the user's account data, and all of it for
++    /// a room if one is given. The store cannot list it.
++    pub async fn fetch_all_account_data(
++        &self,
++        room_id: Option<String>,
++    ) -> Result<AllAccountData, ClientError> {
++        use ruma::api::client::{filter::FilterDefinition, sync::sync_events};
++
++        let room_id = room_id.map(ruma::RoomId::parse).transpose()?;
++        // A sync of nothing but account data, which is answered with all of it
++        let none = json!({ "not_types": ["*"] });
++        let filter: FilterDefinition = serde_json::from_value(json!({
++            "presence": none,
++            "room": {
++                "rooms": room_id.iter().collect::<Vec<_>>(),
++                "timeline": { "limit": 0 },
++                "state": none,
++                "ephemeral": none,
++            },
++        }))?;
++        let mut request = sync_events::v3::Request::new();
++        request.filter = Some(sync_events::v3::Filter::FilterDefinition(filter));
++        let mut response = self.inner.send(request).await?;
++
++        Ok(AllAccountData {
++            global: response
++                .account_data
++                .events
++                .iter()
++                .map(|e| e.json().get().to_owned())
++                .collect(),
++            room: room_id
++                .and_then(|room_id| response.rooms.join.remove(&room_id))
++                .map(|room| {
++                    room.account_data.events.iter().map(|e| e.json().get().to_owned()).collect()
++                })
++                .unwrap_or_default(),
++        })
++    }
++}
++
++/// A device of a user, as the crypto store knows it.
++#[derive(uniffi::Record)]
++pub struct UserDevice {
++    pub device_id: String,
++    pub display_name: Option<String>,
++    pub ed25519_key: Option<String>,
++    pub curve25519_key: Option<String>,
++    /// Whether we trust the device, through cross-signing or having said so
++    /// ourselves.
++    pub is_verified: bool,
++    /// Whether the device is signed by its owner's cross-signing identity.
++    pub is_cross_signed_by_owner: bool,
++}
++
++/// What the homeserver says of a user's presence.
++#[derive(uniffi::Record)]
++pub struct UserPresence {
++    /// `online`, `offline` or `unavailable`.
++    pub presence: String,
++    pub currently_active: Option<bool>,
++    /// How long ago the user was last active, in milliseconds.
++    pub last_active_ago: Option<u64>,
++    pub status_msg: Option<String>,
++}
++
++#[matrix_sdk_ffi_macros::export]
++impl Client {
++    /// The devices of a user that the crypto store knows of, with whether we
++    /// trust them.
++    pub async fn user_devices(&self, user_id: String) -> Result<Vec<UserDevice>, ClientError> {
++        let user_id = ruma::UserId::parse(user_id)?;
++        let devices = self.inner.encryption().get_user_devices(&user_id).await?;
++        Ok(devices
++            .devices()
++            .map(|device| UserDevice {
++                device_id: device.device_id().to_string(),
++                display_name: device.display_name().map(ToOwned::to_owned),
++                ed25519_key: device.ed25519_key().map(|key| key.to_base64()),
++                curve25519_key: device.curve25519_key().map(|key| key.to_base64()),
++                is_verified: device.is_verified(),
++                is_cross_signed_by_owner: device.is_cross_signed_by_owner(),
++            })
++            .collect())
++    }
++
++    /// Marks a device as trusted, on the user's say-so: by signing it, if it
++    /// is one of our own, and locally otherwise.
++    pub async fn verify_device(
++        &self,
++        user_id: String,
++        device_id: String,
++    ) -> Result<(), ClientError> {
++        let user_id = ruma::UserId::parse(user_id)?;
++        let device = self
++            .inner
++            .encryption()
++            .get_device(&user_id, device_id.as_str().into())
++            .await?
++            .context("No such device")?;
++        device.verify().await.map_err(ClientError::from_err)?;
++        Ok(())
++    }
++
++    /// Asks the homeserver for the user's pushers, as a JSON array.
++    pub async fn pushers_json(&self) -> Result<String, ClientError> {
++        let request = ruma::api::client::push::get_pushers::v3::Request::new();
++        Ok(serde_json::to_string(&self.inner.send(request).await?.pushers)?)
++    }
++
++    /// Asks the homeserver for the third party identifiers (email addresses
++    /// and phone numbers) of the account, as a JSON array.
++    pub async fn threepids_json(&self) -> Result<String, ClientError> {
++        Ok(serde_json::to_string(&self.inner.account().get_3pids().await?.threepids)?)
++    }
++
++    /// Changes the password of the account.
++    ///
++    /// Returns `false`, having changed nothing, if the homeserver wants the
++    /// current password for this and none was given. Fails if the homeserver
++    /// wants some other kind of authentication.
++    pub async fn change_password(
++        &self,
++        new_password: String,
++        current_password: Option<String>,
++    ) -> Result<bool, ClientError> {
++        use ruma::api::client::uiaa;
++
++        let account = self.inner.account();
++        let Err(error) = account.change_password(&new_password, None).await else {
++            return Ok(true);
++        };
++        let Some(info) = error.as_uiaa_response() else {
++            return Err(error.into());
++        };
++        if !info.flows.iter().any(|flow| flow.stages.first() == Some(&uiaa::AuthType::Password)) {
++            return Err(error.into());
++        }
++        let Some(current_password) = current_password else {
++            return Ok(false);
++        };
++
++        let user_id = self.inner.user_id().context("No user is signed in")?.to_owned();
++        let mut auth = uiaa::Password::new(user_id.into(), current_password);
++        auth.session = info.session.clone();
++        account.change_password(&new_password, Some(uiaa::AuthData::Password(auth))).await?;
++        Ok(true)
++    }
++
++    /// Asks the homeserver for the presence of a user.
++    pub async fn presence(&self, user_id: String) -> Result<UserPresence, ClientError> {
++        let request = ruma::api::client::presence::get_presence::v3::Request::new(
++            ruma::UserId::parse(user_id)?,
++        );
++        let response = self.inner.send(request).await?;
++        Ok(UserPresence {
++            presence: response.presence.to_string(),
++            currently_active: response.currently_active,
++            last_active_ago: response.last_active_ago.map(|ago| ago.as_millis() as u64),
++            status_msg: response.status_msg,
++        })
++    }
++}
+diff --git a/bindings/matrix-sdk-ffi/src/room/mod.rs b/bindings/matrix-sdk-ffi/src/room/mod.rs
+index ee11d99d3..6bd472c15 100644
+--- a/bindings/matrix-sdk-ffi/src/room/mod.rs
++++ b/bindings/matrix-sdk-ffi/src/room/mod.rs
+@@ -2181,3 +2181,167 @@ mod tests {
+             .expect("Room::drop panicked on a non-tokio thread");
+     }
+ }
++
++#[matrix_sdk_ffi_macros::export]
++impl Room {
++    /// Asks the homeserver for the whole current state of the room, as JSON
++    /// events.
++    pub async fn fetch_state(&self) -> Result<Vec<String>, ClientError> {
++        let request = ruma::api::client::state::get_state_events::v3::Request::new(
++            self.inner.room_id().to_owned(),
++        );
++        let response = self.inner.client().send(request).await?;
++        Ok(response.room_state.into_iter().map(|event| event.json().get().to_owned()).collect())
++    }
++
++    /// Asks the homeserver for the content of one state event of the room, as
++    /// JSON, if the room has such an event.
++    pub async fn fetch_state_event_content(
++        &self,
++        event_type: String,
++        state_key: String,
++    ) -> Result<Option<String>, ClientError> {
++        let request = ruma::api::client::state::get_state_event_for_key::v3::Request::new(
++            self.inner.room_id().to_owned(),
++            event_type.into(),
++            state_key,
++        );
++        match self.inner.client().send(request).await {
++            Ok(response) => Ok(Some(response.event_or_content.get().to_owned())),
++            Err(error) if crate::client::is_not_found(&error) => Ok(None),
++            Err(error) => Err(error.into()),
++        }
++    }
++
++    /// Asks our homeserver for the aliases it has for the room.
++    pub async fn local_aliases(&self) -> Result<Vec<String>, ClientError> {
++        let request =
++            ruma::api::client::room::aliases::v3::Request::new(self.inner.room_id().to_owned());
++        let response = self.inner.client().send(request).await?;
++        Ok(response.aliases.into_iter().map(Into::into).collect())
++    }
++
++    /// Get the content of the event of the given type out of the room's
++    /// account data store.
++    ///
++    /// It will be returned as a JSON string.
++    pub async fn account_data(&self, event_type: String) -> Result<Option<String>, ClientError> {
++        let Some(event) = self.inner.account_data(event_type.into()).await? else {
++            return Ok(None);
++        };
++        Ok(event.get_field::<serde_json::Value>("content")?.map(|content| content.to_string()))
++    }
++
++    /// Set the given account data content for the given event type, for this
++    /// room.
++    ///
++    /// It should be supplied as a JSON string.
++    pub async fn set_account_data(
++        &self,
++        event_type: String,
++        content: String,
++    ) -> Result<(), ClientError> {
++        let content = matrix_sdk::ruma::serde::Raw::from_json_string(content)?;
++        self.inner.set_account_data_raw(event_type.into(), content).await?;
++        Ok(())
++    }
++
++    /// Asks the homeserver for the roots of the threads of the room which the
++    /// user has taken part in, most recently active first.
++    pub async fn participated_thread_ids(
++        &self,
++        limit: Option<u32>,
++    ) -> Result<Vec<String>, ClientError> {
++        let mut options = matrix_sdk::room::ListThreadsOptions::default();
++        options.include_threads =
++            ruma::api::client::threads::get_threads::v1::IncludeThreads::Participated;
++        options.limit = limit.map(Into::into);
++        let roots = self.inner.list_threads(options).await?;
++        Ok(roots.chunk.iter().filter_map(|event| Some(event.event_id()?.to_string())).collect())
++    }
++
++    /// Asks the homeserver for the event of the room closest to a time (in
++    /// milliseconds since the Unix epoch), looking forwards or backwards from
++    /// it.
++    pub async fn event_id_at_timestamp(
++        &self,
++        timestamp: u64,
++        forward: bool,
++    ) -> Result<String, ClientError> {
++        let timestamp = ruma::UInt::try_from(timestamp).map_err(ClientError::from_err)?;
++        let request = ruma::api::client::room::get_event_by_timestamp::v1::Request::new(
++            self.inner.room_id().to_owned(),
++            ruma::MilliSecondsSinceUnixEpoch(timestamp),
++            if forward { ruma::api::Direction::Forward } else { ruma::api::Direction::Backward },
++        );
++        Ok(self.inner.client().send(request).await?.event_id.to_string())
++    }
++
++    /// Asks the homeserver for an event of the room, as JSON (decrypted, if it
++    /// can be).
++    pub async fn fetch_event_json(&self, event_id: String) -> Result<String, ClientError> {
++        let event_id = EventId::parse(event_id)?;
++        let event = self.inner.event(&event_id, None).await?;
++        Ok(event.raw().json().get().to_owned())
++    }
++}
++
++#[matrix_sdk_ffi_macros::export]
++impl Room {
++    /// Upgrades the room to another version: the homeserver makes a new room
++    /// which replaces this one, and whose ID is returned.
++    pub async fn upgrade(&self, new_version: String) -> Result<String, ClientError> {
++        let request = ruma::api::client::room::upgrade_room::v3::Request::new(
++            self.inner.room_id().to_owned(),
++            ruma::RoomVersionId::try_from(new_version.as_str())?,
++        );
++        Ok(self.inner.client().send(request).await?.replacement_room.to_string())
++    }
++
++    /// Asks the homeserver for the events relating to an event of the room,
++    /// oldest first, as JSON (decrypted, if they can be): all of them, or only
++    /// those of a relation type (`m.replace`, say), or of a relation type and
++    /// an event type.
++    // A page of them: the first hundred or so, as the homeserver sees fit.
++    pub async fn relations_json(
++        &self,
++        event_id: String,
++        relation_type: Option<String>,
++        event_type: Option<String>,
++    ) -> Result<Vec<String>, ClientError> {
++        use matrix_sdk::room::{IncludeRelations, RelationsOptions};
++
++        let mut options = RelationsOptions::default();
++        options.dir = ruma::api::Direction::Forward;
++        options.include_relations = match (relation_type, event_type) {
++            (Some(relation), Some(event)) => {
++                IncludeRelations::RelationsOfTypeAndEventType(relation.into(), event.into())
++            }
++            (Some(relation), None) => IncludeRelations::RelationsOfType(relation.into()),
++            _ => IncludeRelations::AllRelations,
++        };
++        let relations = self.inner.relations(EventId::parse(event_id)?, options).await?;
++        Ok(relations.chunk.iter().map(|event| event.raw().json().get().to_owned()).collect())
++    }
++
++    /// The tags the user has given the room, as the JSON content of its
++    /// `m.tag` event: an object of tag names to what is known of each.
++    pub async fn tags_json(&self) -> Result<String, ClientError> {
++        Ok(serde_json::to_string(&self.inner.tags().await?.unwrap_or_default())?)
++    }
++
++    /// Gives the room a tag, placed among the others with it by an order from
++    /// 0 to 1 if one is given.
++    pub async fn set_tag(&self, tag: String, order: Option<f64>) -> Result<(), ClientError> {
++        let mut info = ruma::events::tag::TagInfo::new();
++        info.order = order;
++        self.inner.set_tag(tag.into(), info).await?;
++        Ok(())
++    }
++
++    /// Takes a tag off the room.
++    pub async fn remove_tag(&self, tag: String) -> Result<(), ClientError> {
++        self.inner.remove_tag(tag.into()).await?;
++        Ok(())
++    }
++}
