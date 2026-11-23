@@ -370,14 +370,15 @@ export class RoomListViewViewModel
             }
         }
 
+        const unchanged = new Set(this.rooms);
         this.rooms = newRooms;
 
-        // Update existing view models with new room data
+        // Update the view models of the rooms this diff touched. Not the others: each update
+        // redraws its row and asks the SDK for the room's notification mode again, which for
+        // every row on every message held up the next frame.
         for (const room of this.rooms) {
-            const viewModel = this.roomItemViewModels.get(room.id);
-            if (viewModel) {
-                viewModel.updateSummary(room);
-            }
+            if (unchanged.has(room)) continue;
+            this.roomItemViewModels.get(room.id)?.updateSummary(room);
         }
 
         // Clean up view models for rooms that no longer exist
