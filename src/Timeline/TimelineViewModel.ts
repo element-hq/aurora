@@ -56,12 +56,10 @@ import type {
 const PAGINATE_SIZE = 50;
 
 /**
- * How many events we try to have before showing the timeline for the first time. The view
- * keeps the reader's place by adjusting the scroll position, which does nothing for a list
- * too short to scroll, so older history arriving above would shove the rows about.
+ * How many events we want behind the first ones shown. Whatever the SDK has is drawn at once
+ * (even a single event), and history is loaded up to this once the view has placed it.
  */
 const MIN_INITIAL_EVENTS = 40;
-const MAX_INITIAL_FILL_REQUESTS = 2;
 
 /** How long after the last scroll to wait before sending a read receipt (ms). */
 const READ_RECEIPT_DEBOUNCE_MS = 500;
@@ -169,8 +167,13 @@ export class TimelineViewModel
     private sdkItems: SdkItem[] = [];
     private diffQueue: Promise<void> = Promise.resolve();
 
-    /** False until the first batch has been gathered; nothing is published before then. */
-    private initialFillDone = false;
+    /**
+     * False until the view has put the first batch on screen. Changes arriving before then are
+     * held back: rows added above the batch while the view is still placing it would move it.
+     */
+    private placed = false;
+    /** Whether a view is showing this timeline. It outlives its view: see RoomViewModel. */
+    private open = true;
 
     /** The in-flight back-pagination chain, or undefined when idle. */
     private paginating?: Promise<void>;
@@ -242,25 +245,42 @@ export class TimelineViewModel
                 if (this.isDisposed) return;
                 const listener = await timeline.addListener(this);
                 this.disposables.track(() => listener.cancel());
-                await this.initialFill(timeline);
+                await this.diffQueue;
             } catch (e) {
                 printRustError("Failed to start timeline", e);
             }
-            this.initialFillDone = true;
-            this.publish();
+            // Nothing to draw, so nothing for the view to place: go and look for history.
+            if (!this.snapshot.current.items.length) this.onPlaced();
         })();
     }
 
-    /** Load enough history to fill the window before the first publish. */
-    private async initialFill(timeline: TimelineInterface): Promise<void> {
-        for (let i = 0; i < MAX_INITIAL_FILL_REQUESTS; i++) {
-            await this.diffQueue;
-            const events = this.sdkItems.filter((i) => "event" in i).length;
-            if (events >= MIN_INITIAL_EVENTS || this.startReached) break;
-            this.startReached = await timeline.paginateBackwards(PAGINATE_SIZE);
-            if (this.isDisposed) return;
+    /** A view is showing this timeline again: have it start at the newest message. */
+    public reopen(): void {
+        this.open = true;
+        const last = lastOf(this.snapshot.current.items);
+        if (!last) return;
+        this.placed = false;
+        this.snapshot.merge({
+            pendingAnchor: { targetKey: last.key, align: "end" },
+            isAtBottom: true,
+        });
+    }
+
+    /** The view has gone. The timeline stays subscribed, but nobody is reading it. */
+    public close(): void {
+        this.open = false;
+        clearTimeout(this.readReceiptTimer);
+    }
+
+    /** The first batch is on screen: show what arrived meanwhile, and load history behind it. */
+    private onPlaced(): void {
+        if (this.placed || this.isDisposed) return;
+        this.placed = true;
+        this.publish();
+        const events = this.sdkItems.filter((i) => "event" in i).length;
+        if (events < MIN_INITIAL_EVENTS && !this.startReached) {
+            void this.paginateBackwards();
         }
-        await this.diffQueue;
     }
 
     // ── SDK updates ──────────────────────────────────────────────────
@@ -330,12 +350,19 @@ export class TimelineViewModel
     // ── Building the items ───────────────────────────────────────────
 
     private publish(): void {
-        if (!this.initialFillDone || this.isDisposed) return;
-        const items = this.buildItems();
+        if (this.isDisposed) return;
         const wasEmpty = this.snapshot.current.items.length === 0;
+        if (!wasEmpty && !this.placed) return;
+        const items = this.buildItems();
         const extra: Partial<AuroraTimelineSnapshot> = {};
         const last = lastOf(items);
-        if (wasEmpty && last) {
+        // Start at the newest message. And stay there when history arrives above it while
+        // the reader is still at the bottom: the view only estimates the height of rows it
+        // hasn't drawn, so left to itself it drifts up the page as it measures them.
+        const grewAbove =
+            this.snapshot.current.isAtBottom &&
+            this.snapshot.current.items[0]?.key !== items[0]?.key;
+        if (last && (wasEmpty || grewAbove)) {
             extra.pendingAnchor = {
                 targetKey: last.key,
                 align: "end",
@@ -499,6 +526,7 @@ export class TimelineViewModel
     public onAnchorReached = (): void => {
         if (this.snapshot.current.pendingAnchor === null) return;
         this.snapshot.merge({ pendingAnchor: null });
+        this.onPlaced();
     };
 
     public onVisibleRangeChanged = (start: number, end: number): void => {
@@ -649,7 +677,9 @@ export class TimelineViewModel
     }
 
     private scheduleReadReceipt(eventId: string | undefined): void {
-        if (!eventId || eventId === this.lastReceiptEventId) return;
+        if (!this.open || !eventId || eventId === this.lastReceiptEventId) {
+            return;
+        }
         clearTimeout(this.readReceiptTimer);
         this.readReceiptTimer = setTimeout(
             () => void this.sendReadReceipt(eventId),

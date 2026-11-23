@@ -76,6 +76,28 @@ export const Timeline: React.FC<TimelineProps> = ({
         // The room view model owns and disposes the timeline view model.
     }, [vm]);
 
+    // Works around TimelineView never finishing its first placement (a 1 s spinner) when the
+    // first batch is shorter than the window: the browser clamps its scroll without a scroll
+    // event, so the virtualiser's idea of the offset goes stale. A scroll event per frame while
+    // the list is still hidden makes it look again. Drop this once that is fixed upstream.
+    const root = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+        let frame = requestAnimationFrame(function poke() {
+            const scroller = root.current?.querySelector(
+                "[data-testid=timeline-scroller]",
+            );
+            if (
+                scroller &&
+                getComputedStyle(scroller).visibility !== "hidden"
+            ) {
+                return;
+            }
+            scroller?.dispatchEvent(new Event("scroll"));
+            frame = requestAnimationFrame(poke);
+        });
+        return () => cancelAnimationFrame(frame);
+    }, []);
+
     // One view model per date separator, so a row doesn't get a new one every render.
     const dateSeparatorVms = useRef(new Map<string, DateSeparatorVm>());
     const dateSeparatorVm = useCallback(
@@ -173,7 +195,7 @@ export const Timeline: React.FC<TimelineProps> = ({
     );
 
     return (
-        <div className="mx_Timeline">
+        <div className="mx_Timeline" ref={root}>
             <TimelineView vm={vm} renderItem={renderItem} />
             {reactionPicker && canReact && (
                 <ReactionPicker

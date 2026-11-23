@@ -104,6 +104,17 @@ body {
     letter-spacing: var(--cpd-font-letter-spacing-body-md);
 }
 
+/* A room shorter than the window sits at the bottom, so the newest message stays put while
+   history loads above it. */
+.mx_Timeline [data-testid="timeline-scroller"] {
+    display: flex;
+    flex-direction: column;
+}
+.mx_Timeline .mx_TimelineView_list {
+    flex: none;
+    margin-top: auto;
+}
+
 /* The rows are absolutely positioned, so padding on the list wouldn't inset them:
    it goes on each row instead. Horizontal only, so row measurements are unaffected. */
 .mx_Timeline .mx_TimelineView_tile {
