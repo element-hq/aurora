@@ -13,7 +13,7 @@ import {
 import { Avatar, useIdColorHash } from "@vector-im/compound-web";
 import classNames from "classnames";
 import type React from "react";
-import { type ReactElement, type ReactNode, useState } from "react";
+import { memo, type ReactElement, type ReactNode, useState } from "react";
 import { UtdCause } from "../generated/matrix_sdk_crypto";
 import {
     type ClientInterface,
@@ -181,7 +181,9 @@ function renderMessageBody(
     return undefined;
 }
 
-export const EventTile: React.FC<EventTileProp> = ({
+// Memoised: the timeline re-renders each time the virtualiser measures a row, which would
+// otherwise render every tile again, each making new view models for its parts.
+export const EventTile: React.FC<EventTileProp> = memo(function EventTile({
     id,
     event,
     continuation,
@@ -190,7 +192,7 @@ export const EventTile: React.FC<EventTileProp> = ({
     client,
     reactions,
     ownUserId,
-}) => {
+}) {
     // The action bar shows while the tile is hovered or has focus
     const [isHovered, setHovered] = useState(false);
     const [hasFocus, setHasFocus] = useState(false);
@@ -421,4 +423,4 @@ export const EventTile: React.FC<EventTileProp> = ({
             }}
         />
     );
-};
+});
