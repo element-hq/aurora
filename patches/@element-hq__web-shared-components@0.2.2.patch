@@ -1,0 +1,15 @@
+diff --git a/dist/element-web-shared-components.js b/dist/element-web-shared-components.js
+index b6d19545840fb0ed4301ed3eb498da7f18a63646..a81781c451925bd68e8deb4a003da635a1963f58 100644
+--- a/dist/element-web-shared-components.js
++++ b/dist/element-web-shared-components.js
+@@ -13924,6 +13924,10 @@ function Pk({ vm: e, renderItem: t }) {
+ 		count: i.length,
+ 		getScrollElement: () => o.current,
+ 		estimateSize: () => Ak,
++		initialOffset: () => {
++			let e = n.pendingAnchor, t = e ? i.findIndex((t) => t.key === e.targetKey) : -1;
++			return Math.max(0, ((t < 0 ? i.length - 1 : t) + 1) * Ak - window.innerHeight);
++		},
+ 		getItemKey: u,
+ 		overscan: jk,
+ 		anchorTo: "end",

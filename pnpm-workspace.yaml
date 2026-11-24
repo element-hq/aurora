@@ -9,6 +9,8 @@ overrides:
   # vite-plugin-top-level-await 1.6.0 fails with "missing field `type`" on newer @swc/core
   '@swc/core': '~1.15.0'
 patchedDependencies:
+  # Starts the timeline at the row it is about to scroll to, not the oldest one
+  '@element-hq/web-shared-components@0.2.2': patches/@element-hq__web-shared-components@0.2.2.patch
   # Mounts a tooltip only while it is open
   '@vector-im/compound-web@10.3.0': patches/@vector-im__compound-web@10.3.0.patch
   # Ports the bindings generator to uniffi 0.32, which matrix-rust-sdk now uses
