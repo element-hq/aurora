@@ -1,0 +1,53 @@
+diff --git a/dist/components/Tooltip/Tooltip.js b/dist/components/Tooltip/Tooltip.js
+index fcbf7f4c98383e319f32c8d5e3c91c540bd9e63e..685688fe0feb196a267458aad62f6227ed185a26 100644
+--- a/dist/components/Tooltip/Tooltip.js
++++ b/dist/components/Tooltip/Tooltip.js
+@@ -50,7 +50,7 @@ function Caption() {
+ */
+ function TooltipContent({ children }) {
+ 	const { context: floatingContext, open, arrowRef, purpose, maxWidth, ...rest } = useTooltipContext();
+-	if (!open && purpose !== "label") return null;
++	if (!open) return null;
+ 	const escaped = floatingContext.middlewareData?.hide?.escaped ?? false;
+ 	return /* @__PURE__ */ jsx(FloatingPortal, { children: /* @__PURE__ */ jsxs("div", {
+ 		ref: rest.refs.setFloating,
+@@ -87,7 +87,7 @@ var TooltipAnchor = ({ children, isTriggerInteractive, nonInteractiveTriggerTabI
+ 			});
+ 			return cloneElement(children, props);
+ 		} else {
+-			const { "aria-labelledby": labelId, "aria-describedby": descriptionId, ...spanProps } = context.getReferenceProps({
++			const { "aria-label": ariaLabel, "aria-labelledby": labelId, "aria-describedby": descriptionId, ...spanProps } = context.getReferenceProps({
+ 				ref,
+ 				tabIndex: nonInteractiveTriggerTabIndex
+ 			});
+@@ -95,6 +95,7 @@ var TooltipAnchor = ({ children, isTriggerInteractive, nonInteractiveTriggerTabI
+ 				tabIndex: nonInteractiveTriggerTabIndex,
+ 				...spanProps,
+ 				children: cloneElement(children, {
++					"aria-label": ariaLabel,
+ 					"aria-labelledby": labelId,
+ 					"aria-describedby": descriptionId
+ 				})
+diff --git a/dist/components/Tooltip/useTooltip.js b/dist/components/Tooltip/useTooltip.js
+index 24e0703515f15f0c209823248388ddc8e966e0f1..c478f2016b425e630481a9f32352e00bcac79824 100644
+--- a/dist/components/Tooltip/useTooltip.js
++++ b/dist/components/Tooltip/useTooltip.js
+@@ -72,13 +72,15 @@ function useTooltip({ open: controlledOpen, disabled = false, onOpenChange, plac
+ 		enabled: purpose === "description",
+ 		role: "tooltip"
+ 	});
+-	const label = useMemo(() => purpose === "label" ? { reference: {
++	const label = useMemo(() => purpose === "label" ? { reference: open ? {
+ 		"aria-labelledby": labelId,
+ 		"aria-describedby": caption ? captionId : void 0
+-	} } : {}, [
++	} : { "aria-label": props.label } } : {}, [
+ 		purpose,
+ 		labelId,
+-		captionId
++		captionId,
++		open,
++		props.label
+ 	]);
+ 	const interactions = useInteractions([
+ 		hover,
